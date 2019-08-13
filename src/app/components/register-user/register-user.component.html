@@ -1,0 +1,55 @@
+<section class="auth-pages sign-up-page">
+    <main class="contain-box">
+      <nav>
+        <a href="">
+          <i class="flaticon-left-arrow"></i>
+        </a>
+      </nav>
+      <div class="page-heading">
+        <h1>Signup</h1>
+        <p>Sign up for LnkP</p>
+      </div>
+      <div class="alt-sisgn-up">
+        <button class="alt-button " id="facebook">
+          <img src="./assets/svg/001-facebook.svg" alt="" width="15px" />
+        </button>
+        <button class="alt-button " id="google">
+          <img src="./assets/svg/002-search.svg" alt="" width="15px" />
+        </button>
+      </div>
+      <form [formGroup]="registerForm" (ngSubmit)="registerUser()" id="sign-up-form">
+        <div class="input-group">
+          <label for="">Username</label>
+          <input type="text" name="" id="" formControlName="userName"/>
+        </div>
+        <div class="input-group">
+            <label for="">Email</label>
+            <input type="text" name="" id="" formControlName="email"/>
+          </div>
+        <div class="input-group">
+          <label for="">Phone Number</label>
+          <input type="text" name="" id="" formControlName="phoneNumber"/>
+        </div>
+        <div class="input-group">
+          <label for="">Password</label>
+          <input type="password" name="" id="" formControlName="password"/>
+        </div>
+        <div class="input-group">
+            <label for="">Register as</label>
+            <select class="select-container" formControlName="role" >
+                <option disabled selected value> --Select-- </option>
+                <option value="Driver" >Driver</option>
+                <option value="Rider" >Rider</option>
+          </select>
+          </div>
+        <div class="input-group checker">
+          <input type="checkbox" name="" id="" formControlName="termsAgree"/>
+          <p>I accept Terms and Conditions of the LnkUp App</p>
+        </div>
+        <div class="input-group">
+          <input type="submit" value="Register" />
+        </div>
+      </form>
+      <p class="a-login">Already have a account? <a href="" [routerLink]="['auth']">Log In</a></p>
+    </main>
+  </section>

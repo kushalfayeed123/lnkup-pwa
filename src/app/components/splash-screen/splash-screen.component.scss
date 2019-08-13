@@ -1,0 +1,28 @@
+/* 
+=================
+Splash Page
+=================
+*/
+section.splash-page .contain-box {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+  .splash-logo{
+    width: 60%;
+    margin-left: 18%;
+    padding-top: 256px;
+    margin-top: auto;
+  }

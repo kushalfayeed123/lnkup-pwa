@@ -1,0 +1,223 @@
+/* 
+=================
+Auth  Pages
+=================
+*/
+section.auth-pages a {
+  text-decoration: none;
+  -webkit-transition: all ease-in 300ms;
+  transition: all ease-in 300ms;
+  color: #ffffff;
+}
+
+section.auth-pages a:hover, section.auth-pages a:active, section.auth-pages a:focus {
+  text-decoration: none;
+  -webkit-transition: all ease-out 300ms;
+  transition: all ease-out 300ms;
+  color: #d54ab6;
+}
+
+section.auth-pages nav {
+  margin-top: 55px;
+  margin-bottom: 30px;
+}
+
+section.auth-pages .page-heading {
+  margin-bottom: 35px;
+}
+
+section.auth-pages .page-heading h1 {
+  color: #d54ab6;
+  font-weight: bold;
+  font-size: 32px;
+  font-family: "Circular";
+}
+
+section.auth-pages .page-heading p {
+  color: #ffffff;
+  font-weight: normal;
+  font-size: 16px;
+  font-family: 'Circular-book';
+}
+
+section.auth-pages .alt-sisgn-up {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  margin-bottom: 37px;
+}
+
+section.auth-pages .alt-sisgn-up button {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 16px;
+  color: #ffffff;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  background-color: #ffffff;
+  border: 0;
+  text-align: center;
+  font-weight: bold;
+  font-family: "Lato";
+  padding: 7px 0px;
+  min-width: 123px;
+}
+
+section.auth-pages .alt-sisgn-up button:focus, section.auth-pages .alt-sisgn-up button:active, section.auth-pages .alt-sisgn-up button:hover {
+  outline: none;
+}
+
+section.auth-pages .alt-sisgn-up button:first-of-type {
+  margin-right: 10px;
+}
+
+section.auth-pages .input-group {
+  text-align: left;
+  margin: 0 0 30px 0;
+}
+
+section.auth-pages .input-group label {
+  font-family: "Circular";
+  font-weight: normal;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 500;
+  margin: 0;
+}
+
+section.auth-pages .input-group input {
+  border: 0;
+  border-bottom: 1px solid #ffffff;
+  font-size: 16px;
+  font-family: 'Circular-book';
+  width: 100%;
+  display: inline-block;
+  background-color: transparent;
+  color: #ffffff;
+  -webkit-transition: all ease-in 300ms;
+  transition: all ease-in 300ms;
+}
+
+section.auth-pages .input-group input:focus, section.auth-pages .input-group input:active, section.auth-pages .input-group input:hover {
+  outline: none;
+  border-bottom: 1px solid #d8d8d8;
+  -webkit-transition: all ease-out 300ms;
+  transition: all ease-out 300ms;
+}
+
+section.auth-pages .input-group input[type='checkbox'] {
+  padding: 6px;
+  width: unset;
+  margin-right: 7px;
+  border: 1px solid #e4e8ea;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  background-color: transparent;
+}
+
+section.auth-pages .input-group input[type='submit'] {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 16px;
+  color: #ffffff;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  background-color: #d54ab6;
+  border: 0;
+  text-align: center;
+  font-weight: bold;
+  font-family: "Lato";
+  padding: 15px 0;
+  width: 100%;
+}
+
+section.auth-pages .input-group input[type='submit']:focus, section.auth-pages .input-group input[type='submit']:active, section.auth-pages .input-group input[type='submit']:hover {
+  outline: none;
+}
+
+section.auth-pages .checker {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
+  margin-top: 30px;
+}
+
+section.auth-pages .checker p {
+  color: #ffffff;
+  font-weight: normal;
+  font-size: 10px;
+  font-family: 'Circular-book';
+  margin: 0;
+}
+
+@media (min-width: 374px) {
+  section.auth-pages .checker p {
+    font-size: 12px;
+  }
+}
+
+section.auth-pages .a-login {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+/* 
+=================
+Auth-variant Page
+=================
+*/
+section.auth-pages.auth-page .page-heading {
+  margin-bottom: 80px;
+}
+
+section.auth-pages.auth-page #sign-up-form p {
+  text-align: right;
+  margin-bottom: 70px;
+}
+
+section.auth-pages.auth-page #sign-up-form p a {
+  color: #d54ab6;
+}
+.select-container{
+  margin-left: 19px;
+  width: 68%;
+  background-color: #424242;
+  color: #ffffff;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  padding-bottom: 2px;
+}

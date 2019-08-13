@@ -1,0 +1,90 @@
+
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, config } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AuthenticateDataService } from './authenticate.data.service';
+import { Users } from 'src/app/models/Users';
+import * as jwt_decode from 'jwt-decode';
+import { environment } from '../../../environments/environment';
+
+
+
+
+@Injectable({ providedIn: 'root' })
+export class AuthenticateWebService implements AuthenticateDataService {
+  public webUrl: string;
+  private currentUserSubject: BehaviorSubject<Users>;
+  public currentUser: Observable<Users>;
+  public registerUrl: string;
+  private loggedIn = new BehaviorSubject<boolean>(false);
+  mockUrl: string;
+
+  constructor( private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<Users>(
+      JSON.parse(localStorage.getItem('currentUser'))
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
+    this.webUrl = environment.webUrl;
+    
+  }
+
+  public get currentUserValue(): Users {
+    return this.currentUserSubject.value;
+  }
+  get isLoggedIn() {
+    return this.loggedIn.asObservable();
+  }
+
+  login(username: string, password: string) {
+    return this.http.post<any>(`${this.webUrl}/user/authenticate`, { username, password }).pipe(
+      map(user => {
+        // login successful if there's a jwt token in the response
+        if (user && user.token) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.loggedIn.next(true);
+          this.currentUserSubject.next(user);
+        }
+
+        return user;
+      })
+    );
+  }
+
+  getAll() {
+    return this.http.get<Users[]>(`${this.webUrl}/user`);
+  }
+
+  getById(id: any) {
+    return this.http.get<Users>(`${this.webUrl}/user/${id}`);
+  }
+
+  register(user: any) {
+    console.log('phone', user);
+    return this.http.post(`${this.webUrl}/user/register`, user);
+  }
+  update(user: Users) {
+    console.log('user id from service',  user.userId);
+    return this.http.put(`${this.webUrl}/user/${user.userId}`, user);
+
+  }
+  delete(id: any) {
+    return this.http.delete(`${this.webUrl}/user/${id}`);
+  }
+
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+  }
+  decode() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const token = currentUser.token;
+    try {
+      return jwt_decode(token);
+    } catch (Error) {
+     return null;
+   }
+  }
+}

@@ -1,0 +1,170 @@
+/* =================
+    Positioning 
+   ================= */
+// @mixin grid($col: $row: ) {
+// }
+@mixin flex($content: center, $item: center, $direction: row, $wrap: wrap) {
+  display: flex;
+  justify-content: $content;
+  align-items: $item;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+}
+@mixin grid($col, $row, $gap) {
+  display: grid;
+  display: -ms-grid;
+  grid-template-columns: $col;
+  grid-template-rows: $row;
+  grid-column-gap: $gap;
+}
+@mixin grid-child($col-start, $col-end, $row-start, $row-end) {
+  -ms-grid-column: $col-start;
+  -ms-grid-column-span: $col-end - $col-start;
+  -ms-grid-row: $row-start;
+  -ms-grid-row-span: $row-end - $row-start;
+  grid-column: #{$col-start}/#{$col-end};
+  grid-row: #{$row-start}/#{$row-end};
+}
+
+@mixin buttons(
+  $color: $tentiary-color,
+  $radius: $button-radius,
+  $b-color: $primary-color,
+  $family: $secondary-font,
+  $weight: bold,
+  $border: 0
+) {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: $normal-text;
+  color: $color;
+  border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+  background-color: $b-color;
+  border: $border;
+  text-align: center;
+
+  font: {
+    weight: $weight;
+    family: $family;
+  }
+  &:focus,
+  &:active,
+  &:hover {
+    outline: none;
+  }
+}
+@mixin btn-type-1 {
+  padding: 15px 0;
+  width: $full-width;
+}
+
+@mixin trans-in($timing: 300ms, $type: ease-in, $property: all) {
+  transition: #{$property} #{$type} #{$timing};
+}
+@mixin trans-out($timing: 300ms, $type: ease-out, $property: all) {
+  transition: #{$property} #{$type} #{$timing};
+}
+@mixin image-center {
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+}
+@mixin heading($color: $primary-color, $size: $heading-text) {
+  color: $color;
+  font-weight: bold;
+  font-size: $size;
+  font-family: $primary-font;
+}
+@mixin paragraph($color: $tentiary-color, $size: $normal-text) {
+  color: $color;
+  font-weight: normal;
+  font-size: $size;
+  font-family: 'Circular-book';
+}
+@mixin input-group {
+  text-align: left;
+  margin: 0 0 30px 0;
+}
+@mixin input-label {
+  font-family: $primary-font;
+  font-weight: normal;
+  font-size: $normal-text;
+  color: $tentiary-color;
+  font-weight: 500;
+  margin: 0;
+}
+@mixin input-box {
+  border: 0;
+  border-bottom: $input-border;
+  font-size: $normal-text;
+  font-family: 'Circular-book';
+  width: 100%;
+  display: inline-block;
+  background-color: transparent;
+  color: $tentiary-color;
+  @include trans-in;
+  &:focus,
+  &:active,
+  &:hover {
+    outline: none;
+    border-bottom: $input-trans;
+    @include trans-out;
+  }
+}
+@mixin linker {
+  text-decoration: none;
+  @include trans-in;
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none;
+    @include trans-out;
+    color: $primary-color;
+  }
+}
+
+@mixin card($pad: 50px 20px 23px 20px, $border: $card-border, $max: 350px) {
+  padding: $pad;
+  font-family: $primary-font;
+  border: $border;
+  max-width: $max;
+}
+
+/*  ================
+    Queries layout
+    ================ */
+@mixin lg-screens($screen: 1200px) {
+  @media (min-width: $screen) {
+    @content;
+  }
+}
+@mixin md-screens($screen: 1200px) {
+  @media (max-width: $screen) {
+    @content;
+  }
+}
+@mixin sd-screens($screen: 991px) {
+  @media (max-width: $screen) {
+    @content;
+  }
+}
+@mixin lm-screens($screen: 767px) {
+  @media (max-width: $screen) {
+    @content;
+  }
+}
+@mixin mm-screens($screen: 560px) {
+  @media (max-width: $screen) {
+    @content;
+  }
+}
+@mixin sm-screens($screen: 375px) {
+  @media (max-width: $screen) {
+    @content;
+  }
+}
