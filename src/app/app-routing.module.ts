@@ -7,8 +7,7 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'splash', pathMatch: 'full' },
-  { path: 'splash', component: SplashScreenComponent },
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
   { path: 'onboarding', component: OnboardingComponent },
   { path: 'auth', component: AuthenticateUserComponent },
   { path: 'register', component: RegisterUserComponent },
