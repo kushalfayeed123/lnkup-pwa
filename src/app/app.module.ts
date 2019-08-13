@@ -15,6 +15,8 @@ import { OnboardingComponent } from './components/onboarding/onboarding.componen
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { AuthenticateUserComponent } from './components/authenticate-user/authenticate-user.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { VerifycodeComponent } from './components/verifycode/verifycode.component';
+import { BroadcastService } from './services/business/broadcastdata.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SplashScreenComponent,
     OnboardingComponent,
     RegisterUserComponent,
-    AuthenticateUserComponent
+    AuthenticateUserComponent,
+    VerifycodeComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
+    BroadcastService,
+    
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {provide: AuthenticateDataService, useClass: AuthenticateWebService}

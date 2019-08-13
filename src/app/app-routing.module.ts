@@ -4,14 +4,16 @@ import { SplashScreenComponent } from './components/splash-screen/splash-screen.
 import { OnboardingComponent } from './components/onboarding/onboarding.component';
 import { AuthenticateUserComponent } from './components/authenticate-user/authenticate-user.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
+import { VerifycodeComponent } from './components/verifycode/verifycode.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'auth', pathMatch: 'full' },
+  { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
   { path: 'onboarding', component: OnboardingComponent },
+  { path: 'verify', component: VerifycodeComponent },
   { path: 'auth', component: AuthenticateUserComponent },
   { path: 'register', component: RegisterUserComponent },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'onboarding', pathMatch: 'full' },
 ];
 
 @NgModule({

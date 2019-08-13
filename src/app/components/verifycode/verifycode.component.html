@@ -1,0 +1,24 @@
+<section class="auth-pages auth-page">
+    <main class="contain-box">
+      <nav>
+        <a href="">
+          <i class="flaticon-left-arrow"></i>
+        </a>
+      </nav>
+      <div class="page-heading">
+        <p>
+          We just sent you a verification code (xxx-xxx), Please enter the digits below, or tap on resend code to request a new code. Thanks!! <br />
+        </p>
+      </div>
+      <form  id="auth-form" (ngSubmit)="verifyUser()" [formGroup]="verifyForm" >
+        <div class="input-group">
+          <!-- <label for="">000-000</label> -->
+          <input type="text" name="" id="" placeholder="xxx-xxx" formControlName="verifycode"/>
+        </div>
+        <p><a href="">Resend Code</a></p>
+        <div class="input-group">
+          <input type="submit"  />
+        </div>
+      </form>
+    </main>
+  </section>
