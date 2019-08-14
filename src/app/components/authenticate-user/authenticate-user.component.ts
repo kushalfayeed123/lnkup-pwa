@@ -88,7 +88,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
     } else if(this.userRole.role ===  'Driver'){
       this.router.navigate(['driver/dashboard', userId]);
     } else if(this.userRole.role === 'Admin'){
-      this.router.navigate(['admin/dashboard']);
+      this.router.navigate(['admin/dashboard', userId]);
     } else {
       this.router.navigate(['onboarding']);
     }

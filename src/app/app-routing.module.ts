@@ -14,8 +14,16 @@ const routes: Routes = [
   { path: 'auth', component: AuthenticateUserComponent },
   { path: 'register', component: RegisterUserComponent },
   {
+    path: 'admin',
+    loadChildren: './admin/admin.module#AdminModule'
+  },
+  {
     path: 'rider',
     loadChildren: './rider/rider.module#RiderModule'
+  },
+  {
+    path: 'driver',
+    loadChildren: './driver/driver.module#DriverModule'
   },
   { path: '**', redirectTo: 'onboarding', pathMatch: 'full' },
 ];
