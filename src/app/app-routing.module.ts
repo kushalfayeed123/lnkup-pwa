@@ -8,12 +8,16 @@ import { VerifycodeComponent } from './components/verifycode/verifycode.componen
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'register', pathMatch: 'full' },
+  { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
   { path: 'onboarding', component: OnboardingComponent },
   { path: 'verify', component: VerifycodeComponent },
   { path: 'auth', component: AuthenticateUserComponent },
   { path: 'register', component: RegisterUserComponent },
-  { path: '**', redirectTo: 'register', pathMatch: 'full' },
+  {
+    path: 'rider',
+    loadChildren: './rider/rider.module#RiderModule'
+  },
+  { path: '**', redirectTo: 'onboarding', pathMatch: 'full' },
 ];
 
 @NgModule({
