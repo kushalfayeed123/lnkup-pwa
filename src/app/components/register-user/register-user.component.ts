@@ -5,11 +5,14 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { fadeInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-register-user',
   templateUrl: './register-user.component.html',
-  styleUrls: ['./register-user.component.scss']
+  styleUrls: ['./register-user.component.scss'],
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' }
 })
 export class RegisterUserComponent implements OnInit, OnDestroy {
 

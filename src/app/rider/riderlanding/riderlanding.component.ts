@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,7 +15,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   public userId: string;
 
   constructor(private route: ActivatedRoute,
-    private authService: AuthenticateDataService) { }
+    private authService: AuthenticateDataService,
+    private  router: Router) { }
 
   ngOnInit() {
     this.route.params.subscribe(p => {
@@ -32,6 +33,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           const currentUser = user;
           console.log('user viewing this screen', currentUser);
     });
+  }
+  navtologin(){
+    this.router.navigate(['auth'])
+  }
+  navtoregister(){
+    this.router.navigate(['register'])
   }
 
   ngOnDestroy() {
