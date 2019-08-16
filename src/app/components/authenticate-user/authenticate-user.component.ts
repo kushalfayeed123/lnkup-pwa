@@ -22,6 +22,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   public error: any;
   public loggedInUser: any;
   public userRole = <any>{};
+  loading: boolean;
 
 
   constructor(private router: Router,
@@ -44,7 +45,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-
+    this.loading = true;
     // // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
@@ -57,7 +58,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
           this.updateUserStatus();
           this.redirectUser();
           localStorage.removeItem('registeredUser');
-
+          this.loading = false;
         },
         error => {
           this.error = error;
@@ -96,9 +97,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       this.router.navigate(['onboarding']);
     }
   }
-  navigateToRegister() {
-    this.router.navigate(["register"]);
-  }
+ 
 
   ngOnDestroy() {
     this.unsubscribe$.next();

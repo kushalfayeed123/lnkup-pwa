@@ -18,6 +18,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
 
   public registerForm : FormGroup;
   private unsubscribe$ = new Subject<void>();
+  loading: boolean;
 
 
   constructor( private formBuilder: FormBuilder,
@@ -39,6 +40,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
   }
 
   registerUser(){
+    this.loading = true;
     localStorage.removeItem('userVerification')
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
     const validateCode = randomCode.slice(0,3) + '-' + randomCode.slice(3,6);
@@ -50,14 +52,13 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     .subscribe(res => {
        localStorage.setItem('registeredUser', JSON.stringify(registerValues))
         this.route.navigate(["verify"]);
+        this.loading = false;
     }, 
     error => {
       console.error('An error occured');
     });
   }
-  navigateToAuthentication(){
-    this.route.navigate(["auth"]) 
-  }
+ 
 
   ngOnDestroy() {
     this.unsubscribe$.next();

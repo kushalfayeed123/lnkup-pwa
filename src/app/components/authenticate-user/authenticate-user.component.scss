@@ -9,6 +9,11 @@ section.auth-pages a {
   transition: all ease-in 300ms;
   color: #ffffff;
 }
+.pl-2{
+  position: relative;
+  bottom: 40px;
+  left: 55%;
+}
 
 section.auth-pages a:hover, section.auth-pages a:active, section.auth-pages a:focus {
   text-decoration: none;

@@ -207,6 +207,11 @@ section.auth-pages.auth-page #sign-up-form p {
   text-align: right;
   margin-bottom: 70px;
 }
+.pl-2{
+  position: relative;
+  bottom: 40px;
+  left: 55%;
+}
 
 section.auth-pages.auth-page #sign-up-form p a {
   color: #d54ab6;
@@ -214,7 +219,7 @@ section.auth-pages.auth-page #sign-up-form p a {
 .select-container{
   margin-left: 19px;
   width: 68%;
-  background-color: #424242;
+  background-color: #212529;
   color: #ffffff;
   border-top: 0px;
   border-left: 0px;
