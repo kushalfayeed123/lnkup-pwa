@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { fadeInAnimation } from 'src/app/services/misc/animation';
+import { popInAnimation } from 'src/app/services/misc/landinganimation';
 
 @Component({
   selector: 'app-authenticate-user',
@@ -16,20 +17,20 @@ import { fadeInAnimation } from 'src/app/services/misc/animation';
 })
 export class AuthenticateUserComponent implements OnInit, OnDestroy {
 
-  public loginForm: FormGroup
+  public loginForm: FormGroup;
   public returnUrl: any;
   private unsubscribe$ = new Subject<void>();
   public error: any;
   public loggedInUser: any;
-  public userRole = <any>{};
+  public userRole = {} as any;
   loading: boolean;
 
 
   constructor(private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private broadCastService: BroadcastService,
-    private authenticate: AuthenticateDataService) { }
+              private route: ActivatedRoute,
+              private formBuilder: FormBuilder,
+              private broadCastService: BroadcastService,
+              private authenticate: AuthenticateDataService) { }
 
   ngOnInit() {
 
@@ -38,7 +39,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       password: ['', Validators.required]
     });
     // get return url from route or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
 
   // convinience getter for easy access to form fields
@@ -73,8 +74,8 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       return;
     } else {
       const userData = registeredUser;
-      userData['userId'] = userId;
-      userData['userStatus'] = 1;
+      userData.userId = userId;
+      userData.userStatus = 1;
       this.authenticate.update(userData)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
@@ -97,7 +98,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       this.router.navigate(['onboarding']);
     }
   }
- 
+
 
   ngOnDestroy() {
     this.unsubscribe$.next();

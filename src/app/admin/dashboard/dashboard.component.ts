@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { popInAnimation } from 'src/app/services/misc/landinganimation';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  animations: [popInAnimation],
+  host: { '[@popInAnimation]': '' }
 })
 export class DashboardComponent implements OnInit {
 
@@ -13,11 +16,11 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
   }
 
-  navtologin(){
-    this.router.navigate(['auth'])
+  navtologin() {
+    this.router.navigate(['auth']);
   }
-  navtoregister(){
-    this.router.navigate(['register'])
+  navtoregister() {
+    this.router.navigate(['register']);
   }
 
 }
