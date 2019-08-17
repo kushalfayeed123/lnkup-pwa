@@ -1,6 +1,6 @@
 /*
   	Flaticon icon font: Flaticon
-  	Creation date: 08/08/2019 22:13
+  	Creation date: 17/08/2019 05:07
   	*/
 
 @font-face {
@@ -29,9 +29,17 @@
   font-family: Flaticon;
   font-size: 20px;
   font-style: normal;
-  margin-left: 0px;
 }
 
 .flaticon-left-arrow:before {
   content: '\f100';
+}
+.flaticon-add:before {
+  content: '\f101';
+}
+.flaticon-magnifying-glass:before {
+  content: '\f102';
+}
+.flaticon-checked:before {
+  content: '\f103';
 }
