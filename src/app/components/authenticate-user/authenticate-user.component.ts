@@ -65,7 +65,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
         },
         error => {
           this.loading = false;
-          this.openErrorMessage()
+          this.openErrorMessage();
           this.error = error;
         }
       );
