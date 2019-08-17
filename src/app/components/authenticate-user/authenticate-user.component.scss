@@ -237,5 +237,8 @@ section.auth-pages.login-page #sign-up-form p a {
   position: relative;
   left: 25%;
   height: 50px;
-  width: 40%;
+  width: 20%;
+}
+::ng-deep .dark-snackbar{
+  background: #ff1744 !important;
 }

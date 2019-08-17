@@ -19,6 +19,7 @@ import { VerifycodeComponent } from './components/verifycode/verifycode.componen
 import { BroadcastService } from './services/business/broadcastdata.service';
 import { AngularMaterialModule } from './angular-material.module';
 import { SuccessMessageComponent } from './components/success-message/success-message.component';
+import { ErrorMessageComponent } from './components/error-message/error-message.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +29,7 @@ import { SuccessMessageComponent } from './components/success-message/success-me
     AuthenticateUserComponent,
     VerifycodeComponent,
     SuccessMessageComponent,
+    ErrorMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,7 @@ import { SuccessMessageComponent } from './components/success-message/success-me
     {provide: AuthenticateDataService, useClass: AuthenticateWebService}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SuccessMessageComponent]
+  entryComponents: [SuccessMessageComponent, ErrorMessageComponent]
 
 })
 export class AppModule { }

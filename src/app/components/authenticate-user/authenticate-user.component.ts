@@ -6,6 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { fadeInAnimation } from 'src/app/services/misc/animation';
+import { MatSnackBar } from '@angular/material';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 @Component({
   selector: 'app-authenticate-user',
@@ -22,13 +24,14 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   public error: any;
   public loggedInUser: any;
   public userRole = {} as any;
-  loading: boolean;
+  public loading: boolean;
+  public durationInSeconds = 4;
 
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
-              private broadCastService: BroadcastService,
+              private _snackBar: MatSnackBar,
               private authenticate: AuthenticateDataService) { }
 
   ngOnInit() {
@@ -61,9 +64,17 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error => {
+          this.loading = false;
+          this.openErrorMessage()
           this.error = error;
         }
       );
+  }
+  openErrorMessage() {
+    this._snackBar.openFromComponent(ErrorMessageComponent, {
+      duration: this.durationInSeconds * 1000,
+      panelClass: ['dark-snackbar']
+    });
   }
   updateUserStatus() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
