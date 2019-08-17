@@ -5,15 +5,14 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
-import { fadeInAnimation } from 'src/app/services/misc/animation';
-import { popInAnimation } from 'src/app/services/misc/landinganimation';
+// import { fadeInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-authenticate-user',
   templateUrl: './authenticate-user.component.html',
-  styleUrls: ['./authenticate-user.component.scss'],
-  animations: [fadeInAnimation],
-  host: { '[@fadeInAnimation]': '' }
+  styleUrls: ['./authenticate-user.component.scss']
+  // animations: [fadeInAnimation],
+  // host: { '[@fadeInAnimation]': '' }
 })
 export class AuthenticateUserComponent implements OnInit, OnDestroy {
 

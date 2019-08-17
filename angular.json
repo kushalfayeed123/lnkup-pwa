@@ -29,7 +29,8 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/lnkup-theme.scss"
             ],
             "scripts": []
           },

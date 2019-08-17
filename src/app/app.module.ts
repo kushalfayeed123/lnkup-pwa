@@ -17,7 +17,7 @@ import { AuthenticateUserComponent } from './components/authenticate-user/authen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VerifycodeComponent } from './components/verifycode/verifycode.component';
 import { BroadcastService } from './services/business/broadcastdata.service';
-
+import { AngularMaterialModule } from './angular-material.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +34,7 @@ import { BroadcastService } from './services/business/broadcastdata.service';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    AngularMaterialModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
