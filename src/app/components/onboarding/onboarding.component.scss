@@ -64,7 +64,6 @@ section.onboarding-page .overlap {
   -ms-grid-column-span: 1;
   grid-column: 1/2;
   z-index: 20;
-  padding-top: 60px;
 }
 
 section.onboarding-page h4 {
@@ -90,6 +89,9 @@ section.onboarding-page .carousel-indicators {
           align-items: center;
   height: 20px;
   margin-bottom: 10px;
+}
+.carousel{
+  height: 710px !important;
 }
 
 section.onboarding-page .carousel-indicators li {
