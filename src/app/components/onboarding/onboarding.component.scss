@@ -23,7 +23,7 @@ section.onboarding-page nav a:hover, section.onboarding-page nav a:active {
 section.onboarding-page div#onboardingCarousel {
   position: static;
   display: grid;
-  height: 597px;
+  height: 599px;
   display: -ms-grid;
   -ms-grid-columns: 1fr;
       grid-template-columns: 1fr;
@@ -46,6 +46,8 @@ section.onboarding-page img {
   -o-object-position: center;
      object-position: center;
   width: 100%;
+  top: 12px;
+  position: relative;
 }
 .mat-tab-list{
   transform: translateX(37px) !important;
@@ -56,7 +58,7 @@ section.onboarding-page img {
 }
 section.onboarding-page .overlap {
   background: #121212;
-  padding: 25px 20px 35px 20px;
+  padding: 45px 20px 35px 20px;
   margin: 0 -32px 0 -32px;
   text-align: center;
   grid-row: rtwo/rthree;
@@ -90,9 +92,7 @@ section.onboarding-page .carousel-indicators {
   height: 20px;
   margin-bottom: 10px;
 }
-.carousel{
-  height: 710px !important;
-}
+
 
 section.onboarding-page .carousel-indicators li {
   border-radius: 50%;
@@ -126,20 +126,26 @@ section.onboarding-page .button-container {
   -ms-grid-rows: auto;
       grid-template-rows: auto;
   grid-column-gap: 16px;
+  padding-top: 40px;
+  height: 120px
 }
 .mat-tab-header-pagination-chevron{
   visibility: hidden !important;
+}
+
+.mat-tab-header{
+  border-top: none !important;
 }
 .d-block{
   overflow: hidden;
 }
 .mat-raised-button{
     border: none !important;
-    height: 54px !important;
+    height: 35px !important;
 }
 .mat-button-wrapper{
   position: relative;
-  bottom: 5px;
+  bottom: 12px;
 }
 section.onboarding-page button {
   display: inline-block;
@@ -180,4 +186,12 @@ section.onboarding-page button:active, section.onboarding-page button:focus {
     -ms-transform: translateX(18px) !important;
     -o-transform: translateX(18px) !important;
 }
+section.onboarding-page .overlap{
+  padding-top: 1px;
+}
+}
+@media(max-width: 411px){
+  .carousel{
+    height: 630px !important;
+  }
 }
