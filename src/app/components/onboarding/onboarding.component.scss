@@ -1,0 +1,177 @@
+/* 
+================
+Onboarding-Page
+================
+*/
+section.onboarding-page .contain-box {
+  text-align: center;
+}
+
+section.onboarding-page nav {
+  text-align: right;
+  font-size: 14px;
+}
+
+section.onboarding-page nav a {
+  color: #ffffff;
+}
+
+section.onboarding-page nav a:hover, section.onboarding-page nav a:active {
+  color: #ffffff;
+}
+
+section.onboarding-page div#onboardingCarousel {
+  position: static;
+  display: grid;
+  display: -ms-grid;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+  -ms-grid-rows: [rone] 60% [rtwo] 40% [rthree];
+      grid-template-rows: [rone] 60% [rtwo] 40% [rthree];
+  grid-column-gap: 0;
+}
+
+section.onboarding-page .carousel-inner {
+  grid-row: rone/rthree;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+}
+
+section.onboarding-page img {
+  margin-top: 80px;
+  max-width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+  width: 100%;
+}
+.mat-tab-list{
+  transform: translateX(37px) !important;
+  -webkit-transform: translateX(37px) !important;
+  -moz-transform: translateX(37px) !important;
+  -ms-transform: translateX(37px) !important;
+  -o-transform: translateX(37px) !important;
+}
+section.onboarding-page .overlap {
+  background: #121212;
+  padding: 25px 20px 35px 20px;
+  margin: 0 -32px 0 -32px;
+  text-align: center;
+  grid-row: rtwo/rthree;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  z-index: 20;
+}
+
+section.onboarding-page h4 {
+  font-weight: 500;
+  font-size: 18px;
+  color: #d54ab6;
+  margin-bottom: 12px;
+  letter-spacing: 0.25px;
+}
+
+section.onboarding-page p {
+  letter-spacing: 0.111px;
+  font-size: 13px;
+  line-height: 20px;
+  margin-bottom: 22px;
+}
+
+section.onboarding-page .carousel-indicators {
+  position: static;
+  margin: 0;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+section.onboarding-page .carousel-indicators li {
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  background: #ffffff;
+  opacity: 0.2;
+  width: 5px;
+  height: 5px;
+  border: 0;
+  -webkit-transition: all ease-out 300ms;
+  transition: all ease-out 300ms;
+}
+
+section.onboarding-page .carousel-indicators li.active {
+  width: 7px;
+  height: 7px;
+  background-color: #d54ab6;
+  opacity: 0.5;
+  -webkit-transition: all ease-in 300ms;
+  transition: all ease-in 300ms;
+}
+
+section.onboarding-page .button-container {
+  display: grid;
+  display: -ms-grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  -ms-grid-rows: auto;
+      grid-template-rows: auto;
+  grid-column-gap: 16px;
+}
+.mat-tab-header-pagination-chevron{
+  visibility: hidden !important;
+}
+.mat-raised-button{
+    border: none !important;
+    height: 54px !important;
+}
+.mat-button-wrapper{
+  position: relative;
+  bottom: 5px;
+}
+section.onboarding-page button {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 16px;
+  color: #ffffff;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  background-color: transparent;
+  border: 1.5px solid #ffffff;
+  text-align: center;
+  font-weight: bold;
+  font-family: "Lato";
+  -webkit-transition: all ease-out 300ms;
+  transition: all ease-out 300ms;
+  padding: 12px 0;
+}
+
+section.onboarding-page button:focus, section.onboarding-page button:active, section.onboarding-page button:hover {
+  outline: none;
+}
+
+section.onboarding-page button:active, section.onboarding-page button:focus {
+  -webkit-transition: all ease-in 300ms;
+  transition: all ease-in 300ms;
+  background-color: #d54ab6;
+  border: 0;
+  padding: 13.5px 0;
+}
+@media(max-width: 320px){
+  .mat-tab-list{
+    transform: translateX(18px) !important;
+    -webkit-transform: translateX(18px) !important;
+    -moz-transform: translateX(18px) !important;
+    -ms-transform: translateX(18px) !important;
+    -o-transform: translateX(18px) !important;
+}
+}

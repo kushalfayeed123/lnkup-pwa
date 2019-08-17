@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-onboarding',
   templateUrl: './onboarding.component.html',
-  styleUrls: ['./onboarding.component.sass']
+  styleUrls: ['./onboarding.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class OnboardingComponent implements OnInit {
 
@@ -13,10 +14,10 @@ export class OnboardingComponent implements OnInit {
   ngOnInit() {
   }
 
-  navtologin(){
+  navToLogin(){
     this.router.navigate(['auth'])
   }
-  navtoregister(){
+  navToRegister(){
     this.router.navigate(['register'])
   }
 

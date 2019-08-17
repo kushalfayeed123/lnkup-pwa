@@ -24,6 +24,7 @@ import {
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatTabsModule} from '@angular/material/tabs';
 @NgModule({
    imports: [
       CommonModule,
@@ -47,7 +48,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
       MatPaginatorModule,
       MatCardModule,
       MatProgressSpinnerModule,
-      MatSnackBarModule
+      MatSnackBarModule,
+      MatTabsModule
       
    ],
    exports: [
@@ -70,7 +72,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
       MatCardModule,
       MatProgressSpinnerModule,
       MatBottomSheetModule,
-      MatSnackBarModule
+      MatSnackBarModule,
+      MatTabsModule
       ],
    providers: [
       MatDatepickerModule,

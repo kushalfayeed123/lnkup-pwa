@@ -1,6 +1,41 @@
-<div style = "color: whitesmoke" (click)="navtologin()">
-login
-</div>
-<div style = "color: whitesmoke" (click)="navtoregister()">
-    register
-    </div>
+<section class="onboarding-page">
+        <main class="contain-box">
+          <div
+            id="onboardingCarousel"
+            class="carousel slide carousel-fade"
+            data-ride="carousel"
+          >
+          <mat-tab-group headerPosition="below">
+                <mat-tab label="." id="#onboardingCarousel"> <img
+                    src="assets/Images/iPhone X Blue.png"
+                    class="d-block w-100"
+                    alt="..."
+                  /> </mat-tab>
+                <mat-tab label="." id="#onboardingCarousel"> <img
+                    src="assets/Images/iPhone X Blue.png"
+                    class="d-block w-100"
+                    alt="..."
+                  /> </mat-tab>
+                <mat-tab label="." id="#onboardingCarousel"> <img
+                    src="assets/Images/iPhone X Blue.png"
+                    class="d-block w-100"
+                    alt="..."
+                  /> </mat-tab>
+              </mat-tab-group>
+            <div class="overlap">
+              <h4 class="carousel-heading">
+                Ridesharing Now Made Easy
+              </h4>
+              <p class="carousel-p">
+                Lnkup is here to make your daily <br />
+                commutes smoother
+              </p>
+             
+              <div class="button-container">
+                <button id="login" (click)="navToLogin()" mat-raised-button color="accent" class="onboarding-btn">Login</button>
+                <button id="sign-up" (click)="navToRegister()" mat-raised-button color="accent" class="onboarding-btn">Sign Up</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </section>
