@@ -18,6 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VerifycodeComponent } from './components/verifycode/verifycode.component';
 import { BroadcastService } from './services/business/broadcastdata.service';
 import { AngularMaterialModule } from './angular-material.module';
+import { SuccessMessageComponent } from './components/success-message/success-message.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +27,7 @@ import { AngularMaterialModule } from './angular-material.module';
     RegisterUserComponent,
     AuthenticateUserComponent,
     VerifycodeComponent,
+    SuccessMessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +46,8 @@ import { AngularMaterialModule } from './angular-material.module';
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {provide: AuthenticateDataService, useClass: AuthenticateWebService}
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [SuccessMessageComponent]
+
 })
 export class AppModule { }

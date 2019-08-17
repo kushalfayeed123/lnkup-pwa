@@ -16,6 +16,10 @@
           <img src="./assets/svg/002-search.svg" alt="" width="15px" />
         </button>
       </div> -->
+      <mat-spinner *ngIf="loading"
+      class="loader"
+      [color]="primary"
+    ></mat-spinner>
     <form [formGroup]="registerForm" (ngSubmit)="registerUser()" id="sign-up-form">
       <mat-form-field class="auth-full-width">
         <input type="text" matInput class="input-color" placeholder="username" formControlName="userName" />

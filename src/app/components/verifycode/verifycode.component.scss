@@ -9,12 +9,45 @@ section.auth-pages a {
   transition: all ease-in 300ms;
   color: #ffffff;
 }
+.pl-2{
+  position: relative;
+  bottom: 40px;
+  left: 55%;
+}
+.loader{
+  position: relative;
+  left: 25%;
+  height: 50px;
+  width: 40%;
+}
+.auth-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  
+}
+.login-text{
+  color: #eeeeee !important;
+}
+
+
+.auth-full-width {
+  width: 100%;
+  color: #ccc;
+}
+
+td {
+  padding-right: 8px;
+}
 
 section.auth-pages a:hover, section.auth-pages a:active, section.auth-pages a:focus {
   text-decoration: none;
   -webkit-transition: all ease-out 300ms;
   transition: all ease-out 300ms;
   color: #d54ab6;
+}
+::ng-deep .dark-snackbar{
+  background: #d54ab6 !important;
 }
 
 section.auth-pages nav {
@@ -30,14 +63,14 @@ section.auth-pages .page-heading h1 {
   color: #d54ab6;
   font-weight: bold;
   font-size: 32px;
-  font-family: "Circular";
+  font-family: "Poppins";
 }
 
 section.auth-pages .page-heading p {
-  color: #ffffff;
+  color: #ccc;
   font-weight: normal;
   font-size: 16px;
-  font-family: 'Circular-book';
+  font-family: 'Poppins';
 }
 
 section.auth-pages .alt-sisgn-up {
@@ -176,10 +209,10 @@ section.auth-pages .checker {
 }
 
 section.auth-pages .checker p {
-  color: #ffffff;
+  color: #ccc;
   font-weight: normal;
   font-size: 10px;
-  font-family: 'Circular-book';
+  font-family: 'Poppins';
   margin: 0;
 }
 
@@ -191,8 +224,10 @@ section.auth-pages .checker p {
 
 section.auth-pages .a-login {
   font-size: 14px;
-  text-align: center;
-  margin-bottom: 30px;
+  text-align: left;
+  margin-top: 15px;
+  font-family: "Poppins";
+  color: #ccc;
 }
 
 section.auth-pages.login-page .page-heading {
