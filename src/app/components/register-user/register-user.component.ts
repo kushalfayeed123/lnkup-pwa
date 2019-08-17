@@ -6,6 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { fadeInAnimation } from 'src/app/services/misc/animation';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register-user',
@@ -18,13 +20,15 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
 
   public registerForm : FormGroup;
   private unsubscribe$ = new Subject<void>();
-  loading: boolean;
+  public loading: boolean;
+  public durationInSeconds = 4;
 
 
   constructor( private formBuilder: FormBuilder,
      private authService: AuthenticateDataService,
      private route: Router,
-     private broadcastService: BroadcastService) { }
+     private _snackBar: MatSnackBar,
+     ) { }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -55,10 +59,16 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
         this.loading = false;
     }, 
     error => {
-      console.error('An error occured');
+      this.loading = false;
+      this.openErrorMessage();
     });
   }
- 
+  openErrorMessage() {
+    this._snackBar.openFromComponent(ErrorMessageComponent, {
+      duration: this.durationInSeconds * 1000,
+      panelClass: ['dark-snackbar']
+    });
+  }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
