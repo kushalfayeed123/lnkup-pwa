@@ -51,6 +51,10 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
     this.loading = true;
     // // stop here if form is invalid
     if (this.loginForm.invalid) {
+      setTimeout(() => {
+        this.loading = false;
+        this.openErrorMessage();
+      }, 3000);  
       return;
     }
 
@@ -64,8 +68,6 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error => {
-          this.loading = false;
-          this.openErrorMessage();
           this.error = error;
         }
       );
@@ -73,14 +75,19 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   openErrorMessage() {
     this._snackBar.openFromComponent(ErrorMessageComponent, {
       duration: this.durationInSeconds * 1000,
-      panelClass: ['dark-snackbar']
+      panelClass: ['dark-snackbar-error']
     });
   }
   updateUserStatus() {
+    this.loading = true;
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
     const registeredUser = JSON.parse(localStorage.getItem('registeredUser'));
     if (registeredUser == null) {
+      setTimeout(() => {
+        this.loading = false;
+        this.openErrorMessage();
+      }, 3000);   
       return;
     } else {
       const userData = registeredUser;

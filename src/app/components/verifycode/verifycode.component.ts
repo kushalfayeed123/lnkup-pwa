@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { fadeInAnimation } from 'src/app/services/misc/animation';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessMessageComponent } from '../success-message/success-message.component';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 @Component({
   selector: 'app-verifycode',
@@ -36,16 +37,24 @@ export class VerifycodeComponent implements OnInit, OnDestroy {
 
 
   verifyUser() {
+    this.loading =  true;
     const storedVerifyCode = localStorage.getItem('userVerification');
     const userVerifyCode = this.verifyForm.value;
     const usercode = userVerifyCode.verifycode;
     if (storedVerifyCode === usercode) {
-      this.loading =  true;
-     this.openSuccessMessage();
      setTimeout(() => {
        this.loading = false;
+       this.openSuccessMessage();
+     }, 2000);
+     setTimeout(() => {
       this.authenticateUser();
-     }, 4000);
+    }, 4000);
+     
+    } else {
+      setTimeout(() => {
+        this.loading = false;
+        this.openErrorMessage();
+      }, 4000);      
     }
    
   }
@@ -53,6 +62,12 @@ export class VerifycodeComponent implements OnInit, OnDestroy {
     this._snackBar.openFromComponent(SuccessMessageComponent, {
       duration: this.durationInSeconds * 1000,
       panelClass: ['dark-snackbar']
+    });
+  }
+  openErrorMessage() {
+    this._snackBar.openFromComponent(ErrorMessageComponent, {
+      duration: this.durationInSeconds * 1000,
+      panelClass: ['dark-snackbar-error']
     });
   }
   authenticateUser() {

@@ -66,7 +66,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
   openErrorMessage() {
     this._snackBar.openFromComponent(ErrorMessageComponent, {
       duration: this.durationInSeconds * 1000,
-      panelClass: ['dark-snackbar']
+      panelClass: ['dark-snackbar-error']
     });
   }
 

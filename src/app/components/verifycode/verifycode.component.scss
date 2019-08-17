@@ -49,6 +49,9 @@ section.auth-pages a:hover, section.auth-pages a:active, section.auth-pages a:fo
 ::ng-deep .dark-snackbar{
   background: #d54ab6 !important;
 }
+::ng-deep .dark-snackbar-error{
+  background: #ff1744 !important;
+}
 
 section.auth-pages nav {
   margin-top: 55px;

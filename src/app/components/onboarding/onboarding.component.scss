@@ -178,6 +178,11 @@ section.onboarding-page button:active, section.onboarding-page button:focus {
   border: 0;
   padding: 13.5px 0;
 }
+@media(max-width: 411px){
+  .carousel{
+    height: 630px !important;
+  }
+}
 @media(max-width: 320px){
   .mat-tab-list{
     transform: translateX(18px) !important;
@@ -190,8 +195,4 @@ section.onboarding-page .overlap{
   padding-top: 1px;
 }
 }
-@media(max-width: 411px){
-  .carousel{
-    height: 630px !important;
-  }
-}
+
