@@ -23,6 +23,7 @@ section.onboarding-page nav a:hover, section.onboarding-page nav a:active {
 section.onboarding-page div#onboardingCarousel {
   position: static;
   display: grid;
+  height: 597px;
   display: -ms-grid;
   -ms-grid-columns: 1fr;
       grid-template-columns: 1fr;
@@ -39,7 +40,6 @@ section.onboarding-page .carousel-inner {
 }
 
 section.onboarding-page img {
-  margin-top: 80px;
   max-width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -126,6 +126,9 @@ section.onboarding-page .button-container {
 }
 .mat-tab-header-pagination-chevron{
   visibility: hidden !important;
+}
+.d-block{
+  overflow: hidden;
 }
 .mat-raised-button{
     border: none !important;
