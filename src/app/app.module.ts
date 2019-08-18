@@ -20,6 +20,8 @@ import { BroadcastService } from './services/business/broadcastdata.service';
 import { AngularMaterialModule } from './angular-material.module';
 import { SuccessMessageComponent } from './components/success-message/success-message.component';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
+import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';     
+import { AgmDirectionModule } from 'agm-direction';   
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,11 +41,15 @@ import { ErrorMessageComponent } from './components/error-message/error-message.
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
+    AgmCoreModule.forRoot({ 
+      apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ',
+    }),
+    AgmDirectionModule,     
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     BroadcastService,
-    
+    GoogleMapsAPIWrapper,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {provide: AuthenticateDataService, useClass: AuthenticateWebService}

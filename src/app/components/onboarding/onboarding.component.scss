@@ -178,6 +178,9 @@ section.onboarding-page button:active, section.onboarding-page button:focus {
   border: 0;
   padding: 13.5px 0;
 }
+.mat-ink-bar{
+  width: 63.2px !important;
+}
 @media(max-width: 411px){
   .carousel{
     height: 630px !important;
