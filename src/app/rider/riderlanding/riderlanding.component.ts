@@ -51,7 +51,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     zoom: 5
   };
  
-  @ViewChild(AgmMap) map: AgmMap;
+  @ViewChild(AgmMap, {static: false}) map: AgmMap;
 
   constructor(private route: ActivatedRoute,
     private authService: AuthenticateDataService,
