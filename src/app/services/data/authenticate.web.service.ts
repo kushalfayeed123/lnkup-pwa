@@ -26,7 +26,7 @@ export class AuthenticateWebService implements AuthenticateDataService {
     );
     this.currentUser = this.currentUserSubject.asObservable();
     this.webUrl = environment.webUrl;
-    
+
   }
 
   public get currentUserValue(): Users {
@@ -63,9 +63,13 @@ export class AuthenticateWebService implements AuthenticateDataService {
   register(user: any) {
     return this.http.post(`${this.webUrl}/user/register`, user);
   }
-  update(user: Users) {
-    return this.http.put(`${this.webUrl}/user/${user.userId}`, user);
-
+  update(user: any) {
+    console.log('from the service', user);
+    return this.http.put(`${this.webUrl}/user/${user.id}`, user);
+  }
+  updateUserStatus(user: any) {
+    console.log('from the service', user);
+    return this.http.patch(`${this.webUrl}/user/status/${user.id}`, user);
   }
   delete(id: any) {
     return this.http.delete(`${this.webUrl}/user/${id}`);

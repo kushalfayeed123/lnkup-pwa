@@ -1,3 +1,5 @@
+import { AgmDirectionModule } from 'agm-direction';
+import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,8 +22,7 @@ import { BroadcastService } from './services/business/broadcastdata.service';
 import { AngularMaterialModule } from './angular-material.module';
 import { SuccessMessageComponent } from './components/success-message/success-message.component';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
-import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';     
-import { AgmDirectionModule } from 'agm-direction';   
+import { PushNotificationComponent } from './components/push-notification/push-notification.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,8 @@ import { AgmDirectionModule } from 'agm-direction';
     AuthenticateUserComponent,
     VerifycodeComponent,
     SuccessMessageComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    PushNotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -41,10 +43,10 @@ import { AgmDirectionModule } from 'agm-direction';
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    AgmCoreModule.forRoot({ 
+    AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ',
     }),
-    AgmDirectionModule,     
+    AgmDirectionModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [

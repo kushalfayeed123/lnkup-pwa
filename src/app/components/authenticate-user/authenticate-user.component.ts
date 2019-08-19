@@ -54,7 +54,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.loading = false;
         this.openErrorMessage();
-      }, 3000);  
+      }, 3000);
       return;
     }
 
@@ -80,20 +80,17 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   }
   updateUserStatus() {
     this.loading = true;
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
-    const registeredUser = JSON.parse(localStorage.getItem('registeredUser'));
+    const registeredUser = JSON.parse(localStorage.getItem('currentUser'));
     if (registeredUser == null) {
       setTimeout(() => {
         this.loading = false;
         this.openErrorMessage();
-      }, 3000);   
+      }, 3000);
       return;
     } else {
       const userData = registeredUser;
-      userData.userId = userId;
-      userData.userStatus = 1;
-      this.authenticate.update(userData)
+      const userStatusData = {id: userData.id, userStatus: 1};
+      this.authenticate.updateUserStatus(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
           console.log('status was updated', data);
@@ -107,9 +104,9 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
     const userId = loggedInUser.id;
     if (this.userRole.role === 'Rider') {
       this.router.navigate(['rider/home', userId]);
-    } else if(this.userRole.role ===  'Driver'){
+    } else if (this.userRole.role ===  'Driver') {
       this.router.navigate(['driver/dashboard', userId]);
-    } else if(this.userRole.role === 'Admin'){
+    } else if (this.userRole.role === 'Admin') {
       this.router.navigate(['admin/dashboard', userId]);
     } else {
       this.router.navigate(['onboarding']);
