@@ -1,6 +1,6 @@
 <agm-map [(latitude)]="location.lat" [(longitude)]="location.lng" [(zoom)]="location.zoom" [disableDefaultUI]="true"
     [zoomControl]="true" [(fitBounds)]='location.viewport'>
-    <agm-marker [(latitude)]="location.marker.lat" [(longitude)]="location.marker.lng"
+    <agm-marker [(latitude)]="location.lat" [(longitude)]="location.lng"
         [markerDraggable]="location.marker.draggable" (dragEnd)='markerDragEnd($event)'></agm-marker>
 
     <agm-circle [latitude]="location.lat" [longitude]="location.lng" [(radius)]="circleRadius" [fillColor]="'blue'"
