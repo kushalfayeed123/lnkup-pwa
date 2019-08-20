@@ -57,11 +57,12 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       }, 3000);
       return;
     }
-
+    localStorage.setItem('userPassword', JSON.stringify(this.loginForm.value));
     this.authenticate.login(this.f.username.value, this.f.password.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         data => {
+        
           this.updateUserStatus();
           this.redirectUser();
           localStorage.removeItem('registeredUser');
@@ -81,6 +82,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   updateUserStatus() {
     this.loading = true;
     const registeredUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userPass = JSON.parse(localStorage.getItem('userPassword'));
     if (registeredUser == null) {
       setTimeout(() => {
         this.loading = false;
@@ -89,8 +91,19 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       return;
     } else {
       const userData = registeredUser;
-      const userStatusData = {id: userData.id, userStatus: 1};
-      this.authenticate.updateUserStatus(userStatusData)
+      const userRole = this.authenticate.decode();
+
+      const userStatusData = {id: userData.id,
+        email: userData.email,
+        username: userData.userName,
+        phoneNumber: userData.phoneNumber,
+        password: userPass.password,
+        token: userData.token,
+        userStatus: 1,
+        role: userRole.role
+        };
+        console.log('dnt know', userStatusData)
+      this.authenticate.update(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
           console.log('status was updated', data);
