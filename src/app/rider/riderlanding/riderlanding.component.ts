@@ -4,7 +4,8 @@ import {
   OnDestroy,
   Input,
   ViewChild,
-  NgZone
+  NgZone,
+  ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
@@ -12,6 +13,7 @@ import { MapsAPILoader, AgmMap } from '@agm/core';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 declare var google: any;
 
@@ -29,6 +31,8 @@ interface Location {
   zoom: number;
   address_level_1?: string;
   address_level_2?: string;
+  origin_address?: string;
+  destination_address?: string;
   address_country?: string;
   address_zip?: string;
   address_state?: string;
@@ -57,6 +61,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   };
 
   @ViewChild(AgmMap, { static: false }) map: AgmMap;
+  @ViewChild("search", { static: false }) searchElementRef: ElementRef;
+ 
+  origin: { lat: number; lng: number; };
+  destination: { lat: number; lng: number; };
+  waypoints: { location: { lat: number; lng: number; }; }[];
+  searchControl: FormControl;
 
   constructor(
     private route: ActivatedRoute,
@@ -79,8 +89,30 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       const userId = p.id;
       this.getUserById(userId);
     });
+    this.searchControl = new FormControl();
+    // this.getDirection();
     this.getCurrentLocation();
     this.location.marker.draggable = true;
+  }
+
+  activateAutocomplete(){
+    this.mapsApiLoader.load().then(() => {
+      const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      });
+      
+      autocomplete.addListener("place_changed", () => {
+        this.zone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+        });
+      });
+    });
   }
 
   getUserById(userId) {
@@ -107,28 +139,156 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     }
   }
 
+  async getDirection(){
+    const origin = await JSON.parse(localStorage.getItem('origin'));
+    const destination =  await JSON.parse(localStorage.getItem('destination'));
+    console.log('direction', origin, destination);
+    this.origin = { lat: origin.lat, lng: origin.lng }
+    this.destination = { lat: destination.lat, lng: destination.lng }
+  // this.waypoints = [
+  //    {location: { lat: 39.0921167, lng: -94.8559005 }},
+  //    {location: { lat: 41.8339037, lng: -87.8720468 }}
+  // ]
+  }
+
   showTrackingPosition(position) {
     this.location.lng = position.coords.longitude;
     this.location.lat = position.coords.latitude;
     console.log('getting my location',  typeof this.location.lng);
   }
 
-  updateOnMap() {
-    // tslint:disable-next-line:variable-name
-    let full_address: string = this.location.address_level_1 || ' ';
-    if (this.location.address_level_2) {
-      full_address = full_address + ' ' + this.location.address_level_2;
-    }
-    if (this.location.address_state) {
-      full_address = full_address + ' ' + this.location.address_state;
-    }
-    if (this.location.address_country) {
-      full_address = full_address + ' ' + this.location.address_country;
-    }
+  // updateOnMap() {
+  //   // tslint:disable-next-line:variable-name
+  //   let full_address: string = this.location.address_level_1 || ' ';
+  //   if (this.location.address_level_2) {
+  //     full_address = full_address + ' ' + this.location.address_level_2;
+  //   }
+  //   if (this.location.address_state) {
+  //     full_address = full_address + ' ' + this.location.address_state;
+  //   }
+  //   if (this.location.address_country) {
+  //     full_address = full_address + ' ' + this.location.address_country;
+  //   }
 
-    this.findLocation(full_address);
+  //   this.findLocation(full_address);
+  // }
+  storeLocation(){
+    let origin_address: string = this.location.origin_address || ' ';
+    let destination_address: string = this.location.destination_address || '';
+    this.findOrigin(origin_address);
+    this.findDestination(destination_address);
+    setTimeout(() => {
+      this.getDirection();
+    }, 2000);
+   
   }
-  findLocation(address) {
+ 
+  findDestination(address) {
+    if (!this.geocoder) {
+      this.geocoder = new google.maps.Geocoder();
+    }
+    this.geocoder.geocode(
+      {
+        address
+      },
+      (results, status) => {
+        console.log(results);
+        if (status === google.maps.GeocoderStatus.OK) {
+          // tslint:disable-next-line:prefer-for-of
+          for (var i = 0; i < results[0].address_components.length; i++) {
+            const types = results[0].address_components[i].types;
+
+            if (types.indexOf('locality') !== -1) {
+              this.location.address_level_2 =
+                results[0].address_components[i].long_name;
+            }
+            if (types.indexOf('country') !== -1) {
+              this.location.address_country =
+                results[0].address_components[i].long_name;
+            }
+            if (types.indexOf('postal_code') !== -1) {
+              this.location.address_zip =
+                results[0].address_components[i].long_name;
+            }
+            if (types.indexOf('administrative_area_level_1') !== -1) {
+              this.location.address_state =
+                results[0].address_components[i].long_name;
+            }
+          }
+
+          if (results[0].geometry.location) {
+            this.location.lat = results[0].geometry.location.lat();
+            this.location.lng = results[0].geometry.location.lng();
+            // this.location.marker.lat = results[0].geometry.location.lat();
+            // this.location.marker.lng = results[0].geometry.location.lng();
+            // this.location.marker.draggable = true;
+            // this.location.viewport = results[0].geometry.viewport;
+            const destination = {lng: this.location.lng,
+                            lat: this.location.lat}
+            localStorage.setItem('destination', JSON.stringify(destination));
+            console.log('coordinates', this.location.lat, this.location.lng);
+          }
+
+          // this.map.triggerResize();
+        } else {
+          alert('Sorry, this search produced no results.');
+        }
+      }
+    );
+  }
+   findOrigin(address){
+    if (!this.geocoder) {
+      this.geocoder = new google.maps.Geocoder();
+    }
+    this.geocoder.geocode(
+      {
+        address
+      },
+      (results, status) => {
+        console.log(results);
+        if (status === google.maps.GeocoderStatus.OK) {
+          // tslint:disable-next-line:prefer-for-of
+          for (var i = 0; i < results[0].address_components.length; i++) {
+            const types = results[0].address_components[i].types;
+
+            if (types.indexOf('locality') !== -1) {
+              this.location.address_level_2 =
+                results[0].address_components[i].long_name;
+            }
+            if (types.indexOf('country') !== -1) {
+              this.location.address_country =
+                results[0].address_components[i].long_name;
+            }
+            if (types.indexOf('postal_code') !== -1) {
+              this.location.address_zip =
+                results[0].address_components[i].long_name;
+            }
+            if (types.indexOf('administrative_area_level_1') !== -1) {
+              this.location.address_state =
+                results[0].address_components[i].long_name;
+            }
+          }
+
+          if (results[0].geometry.location) {
+            this.location.lat = results[0].geometry.location.lat();
+            this.location.lng = results[0].geometry.location.lng();
+            // this.location.marker.lat = results[0].geometry.location.lat();
+            // this.location.marker.lng = results[0].geometry.location.lng();
+            // this.location.marker.draggable = true;
+            // this.location.viewport = results[0].geometry.viewport;
+            const origin = {lng: this.location.lng,
+                            lat: this.location.lat};
+             localStorage.setItem('origin', JSON.stringify(origin));
+          }
+
+          // this.map.triggerResize();
+        } else {
+          alert('Sorry, this search produced no results.');
+        }
+      }
+    );
+  }
+  findLocation(address){
     if (!this.geocoder) {
       this.geocoder = new google.maps.Geocoder();
     }
@@ -167,7 +327,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.location.marker.lat = results[0].geometry.location.lat();
             this.location.marker.lng = results[0].geometry.location.lng();
             this.location.marker.draggable = true;
-            this.location.viewport = results[0].geometry.viewport;
+            this.location.viewport = results[0].geometry.viewport; 
           }
 
           this.map.triggerResize();
