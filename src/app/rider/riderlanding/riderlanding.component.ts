@@ -37,6 +37,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   destinationAddress: string;
   origin: { lat: any; lng: any; };
   destination: { lat: any; lng: any; };
+  renderOptions: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -92,6 +93,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     console.log('direction', origin, destination);
     this.origin = { lat: origin.lat, lng: origin.lng };
     this.destination = { lat: destination.lat, lng: destination.lng };
+    this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6' } };
     // this.waypoints = [
     //    {location: { lat: 39.0921167, lng: -94.8559005 }},
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}
