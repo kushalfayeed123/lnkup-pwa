@@ -14,6 +14,7 @@ import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { Appearance } from '@angular-material-extensions/google-maps-autocomplete';
 
 declare var google: any;
 
@@ -59,14 +60,17 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     },
     zoom: 17
   };
+  public appearance = Appearance;
 
   @ViewChild(AgmMap, { static: false }) map: AgmMap;
-  @ViewChild("search", { static: false }) searchElementRef: ElementRef;
- 
+  @ViewChild('search', { static: false }) search: ElementRef;
+
   origin: { lat: number; lng: number; };
   destination: { lat: number; lng: number; };
   waypoints: { location: { lat: number; lng: number; }; }[];
   searchControl: FormControl;
+  latitude: number;
+  longitude: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -95,26 +99,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.location.marker.draggable = true;
   }
 
-  activateAutocomplete(){
-    this.mapsApiLoader.load().then(() => {
-      const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
-        types: ["address"]
-      });
-      
-      autocomplete.addListener("place_changed", () => {
-        this.zone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-        });
-      });
-    });
+
+  onLocationSelected(location: Location) {
+    console.log('onLocationSelected: ', location);
+    this.latitude = location.lat;
+    this.longitude = location.lng;
   }
-
   getUserById(userId) {
     this.authService
       .getById(userId)
@@ -180,9 +171,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.getDirection();
     }, 2000);
-   
+
   }
- 
+
   findDestination(address) {
     if (!this.geocoder) {
       this.geocoder = new google.maps.Geocoder();
@@ -327,7 +318,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.location.marker.lat = results[0].geometry.location.lat();
             this.location.marker.lng = results[0].geometry.location.lng();
             this.location.marker.draggable = true;
-            this.location.viewport = results[0].geometry.viewport; 
+            this.location.viewport = results[0].geometry.viewport;
           }
 
           this.map.triggerResize();

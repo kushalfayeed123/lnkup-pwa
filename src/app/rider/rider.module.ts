@@ -6,6 +6,7 @@ import { RiderlandingComponent } from './riderlanding/riderlanding.component';
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 
 
 @NgModule({
@@ -14,9 +15,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     CommonModule,
     RiderRoutingModule,
     AgmCoreModule,
-    AgmDirectionModule, 
+    AgmDirectionModule,
     FormsModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
+    MatGoogleMapsAutocompleteModule
   ]
 })
 export class RiderModule { }
