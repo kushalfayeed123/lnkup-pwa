@@ -24,6 +24,7 @@ import { SuccessMessageComponent } from './components/success-message/success-me
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { PushNotificationComponent } from './components/push-notification/push-notification.component';
+import { MapBroadcastService } from './services/business/mapbroadcast.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +54,7 @@ import { PushNotificationComponent } from './components/push-notification/push-n
   ],
   providers: [
     BroadcastService,
+    MapBroadcastService,
     GoogleMapsAPIWrapper,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
