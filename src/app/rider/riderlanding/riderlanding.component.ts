@@ -9,17 +9,11 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
-import { MapsAPILoader, AgmMap } from '@agm/core';
-import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
 import { Appearance } from '@angular-material-extensions/google-maps-autocomplete';
-
-declare var google: any;
-
-
 
 @Component({
   selector: 'app-riderlanding',
