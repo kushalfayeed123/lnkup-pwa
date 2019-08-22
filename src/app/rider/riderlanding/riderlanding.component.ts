@@ -25,6 +25,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   public userId: string;
   public circleRadius = 50;
   public appearance = Appearance;
+  private heatmap: google.maps.visualization.HeatmapLayer = null;
 
   @ViewChild('search', { static: false }) searchElementRef: ElementRef;
 
@@ -93,7 +94,14 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     console.log('direction', origin, destination);
     this.origin = { lat: origin.lat, lng: origin.lng };
     this.destination = { lat: destination.lat, lng: destination.lng };
-    this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6' } };
+    this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6',
+                                              geodesic : true,
+                                              strokeOpacity: 0.6,
+                                              strokeWeight: 5,
+                                              editable: false, } };
+    this.heatmap = new google.maps.visualization.HeatmapLayer({
+      data: [this.origin, this.destination]
+  });
     // this.waypoints = [
     //    {location: { lat: 39.0921167, lng: -94.8559005 }},
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}
