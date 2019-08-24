@@ -9,16 +9,11 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
-import { MapsAPILoader, AgmMap } from '@agm/core';
-import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
-
-declare var google: any;
-
-
+import { Appearance } from '@angular-material-extensions/google-maps-autocomplete';
 
 @Component({
   selector: 'app-riderlanding',
@@ -29,8 +24,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   public userId: string;
   public circleRadius = 50;
+  public appearance = Appearance;
+  private heatmap: google.maps.visualization.HeatmapLayer = null;
 
- 
   @ViewChild('search', { static: false }) searchElementRef: ElementRef;
 
   searchControl: FormControl;
@@ -42,6 +38,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   destinationAddress: string;
   origin: { lat: any; lng: any; };
   destination: { lat: any; lng: any; };
+  renderOptions: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,8 +58,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.zoom = 17;
     // this.location.marker.draggable = true;
   }
-
-
   getUserById(userId) {
     this.authService
       .getById(userId)
@@ -91,7 +86,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.getDirection();
     }, 2000);
-
   }
 
   async getDirection() {
@@ -100,6 +94,14 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     console.log('direction', origin, destination);
     this.origin = { lat: origin.lat, lng: origin.lng };
     this.destination = { lat: destination.lat, lng: destination.lng };
+    this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6',
+                                              geodesic : true,
+                                              strokeOpacity: 0.6,
+                                              strokeWeight: 5,
+                                              editable: false, } };
+    this.heatmap = new google.maps.visualization.HeatmapLayer({
+      data: [this.origin, this.destination]
+  });
     // this.waypoints = [
     //    {location: { lat: 39.0921167, lng: -94.8559005 }},
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}

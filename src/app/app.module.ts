@@ -22,6 +22,7 @@ import { BroadcastService } from './services/business/broadcastdata.service';
 import { AngularMaterialModule } from './angular-material.module';
 import { SuccessMessageComponent } from './components/success-message/success-message.component';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
+import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { PushNotificationComponent } from './components/push-notification/push-notification.component';
 import { MapBroadcastService } from './services/business/mapbroadcast.service';
 @NgModule({
@@ -45,9 +46,10 @@ import { MapBroadcastService } from './services/business/mapbroadcast.service';
     ReactiveFormsModule,
     AngularMaterialModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ',
+      apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ' + '&libraries=visualization',
     }),
     AgmDirectionModule,
+    MatGoogleMapsAutocompleteModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
