@@ -12,7 +12,6 @@
       </div>
       <mat-spinner *ngIf="loading" [diameter]="30"
       class="loader"
-      [color]="primary"
     ></mat-spinner>
       <form  id="auth-form" (ngSubmit)="verifyUser()" [formGroup]="verifyForm" >
           <mat-form-field class="auth-full-width">

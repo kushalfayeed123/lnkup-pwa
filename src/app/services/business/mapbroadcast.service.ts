@@ -33,8 +33,8 @@ export class MapBroadcastService {
   };
 
   constructor(public mapsApiLoader: MapsAPILoader,
-    private zone: NgZone,
-    private wrapper: GoogleMapsAPIWrapper) {
+              private zone: NgZone,
+              private wrapper: GoogleMapsAPIWrapper) {
     this.mapsApiLoader = mapsApiLoader;
     this.zone = zone;
     this.wrapper = wrapper;
@@ -69,7 +69,7 @@ export class MapBroadcastService {
     this.findOrigin(originaddress);
     this.findDestination(destinationaddress);
   }
-  
+
 
   findDestination(address) {
     if (!this.geocoder) {
@@ -114,7 +114,7 @@ export class MapBroadcastService {
             const destination = {
               lng: this.location.lng,
               lat: this.location.lat
-            }
+            };
             localStorage.setItem('destination', JSON.stringify(destination));
             console.log('coordinates', this.location.lat, this.location.lng);
           }
@@ -138,7 +138,7 @@ export class MapBroadcastService {
         console.log(results);
         if (status === google.maps.GeocoderStatus.OK) {
           // tslint:disable-next-line:prefer-for-of
-          for (var i = 0; i < results[0].address_components.length; i++) {
+          for (let i = 0; i < results[0].address_components.length; i++) {
             const types = results[0].address_components[i].types;
 
             if (types.indexOf('locality') !== -1) {
@@ -192,7 +192,7 @@ export class MapBroadcastService {
         console.log(results);
         if (status === google.maps.GeocoderStatus.OK) {
           // tslint:disable-next-line:prefer-for-of
-          for (var i = 0; i < results[0].address_components.length; i++) {
+          for (let i = 0; i < results[0].address_components.length; i++) {
             const types = results[0].address_components[i].types;
 
             if (types.indexOf('locality') !== -1) {

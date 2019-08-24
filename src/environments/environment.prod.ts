@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  webUrl : 'https://linkup20190809110109.azurewebsites.net/api'
+  webUrl : 'https://linkup20190824020415.azurewebsites.net/api'
 };
