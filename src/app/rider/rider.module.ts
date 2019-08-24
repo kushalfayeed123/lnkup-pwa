@@ -7,6 +7,7 @@ import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
+import { AngularMaterialModule } from '../angular-material.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/go
     AgmDirectionModule,
     FormsModule,
     ReactiveFormsModule,
-    MatGoogleMapsAutocompleteModule
+    MatGoogleMapsAutocompleteModule,
+    AngularMaterialModule
   ]
 })
 export class RiderModule { }

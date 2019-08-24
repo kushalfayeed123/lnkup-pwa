@@ -16,7 +16,10 @@ section.auth-pages a {
 }
 ::ng-deep .dark-snackbar-error{
   background: #ff1744 !important;
+  position: relative;
+  bottom: 80px;
 }
+
 .auth-form {
   min-width: 150px;
   max-width: 500px;
@@ -24,7 +27,7 @@ section.auth-pages a {
   
 }
 .loader{
-  position: relative;
+  
   left: 25%;
   height: 50px;
   width: 40%;

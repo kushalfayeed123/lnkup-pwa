@@ -62,7 +62,6 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         data => {
-        
           this.updateUserStatus();
           this.redirectUser();
           localStorage.removeItem('registeredUser');
@@ -70,6 +69,10 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
         },
         error => {
           this.error = error;
+          setTimeout(() => {
+            this.loading = false;
+            this.openErrorMessage();
+          }, 3000);
         }
       );
   }
@@ -102,13 +105,10 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
         userStatus: 1,
         role: userRole.role
         };
-        console.log('dnt know', userStatusData)
       this.authenticate.update(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
-          console.log('status was updated', data);
         });
-      console.log('user data', userData);
     }
   }
   redirectUser() {

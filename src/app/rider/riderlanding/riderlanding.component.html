@@ -1,18 +1,37 @@
-<agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [disableDefaultUI]="true"
-    [zoomControl]="true" >
-    <agm-marker [(latitude)]="latitude" [(longitude)]="longitude"
-        [markerDraggable]="true" ></agm-marker>
+<div class="avd-container">
+    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [disableDefaultUI]="true"
+        [zoomControl]="true">
+        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker>
 
-    <!-- <agm-circle [latitude]="location.lat" [longitude]="location.lng" [(radius)]="circleRadius" [fillColor]="'blue'"
-        [circleDraggable]="true" [editable]="true"></agm-circle> -->
+        <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
+            [circleDraggable]="false" [editable]="false" *ngIf="gettingDrivers"></agm-circle>
 
+          
         <agm-direction [origin]="origin" [destination]="destination" [renderOptions]="renderOptions"></agm-direction>
 
-</agm-map>
+    </agm-map>
+    <!-- <mat-spinner *ngIf="loading"  [diameter]="30"
+    class="loader"
+  ></mat-spinner> -->
+    <form class="destination-container">
+        <mat-card class="example-card">
+
+            <mat-card-content>
+                <mat-form-field class="auth-full-width">
+                    <input type="text" matInput class="input-color" placeholder="Tell us your destination"
+                        [(ngModel)]='destinationAddress' name="destinationAddress" />
+                </mat-form-field>
+                <!-- <p><a href="">Forgot password?</a></p> -->
+                <button (click)='getDrivers()' mat-raised-button color="accent"
+                    class="auth-full-width login-text">Search
+                    <i class="material-icons right">send</i>
+                </button>
+            </mat-card-content>
+        </mat-card>
+    </form>
 
 
-
-<div class="container-fluid">
+    <!-- <div class="container-fluid">
     <div class='row'>
         <div class="form-group">
             <label class='col-sm-2'>Origin</label>
@@ -43,4 +62,5 @@
 </div>
 <div style="color: whitesmoke" (click)="navtoregister()">
     register
+</div> -->
 </div>

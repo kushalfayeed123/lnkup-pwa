@@ -14,6 +14,8 @@ import { takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
 import { Appearance } from '@angular-material-extensions/google-maps-autocomplete';
+import { MatSnackBar } from '@angular/material';
+import { SearchMessageComponent } from 'src/app/components/search-message/search-message.component';
 
 @Component({
   selector: 'app-riderlanding',
@@ -23,13 +25,14 @@ import { Appearance } from '@angular-material-extensions/google-maps-autocomplet
 export class RiderlandingComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   public userId: string;
-  public circleRadius = 50;
+  public circleRadius = 70;
   public appearance = Appearance;
   private heatmap: google.maps.visualization.HeatmapLayer = null;
 
   @ViewChild('search', { static: false }) searchElementRef: ElementRef;
 
   searchControl: FormControl;
+  durationInSeconds = 10;
   lattitude: any;
   longitude: any;
   latitude: any;
@@ -39,12 +42,15 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   origin: { lat: any; lng: any; };
   destination: { lat: any; lng: any; };
   renderOptions: any;
+  gettingDrivers: boolean;
+  loading: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthenticateDataService,
     private router: Router,
-    private mapService: MapBroadcastService
+    private mapService: MapBroadcastService,
+    private _snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -107,6 +113,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}
     // ]
   }
+  getDrivers() {
+    this.gettingDrivers = true;
+    this.loading = true;
+    this.openSearchMessage();
+  }
   markerDragEnd(m: any, $event: any) {
   }
   milesToRadius(value) {
@@ -115,6 +126,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   circleRadiusInMiles() {
     return this.circleRadius * 0.00062137;
+  }
+  openSearchMessage() {
+    this._snackBar.openFromComponent(SearchMessageComponent, {
+      duration: this.durationInSeconds * 1000,
+      panelClass: ['dark-snackbar-search']
+    });
   }
   ngOnDestroy() {
     this.unsubscribe$.next();

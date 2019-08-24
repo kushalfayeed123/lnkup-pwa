@@ -25,6 +25,7 @@ import { ErrorMessageComponent } from './components/error-message/error-message.
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { PushNotificationComponent } from './components/push-notification/push-notification.component';
 import { MapBroadcastService } from './services/business/mapbroadcast.service';
+import { SearchMessageComponent } from './components/search-message/search-message.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,6 +36,7 @@ import { MapBroadcastService } from './services/business/mapbroadcast.service';
     VerifycodeComponent,
     SuccessMessageComponent,
     ErrorMessageComponent,
+    SearchMessageComponent,
     PushNotificationComponent
   ],
   imports: [
@@ -61,7 +63,7 @@ import { MapBroadcastService } from './services/business/mapbroadcast.service';
     {provide: AuthenticateDataService, useClass: AuthenticateWebService}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SuccessMessageComponent, ErrorMessageComponent]
+  entryComponents: [SuccessMessageComponent, ErrorMessageComponent, SearchMessageComponent]
 
 })
 export class AppModule { }
