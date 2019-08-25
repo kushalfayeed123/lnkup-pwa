@@ -16,6 +16,7 @@ import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.serv
 import { Appearance } from '@angular-material-extensions/google-maps-autocomplete';
 import { MatSnackBar } from '@angular/material';
 import { SearchMessageComponent } from 'src/app/components/search-message/search-message.component';
+import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 
 @Component({
   selector: 'app-riderlanding',
@@ -51,6 +52,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapBroadcastService,
     private _snackBar: MatSnackBar,
+    private  activeRider: ActiveRiderDataService
   ) { }
 
   ngOnInit() {
@@ -116,7 +118,28 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   getDrivers() {
     this.gettingDrivers = true;
     this.loading = true;
+    this.getCurrentLocation();
     this.openSearchMessage();
+    this.createTripRequest();
+  }
+  createTripRequest() {
+    const UserId = JSON.parse(localStorage.getItem('currentUser'));
+    this.mapService.findDestination(this.destinationAddress);
+    const destination = JSON.parse(localStorage.getItem('destination'));
+    const request = {
+                    currentLocationLongitude: this.longitude.toString(),
+                    currentLocationLatitude: this.latitude.toString(),
+                    riderDestinationLatitude: destination.lat.toString(),
+                    riderDestinationLongitude: destination.lng.toString(),
+                    userId: UserId.id,
+                    tripStatus: '1'
+                     };
+                    console.log(request);
+    this.activeRider.create(request)
+     .pipe(takeUntil(this.unsubscribe$))
+     .subscribe(data => {
+      console.log(data);
+     });
   }
   markerDragEnd(m: any, $event: any) {
   }

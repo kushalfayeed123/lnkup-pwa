@@ -26,6 +26,8 @@ import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/go
 import { PushNotificationComponent } from './components/push-notification/push-notification.component';
 import { MapBroadcastService } from './services/business/mapbroadcast.service';
 import { SearchMessageComponent } from './components/search-message/search-message.component';
+import { ActiveRiderDataService } from './services/data/active-rider/active-rider.data.service';
+import { ActiveRiderWebService } from './services/data/active-rider/active-rider.web.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +62,8 @@ import { SearchMessageComponent } from './components/search-message/search-messa
     GoogleMapsAPIWrapper,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    {provide: AuthenticateDataService, useClass: AuthenticateWebService}
+    {provide: AuthenticateDataService, useClass: AuthenticateWebService},
+    {provide: ActiveRiderDataService, useClass: ActiveRiderWebService}
   ],
   bootstrap: [AppComponent],
   entryComponents: [SuccessMessageComponent, ErrorMessageComponent, SearchMessageComponent]
