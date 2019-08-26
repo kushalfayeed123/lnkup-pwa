@@ -12,24 +12,28 @@ import { ActiveRiders } from 'src/app/models/ActiveRider';
 export class ActiveRiderWebService implements ActiveRiderDataService {
     public webUrl: string;
 
-  constructor( private http: HttpClient) {
-    this.webUrl = environment.webUrl;
+    constructor(private http: HttpClient) {
+        this.webUrl = environment.webUrl;
 
-  }
+    }
 
-  update(activetrip: any) {
-    return this.http.put(`${this.webUrl}/ActiveRiders/activetrip.Id`, activetrip);
-}
-delete(id: any) {
-    return this.http.delete(`${this.webUrl}/ActiveRiders`, id);
-}
-create(activetrip: any) {
-    return this.http.post(`${this.webUrl}/ActiveRiders`, activetrip);
-}
-get() {
-    return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`);
-}
-getById(id: any) {
-    return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`, id);
-}
+    update(activetrip: any) {
+        return this.http.put(`${this.webUrl}/ActiveRiders/activetrip.Id`, activetrip);
+    }
+    delete(id: any) {
+        return this.http.delete(`${this.webUrl}/ActiveRiders`, id);
+    }
+    create(activetrip: any) {
+        return this.http.post(`${this.webUrl}/ActiveRiders`, activetrip);
+    }
+    get() {
+        return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`);
+    }
+    getById(id: any) {
+        return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`, id);
+    }
+
+    getAllTrips() {
+        return this.http.get(`${this.webUrl}/ActiveTrips`);
+    }
 }

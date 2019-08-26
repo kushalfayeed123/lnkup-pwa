@@ -12,4 +12,5 @@ export abstract class ActiveRiderDataService{
     abstract create(activetrip);
     abstract get();
     abstract getById(id);
+    abstract getAllTrips();
 }
