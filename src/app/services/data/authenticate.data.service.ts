@@ -5,7 +5,7 @@ import { Users } from 'src/app/models/Users';
 
 @Injectable()
 
-export abstract class AuthenticateDataService{
+export abstract class AuthenticateDataService {
     abstract login(username, password);
     abstract getAll(): Observable<Users[]>;
     abstract register(user);

@@ -17,6 +17,7 @@ import { Appearance } from '@angular-material-extensions/google-maps-autocomplet
 import { MatSnackBar } from '@angular/material';
 import { SearchMessageComponent } from 'src/app/components/search-message/search-message.component';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
+import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 
 @Component({
   selector: 'app-riderlanding',
@@ -45,6 +46,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   renderOptions: any;
   gettingDrivers: boolean;
   loading: boolean;
+  requestData: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +54,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapBroadcastService,
     private _snackBar: MatSnackBar,
-    private  activeRider: ActiveRiderDataService
+    private  activeRider: ActiveRiderDataService,
+    private activeTrip: ActiveTripDataService
   ) { }
 
   ngOnInit() {
@@ -138,7 +141,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.activeRider.create(request)
      .pipe(takeUntil(this.unsubscribe$))
      .subscribe(data => {
-      console.log(data);
+       this.requestData = data;
+       console.log('getting user request desination', this.requestData);
      });
   }
   markerDragEnd(m: any, $event: any) {
@@ -154,6 +158,19 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this._snackBar.openFromComponent(SearchMessageComponent, {
       duration: this.durationInSeconds * 1000,
       panelClass: ['dark-snackbar-search']
+    });
+  }
+  getAllActiveTrips(status?) {
+    this.activeTrip.getAllActiveTrips(status)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(data => {
+      const allActiveTrips = data;
+      allActiveTrips.forEach(element => {
+        const tripDestinationLat = element.driverEndLatitude;
+        const tripDestinationLong = element.driverEndLongitude;
+        console.log('getting trip destinations', tripDestinationLat, tripDestinationLong);
+        // this.mapService.getLocationDistance(tripDestinationLat, tripDestinationLong)
+      });
     });
   }
   ngOnDestroy() {

@@ -7,6 +7,10 @@ import { Location } from '../../models/Location';
 @Injectable()
 export class MapBroadcastService {
 
+  // tslint:disable-next-line: variable-name
+  private _locationDistance = new BehaviorSubject(null);
+  public locationDistance = this._locationDistance.asObservable();
+
   @ViewChild(AgmMap, { static: false }) map: AgmMap;
 
   public geocoder: any;
@@ -283,6 +287,13 @@ export class MapBroadcastService {
         continue;
       }
     }
+  }
+
+  getLocationDistance(startLat, endLat, startLong, endLong) {
+    const startLocation = new google.maps.LatLng(startLat, startLong);
+    const endLocation = new google.maps.LatLng(endLat, endLong);
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
+    localStorage.setItem('locationDistance', JSON.stringify(distance));
   }
 
   // updateOnMap() {

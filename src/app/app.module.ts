@@ -28,6 +28,8 @@ import { MapBroadcastService } from './services/business/mapbroadcast.service';
 import { SearchMessageComponent } from './components/search-message/search-message.component';
 import { ActiveRiderDataService } from './services/data/active-rider/active-rider.data.service';
 import { ActiveRiderWebService } from './services/data/active-rider/active-rider.web.service';
+import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
+import { ActiveTripWebService } from './services/data/active-trip/active-trip.web.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +53,7 @@ import { ActiveRiderWebService } from './services/data/active-rider/active-rider
     AngularMaterialModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ' + '&libraries=visualization',
+      libraries: ['geometry']
     }),
     AgmDirectionModule,
     MatGoogleMapsAutocompleteModule.forRoot(),
@@ -63,7 +66,8 @@ import { ActiveRiderWebService } from './services/data/active-rider/active-rider
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {provide: AuthenticateDataService, useClass: AuthenticateWebService},
-    {provide: ActiveRiderDataService, useClass: ActiveRiderWebService}
+    {provide: ActiveRiderDataService, useClass: ActiveRiderWebService},
+    {provide: ActiveTripDataService, useClass: ActiveTripWebService}
   ],
   bootstrap: [AppComponent],
   entryComponents: [SuccessMessageComponent, ErrorMessageComponent, SearchMessageComponent]
