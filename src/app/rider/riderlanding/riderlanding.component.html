@@ -6,7 +6,7 @@
         <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
             [circleDraggable]="false" [editable]="false" *ngIf="gettingDrivers"></agm-circle>
 
-          
+
         <agm-direction [origin]="origin" [destination]="destination" [renderOptions]="renderOptions"></agm-direction>
 
     </agm-map>
@@ -30,7 +30,7 @@
         </mat-card>
     </form>
 
-
+<app-availabledrivers *ngIf="reachableDrivers"></app-availabledrivers>
     <!-- <div class="container-fluid">
     <div class='row'>
         <div class="form-group">

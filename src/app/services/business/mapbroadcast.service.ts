@@ -11,6 +11,9 @@ export class MapBroadcastService {
   private _locationDistance = new BehaviorSubject(null);
   public locationDistance = this._locationDistance.asObservable();
 
+  private _availableTrips = new BehaviorSubject(null);
+  public availableTrips = this._availableTrips.asObservable();
+
   @ViewChild(AgmMap, { static: false }) map: AgmMap;
 
   public geocoder: any;
@@ -289,12 +292,16 @@ export class MapBroadcastService {
     }
   }
 
-  getLocationDistance(startLat, endLat, startLong, endLong) {
-    const startLocation = new google.maps.LatLng(startLat, startLong);
-    const endLocation = new google.maps.LatLng(endLat, endLong);
-    const distance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
-    localStorage.setItem('locationDistance', JSON.stringify(distance));
+  publishAvailableTrips(availableTrips: []) {
+    this._availableTrips.next(availableTrips);
   }
+
+  // getLocationDistance(startLat, endLat, startLong, endLong) {
+  //   const startLocation = new google.maps.LatLng(startLat, startLong);
+  //   const endLocation = new google.maps.LatLng(endLat, endLong);
+  //   const distance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
+  //   localStorage.setItem('locationDistance', JSON.stringify(distance));
+  // }
 
   // updateOnMap() {
   //   // tslint:disable-next-line:variable-name

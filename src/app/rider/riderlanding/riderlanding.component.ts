@@ -181,7 +181,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         element.userDriverDestinationDistance = destinationDistanceInKm;
         // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
       });
-      this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance < 2);
+      this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance <= 5);
+      this.mapService.publishAvailableTrips(this.reachableDrivers);
       console.log('reachable drivers', this.reachableDrivers);
     });
   }
