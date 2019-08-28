@@ -90,6 +90,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     await this.mapService.locationObject.subscribe(loc => {
       this.latitude = loc.lat;
       this.longitude  = loc.lng;
+      const currentLocation = {lat: loc.lat, lng: loc.lng};
+      localStorage.setItem('currentLocation', JSON.stringify(currentLocation));
     });
 
   }
@@ -99,27 +101,35 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.getDirection();
     }, 2000);
   }
+  getDestinationCordinates() {
+    this.mapService.findDestination(this.destinationAddress);
+  }
 
-  async getDirection() {
-    const origin = await JSON.parse(localStorage.getItem('origin'));
-    const destination = await JSON.parse(localStorage.getItem('destination'));
-    console.log('direction', origin, destination);
-    this.origin = { lat: origin.lat, lng: origin.lng };
-    this.destination = { lat: destination.lat, lng: destination.lng };
-    this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6',
+    getDirection() {
+    setTimeout(() => {
+      const cl = JSON.parse(localStorage.getItem('currentLocation'));
+      const origin = JSON.parse(localStorage.getItem('origin'));
+      const destination = JSON.parse(localStorage.getItem('destination'));
+      this.origin = { lat: cl.lat, lng: cl.lng };
+      this.destination = { lat: destination.lat, lng: destination.lng };
+      this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6',
                                               geodesic : true,
                                               strokeOpacity: 0.6,
                                               strokeWeight: 5,
                                               editable: false, } };
-    this.heatmap = new google.maps.visualization.HeatmapLayer({
-      data: [this.origin, this.destination]
-  });
+    }, 2000);
+  //   this.heatmap = new google.maps.visualization.HeatmapLayer({
+  //     data: [this.origin, this.destination]
+  // });
     // this.waypoints = [
     //    {location: { lat: 39.0921167, lng: -94.8559005 }},
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}
     // ]
   }
   getDrivers() {
+    this.getCurrentLocation();
+    this.getDestinationCordinates();
+    this.getDirection();
     this.gettingDrivers = true;
     this.loading = true;
     this.getCurrentLocation();
