@@ -18,8 +18,8 @@
 
             <mat-card-content>
                 <mat-form-field class="auth-full-width">
-                    <input type="text" matInput class="input-color" placeholder="Tell us your destination"
-                        [(ngModel)]='destinationAddress' name="destinationAddress" />
+                    <input type="text" matInput class="input-color" placeholder="Tell us your destination" autocorrect="off" autocapitalize="off" spellcheck="off" #search
+                        [(ngModel)]='destinationAddress' name="destinationAddress"  (focus)="autoCompleteFocus()"/>
                 </mat-form-field>
                 <!-- <p><a href="">Forgot password?</a></p> -->
             <button (click)='getDrivers()' mat-raised-button color="accent"

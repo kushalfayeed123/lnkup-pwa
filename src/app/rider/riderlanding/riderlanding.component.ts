@@ -18,6 +18,8 @@ import { MatSnackBar } from '@angular/material';
 import { SearchMessageComponent } from 'src/app/components/search-message/search-message.component';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
+import { MapsAPILoader } from '@agm/core';
+import {} from '@types/googlemaps';
 
 @Component({
   selector: 'app-riderlanding',
@@ -31,7 +33,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   public appearance = Appearance;
   private heatmap: google.maps.visualization.HeatmapLayer = null;
 
-  @ViewChild('search', { static: false }) searchElementRef: ElementRef;
+  @ViewChild('search', { static: true }) public searchElement: ElementRef;
 
   searchControl: FormControl;
   durationInSeconds = 10;
@@ -56,7 +58,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private mapService: MapBroadcastService,
     private _snackBar: MatSnackBar,
     private  activeRider: ActiveRiderDataService,
-    private activeTrip: ActiveTripDataService
+    private activeTrip: ActiveTripDataService,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit() {
@@ -78,6 +82,23 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         const currentUser = user;
         console.log('user viewing this screen', currentUser);
       });
+  }
+
+  autoCompleteFocus(){
+    this.mapsAPILoader.load().then(
+      () => {
+       let autocomplete = new google.maps.places.Autocomplete(this.searchElement.value, { types:["address"] });
+
+        autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+         let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+         if(place.geometry === undefined || place.geometry === null ){
+          return;
+         }
+        });
+        });
+      }
+    );
   }
 
   navtologin() {
