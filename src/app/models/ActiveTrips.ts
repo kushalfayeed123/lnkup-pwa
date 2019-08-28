@@ -11,4 +11,5 @@ export class ActiveTrips {
   departureDateTime: string;
   allowedRiderCount: number;
   tripType: string;
+  userDriverDestinationDistance: number;
 }

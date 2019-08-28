@@ -47,6 +47,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   gettingDrivers: boolean;
   loading: boolean;
   requestData: any;
+  reachableDrivers: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -128,22 +129,26 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   createTripRequest() {
     const UserId = JSON.parse(localStorage.getItem('currentUser'));
     this.mapService.findDestination(this.destinationAddress);
-    const destination = JSON.parse(localStorage.getItem('destination'));
-    const request = {
-                    currentLocationLongitude: this.longitude.toString(),
-                    currentLocationLatitude: this.latitude.toString(),
-                    riderDestinationLatitude: destination.lat.toString(),
-                    riderDestinationLongitude: destination.lng.toString(),
-                    userId: UserId.id,
-                    tripStatus: '1'
-                     };
-                    console.log(request);
-    this.activeRider.create(request)
+    setTimeout(() => {
+      const destination = JSON.parse(localStorage.getItem('destination'));
+      const request = {
+        currentLocationLongitude: this.longitude.toString(),
+        currentLocationLatitude: this.latitude.toString(),
+        riderDestinationLatitude: destination.lat.toString(),
+        riderDestinationLongitude: destination.lng.toString(),
+        userId: UserId.id,
+        tripStatus: '1'
+         };
+      console.log(request);
+      this.activeRider.create(request)
      .pipe(takeUntil(this.unsubscribe$))
      .subscribe(data => {
        this.requestData = data;
        console.log('getting user request desination', this.requestData);
+       const status = 1;
+       this.getAllActiveTrips(status);
      });
+    }, 2000);
   }
   markerDragEnd(m: any, $event: any) {
   }
@@ -168,9 +173,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       allActiveTrips.forEach(element => {
         const tripDestinationLat = element.driverEndLatitude;
         const tripDestinationLong = element.driverEndLongitude;
-        console.log('getting trip destinations', tripDestinationLat, tripDestinationLong);
-        // this.mapService.getLocationDistance(tripDestinationLat, tripDestinationLong)
+        const userDestination = JSON.parse(localStorage.getItem('destination'));
+        const startLocation = new google.maps.LatLng(tripDestinationLat, tripDestinationLong);
+        const endLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
+        const distance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
+        const destinationDistanceInKm = distance / 1000;
+        element.userDriverDestinationDistance = destinationDistanceInKm;
+        // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
       });
+      this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance < 2);
+      console.log('reachable drivers', this.reachableDrivers);
     });
   }
   ngOnDestroy() {
