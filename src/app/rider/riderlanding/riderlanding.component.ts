@@ -19,7 +19,7 @@ import { SearchMessageComponent } from 'src/app/components/search-message/search
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { MapsAPILoader } from '@agm/core';
-import {} from '@types/googlemaps';
+import {} from 'googlemaps';
 
 @Component({
   selector: 'app-riderlanding',
