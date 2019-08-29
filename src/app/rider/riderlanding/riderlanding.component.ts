@@ -51,6 +51,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   requestData: any;
   reachableDrivers: any;
   userLocationMarkerAnimation: string;
+  loadMarker: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -65,6 +66,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loadMarker = true;
     this.route.params.subscribe(p => {
       const userId = p.id;
       this.getUserById(userId);
@@ -152,6 +154,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     // ]
   }
   getDrivers() {
+    this.loadMarker = false;
     this.getCurrentLocation();
     this.getDestinationCordinates();
     this.getDirection();

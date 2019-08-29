@@ -1,3 +1,4 @@
+import { AvailabledriversComponent } from './availabledrivers/availabledrivers.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_gaurd/auth.guard';
@@ -9,6 +10,12 @@ const routes: Routes = [
   {
     path: 'home/:id',
     component: RiderlandingComponent,
+    canActivate: [AuthGuard],
+    data: {role: 'Rider'}
+  },
+  {
+    path: 'availableTrips',
+    component: AvailabledriversComponent,
     canActivate: [AuthGuard],
     data: {role: 'Rider'}
   },

@@ -20,6 +20,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     spaceBetween: 30
 };
   availableTrips: any;
+  emptyTrips: boolean;
 
   constructor(private mapService: MapBroadcastService) { }
 
@@ -32,6 +33,10 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(trips => {
       this.availableTrips = trips;
+      if (this.availableTrips.length === 0) {
+        this.emptyTrips = true;
+        console.log('there no trips headed in your direction');
+      }
     });
   }
 

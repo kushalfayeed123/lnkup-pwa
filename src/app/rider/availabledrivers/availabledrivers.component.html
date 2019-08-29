@@ -1,16 +1,40 @@
-<form class="destination-container">
+<form class="destination-container" *ngIf="!emptyTrips">
         <swiper [config]="config">
                 <div class="swiper-wrapper">
-                <mat-card class="example-card swiper-slide" *ngFor="let trips of availableTrips">
+                <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips">
                         <mat-card-content>
-                            <mat-form-field class="auth-full-width">
-                                <input type="text" matInput class="input-color" placeholder="Tell us your destination"
-                                     name="destinationAddress"  />
-                            </mat-form-field>
-                        <button mat-raised-button color="accent"
-                                class="auth-full-width login-text">See
-                                <i class="material-icons right">send</i>
-                            </button>
+                          <div class="avd">
+                            <!-- <h2 class="heading">Available Drivers</h2> -->
+                            <div class="driver-container">
+                              <div class="driver-track">
+                                <div class="driver-item">
+                                  <div class="container-grid">
+                                    <div class="avi-info">
+                                      <img src="assets/Images/Avatar1.png" alt="" class="avi" />
+                                      <h3 class="driver-name">Darey</h3>
+                                      <span class="driver-stats">4.33</span>
+                                    </div>
+                                    <div class="destination-details">
+                                      <div class="time-line-container">
+                                        <ul class="tl">
+                                          <li class="destination">
+                                            <div class="location">Tolu Ipoyi Street</div>
+                                            <div class="seats sub">5 seats available</div>
+                                          </li>
+                                          <li class="current-location">
+                                            <div class="location">Current Location</div>
+                                            <div class="est sub">5 mins away</div>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width">Choose Driver</button>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
                         </mat-card-content>
                     </mat-card>
                     <!-- <div class="swiper-button-next"></div>
@@ -18,4 +42,6 @@
         </div>
         </swiper>
 </form>
+
+
 

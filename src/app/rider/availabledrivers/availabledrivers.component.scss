@@ -8,9 +8,17 @@
     width: 40%;
   }
 
-  .example-card {
+  .available-driver-card {
     max-width: 400px;
     height: 127px;
+  }
+  .container-grid{
+    display: grid;
+    margin-bottom: 0;
+    grid-template-columns: 30% 70%;
+    -ms-grid-rows: auto;
+    grid-template-rows: auto;
+    grid-column-gap: unset;
   }
 
   .mat-form-field{
@@ -29,6 +37,13 @@
     bottom: 0;
     width: -webkit-fill-available;
     margin-bottom: 5%;
+  }
+  li{
+    position: relative;
+    padding-left: 25px;
+  }
+  .destination{
+    margin-bottom: 10px;
   }
   ::ng-deep .dark-snackbar-search{
     background: #E040FB !important;
