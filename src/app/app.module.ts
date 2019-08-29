@@ -30,7 +30,8 @@ import { ActiveRiderDataService } from './services/data/active-rider/active-ride
 import { ActiveRiderWebService } from './services/data/active-rider/active-rider.web.service';
 import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
 import { ActiveTripWebService } from './services/data/active-trip/active-trip.web.service';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,12 +47,12 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
   ],
   imports: [
     BrowserModule,
+    NgxUsefulSwiperModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCarouselModule,
     AngularMaterialModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ' + '&libraries=visualization',

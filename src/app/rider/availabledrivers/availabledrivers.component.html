@@ -1,10 +1,10 @@
-<form class="destination-container">  
-        <mat-carousel>
-                <mat-carousel-slide>
-                <mat-card class="example-card">
+<form class="destination-container">
+        <swiper [config]="config">
+                <div class="swiper-wrapper">
+                <mat-card class="example-card swiper-slide" *ngFor="let trips of availableTrips">
                         <mat-card-content>
                             <mat-form-field class="auth-full-width">
-                                <input type="text" matInput class="input-color" placeholder="Tell us your destination" 
+                                <input type="text" matInput class="input-color" placeholder="Tell us your destination"
                                      name="destinationAddress"  />
                             </mat-form-field>
                         <button mat-raised-button color="accent"
@@ -13,7 +13,7 @@
                             </button>
                         </mat-card-content>
                     </mat-card>
-                </mat-carousel-slide>
-          </mat-carousel>
+        </div>
+        </swiper>
 </form>
 

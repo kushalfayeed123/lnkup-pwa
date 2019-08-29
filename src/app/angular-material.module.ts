@@ -25,6 +25,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
+
 @NgModule({
    imports: [
       CommonModule,
@@ -49,7 +51,8 @@ import {MatTabsModule} from '@angular/material/tabs';
       MatCardModule,
       MatProgressSpinnerModule,
       MatSnackBarModule,
-      MatTabsModule      
+      MatTabsModule,
+      MatCarouselModule      
    ],
    exports: [
       MatButtonModule,
@@ -72,7 +75,8 @@ import {MatTabsModule} from '@angular/material/tabs';
       MatProgressSpinnerModule,
       MatBottomSheetModule,
       MatSnackBarModule,
-      MatTabsModule
+      MatTabsModule,
+      MatCarouselModule
       ],
    providers: [
       MatDatepickerModule,

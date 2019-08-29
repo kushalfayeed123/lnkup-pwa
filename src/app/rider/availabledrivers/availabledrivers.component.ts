@@ -11,7 +11,11 @@ import { takeUntil } from 'rxjs/operators';
 export class AvailabledriversComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
+  public config: any = {
 
+    spaceBetween: 30
+};
+  availableTrips: any;
 
   constructor(private mapService: MapBroadcastService) { }
 
@@ -23,7 +27,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.mapService.availableTrips
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(trips => {
-      console.log('getting all the trips that are headed in the users direction', trips);
+      this.availableTrips = trips;
     });
   }
 
