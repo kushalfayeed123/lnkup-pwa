@@ -9,12 +9,14 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { AngularMaterialModule } from '../angular-material.module';
 import { AvailabledriversComponent } from './availabledrivers/availabledrivers.component';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 
 @NgModule({
   declarations: [RiderlandingComponent, AvailabledriversComponent],
   imports: [
     CommonModule,
+    MatCarouselModule,
     RiderRoutingModule,
     AgmCoreModule,
     AgmDirectionModule,

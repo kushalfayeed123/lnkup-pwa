@@ -49,8 +49,7 @@ import {MatTabsModule} from '@angular/material/tabs';
       MatCardModule,
       MatProgressSpinnerModule,
       MatSnackBarModule,
-      MatTabsModule
-      
+      MatTabsModule      
    ],
    exports: [
       MatButtonModule,

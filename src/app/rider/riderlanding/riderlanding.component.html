@@ -1,6 +1,6 @@
 <div class="avd-container">
-    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [disableDefaultUI]="true"
-        [zoomControl]="true">
+    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" 
+        [zoomControl]="false">
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker>
 
         <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
@@ -13,13 +13,13 @@
     <!-- <mat-spinner *ngIf="loading"  [diameter]="30"
     class="loader"
   ></mat-spinner> -->
-    <form class="destination-container">
+    <form class="destination-container" *ngIf="!reachableDrivers">
         <mat-card class="example-card">
 
             <mat-card-content>
                 <mat-form-field class="auth-full-width">
                     <input type="text" matInput class="input-color" placeholder="Tell us your destination" autocorrect="off" autocapitalize="off" spellcheck="off" #search
-                        [(ngModel)]='destinationAddress' name="destinationAddress"  (focus)="autoCompleteFocus()"/>
+                        [(ngModel)]='destinationAddress' name="destinationAddress"/>
                 </mat-form-field>
                 <!-- <p><a href="">Forgot password?</a></p> -->
             <button (click)='getDrivers()' mat-raised-button color="accent"

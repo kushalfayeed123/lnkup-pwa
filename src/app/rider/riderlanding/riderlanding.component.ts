@@ -19,7 +19,7 @@ import { SearchMessageComponent } from 'src/app/components/search-message/search
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { MapsAPILoader } from '@agm/core';
-import {} from 'googlemaps';
+
 
 @Component({
   selector: 'app-riderlanding',
@@ -84,22 +84,22 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       });
   }
 
-  autoCompleteFocus(){
-    this.mapsAPILoader.load().then(
-      () => {
-       let autocomplete = new google.maps.places.Autocomplete(this.searchElement.value, { types:["address"] });
+  // autoCompleteFocus() {
+  //   this.mapsAPILoader.load().then(
+  //     () => {
+  //      const autocomplete = new google.maps.places.Autocomplete(this.searchElement.nativeElement, { types: ['address'] });
 
-        autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-         let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-         if(place.geometry === undefined || place.geometry === null ){
-          return;
-         }
-        });
-        });
-      }
-    );
-  }
+  //      autocomplete.addListener('place_changed', () => {
+  //       this.ngZone.run(() => {
+  //        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+  //        if (place.geometry === undefined || place.geometry === null ) {
+  //         return;
+  //        }
+  //       });
+  //       });
+  //     }
+  //   );
+  // }
 
   navtologin() {
     this.router.navigate(['auth']);
