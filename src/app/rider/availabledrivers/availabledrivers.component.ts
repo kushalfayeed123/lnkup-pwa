@@ -12,6 +12,10 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
   public config: any = {
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
 
     spaceBetween: 30
 };

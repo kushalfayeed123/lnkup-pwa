@@ -50,6 +50,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   loading: boolean;
   requestData: any;
   reachableDrivers: any;
+  userLocationMarkerAnimation: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -82,6 +83,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         const currentUser = user;
         console.log('user viewing this screen', currentUser);
       });
+  }
+  mapReading() {
+    this.userLocationMarkerAnimation = 'BOUNCE';
   }
 
   // autoCompleteFocus() {
@@ -153,8 +157,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getDirection();
     this.gettingDrivers = true;
     this.loading = true;
-    this.getCurrentLocation();
-    this.openSearchMessage();
     this.createTripRequest();
   }
   createTripRequest() {
@@ -214,6 +216,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       });
       this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance <= 5);
       this.mapService.publishAvailableTrips(this.reachableDrivers);
+      this.gettingDrivers = false;
       console.log('reachable drivers', this.reachableDrivers);
     });
   }
