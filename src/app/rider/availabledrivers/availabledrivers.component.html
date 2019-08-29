@@ -1,7 +1,8 @@
+
 <form class="destination-container" *ngIf="!emptyTrips">
         <swiper [config]="config">
                 <div class="swiper-wrapper">
-                <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips">
+                <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">
                         <mat-card-content>
                           <div class="avd">
                             <!-- <h2 class="heading">Available Drivers</h2> -->
@@ -19,7 +20,7 @@
                                         <ul class="tl">
                                           <li class="destination">
                                             <div class="location">Tolu Ipoyi Street</div>
-                                            <div class="seats sub">5 seats available</div>
+                                            <div class="seats sub">{{availableSeats[i]}} seats available</div>
                                           </li>
                                           <li class="current-location">
                                             <div class="location">Current Location</div>
@@ -27,7 +28,7 @@
                                           </li>
                                         </ul>
                                       </div>
-                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width">Choose Driver</button>
+                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="getDriverDetails(trips.tripId)">Choose Driver</button>
                                     </div>
                                   </div>
                                 </div>

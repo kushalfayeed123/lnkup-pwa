@@ -17,14 +17,14 @@ export class ActiveRiderWebService implements ActiveRiderDataService {
 
     }
 
-    update(activetrip: any) {
-        return this.http.put(`${this.webUrl}/ActiveRiders/activetrip.Id`, activetrip);
+    update(activerider: any) {
+        return this.http.put(`${this.webUrl}/ActiveRiders/activetrip.Id`, activerider);
     }
     delete(id: any) {
         return this.http.delete(`${this.webUrl}/ActiveRiders`, id);
     }
-    create(activetrip: any) {
-        return this.http.post(`${this.webUrl}/ActiveRiders`, activetrip);
+    create(activerider: any) {
+        return this.http.post(`${this.webUrl}/ActiveRiders`, activerider);
     }
     get() {
         return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`);

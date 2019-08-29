@@ -68,7 +68,9 @@ export class MapBroadcastService {
     this._location.next(location);
     console.log('getting my location', typeof this.location.lng);
   }
-
+  storeOrigin(origin) {
+    this.findOrigin(origin);
+  }
   storeLocation(originaddress: string, destinationaddress: string) {
     console.log(originaddress, destinationaddress);
     originaddress = originaddress || ' ';
@@ -177,7 +179,7 @@ export class MapBroadcastService {
               lng: this.location.lng,
               lat: this.location.lat
             };
-            localStorage.setItem('origin', JSON.stringify(origin));
+            localStorage.setItem('currentLocation', JSON.stringify(origin));
           }
 
           // this.map.triggerResize();
@@ -236,20 +238,23 @@ export class MapBroadcastService {
       }
     );
   }
-  markerDragEnd(m: any, $event: any) {
-    this.location.marker.lat = m.coords.lat;
-    this.location.marker.lng = m.coords.lng;
-    this.findAddressByCoordinates();
+  // markerDragEnd(m: any, $event: any) {
+  //   this.location.marker.lat = m.coords.lat;
+  //   this.location.marker.lng = m.coords.lng;
+  //   this.findAddressByCoordinates();
+  // }
+  getDesinationLocations(destinationLocation) {
+    destinationLocation.forEach(element => {
+      console.log('locations', element.lat, element.lng);
+      this.findAddressByCoordinates(element.lat, element.lng);
+    });
   }
-  findAddressByCoordinates() {
-    this.geocoder.geocode(
-      {
-        location: {
-          lat: this.location.marker.lat,
-          lng: this.location.marker.lng
-        }
-      },
+  findAddressByCoordinates(lat: number, lng: number) {
+    const latlng = new google.maps.LatLng(lat, lng);
+    const request = {latLng: latlng};
+    this.geocoder.geocode(request,
       (results, status) => {
+        console.log('results', results);
         this.decomposeAddressComponents(results);
       }
     );
@@ -289,6 +294,7 @@ export class MapBroadcastService {
         this.location.address_zip = element.long_name;
         continue;
       }
+      console.log('decomposed address', this.location.address_level_1);
     }
   }
 

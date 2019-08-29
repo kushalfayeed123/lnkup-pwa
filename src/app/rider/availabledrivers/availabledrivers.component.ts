@@ -21,6 +21,8 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
 };
   availableTrips: any;
   emptyTrips: boolean;
+  destinationLocation = [];
+  availableSeats = [];
 
   constructor(private mapService: MapBroadcastService) { }
 
@@ -29,6 +31,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   }
 
   getAvailableTrips() {
+    localStorage.removeItem('userLocation');
     this.mapService.availableTrips
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(trips => {
@@ -37,7 +40,23 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
         this.emptyTrips = true;
         console.log('there no trips headed in your direction');
       }
+      this.availableTrips.forEach(element => {
+        const destinationLat = element.driverEndLatitude;
+        const destinationLng = element.driverEndLongitude;
+        const destinationLocation = {lat: destinationLat, lng: destinationLng};
+        this.destinationLocation.push(destinationLocation);
+
+        const maxSeats = element.maxRiderNumber;
+        const allowedRiderCount = element.allowedRiderCount;
+        const availableSeat =  maxSeats - allowedRiderCount;
+        this.availableSeats.push(availableSeat);
+      });
+      this.mapService.getDesinationLocations(this.destinationLocation);
     });
+  }
+
+  getDriverDetails(tripId) {
+      console.log(tripId);
   }
 
   ngOnDestroy() {

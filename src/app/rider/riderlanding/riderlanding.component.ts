@@ -58,11 +58,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private authService: AuthenticateDataService,
     private router: Router,
     private mapService: MapBroadcastService,
+    // tslint:disable-next-line: variable-name
     private _snackBar: MatSnackBar,
     private  activeRider: ActiveRiderDataService,
     private activeTrip: ActiveTripDataService,
-    private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone
   ) { }
 
   ngOnInit() {
@@ -114,13 +113,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.router.navigate(['register']);
   }
   async getCurrentLocation() {
-    await this.mapService.locationObject.subscribe(loc => {
-      this.latitude = loc.lat;
-      this.longitude  = loc.lng;
-      const currentLocation = {lat: loc.lat, lng: loc.lng};
-      localStorage.setItem('currentLocation', JSON.stringify(currentLocation));
-    });
-
+    const userLocation = localStorage.getItem('userLocation');
+    console.log(userLocation);
+    if (userLocation !== null || !' ') {
+      this.mapService.storeOrigin(userLocation);
+    } else {
+      await this.mapService.locationObject.subscribe(loc => {
+        this.latitude = loc.lat;
+        this.longitude  = loc.lng;
+        const currentLocation = {lat: loc.lat, lng: loc.lng};
+        localStorage.setItem('currentLocation', JSON.stringify(currentLocation));
+      });
+    }
   }
   storeLocation() {
     this.mapService.storeLocation(this.originAddress, this.destinationAddress);
@@ -222,6 +226,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.gettingDrivers = false;
       console.log('reachable drivers', this.reachableDrivers);
     });
+  }
+
+  storeUserCurrentLocation(event){
+    const userLocation =  event.target.value;
+    localStorage.setItem('userLocation', userLocation);
   }
   ngOnDestroy() {
     this.unsubscribe$.next();

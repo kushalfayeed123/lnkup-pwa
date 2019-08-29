@@ -45,6 +45,21 @@
   .destination{
     margin-bottom: 10px;
   }
+  .location{
+    color: #E040FB;
+    font-size: 12px;
+  }.tl{
+    margin-left: 15%;
+  }
+  .driver-name{
+    padding-top: 6px;
+    font-size: 16px;
+    color: #E040FB;
+  }
+  
+  .sub{
+    font-size: 9px;
+  }
   ::ng-deep .dark-snackbar-search{
     background: #E040FB !important;
   }
