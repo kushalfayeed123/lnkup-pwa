@@ -52,7 +52,8 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
       MatProgressSpinnerModule,
       MatSnackBarModule,
       MatTabsModule,
-      MatCarouselModule      
+      MatSidenavModule,
+      MatCarouselModule
    ],
    exports: [
       MatButtonModule,
@@ -74,6 +75,7 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
       MatCardModule,
       MatProgressSpinnerModule,
       MatBottomSheetModule,
+      MatSidenavModule,
       MatSnackBarModule,
       MatTabsModule,
       MatCarouselModule

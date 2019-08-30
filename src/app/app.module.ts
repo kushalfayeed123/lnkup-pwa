@@ -31,6 +31,7 @@ import { ActiveRiderWebService } from './services/data/active-rider/active-rider
 import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
 import { ActiveTripWebService } from './services/data/active-trip/active-trip.web.service';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
+import { SideNavComponent } from './components/side-nav/side-nav.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
     SuccessMessageComponent,
     ErrorMessageComponent,
     SearchMessageComponent,
-    PushNotificationComponent
+    PushNotificationComponent,
+    SideNavComponent
   ],
   imports: [
     BrowserModule,
