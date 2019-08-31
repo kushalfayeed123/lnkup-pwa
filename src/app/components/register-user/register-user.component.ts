@@ -13,8 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-register-user',
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.scss'],
-  // animations: [fadeInAnimation],
-  // host: { '[@fadeInAnimation]': '' }
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' }
 })
 export class RegisterUserComponent implements OnInit, OnDestroy {
 
