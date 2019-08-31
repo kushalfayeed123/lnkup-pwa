@@ -13,21 +13,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-register-user',
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.scss'],
-  animations: [fadeInAnimation],
-  host: { '[@fadeInAnimation]': '' }
+  // animations: [fadeInAnimation],
+  // host: { '[@fadeInAnimation]': '' }
 })
 export class RegisterUserComponent implements OnInit, OnDestroy {
 
-  public registerForm : FormGroup;
+  public registerForm: FormGroup;
   private unsubscribe$ = new Subject<void>();
   public loading: boolean;
   public durationInSeconds = 4;
 
 
   constructor( private formBuilder: FormBuilder,
-     private authService: AuthenticateDataService,
-     private route: Router,
-     private _snackBar: MatSnackBar,
+               private authService: AuthenticateDataService,
+               private route: Router,
+               private _snackBar: MatSnackBar,
      ) { }
 
   ngOnInit() {
@@ -40,24 +40,24 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
       phoneNumber: ['', Validators.required],
       termsAgree: ['', Validators.required],
       userStatus: [0, Validators.required]
-    })
+    });
   }
 
-  registerUser(){
+  registerUser() {
     this.loading = true;
-    localStorage.removeItem('userVerification')
+    localStorage.removeItem('userVerification');
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const validateCode = randomCode.slice(0,3) + '-' + randomCode.slice(3,6);
+    const validateCode = randomCode.slice(0, 3) + '-' + randomCode.slice(3, 6);
     localStorage.setItem('userVerification', validateCode);
     this.registerForm.patchValue({verificationCode: validateCode});
     const registerValues = this.registerForm.value;
     this.authService.register(registerValues)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
-       localStorage.setItem('registeredUser', JSON.stringify(registerValues))
-        this.route.navigate(["verify"]);
-        this.loading = false;
-    }, 
+       localStorage.setItem('registeredUser', JSON.stringify(registerValues));
+       this.route.navigate(['verify']);
+       this.loading = false;
+    },
     error => {
       this.loading = false;
       this.openErrorMessage();

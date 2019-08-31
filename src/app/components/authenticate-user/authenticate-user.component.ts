@@ -13,8 +13,8 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
   selector: 'app-authenticate-user',
   templateUrl: './authenticate-user.component.html',
   styleUrls: ['./authenticate-user.component.scss'],
-  animations: [fadeInAnimation],
-  host: { '[@fadeInAnimation]': '' }
+  // animations: [fadeInAnimation],
+  // host: { '[@fadeInAnimation]': '' }
 })
 export class AuthenticateUserComponent implements OnInit, OnDestroy {
 
@@ -41,7 +41,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       password: ['', Validators.required]
     });
     // get return url from route or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    // this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
 
   // convinience getter for easy access to form fields
