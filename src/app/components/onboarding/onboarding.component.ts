@@ -14,11 +14,11 @@ export class OnboardingComponent implements OnInit {
   ngOnInit() {
   }
 
-  navToLogin(){
-    this.router.navigate(['auth'])
+  navToLogin() {
+    this.router.navigate(['/auth']);
   }
-  navToRegister(){
-    this.router.navigate(['register'])
+  navToRegister() {
+    this.router.navigate(['/register']);
   }
 
 }
