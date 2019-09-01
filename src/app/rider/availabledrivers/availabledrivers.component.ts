@@ -26,6 +26,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   driverUserName = [];
   pickUp  =  [];
   pickupAddress: any;
+  showTripDetails: boolean;
 
 
   constructor(private mapService: MapBroadcastService) { }
@@ -60,13 +61,10 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     });
   }
 
-  createRiderRequest(userTripId) {
-      // const requestTrip = {tripId: userTripId,
-      //                       tripStatus: 1,
-      //                     currentLocationLongitude:,
-      //                     currentLocationLatitude,
-      //                     riderDestinationLatitude:,
-      //                   riderDestinationLongitude:,}
+  passTripDetails(userTripId) {
+    this.mapService.publishTripDetails(userTripId);
+    this.showTripDetails = true;
+    console.log(this.showTripDetails);
   }
 
   ngOnDestroy() {

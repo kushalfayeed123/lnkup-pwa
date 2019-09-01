@@ -10,6 +10,8 @@ export class MapBroadcastService {
   // tslint:disable-next-line: variable-name
   private _locationDistance = new BehaviorSubject(null);
   public locationDistance = this._locationDistance.asObservable();
+  private _tripId = new BehaviorSubject(null);
+  public tripId = this._tripId.asObservable();
 
   private _availableTrips = new BehaviorSubject(null);
   public availableTrips = this._availableTrips.asObservable();
@@ -295,6 +297,9 @@ export class MapBroadcastService {
 
   publishAvailableTrips(availableTrips: []) {
     this._availableTrips.next(availableTrips);
+  }
+  publishTripDetails(tripId) {
+    this._tripId.next(tripId);
   }
 
   // getLocationDistance(startLat, endLat, startLong, endLong) {

@@ -10,11 +10,12 @@ import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/go
 import { AngularMaterialModule } from '../angular-material.module';
 import { AvailabledriversComponent } from './availabledrivers/availabledrivers.component';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
+import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 
 
 
 @NgModule({
-  declarations: [RiderlandingComponent, AvailabledriversComponent],
+  declarations: [RiderlandingComponent, AvailabledriversComponent, DriverdetailsComponent],
   imports: [
     CommonModule,
     RiderRoutingModule,

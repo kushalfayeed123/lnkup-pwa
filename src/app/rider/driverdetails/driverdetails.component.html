@@ -1,0 +1,44 @@
+
+<div class="destination-container" >
+  <swiper [config]="config">
+          <div class="swiper-wrapper">
+          <mat-card class="available-drivers-card swiper-slide" >
+                  <mat-card-content>
+                    <div class="avd" *ngIf="isTrips">
+                      <!-- <h2 class="heading">Available Drivers</h2> -->
+                      <div class="driver-container">
+                        <div class="driver-track">
+                          <div class="driver-item">
+                            <div class="container-grid">
+                              <div class="avi-info">
+                                <img src="assets/Images/Avatar1.png" alt="" class="avi" />
+                                <h3 class="driver-name"></h3>
+                                <span class="driver-stats">4.33</span>
+                              </div>
+                              <div class="destination-details">
+                                <div class="time-line-container">
+                                  <ul class="tl">
+                                    <li class="destination">
+                                      <div class="location">There are {{availableSeats}} available seats</div>
+                                      <div class="seats sub">at N400/seat</div>
+                                    </li>
+                                    <li class="current-location">
+                                      <div class="location">Your Driver's DropOff</div>
+                                      <div class="est sub"> </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <button type="submit" mat-raised-button color="accent" class="auth-full-width">Book Seat</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card-content>
+              </mat-card>
+              <!-- <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div> -->
+  </div>
+  </swiper>
+</div>

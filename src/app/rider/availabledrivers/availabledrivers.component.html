@@ -1,5 +1,5 @@
 
-<form class="destination-container" *ngIf="!emptyTrips">
+<div class="destination-container" *ngIf="!showTripDetails">
         <swiper [config]="config">
                 <div class="swiper-wrapper">
                 <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">
@@ -19,20 +19,19 @@
                                       <div class="time-line-container">
                                         <ul class="tl">
                                           <li class="destination">
-                                            <div class="location">{{trips.tripPickup}}</div>
-                                            <div class="seats sub">{{availableSeats[i]}} seats available</div>
+                                            <div class="location">Your Pickup Spot</div>
+                                            <div class="seats sub">{{trips.tripPickup}}</div>
                                           </li>
                                           <li class="current-location">
-                                            <div class="location">Current Location</div>
-                                            <div class="est sub">5 mins away</div>
+                                            <div class="location">You are 5 mins away</div>
+                                            <div class="est sub">{{availableSeats[i]}} seats available</div>
                                           </li>
                                         </ul>
                                       </div>
-                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="createRiderRequest(trips.tripId)">Choose Driver</button>
+                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="passTripDetails(trips.tripId)">Choose Driver</button>
                                     </div>
                                   </div>
                                 </div>
-
                               </div>
                             </div>
                           </div>
@@ -42,7 +41,10 @@
                     <div class="swiper-button-prev"></div> -->
         </div>
         </swiper>
-</form>
+      </div>
+<div *ngIf="emptyTrips">There are no trips to display</div>
+
+<app-driverdetails *ngIf="showTripDetails"></app-driverdetails>
 
 
 
