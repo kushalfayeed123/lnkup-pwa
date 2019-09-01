@@ -12,14 +12,14 @@
                                   <div class="container-grid">
                                     <div class="avi-info">
                                       <img src="assets/Images/Avatar1.png" alt="" class="avi" />
-                                      <h3 class="driver-name">Darey</h3>
+                                      <h3 class="driver-name">{{driverUserName[i]}}</h3>
                                       <span class="driver-stats">4.33</span>
                                     </div>
                                     <div class="destination-details">
                                       <div class="time-line-container">
                                         <ul class="tl">
                                           <li class="destination">
-                                            <div class="location">Tolu Ipoyi Street</div>
+                                            <div class="location">{{trips.tripPickup}}</div>
                                             <div class="seats sub">{{availableSeats[i]}} seats available</div>
                                           </li>
                                           <li class="current-location">
@@ -28,7 +28,7 @@
                                           </li>
                                         </ul>
                                       </div>
-                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="getDriverDetails(trips.tripId)">Choose Driver</button>
+                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="createRiderRequest(trips.tripId)">Choose Driver</button>
                                     </div>
                                   </div>
                                 </div>

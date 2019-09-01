@@ -23,6 +23,10 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   emptyTrips: boolean;
   destinationLocation = [];
   availableSeats = [];
+  driverUserName = [];
+  pickUp  =  [];
+  pickupAddress: any;
+
 
   constructor(private mapService: MapBroadcastService) { }
 
@@ -38,25 +42,31 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
       this.availableTrips = trips;
       if (this.availableTrips.length === 0) {
         this.emptyTrips = true;
-        console.log('there no trips headed in your direction');
+        console.log('there are no trips headed in your direction');
       }
       this.availableTrips.forEach(element => {
-        const destinationLat = element.driverEndLatitude;
-        const destinationLng = element.driverEndLongitude;
-        const destinationLocation = {lat: destinationLat, lng: destinationLng};
-        this.destinationLocation.push(destinationLocation);
-
+        const userName = element.tripDriver;
+        if (userName) {
+          this.driverUserName.push(userName.driver.userName);
+          console.log(userName.driver.userName);
+        } else {
+          return;
+        }
         const maxSeats = element.maxRiderNumber;
         const allowedRiderCount = element.allowedRiderCount;
         const availableSeat =  maxSeats - allowedRiderCount;
         this.availableSeats.push(availableSeat);
       });
-      this.mapService.getDesinationLocations(this.destinationLocation);
     });
   }
 
-  getDriverDetails(tripId) {
-      console.log(tripId);
+  createRiderRequest(userTripId) {
+      // const requestTrip = {tripId: userTripId,
+      //                       tripStatus: 1,
+      //                     currentLocationLongitude:,
+      //                     currentLocationLatitude,
+      //                     riderDestinationLatitude:,
+      //                   riderDestinationLongitude:,}
   }
 
   ngOnDestroy() {

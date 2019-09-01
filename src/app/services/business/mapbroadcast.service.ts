@@ -13,16 +13,13 @@ export class MapBroadcastService {
 
   private _availableTrips = new BehaviorSubject(null);
   public availableTrips = this._availableTrips.asObservable();
-
   @ViewChild(AgmMap, { static: false }) map: AgmMap;
-
   public geocoder: any;
-
-
-
   // tslint:disable-next-line: variable-name
   private _location = new BehaviorSubject<any>({});
   public locationObject = this._location.asObservable();
+  private _decomposedAddress = new BehaviorSubject(null);
+  public decomposedAdress = this._decomposedAddress.asObservable();
 
   origin: { lat: number; lng: number; };
   destination: { lat: number; lng: number; };
@@ -38,6 +35,7 @@ export class MapBroadcastService {
     },
     zoom: 17
   };
+  pickupAddress = [];
 
   constructor(public mapsApiLoader: MapsAPILoader,
               private zone: NgZone,
@@ -66,7 +64,6 @@ export class MapBroadcastService {
     this.location.lat = position.coords.latitude;
     const location = {lat: this.location.lat, lng: this.location.lng};
     this._location.next(location);
-    console.log('getting my location', typeof this.location.lng);
   }
   storeOrigin(origin) {
     this.findOrigin(origin);
@@ -198,7 +195,6 @@ export class MapBroadcastService {
         address
       },
       (results, status) => {
-        console.log(results);
         if (status === google.maps.GeocoderStatus.OK) {
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < results[0].address_components.length; i++) {
@@ -294,7 +290,6 @@ export class MapBroadcastService {
         this.location.address_zip = element.long_name;
         continue;
       }
-      console.log('decomposed address', this.location.address_level_1);
     }
   }
 

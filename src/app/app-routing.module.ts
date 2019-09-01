@@ -8,7 +8,7 @@ import { VerifycodeComponent } from './components/verifycode/verifycode.componen
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/onboarding', pathMatch: 'full' },
+  { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
   { path: 'onboarding', component: OnboardingComponent },
   { path: 'verify', component: VerifycodeComponent },
   { path: 'login', component: AuthenticateUserComponent },
