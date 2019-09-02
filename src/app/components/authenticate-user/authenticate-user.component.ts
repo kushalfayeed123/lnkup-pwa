@@ -14,6 +14,7 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
   templateUrl: './authenticate-user.component.html',
   styleUrls: ['./authenticate-user.component.scss'],
   animations: [fadeInAnimation],
+  // tslint:disable-next-line: no-host-metadata-property
   host: { '[@fadeInAnimation]': '' }
 })
 export class AuthenticateUserComponent implements OnInit, OnDestroy {
@@ -31,6 +32,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
+              // tslint:disable-next-line: variable-name
               private _snackBar: MatSnackBar,
               private authenticate: AuthenticateDataService) { }
 

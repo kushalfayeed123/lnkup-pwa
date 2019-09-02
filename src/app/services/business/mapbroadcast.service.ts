@@ -296,6 +296,7 @@ public google: any;
         continue;
       }
     }
+    localStorage.setItem('dropOff', this.location.address_level_1);
   }
 
   publishAvailableTrips(availableTrips: []) {
@@ -304,6 +305,7 @@ public google: any;
   publishTripDetails(tripId) {
     this._tripId.next(tripId);
   }
+
 
   // getLocationDistance(startLat, endLat, startLong, endLong) {
   //   const startLocation = new google.maps.LatLng(startLat, startLong);

@@ -11,11 +11,12 @@ import { AngularMaterialModule } from '../angular-material.module';
 import { AvailabledriversComponent } from './availabledrivers/availabledrivers.component';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
+import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.component';
 
 
 
 @NgModule({
-  declarations: [RiderlandingComponent, AvailabledriversComponent, DriverdetailsComponent],
+  declarations: [RiderlandingComponent, AvailabledriversComponent, DriverdetailsComponent, BookseatrequestComponent],
   imports: [
     CommonModule,
     RiderRoutingModule,

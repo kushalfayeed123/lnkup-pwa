@@ -12,23 +12,23 @@
                             <div class="container-grid">
                               <div class="avi-info">
                                 <img src="assets/Images/Avatar1.png" alt="" class="avi" />
-                                <h3 class="driver-name"></h3>
+                                <h3 class="driver-name">{{driverName}}</h3>
                                 <span class="driver-stats">4.33</span>
                               </div>
                               <div class="destination-details">
                                 <div class="time-line-container">
                                   <ul class="tl">
                                     <li class="destination">
-                                      <div class="location">There are {{availableSeats}} available seats</div>
+                                      <div class="location">{{availableSeats}} available seats</div>
                                       <div class="seats sub">at N400/seat</div>
                                     </li>
                                     <li class="current-location">
                                       <div class="location">Your Driver's DropOff</div>
-                                      <div class="est sub"> </div>
+                                      <div class="est sub">{{destination}}</div>
                                     </li>
                                   </ul>
                                 </div>
-                                <button type="submit" mat-raised-button color="accent" class="auth-full-width">Book Seat</button>
+                                <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="navigateToBookSeat()">Book Seat</button>
                               </div>
                             </div>
                           </div>

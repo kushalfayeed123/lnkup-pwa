@@ -1,3 +1,4 @@
+import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.component';
 import { AvailabledriversComponent } from './availabledrivers/availabledrivers.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -16,6 +17,12 @@ const routes: Routes = [
   {
     path: 'availableTrips',
     component: AvailabledriversComponent,
+    canActivate: [AuthGuard],
+    data: {role: 'Rider'}
+  },
+  {
+    path: 'bookSeat',
+    component: BookseatrequestComponent,
     canActivate: [AuthGuard],
     data: {role: 'Rider'}
   },
