@@ -5,10 +5,11 @@ import { OnboardingComponent } from './components/onboarding/onboarding.componen
 import { AuthenticateUserComponent } from './components/authenticate-user/authenticate-user.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { VerifycodeComponent } from './components/verifycode/verifycode.component';
+import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
+  { path: '', redirectTo: '/onboarding', pathMatch: 'full' },
   { path: 'onboarding', component: OnboardingComponent },
   { path: 'verify', component: VerifycodeComponent },
   { path: 'login', component: AuthenticateUserComponent },
@@ -25,7 +26,8 @@ const routes: Routes = [
     path: 'driver',
     loadChildren: './driver/driver.module#DriverModule'
   },
-  { path: '**', redirectTo: 'onboarding' },
+  { path: '**',
+  component: PagenotfoundComponent },
 ];
 
 @NgModule({
@@ -34,5 +36,5 @@ const routes: Routes = [
 })
 
 export class AppRoutingModule {
-  
+
  }

@@ -32,6 +32,7 @@ import { ActiveTripDataService } from './services/data/active-trip/active-trip.d
 import { ActiveTripWebService } from './services/data/active-trip/active-trip.web.service';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
+import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { SideNavComponent } from './components/side-nav/side-nav.component';
     ErrorMessageComponent,
     SearchMessageComponent,
     PushNotificationComponent,
-    SideNavComponent
+    SideNavComponent,
+    PagenotfoundComponent
   ],
   imports: [
     BrowserModule,
