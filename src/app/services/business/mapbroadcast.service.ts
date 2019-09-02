@@ -6,13 +6,15 @@ import { Location } from '../../models/Location';
 
 @Injectable()
 export class MapBroadcastService {
-
+public google: any;
   // tslint:disable-next-line: variable-name
   private _locationDistance = new BehaviorSubject(null);
   public locationDistance = this._locationDistance.asObservable();
+  // tslint:disable-next-line: variable-name
   private _tripId = new BehaviorSubject(null);
   public tripId = this._tripId.asObservable();
 
+  // tslint:disable-next-line: variable-name
   private _availableTrips = new BehaviorSubject(null);
   public availableTrips = this._availableTrips.asObservable();
   @ViewChild(AgmMap, { static: false }) map: AgmMap;
@@ -20,6 +22,7 @@ export class MapBroadcastService {
   // tslint:disable-next-line: variable-name
   private _location = new BehaviorSubject<any>({});
   public locationObject = this._location.asObservable();
+  // tslint:disable-next-line: variable-name
   private _decomposedAddress = new BehaviorSubject(null);
   public decomposedAdress = this._decomposedAddress.asObservable();
 
