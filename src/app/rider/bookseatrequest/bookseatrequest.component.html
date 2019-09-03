@@ -1,1 +1,43 @@
-<p>bookseatrequest works!</p>
+<section class="auth-pages book-seat filled-page">
+    <main class="contain-box">
+      <nav>
+        <a href="">
+          <i class="flaticon-left-arrow"></i>
+        </a>
+      </nav>
+      <div class="page-heading">
+        <h1>Confirm Seat</h1>
+        <p>
+          Please confirm your seat and pickup spot
+        </p>
+      </div>
+      <div class="increment-icon">
+          <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="decreaseValue()">
+          <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="increaseValue()">
+      </div>
+      <form action="" id="book-seat-filled-form">
+    
+            <mat-form-field class="auth-full-width form-bottom">
+          <input type="text" matInput class="input-color" placeholder="Number of Seats" name="increase" [ngModel]=counter />
+        </mat-form-field>
+        <!-- <div><a href="">Pickup Spot</a></div> -->
+        <mat-form-field class="auth-full-width form-bottom">
+          <input type="text" matInput class="input-color" placeholder="Pickup Spot" value="21b christ avenue" disabled/>
+        </mat-form-field>
+        <div class="input-group fare-group">
+          <div class="f-total">
+            <label for="">Fare Total</label>
+            <span class="fare-price">N 1200</span>
+          </div>
+          <input type="submit" value="Book Ride" id="book-ride" />
+        </div>
+        <div class="payment-options">
+          <div class="c-card">
+            <img src="assets/svg/008-visa.svg" alt="" width="32px" />
+            <span>2456</span>
+          </div>
+          <a href="" class="payment-link">Payment Options</a>
+        </div>
+      </form>
+    </main>
+  </section>

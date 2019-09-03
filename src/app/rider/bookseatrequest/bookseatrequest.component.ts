@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookseatrequestComponent implements OnInit {
 
+  public counter = 0;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  increaseValue() {
+    console.log('yes');
+  }
+  decreaseValue() {
+    this.counter -= 1;
   }
 
 }

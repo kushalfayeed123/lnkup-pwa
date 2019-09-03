@@ -53,7 +53,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
   }
 
   navigateToBookSeat() {
-    this.router.navigate(['bookSeat']);
+    this.router.navigate(['rider/bookSeat']);
   }
   ngOnDestroy() {
     this.unsubscribe$.next();
