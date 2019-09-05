@@ -52,6 +52,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   reachableDrivers: any;
   userLocationMarkerAnimation: string;
   loadMarker: boolean;
+  riderdistance: number;
+  timeToPickup: number;
+  start: any;
+  end: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -211,6 +215,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       const allActiveTrips = data;
+      this.mapService.findAddressByCoordinates();
       allActiveTrips.forEach(element => {
         const tripDestinationLat = element.driverEndLatitude;
         const tripDestinationLong = element.driverEndLongitude;
@@ -220,19 +225,50 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         const distance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
         const destinationDistanceInKm = distance / 1000;
         element.userDriverDestinationDistance = destinationDistanceInKm;
+        const tripPickup = element.tripPickup;
+        this.mapService.findLocation(tripPickup);
+        this.start = JSON.parse(localStorage.getItem('currentLocation'));
+        this.end = JSON.parse(localStorage.getItem('pickup'));
+        
         // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
       });
-      this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance <= 5);
+      this.end.forEach(data => {
+        const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
+        const pickupEndLocation = new google.maps.LatLng(data.lat, data.lng);
+        this.riderdistance = google.maps.geometry.spherical.computeDistanceBetween(currentLocation, pickupEndLocation);
+        const pickupDistanceInKm = this.riderdistance / 1000;
+        const walkingDistancePerHour = 5 * 1000;
+        const timeToPickup = pickupDistanceInKm  / walkingDistancePerHour;
+        const timeToPickupInMinutes = timeToPickup;
+        this.timeToPickup = timeToPickupInMinutes * 60;
+        console.log('pickup time in minutes', timeToPickupInMinutes);
+      });
+      this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance <= 10);
       this.mapService.publishAvailableTrips(this.reachableDrivers);
       this.gettingDrivers = false;
       console.log('reachable drivers', this.reachableDrivers);
     });
   }
 
-  storeUserCurrentLocation(event){
+  storeUserCurrentLocation(event) {
     const userLocation =  event.target.value;
     localStorage.setItem('userLocation', userLocation);
   }
+  // publishTravelTime() {
+  //   setTimeout(() => {
+  //     const start = JSON.parse(localStorage.getItem('currentLocation'));
+  //     const end = JSON.parse(localStorage.getItem('pickup'));
+  //     const startLocation = new google.maps.LatLng(start.lat, start.lng);
+  //     const endLocation = new google.maps.LatLng(end.lat, end.lng);
+  //     this.riderdistance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
+  //     const pickupDistanceInKm = this.riderdistance / 1000;
+  //     const walkingDistancePerHour = 5;
+  //     const timeToPickup = (1 / walkingDistancePerHour) * pickupDistanceInKm;
+  //     const timeToPickupInMinutes = timeToPickup;
+  //     this.timeToPickup = timeToPickupInMinutes;
+  //     console.log('pickup distance', timeToPickupInMinutes);
+  //   }, 1000);
+  // }
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

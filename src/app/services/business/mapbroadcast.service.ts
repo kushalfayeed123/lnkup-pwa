@@ -41,6 +41,7 @@ public google: any;
     zoom: 17
   };
   pickupAddress = [];
+  pickupLatLng = [];
 
   constructor(public mapsApiLoader: MapsAPILoader,
               private zone: NgZone,
@@ -226,13 +227,15 @@ public google: any;
           if (results[0].geometry.location) {
             this.location.lat = results[0].geometry.location.lat();
             this.location.lng = results[0].geometry.location.lng();
-            this.location.marker.lat = results[0].geometry.location.lat();
-            this.location.marker.lng = results[0].geometry.location.lng();
-            this.location.marker.draggable = true;
-            this.location.viewport = results[0].geometry.viewport;
+            // this.location.marker.lat = results[0].geometry.location.lat();
+            // this.location.marker.lng = results[0].geometry.location.lng();
+            // this.location.marker.draggable = true;
+            // this.location.viewport = results[0].geometry.viewport;
           }
-
-          this.map.triggerResize();
+          const pickupLatLng = {lat: this.location.lat, lng: this.location.lng};
+          this.pickupLatLng.push(pickupLatLng);
+          localStorage.setItem('pickup', JSON.stringify(this.pickupLatLng));
+          // this.map.triggerResize();
         } else {
           alert('Sorry, this search produced no results.');
         }
@@ -247,11 +250,11 @@ public google: any;
   getDesinationLocations(destinationLocation) {
     destinationLocation.forEach(element => {
       console.log('locations', element.lat, element.lng);
-      this.findAddressByCoordinates(element.lat, element.lng);
+      // this.findAddressByCoordinates(element.lat, element.lng);
     });
   }
-  findAddressByCoordinates(lat: number, lng: number) {
-    const latlng = new google.maps.LatLng(lat, lng);
+  findAddressByCoordinates(lat?: number, lng?: number) {
+    const latlng = new google.maps.LatLng(6.4475194, 3.470149099999958);
     const request = {latLng: latlng};
     this.geocoder.geocode(request,
       (results, status) => {
@@ -260,6 +263,7 @@ public google: any;
       }
     );
   }
+
   decomposeAddressComponents(addressArray) {
     if (addressArray.length === 0) {
       return false;
@@ -297,6 +301,7 @@ public google: any;
       }
     }
     localStorage.setItem('dropOff', this.location.address_level_1);
+    console.log(this.location.address_level_1);
   }
 
   publishAvailableTrips(availableTrips: []) {
@@ -305,6 +310,7 @@ public google: any;
   publishTripDetails(tripId) {
     this._tripId.next(tripId);
   }
+ 
 
 
   // getLocationDistance(startLat, endLat, startLong, endLong) {

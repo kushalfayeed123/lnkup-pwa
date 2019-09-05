@@ -33,6 +33,7 @@ import { ActiveTripWebService } from './services/data/active-trip/active-trip.we
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { MetaService } from './services/business/metaService.service';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
+    MetaService,
     BroadcastService,
     MapBroadcastService,
     GoogleMapsAPIWrapper,
