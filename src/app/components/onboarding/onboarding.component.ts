@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-onboarding',
@@ -9,16 +9,10 @@ import { Router } from '@angular/router';
 })
 export class OnboardingComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor() { }
 
   ngOnInit() {
   }
 
-  navToLogin() {
-    this.router.navigate(['/auth']);
-  }
-  navToRegister() {
-    this.router.navigate(['/register']);
-  }
 
 }
