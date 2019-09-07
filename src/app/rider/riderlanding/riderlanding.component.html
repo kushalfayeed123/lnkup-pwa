@@ -8,7 +8,6 @@
     placeholder="Enter Your Current Location"
     matGoogleMapsAutocomplete
     (onAutocompleteSelected)="storeUserCurrentLocation($event)"
-    [country]="NG"
   />
 
   </form>
@@ -40,7 +39,7 @@
                         matGoogleMapsAutocomplete
                         (onAutocompleteSelected)="onAutocompleteSelected($event)"
                         (onLocationSelected)="onLocationSelected($event)"
-                        [country]="NG">
+                        >
                         
                 </mat-form-field>
                 <!-- <p><a href="">Forgot password?</a></p> -->

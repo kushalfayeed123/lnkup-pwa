@@ -227,12 +227,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
         const pickupEndLocation = new google.maps.LatLng(data.lat, data.lng);
         this.riderdistance = google.maps.geometry.spherical.computeDistanceBetween(currentLocation, pickupEndLocation);
-        const pickupDistanceInKm = this.riderdistance / 1000;
-        const walkingDistancePerHour = 5 * 1000;
-        const timeToPickup = pickupDistanceInKm  / walkingDistancePerHour;
-        const timeToPickupInMinutes = timeToPickup;
-        this.timeToPickup = timeToPickupInMinutes * 60;
-        console.log('pickup time in minutes', timeToPickupInMinutes);
+        const pickupDistanceInKm = Math.round(this.riderdistance / 1000);
+        // const walkingDistancePerHour = 5 * 1000;
+        // const timeToPickup = pickupDistanceInKm  / walkingDistancePerHour;
+        // const timeToPickupInMinutes = timeToPickup;
+        // this.timeToPickup = timeToPickupInMinutes * 60;
+        console.log('pickup time in minutes', pickupDistanceInKm);
       });
       this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance <= 10);
       this.mapService.publishAvailableTrips(this.reachableDrivers);
