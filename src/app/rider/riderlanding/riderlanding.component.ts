@@ -19,6 +19,7 @@ import { ActiveRiderDataService } from 'src/app/services/data/active-rider/activ
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import {Location, Appearance} from '@angular-material-extensions/google-maps-autocomplete';
 import PlaceResult = google.maps.places.PlaceResult;
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 
 
 @Component({
@@ -68,6 +69,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar,
     private  activeRider: ActiveRiderDataService,
     private activeTrip: ActiveTripDataService,
+    private broadCastService: BroadcastService
   ) { }
 
   ngOnInit() {
@@ -157,7 +159,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     console.log('onAutocompleteSelected: ', result.formatted_address);
     this.destinationAddress = result.formatted_address;
   }
- 
+
   onLocationSelected(location: Location) {
     console.log('onLocationSelected: ', location);
     this.destinationlatitude = location.latitude;
@@ -212,9 +214,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         const tripDestinationLat = element.driverEndLatitude;
         const tripDestinationLong = element.driverEndLongitude;
         const userDestination = JSON.parse(localStorage.getItem('destination'));
-        const startLocation = new google.maps.LatLng(tripDestinationLat, tripDestinationLong);
-        const endLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
-        const distance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
+        const endLocation = new google.maps.LatLng(tripDestinationLat, tripDestinationLong);
+        const riderEndLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
+        const distance = google.maps.geometry.spherical.computeDistanceBetween(endLocation, riderEndLocation);
         const destinationDistanceInKm = distance / 1000;
         element.userDriverDestinationDistance = destinationDistanceInKm;
         const tripPickup = element.tripPickup;
@@ -222,19 +224,22 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         this.start = JSON.parse(localStorage.getItem('currentLocation'));
         this.end = JSON.parse(localStorage.getItem('pickup'));
         // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
-      });
-      this.end.forEach(data => {
+
+        this.end.forEach(data => {
         const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
-        const pickupEndLocation = new google.maps.LatLng(data.lat, data.lng);
-        this.riderdistance = google.maps.geometry.spherical.computeDistanceBetween(currentLocation, pickupEndLocation);
-        const pickupDistanceInKm = Math.round(this.riderdistance / 1000);
-        // const walkingDistancePerHour = 5 * 1000;
-        // const timeToPickup = pickupDistanceInKm  / walkingDistancePerHour;
-        // const timeToPickupInMinutes = timeToPickup;
-        // this.timeToPickup = timeToPickupInMinutes * 60;
-        console.log('pickup time in minutes', pickupDistanceInKm);
+        const pickupLocation = new google.maps.LatLng(data.lat, data.lng);
+        this.riderdistance = google.maps.geometry.spherical.computeDistanceBetween(currentLocation, pickupLocation);
+        const pickupDistanceInKm = this.riderdistance / 1000;
+        const walkingDistancePerHour = 4.5;
+        const timeToPickup = (pickupDistanceInKm  / walkingDistancePerHour) * 60;
+        const timeToPickupInMinutes = Math.round(timeToPickup);
+        this.timeToPickup = timeToPickupInMinutes;
+        element.timeToPickup = this.timeToPickup;
+        element.pickupDistance = pickupDistanceInKm;
       });
-      this.reachableDrivers = allActiveTrips.filter(d => d.userDriverDestinationDistance <= 10);
+    });
+      this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance <= 10
+         && d.userDriverDestinationDistance <= 10);
       this.mapService.publishAvailableTrips(this.reachableDrivers);
       this.gettingDrivers = false;
       console.log('reachable drivers', this.reachableDrivers);

@@ -16,6 +16,8 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
   availableSeats: number;
   driverName: any;
   destination: any;
+  tripPricePerRider: any;
+  end: any;
 
 
   constructor(private mapService: MapBroadcastService,
@@ -39,6 +41,9 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         const availableSeats = max - allowed;
         const destinationLng = trip.driverEndLongitude;
         const destinationLat = trip.driverEndLatitude;
+        const pickup = trip.tripPickup;
+        this.mapService.findLocation(pickup);
+        const pickupCoordinates = JSON.parse(localStorage.getItem('pickup'));
         this.mapService.findAddressByCoordinates(destinationLat, destinationLng);
         setTimeout(() => {
           this.destination = localStorage.getItem('dropOff');
@@ -46,7 +51,16 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         }, 1000);
         this.availableSeats = availableSeats;
         this.driverName = trip.tripDriver.driver.userName;
+        this.tripPricePerRider = trip.tripPricePerRider;
         this.isTrips = true;
+        pickupCoordinates.forEach(location => {
+          const tripDestination = new google.maps.LatLng(destinationLat, destinationLng);
+          const pickupLocation = new google.maps.LatLng(location.lat, location.lng);
+          const tripDistance = (google.maps.geometry.spherical.computeDistanceBetween(pickupLocation, tripDestination)) / 1000;
+          const pricePerKilometer = 150;
+          const pricePerSeat = pricePerKilometer / max;
+          this.tripPricePerRider = Math.round(pricePerSeat * tripDistance);
+        });
       });
 
     });
