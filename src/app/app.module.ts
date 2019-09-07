@@ -65,7 +65,7 @@ import { MetaService } from './services/business/metaService.service';
     }),
     AgmDirectionModule,
     MatGoogleMapsAutocompleteModule.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     MetaService,

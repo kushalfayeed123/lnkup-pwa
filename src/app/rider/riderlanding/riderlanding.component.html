@@ -6,7 +6,9 @@
     id=""
     class="destination"
     placeholder="Enter Your Current Location"
-    (keyup)="storeUserCurrentLocation($event)"
+    matGoogleMapsAutocomplete
+    (onAutocompleteSelected)="storeUserCurrentLocation($event)"
+    [country]="NG"
   />
 
   </form>
@@ -34,7 +36,12 @@
             <mat-card-content>
                 <mat-form-field class="auth-full-width">
                     <input type="text" matInput class="input-color" placeholder="Tell us your destination" autocorrect="off" autocapitalize="off" spellcheck="off" #search
-                        [(ngModel)]='destinationAddress' name="destinationAddress"/>
+                         name="destinationAddress"
+                        matGoogleMapsAutocomplete
+                        (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                        (onLocationSelected)="onLocationSelected($event)"
+                        [country]="NG">
+                        
                 </mat-form-field>
                 <!-- <p><a href="">Forgot password?</a></p> -->
             <button (click)='getDrivers()' mat-raised-button color="accent"

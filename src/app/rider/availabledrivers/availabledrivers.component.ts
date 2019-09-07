@@ -36,7 +36,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   }
 
   getAvailableTrips() {
-    localStorage.removeItem('userLocation');
     this.mapService.availableTrips
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(trips => {

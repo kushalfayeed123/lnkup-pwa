@@ -250,11 +250,11 @@ public google: any;
   getDesinationLocations(destinationLocation) {
     destinationLocation.forEach(element => {
       console.log('locations', element.lat, element.lng);
-      // this.findAddressByCoordinates(element.lat, element.lng);
+      this.findAddressByCoordinates(element.lat, element.lng);
     });
   }
   findAddressByCoordinates(lat?: number, lng?: number) {
-    const latlng = new google.maps.LatLng(6.4475194, 3.470149099999958);
+    const latlng = new google.maps.LatLng(lat, lng);
     const request = {latLng: latlng};
     this.geocoder.geocode(request,
       (results, status) => {
@@ -310,7 +310,6 @@ public google: any;
   publishTripDetails(tripId) {
     this._tripId.next(tripId);
   }
- 
 
 
   // getLocationDistance(startLat, endLat, startLong, endLong) {

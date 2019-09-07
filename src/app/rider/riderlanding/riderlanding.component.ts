@@ -13,12 +13,12 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
-import { Appearance } from '@angular-material-extensions/google-maps-autocomplete';
 import { MatSnackBar } from '@angular/material';
 import { SearchMessageComponent } from 'src/app/components/search-message/search-message.component';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
-import { MapsAPILoader } from '@agm/core';
+import {Location, Appearance} from '@angular-material-extensions/google-maps-autocomplete';
+import PlaceResult = google.maps.places.PlaceResult;
 
 
 @Component({
@@ -56,6 +56,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   timeToPickup: number;
   start: any;
   end: any;
+  destinationlatitude: number;
+  destinationlongitude: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,6 +71,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    localStorage.removeItem('userLocation');
     this.loadMarker = true;
     this.route.params.subscribe(p => {
       const userId = p.id;
@@ -93,35 +96,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
 
-  // autoCompleteFocus() {
-  //   this.mapsAPILoader.load().then(
-  //     () => {
-  //      const autocomplete = new google.maps.places.Autocomplete(this.searchElement.nativeElement, { types: ['address'] });
-
-  //      autocomplete.addListener('place_changed', () => {
-  //       this.ngZone.run(() => {
-  //        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-  //        if (place.geometry === undefined || place.geometry === null ) {
-  //         return;
-  //        }
-  //       });
-  //       });
-  //     }
-  //   );
-  // }
-
-  navtologin() {
-    this.router.navigate(['auth']);
-  }
-  navtoregister() {
-    this.router.navigate(['register']);
-  }
   async getCurrentLocation() {
     this.mapService.getCurrentLocation();
     const userLocation = localStorage.getItem('userLocation');
-    console.log(userLocation);
     if (userLocation !== null || !' ') {
       this.mapService.storeOrigin(userLocation);
+      console.log('user location', this.latitude, this.longitude);
     } else {
       await this.mapService.locationObject.subscribe(loc => {
         this.latitude = loc.lat;
@@ -153,6 +133,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
                                               strokeOpacity: 0.6,
                                               strokeWeight: 5,
                                               editable: false, } };
+      this.latitude = cl.lat;
+      this.longitude = cl.lng;
     }, 2000);
   //   this.heatmap = new google.maps.visualization.HeatmapLayer({
   //     data: [this.origin, this.destination]
@@ -170,6 +152,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.gettingDrivers = true;
     this.loading = true;
     this.createTripRequest();
+  }
+  onAutocompleteSelected(result: PlaceResult) {
+    console.log('onAutocompleteSelected: ', result.formatted_address);
+    this.destinationAddress = result.formatted_address;
+  }
+ 
+  onLocationSelected(location: Location) {
+    console.log('onLocationSelected: ', location);
+    this.destinationlatitude = location.latitude;
+    this.destinationlongitude = location.longitude;
   }
   createTripRequest() {
     const UserId = JSON.parse(localStorage.getItem('currentUser'));
@@ -229,7 +221,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         this.mapService.findLocation(tripPickup);
         this.start = JSON.parse(localStorage.getItem('currentLocation'));
         this.end = JSON.parse(localStorage.getItem('pickup'));
-        
         // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
       });
       this.end.forEach(data => {
@@ -250,25 +241,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
 
-  storeUserCurrentLocation(event) {
-    const userLocation =  event.target.value;
+  storeUserCurrentLocation(result: PlaceResult) {
+    const userLocation =  result.formatted_address;
     localStorage.setItem('userLocation', userLocation);
   }
-  // publishTravelTime() {
-  //   setTimeout(() => {
-  //     const start = JSON.parse(localStorage.getItem('currentLocation'));
-  //     const end = JSON.parse(localStorage.getItem('pickup'));
-  //     const startLocation = new google.maps.LatLng(start.lat, start.lng);
-  //     const endLocation = new google.maps.LatLng(end.lat, end.lng);
-  //     this.riderdistance = google.maps.geometry.spherical.computeDistanceBetween(startLocation, endLocation);
-  //     const pickupDistanceInKm = this.riderdistance / 1000;
-  //     const walkingDistancePerHour = 5;
-  //     const timeToPickup = (1 / walkingDistancePerHour) * pickupDistanceInKm;
-  //     const timeToPickupInMinutes = timeToPickup;
-  //     this.timeToPickup = timeToPickupInMinutes;
-  //     console.log('pickup distance', timeToPickupInMinutes);
-  //   }, 1000);
-  // }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
