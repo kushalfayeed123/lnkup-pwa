@@ -4,6 +4,7 @@ import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.serv
 import { takeUntil } from 'rxjs/operators';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { Subject } from 'rxjs';
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 
 @Component({
   selector: 'app-driverdetails',
@@ -18,10 +19,12 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
   destination: any;
   tripPricePerRider: any;
   end: any;
+  tripId: any;
 
 
   constructor(private mapService: MapBroadcastService,
               private activeTripService: ActiveTripDataService,
+              private broadcastServic: BroadcastService,
               private router: Router) { }
 
   ngOnInit() {
@@ -32,8 +35,8 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
     this.mapService.tripId
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
-      const tripId = data;
-      this.activeTripService.getTripsById(tripId)
+      this.tripId = data;
+      this.activeTripService.getTripsById(this.tripId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trip => {
         const max = trip.maxRiderNumber;
@@ -60,6 +63,9 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
           const pricePerKilometer = 150;
           const pricePerSeat = pricePerKilometer / max;
           this.tripPricePerRider = Math.round(pricePerSeat * tripDistance);
+          const riderRequest = {tripId: this.tripId,
+                                tripFee: this.tripPricePerRider};
+          this.broadcastServic.publishRiderRequest(riderRequest);
         });
       });
 

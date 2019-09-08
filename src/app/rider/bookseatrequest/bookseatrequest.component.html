@@ -22,22 +22,31 @@
         </mat-form-field>
         <!-- <div><a href="">Pickup Spot</a></div> -->
         <mat-form-field class="auth-full-width form-bottom">
-          <input type="text" matInput class="input-color" placeholder="Pickup Spot" value="21b christ avenue" disabled/>
+          <input type="text" matInput class="input-color" placeholder="Your Dropoff"name="dropoff" [ngModel]=dropoff disabled/>
         </mat-form-field>
         <div class="input-group fare-group">
           <div class="f-total">
             <label for="">Fare Total</label>
-            <span class="fare-price">N 1200</span>
+            <span class="fare-price">&#8358; {{fare}}</span>
           </div>
-          <button type="submit"  id="book-ride" mat-raised-button color="accent" class="auth-full-width">Book Your Ride</button>
+          <button type="submit"  id="book-ride" mat-raised-button color="accent"
+          (click)="createRiderRequest()" class="auth-full-width">Book Your Ride</button>
         </div>
         <div class="payment-options">
           <div class="c-card">
-            <img src="assets/svg/008-visa.svg" alt="" width="32px" />
-            <span>2456</span>
           </div>
-          <a href="" class="payment-link">Payment Options</a>
+          <mat-form-field class="auth-full-width">
+            <mat-label>Change Payment Options</mat-label>
+            <mat-select >
+                <mat-option value="Card">Card</mat-option>
+                <mat-option value="Cash">Cash</mat-option>
+                <mat-option value="Wallet">Wallet</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+        <!-- <div (click)=cancelRequest() class="cancel">
+          Cancel Request
+        </div> -->
       </form>
     </main>
   </section>

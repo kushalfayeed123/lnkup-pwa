@@ -168,6 +168,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   createTripRequest() {
     const UserId = JSON.parse(localStorage.getItem('currentUser'));
     this.mapService.findDestination(this.destinationAddress);
+    const status = 1;
+    this.getAllActiveTrips(status);
     setTimeout(() => {
       const destination = JSON.parse(localStorage.getItem('destination'));
       const request = {
@@ -179,14 +181,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         tripStatus: '1'
          };
       console.log(request);
-      this.activeRider.create(request)
-     .pipe(takeUntil(this.unsubscribe$))
-     .subscribe(data => {
-       this.requestData = data;
-       console.log('getting user request desination', this.requestData);
-       const status = 1;
-       this.getAllActiveTrips(status);
-     });
+      localStorage.setItem('activeRiderRequest', JSON.stringify(request));
     }, 2000);
   }
   markerDragEnd(m: any, $event: any) {

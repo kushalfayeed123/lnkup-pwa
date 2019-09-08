@@ -17,8 +17,8 @@ export class ActiveRiderWebService implements ActiveRiderDataService {
 
     }
 
-    update(activerider: any) {
-        return this.http.put(`${this.webUrl}/ActiveRiders/activetrip.Id`, activerider);
+    update(activerider: any, id: string) {
+        return this.http.put(`${this.webUrl}/ActiveRiders/${id}`, activerider);
     }
     delete(id: any) {
         return this.http.delete(`${this.webUrl}/ActiveRiders`, id);

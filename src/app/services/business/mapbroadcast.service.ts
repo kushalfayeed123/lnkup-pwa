@@ -193,6 +193,7 @@ public google: any;
     );
   }
   findLocation(address) {
+    this.pickupLatLng.splice(0);
     if (!this.geocoder) {
       this.geocoder = new google.maps.Geocoder();
     }

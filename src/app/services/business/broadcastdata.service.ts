@@ -5,8 +5,8 @@ import { BehaviorSubject } from 'rxjs';
 export class BroadcastService {
     private _userData = new BehaviorSubject(null);
     public userData = this._userData.asObservable();
-    private _riderFee = new BehaviorSubject(null);
-    public riderFee = this._riderFee.asObservable();
+    private _riderRequest = new BehaviorSubject(null);
+    public riderRequest = this._riderRequest.asObservable();
 
     constructor() {
 
@@ -17,7 +17,7 @@ export class BroadcastService {
         console.log('data gets to service', user);
     }
 
-    publishRiderTripFee(fee) {
-        this._riderFee.next(fee);
+    publishRiderRequest(request) {
+        this._riderRequest.next(request);
     }
 }
