@@ -11,16 +11,23 @@
           Please confirm your seat and pickup spot
         </p>
       </div>
-      <div class="increment-icon">
-          <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="decreaseValue()">
-          <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="increaseValue()">
-      </div>
+      <mat-spinner *ngIf="loading" [diameter]="30"
+      class="loader"
+    ></mat-spinner>
+      <!-- <div class="increment-icon">
+          <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
+          <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
+      </div> -->
       <form action="" id="book-seat-filled-form">
-    
-            <mat-form-field class="auth-full-width form-bottom">
-          <input type="text" matInput class="input-color" placeholder="Number of Seats" name="increase" [ngModel]=counter />
-        </mat-form-field>
+        <!-- <ngx-mat-numberpicker [min]="1" [max]="6" [default]="1" 
+        [disabled]="false" (onChange)="onValueChanged($event)" class="number-picker">
+      </ngx-mat-numberpicker> -->
+            <!-- <mat-form-field class="auth-full-width form-bottom">
+          <input type="number" matInput class="input-color" placeholder="Number of Seats" name="increase" [ngModel]=currentValue />
+        </mat-form-field> -->
         <!-- <div><a href="">Pickup Spot</a></div> -->
+        <ng-number-picker [(value)]="currentValue" (valueChange)="onValueChanged($event)"></ng-number-picker>
+
         <mat-form-field class="auth-full-width form-bottom">
           <input type="text" matInput class="input-color" placeholder="Your Dropoff"name="dropoff" [ngModel]=dropoff disabled/>
         </mat-form-field>

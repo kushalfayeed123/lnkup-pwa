@@ -34,6 +34,12 @@ import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { MetaService } from './services/business/metaService.service';
+import { APP_BASE_HREF } from '@angular/common';
+import {NumberPickerModule} from 'ng-number-picker';
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -48,7 +54,8 @@ import { MetaService } from './services/business/metaService.service';
     SearchMessageComponent,
     PushNotificationComponent,
     SideNavComponent,
-    PagenotfoundComponent
+    PagenotfoundComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -59,6 +66,7 @@ import { MetaService } from './services/business/metaService.service';
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
+    NumberPickerModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ' + '&libraries=visualization',
       libraries: ['geometry', 'places']
@@ -72,6 +80,7 @@ import { MetaService } from './services/business/metaService.service';
     BroadcastService,
     MapBroadcastService,
     GoogleMapsAPIWrapper,
+    {provide: APP_BASE_HREF, useValue: '/'},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {provide: AuthenticateDataService, useClass: AuthenticateWebService},

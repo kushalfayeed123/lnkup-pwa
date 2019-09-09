@@ -12,6 +12,7 @@ import { AvailabledriversComponent } from './availabledrivers/availabledrivers.c
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.component';
+import {NumberPickerModule} from 'ng-number-picker';
 
 
 
@@ -26,7 +27,8 @@ import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.comp
     FormsModule,
     ReactiveFormsModule,
     MatGoogleMapsAutocompleteModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    NumberPickerModule
   ]
 })
 export class RiderModule { }

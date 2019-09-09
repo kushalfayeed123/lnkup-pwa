@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_gaurd/auth.guard';
 import { RiderlandingComponent } from './riderlanding/riderlanding.component';
+import { RiderlinkComponent } from '../riderlink/riderlink.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {role: 'Rider'}
   },
+  {
+    path: 'riderLink',
+    component: RiderlinkComponent,
+    canActivate: [AuthGuard],
+    data: {role: 'Rider'}
+  }
 ];
 
 @NgModule({

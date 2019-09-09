@@ -3,6 +3,7 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bookseatrequest',
@@ -17,8 +18,11 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   request: any;
   dropoff: string;
   requestData: any;
+  currentValue: number = 1;
+  loading: boolean;
   constructor(private broadcastService: BroadcastService,
-              private activeRiderService: ActiveRiderDataService) { }
+              private activeRiderService: ActiveRiderDataService,
+              private router: Router) { }
 
   ngOnInit() {
     this.dropoff = localStorage.getItem('dropOff');
@@ -31,7 +35,9 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       this.getRiderRequest();
     }
   }
-
+  onValueChanged(value: number): void {
+    this.currentValue = value;
+}
   getRiderRequest() {
     this.broadcastService.riderRequest
     .pipe(takeUntil(this.unsubscribe$))
@@ -42,7 +48,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
         this.fare = this.request.tripFee;
         this.request.paymentType = 'cash';
         this.request.paymentStatus = 'Pending';
-        this.request.bookedSeat  =  1;
+        this.request.bookedSeat  =  this.currentValue;
         this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
         this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
         this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
@@ -56,12 +62,17 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   }
 
   createRiderRequest() {
+    this.loading = true;
     console.log('request', this.request);
     this.activeRiderService.create(this.request)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       this.requestData = data;
-      console.log('getting user request desination', this.requestData);
+      this.loading = false;
+      this.router.navigate(['riderLink']);
+    }, error => {
+      console.error('We could not send your request, please try again shortly.');
+      this.loading = false;
     });
   }
   increaseValue() {
