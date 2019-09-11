@@ -1,7 +1,8 @@
 import { MapBroadcastService } from './../../services/business/mapbroadcast.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 
 @Component({
   selector: 'app-availabledrivers',
@@ -29,9 +30,14 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   showTripDetails: boolean;
 
 
-  constructor(private mapService: MapBroadcastService) { }
+  constructor(private mapService: MapBroadcastService, private broadcastService: BroadcastService) { }
 
   ngOnInit() {
+    this.broadcastService.showTripDetails
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(data => {
+      this.showTripDetails = data;
+    });
     this.getAvailableTrips();
   }
 

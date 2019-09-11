@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_gaurd/auth.guard';
 import { RiderlandingComponent } from './riderlanding/riderlanding.component';
 import { RiderlinkComponent } from '../riderlink/riderlink.component';
+import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 
 
 const routes: Routes = [
@@ -13,14 +14,16 @@ const routes: Routes = [
     path: 'home/:id',
     component: RiderlandingComponent,
     canActivate: [AuthGuard],
-    data: {role: 'Rider'}
+    data: {role: 'Rider'},
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'available-drivers', component:  AvailabledriversComponent},
+      { path: 'driver-details', component: DriverdetailsComponent },
+      // { path: 'detail-report', component: DetailReportComponent }
+
+    ],
   },
-  {
-    path: 'availableTrips',
-    component: AvailabledriversComponent,
-    canActivate: [AuthGuard],
-    data: {role: 'Rider'}
-  },
+
   {
     path: 'bookSeat',
     component: BookseatrequestComponent,

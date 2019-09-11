@@ -26,25 +26,16 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dropoff = localStorage.getItem('dropOff');
-    const request = JSON.parse(localStorage.getItem('riderRequest'));
-    if (request) {
-      this.request = request;
-      console.log('first', this.request);
-      this.fare = this.request.tripFee;
-    } else {
-      this.getRiderRequest();
-    }
+    this.getRiderRequest();
   }
   onValueChanged(value: number): void {
     this.currentValue = value;
 }
   getRiderRequest() {
-    this.broadcastService.riderRequest
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      setTimeout(() => {
+     
         const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
-        this.request = data;
+        this.request = JSON.parse(localStorage.getItem('riderRequest'));
+
         this.fare = this.request.tripFee;
         this.request.paymentType = 'cash';
         this.request.paymentStatus = 'Pending';
@@ -57,19 +48,21 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
         this.request.tripStatus = activeRequest.tripStatus;
         localStorage.setItem('riderRequest', JSON.stringify(this.request));
         console.log(this.dropoff);
-      }, 2000);
-    });
+    
   }
 
   createRiderRequest() {
     this.loading = true;
+   
     console.log('request', this.request);
     this.activeRiderService.create(this.request)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const userId = user.id;
       this.requestData = data;
       this.loading = false;
-      this.router.navigate(['riderLink']);
+      this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
     }, error => {
       console.error('We could not send your request, please try again shortly.');
       this.loading = false;
@@ -86,5 +79,6 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+ 
 
 }

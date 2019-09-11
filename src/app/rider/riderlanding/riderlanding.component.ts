@@ -59,6 +59,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   end: any;
   destinationlatitude: number;
   destinationlongitude: number;
+  riderLink: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -73,6 +74,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.route.queryParams
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(param => {
+      this.riderLink = param.riderLink;
+      console.log('url param', this.riderLink);
+    });
     localStorage.removeItem('userLocation');
     this.loadMarker = true;
     this.route.params.subscribe(p => {
@@ -233,8 +240,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         element.pickupDistance = pickupDistanceInKm;
       });
     });
-      this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance <= 10
-         && d.userDriverDestinationDistance <= 10);
+      this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance <= 5
+         && d.userDriverDestinationDistance <= 5);
       this.mapService.publishAvailableTrips(this.reachableDrivers);
       this.gettingDrivers = false;
       console.log('reachable drivers', this.reachableDrivers);

@@ -13,11 +13,16 @@ import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.component';
 import {NumberPickerModule} from 'ng-number-picker';
+import { RiderlinkComponent } from '../riderlink/riderlink.component';
 
 
 
 @NgModule({
-  declarations: [RiderlandingComponent, AvailabledriversComponent, DriverdetailsComponent, BookseatrequestComponent],
+  declarations: [RiderlandingComponent,
+                 AvailabledriversComponent,
+                 DriverdetailsComponent,
+                 BookseatrequestComponent,
+                 RiderlinkComponent],
   imports: [
     CommonModule,
     RiderRoutingModule,

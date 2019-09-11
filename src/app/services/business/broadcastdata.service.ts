@@ -5,8 +5,13 @@ import { BehaviorSubject } from 'rxjs';
 export class BroadcastService {
     private _userData = new BehaviorSubject(null);
     public userData = this._userData.asObservable();
+
     private _riderRequest = new BehaviorSubject(null);
     public riderRequest = this._riderRequest.asObservable();
+    
+    private _showTripDetails = new BehaviorSubject(null);
+    public showTripDetails = this._riderRequest.asObservable();
+
 
     constructor() {
 
@@ -19,5 +24,9 @@ export class BroadcastService {
 
     publishRiderRequest(request) {
         this._riderRequest.next(request);
+    }
+
+    toggleAvailableTrips(showTripDetails) {
+        this._showTripDetails.next(showTripDetails);
     }
 }

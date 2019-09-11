@@ -24,7 +24,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
 
   constructor(private mapService: MapBroadcastService,
               private activeTripService: ActiveTripDataService,
-              private broadcastServic: BroadcastService,
+              private broadcastService: BroadcastService,
               private router: Router) { }
 
   ngOnInit() {
@@ -65,11 +65,15 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
           this.tripPricePerRider = Math.round(pricePerSeat * tripDistance);
           const riderRequest = {tripId: this.tripId,
                                 tripFee: this.tripPricePerRider};
-          this.broadcastServic.publishRiderRequest(riderRequest);
+          localStorage.setItem('riderRequest', JSON.stringify(riderRequest));
         });
       });
 
     });
+  }
+  getAllAvailableTrips() {
+    this.broadcastService.toggleAvailableTrips(false);
+    console.log('click');
   }
 
   navigateToBookSeat() {
