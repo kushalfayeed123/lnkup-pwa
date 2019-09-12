@@ -307,7 +307,7 @@ public google: any;
       }
     }
     localStorage.setItem('storedAddress', this.location.address_level_1);
-    console.log(this.location.address_level_1);
+    console.log('addresslevel', this.location.address_level_1);
   }
 
   publishAvailableTrips(availableTrips: []) {

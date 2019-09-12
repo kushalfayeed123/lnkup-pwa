@@ -39,6 +39,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
       this.activeTripService.getTripsById(this.tripId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trip => {
+        localStorage.setItem('tripDetails', JSON.stringify(trip));
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;
         const availableSeats = max - allowed;
@@ -49,7 +50,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         const pickupCoordinates = JSON.parse(localStorage.getItem('pickup'));
         this.mapService.findAddressByCoordinates(destinationLat, destinationLng);
         setTimeout(() => {
-          this.destination = localStorage.getItem('dropOff');
+          this.destination = localStorage.getItem('storedAddress');
           console.log('dropOff', this.destination);
         }, 1000);
         this.availableSeats = availableSeats;
