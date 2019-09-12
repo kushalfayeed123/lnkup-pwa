@@ -27,4 +27,8 @@ export class RiderlinkComponent implements OnInit {
     
   }
 
+  cancelRequest() {
+    console.log('cancel');
+  }
+
 }
