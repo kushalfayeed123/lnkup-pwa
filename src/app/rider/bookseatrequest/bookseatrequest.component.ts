@@ -25,7 +25,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit() {
-    this.dropoff = localStorage.getItem('dropOff');
+    this.dropoff = localStorage.getItem('storedAddress');
     this.getRiderRequest();
   }
   onValueChanged(value: number): void {

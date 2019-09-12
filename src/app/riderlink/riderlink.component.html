@@ -1,1 +1,30 @@
-<p>riderlink works!</p>
+<div class="avd">
+    <!-- <h2 class="heading">Available Drivers</h2> -->
+    <div class="driver-container">
+      <div class="driver-track">
+        <div class="driver-item">
+          <div class="container-grid">
+            <div class="avi-info">
+              <img src="assets/Images/Avatar1.png" alt="" class="avi" />
+              <h3 class="driver-name">name</h3>
+            </div>
+            <div class="destination-details">
+              <div class="time-line-container">
+                <ul class="tl">
+                  <li class="destination">
+                    <div class="location">Meet your driver here</div>
+                    <div class="seats sub">Tolu Ipoyi</div>
+                  </li>
+                  <li class="current-location">
+                    <div class="location">Your fare for this trip</div>
+                    <div class="est sub">&#8358;{{riderRequestData.tripFee}}</div>
+                  </li>
+                </ul>
+              </div>
+              <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="cancelRequest()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

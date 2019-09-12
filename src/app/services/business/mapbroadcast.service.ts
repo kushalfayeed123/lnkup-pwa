@@ -187,7 +187,7 @@ public google: any;
               lng: this.location.lng,
               lat: this.location.lat
             };
-            localStorage.setItem('currentLocation', JSON.stringify(origin));
+            localStorage.setItem('origin', JSON.stringify(origin));
           }
 
           // this.map.triggerResize();
@@ -306,7 +306,7 @@ public google: any;
         continue;
       }
     }
-    localStorage.setItem('dropOff', this.location.address_level_1);
+    localStorage.setItem('storedAddress', this.location.address_level_1);
     console.log(this.location.address_level_1);
   }
 

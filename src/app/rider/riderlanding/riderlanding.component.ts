@@ -78,7 +78,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(param => {
       this.riderLink = param.riderLink;
-      console.log('url param', this.riderLink);
+      if (this.riderLink) {
+        this.getPickupDirection();
+      }
     });
     localStorage.removeItem('userLocation');
     this.loadMarker = true;
@@ -105,36 +107,46 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
 
-  async getCurrentLocation() {
+  getCurrentLocation() {
     this.mapService.getCurrentLocation();
     const userLocation = localStorage.getItem('userLocation');
     if (userLocation !== null || !' ') {
       this.mapService.storeOrigin(userLocation);
+      const userLoc = JSON.parse(localStorage.getItem('origin'));
+      this.latitude = userLoc.lat;
+      this.longitude =  userLoc.lng;
       console.log('user location', this.latitude, this.longitude);
     } else {
-      await this.mapService.locationObject.subscribe(loc => {
+        this.mapService.locationObject.subscribe(loc => {
         this.latitude = loc.lat;
         this.longitude  = loc.lng;
         const currentLocation = {lat: loc.lat, lng: loc.lng};
-        localStorage.setItem('currentLocation', JSON.stringify(currentLocation));
+        localStorage.setItem('origin', JSON.stringify(currentLocation));
       });
     }
   }
   storeLocation() {
     this.mapService.storeLocation(this.originAddress, this.destinationAddress);
     setTimeout(() => {
-      this.getDirection();
+      this.passDirection();
     }, 2000);
   }
   getDestinationCordinates() {
     this.mapService.findDestination(this.destinationAddress);
   }
 
-    getDirection() {
+    passDirection() {
+      setTimeout(() => {
+        const cl = JSON.parse(localStorage.getItem('origin'));
+        console.log('cl', cl);
+        const destination = JSON.parse(localStorage.getItem('destination'));
+        this.getDirection(cl, destination);
+      }, 1000);
+    }
+
+    getDirection(origin, destination) {
     setTimeout(() => {
-      const cl = JSON.parse(localStorage.getItem('currentLocation'));
-      const origin = JSON.parse(localStorage.getItem('origin'));
-      const destination = JSON.parse(localStorage.getItem('destination'));
+      const cl = origin;
       this.origin = { lat: cl.lat, lng: cl.lng };
       this.destination = { lat: destination.lat, lng: destination.lng };
       this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6',
@@ -153,11 +165,21 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}
     // ]
   }
+
+  getPickupDirection() {
+    const origin = JSON.parse(localStorage.getItem('origin'));
+    const pickupArray = JSON.parse(localStorage.getItem('pickup'));
+    pickupArray.forEach(element => {
+      const destination = element;
+      console.log('get direction', origin, destination);
+      this.getDirection(origin, destination);
+    });
+  }
   getDrivers() {
     this.loadMarker = false;
     this.getCurrentLocation();
     this.getDestinationCordinates();
-    this.getDirection();
+    this.passDirection();
     this.gettingDrivers = true;
     this.loading = true;
     this.createTripRequest();
@@ -174,7 +196,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
   createTripRequest() {
     const UserId = JSON.parse(localStorage.getItem('currentUser'));
-    this.mapService.findDestination(this.destinationAddress);
     const status = 1;
     this.getAllActiveTrips(status);
     setTimeout(() => {
@@ -223,7 +244,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         element.userDriverDestinationDistance = destinationDistanceInKm;
         const tripPickup = element.tripPickup;
         this.mapService.findLocation(tripPickup);
-        this.start = JSON.parse(localStorage.getItem('currentLocation'));
+        this.start = JSON.parse(localStorage.getItem('origin'));
         this.end = JSON.parse(localStorage.getItem('pickup'));
         // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
 
@@ -240,7 +261,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         element.pickupDistance = pickupDistanceInKm;
       });
     });
-      this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance <= 5
+      this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance <= 10
          && d.userDriverDestinationDistance <= 5);
       this.mapService.publishAvailableTrips(this.reachableDrivers);
       this.gettingDrivers = false;
