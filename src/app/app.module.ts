@@ -53,7 +53,6 @@ import {NumberPickerModule} from 'ng-number-picker';
     ErrorMessageComponent,
     SearchMessageComponent,
     PushNotificationComponent,
-    SideNavComponent,
     PagenotfoundComponent,
 
   ],

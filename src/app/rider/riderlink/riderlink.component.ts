@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapBroadcastService } from '../services/business/mapbroadcast.service';
+import { MapBroadcastService } from '../../services/business/mapbroadcast.service';
 
 @Component({
   selector: 'app-riderlink',

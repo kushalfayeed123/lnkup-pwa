@@ -13,8 +13,8 @@ import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.component';
 import {NumberPickerModule} from 'ng-number-picker';
-import { RiderlinkComponent } from '../riderlink/riderlink.component';
-
+import { RiderlinkComponent } from './riderlink/riderlink.component';
+import { SideNavComponent } from '../components/side-nav/side-nav.component';
 
 
 @NgModule({
@@ -22,7 +22,8 @@ import { RiderlinkComponent } from '../riderlink/riderlink.component';
                  AvailabledriversComponent,
                  DriverdetailsComponent,
                  BookseatrequestComponent,
-                 RiderlinkComponent],
+                 RiderlinkComponent,
+                 SideNavComponent],
   imports: [
     CommonModule,
     RiderRoutingModule,

@@ -7,7 +7,7 @@ import { AuthGuard } from '../_gaurd/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
   {
-    path: 'dashboard/:id',
+    path: 'home/:id',
     component: DriverdashboardComponent,
     canActivate: [AuthGuard],
     data: {role: 'Driver'}

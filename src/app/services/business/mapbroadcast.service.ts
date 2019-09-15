@@ -207,6 +207,7 @@ public google: any;
         address
       },
       (results, status) => {
+        this.pickupLatLng.splice(0);
         if (status === google.maps.GeocoderStatus.OK) {
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < results[0].address_components.length; i++) {

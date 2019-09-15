@@ -7,7 +7,7 @@ import { AuthGuard } from '../_gaurd/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
   {
-    path: 'dashboard/:id',
+    path: 'home/:id',
     component: DashboardComponent,
     canActivate: [AuthGuard],
     data: {role: 'Admin'}

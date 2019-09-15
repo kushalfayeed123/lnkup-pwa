@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_gaurd/auth.guard';
 import { RiderlandingComponent } from './riderlanding/riderlanding.component';
-import { RiderlinkComponent } from '../riderlink/riderlink.component';
+import { RiderlinkComponent } from './riderlink/riderlink.component';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 
 

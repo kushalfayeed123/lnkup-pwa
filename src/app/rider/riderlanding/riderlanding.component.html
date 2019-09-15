@@ -13,6 +13,7 @@
   </form>
 
 <div class="avd-container">
+
     <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()"
         [zoomControl]="false">
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" *ngIf="loadMarker"></agm-marker>

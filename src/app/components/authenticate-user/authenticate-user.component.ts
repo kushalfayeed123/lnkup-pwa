@@ -59,7 +59,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       }, 3000);
       return;
     }
-    localStorage.setItem('userPassword', JSON.stringify(this.loginForm.value));
+    // localStorage.setItem('userPassword', JSON.stringify(this.loginForm.value));
     this.authenticate.login(this.f.username.value, this.f.password.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
@@ -87,7 +87,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   updateUserStatus() {
     this.loading = true;
     const registeredUser = JSON.parse(localStorage.getItem('currentUser'));
-    const userPass = JSON.parse(localStorage.getItem('userPassword'));
+    const userPass = this.f.password.value;
     if (registeredUser == null) {
       setTimeout(() => {
         this.loading = false;

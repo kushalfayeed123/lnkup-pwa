@@ -1,4 +1,7 @@
+import { ActiveRiders } from './ActiveRider';
+
 export class ActiveTrips {
+  tripId: string;
   driverId: string;
   driverTripStatus: number;
   driverStartLongitude: string;
@@ -12,4 +15,5 @@ export class ActiveTrips {
   allowedRiderCount: number;
   tripType: string;
   userDriverDestinationDistance: number;
+  activeRiders: ActiveRiders[];
 }
