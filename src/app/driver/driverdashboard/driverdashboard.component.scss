@@ -62,9 +62,12 @@
   .driver-id {
     padding-left: 22%;
     padding-top: 18px;
+    text-align: right;
   }
   .destination-details {
     display: flex;
+    padding-left: 55px;
+
   }
   ::ng-deep .dark-snackbar-search{
     background: #E040FB !important;
@@ -195,13 +198,12 @@ body.map-body .avd .driver-track {
   -ms-overflow-style: none;
   scroll-behavior: smooth;
 }
-.avi-info {
-  padding-left: 17%;
-}
+
 
 body.map-body .avd .driver-track::-webkit-scrollbar {
   display: none;
 }
+
 
 body.map-body .avd .driver-item {
   width: 280px;
