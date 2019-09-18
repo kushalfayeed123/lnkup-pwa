@@ -4,7 +4,7 @@ Onboarding-Page
 ================
 */
 section.onboarding-page .contain-box {
-  padding: 32px 32px;
+  padding: 17px 32px;
 }
 .logo5{
   height: 163px !important;
@@ -184,12 +184,12 @@ section.onboarding-page button:active, section.onboarding-page button:focus {
 .mat-ink-bar{
   width: 63.2px !important;
 }
-@media(max-width: 411px){
+@media(max-width: 415px){
   .carousel{
-    height: 630px !important;
+    height: 785px !important;
   }
 }
-@media(max-width: 320px){
+@media(max-width: 400px){
   .mat-tab-list{
     transform: translateX(18px) !important;
     -webkit-transform: translateX(18px) !important;
@@ -200,5 +200,20 @@ section.onboarding-page button:active, section.onboarding-page button:focus {
 section.onboarding-page .overlap{
   padding-top: 1px;
 }
+.carousel{
+  height: 670px !important;
+}
+}
+
+@media(max-width: 321px) {
+  .carousel {
+    height: 534px !important;
+  }
+}
+
+@media(min-height: 800px) {
+  .carousel {
+    height: 787px !important;
+  }
 }
 

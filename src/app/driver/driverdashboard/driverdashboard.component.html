@@ -1,0 +1,70 @@
+<form action="" id="search-form">
+
+  <input *ngIf="!riderLink " type="search" name="" id="" class="destination" placeholder="Where are you going?"
+    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
+
+</form>
+
+<div class="avd-container">
+
+  <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false">
+    <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker>
+  </agm-map>
+
+  <!-- <mat-card class="example-card">
+
+            <mat-card-content>
+                    <div class="avd">
+                            <h2 class="heading">Pick Up Spot</h2>
+                            <div class="driver-container">
+                              <div class="driver-track">
+                                <div class="driver-item">
+                                  <div class="destination-details">
+                                    <p class="move">
+                                      Move the map marker to your exact pickup location
+                                    </p>
+                                    <p class="address">Ibukun 6435 Way, Off Awolowo</p>
+                                    <button  mat-raised-button color="accent"
+                                    class="auth-full-width login-text">Set Destination
+                                    <i class="material-icons right">send</i>
+                                </button>                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+            </mat-card-content>
+        </mat-card> -->
+
+  <form class="destination-container">
+    <mat-card class="example-card">
+
+      <mat-card-content>
+        <div class="destination-details">
+          <!-- <p class="move">
+                    Move the marker to your destination or enter your destination above
+                  </p> -->
+          <div class="avi-info">
+            <img src="assets/Images/Avatar1.png" alt="" class="avi" />
+            <h3 class="driver-name">{{currentUser?.userName}}</h3>
+            <span class="driver-stats">4.33</span>
+          </div>
+          <div class="driver-id">
+            <p>{{userId}}</p>
+            <div>
+              <div class="location" style="font-size: 16px;">Your destination</div>
+              <span class="location" >{{destinationName}}</span>
+            </div>
+          </div>
+
+        </div>
+       
+        <!-- <p><a href="">Forgot password?</a></p> -->
+        <button (click)='setDestination()' mat-raised-button color="accent" class="auth-full-width login-text">Set
+          Destination
+          <i class="material-icons right"></i>
+        </button>
+      </mat-card-content>
+
+    </mat-card>
+  </form>
+</div>

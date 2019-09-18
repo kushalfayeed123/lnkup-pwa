@@ -38,7 +38,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   searchControl: FormControl;
   durationInSeconds = 10;
-  lattitude: any;
   longitude: any;
   latitude: any;
   zoom: number;

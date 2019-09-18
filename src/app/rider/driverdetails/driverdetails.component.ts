@@ -57,7 +57,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         this.driverName = trip.tripDriver.driver.userName;
         this.tripPricePerRider = trip.tripPricePerRider;
         this.isTrips = true;
-     
+
         const tripDestination = new google.maps.LatLng(destinationLat, destinationLng);
         const pickupLocation = new google.maps.LatLng(pickupCoordinates.lat, pickupCoordinates.lng);
           // tslint:disable-next-line: max-line-length

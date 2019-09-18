@@ -49,14 +49,12 @@ export class VerifycodeComponent implements OnInit, OnDestroy {
      setTimeout(() => {
       this.authenticateUser();
     }, 4000);
-     
     } else {
       setTimeout(() => {
         this.loading = false;
         this.openErrorMessage();
-      }, 4000);      
+      }, 4000);
     }
-   
   }
   openSuccessMessage() {
     this._snackBar.openFromComponent(SuccessMessageComponent, {
@@ -71,7 +69,7 @@ export class VerifycodeComponent implements OnInit, OnDestroy {
     });
   }
   authenticateUser() {
-    this.route.navigate(["auth"]);
+    this.route.navigate(['login']);
   }
   
 
