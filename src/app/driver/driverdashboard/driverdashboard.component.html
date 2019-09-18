@@ -1,6 +1,6 @@
 <form action="" id="search-form">
 
-  <input *ngIf="!riderLink " type="search" name="" id="" class="destination" placeholder="Where are you going?"
+  <input type="search" name="" id="" class="destination" placeholder="Where are you going?"
     matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
 
 </form>
