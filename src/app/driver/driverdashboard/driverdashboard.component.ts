@@ -44,6 +44,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   destinationLocation: any;
   pickupLocation: any;
   driverDataId: string;
+  currentUserId: string;
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -78,13 +79,16 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       });
   }
   getDriverData() {
-    this.driverDataService.getDriverByDriverId(this.userId)
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
+    this.driverDataService.getDriverByDriverId(userId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
-      this.driverDataId = data.DriverDataId;
+      this.driverDataId = data.driverDataId;
       localStorage.setItem('driverDataId', this.driverDataId);
-      console.log('driver data id', this.driverDataId);
+      console.log('driver data id', data);
     });
+
   }
   getCurrentLocation() {
         console.log('get current location');
@@ -94,9 +98,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
         this.currentLocation = {lat: loc.lat, lng: loc.lng};
       });
   }
-
- 
-
   getActiveTripById() {
     const activeTripId = localStorage.getItem('activeTripId');
     this.activeTripService.getTripsById(activeTripId)

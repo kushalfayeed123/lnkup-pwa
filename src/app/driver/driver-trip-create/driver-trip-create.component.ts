@@ -54,7 +54,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
 
   getDriverDetails() {
-    const driverDataId = JSON.parse(localStorage.getItem('driverDataId'));
+    const driverDataId = localStorage.getItem('driverDataId');
     this.driverDataId = driverDataId;
   }
 
@@ -87,7 +87,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         }, 3000);
       });
     } else {
-      console.log('number of riders exceeds car capcity');
+      console.log('number of riders exceeds car capacity');
     }
   }
 

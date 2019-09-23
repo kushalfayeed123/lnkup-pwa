@@ -37,6 +37,8 @@ import { MetaService } from './services/business/metaService.service';
 import { APP_BASE_HREF } from '@angular/common';
 import {NumberPickerModule} from 'ng-number-picker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { DriverDataDataService } from './services/data/driver-data/driver-data.data.service';
+import { DriverDataWebService } from './services/data/driver-data/driver-data.web.service';
 
 
 
@@ -87,7 +89,9 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {provide: AuthenticateDataService, useClass: AuthenticateWebService},
     {provide: ActiveRiderDataService, useClass: ActiveRiderWebService},
-    {provide: ActiveTripDataService, useClass: ActiveTripWebService}
+    {provide: ActiveTripDataService, useClass: ActiveTripWebService},
+    {provide: DriverDataDataService, useClass: DriverDataWebService}
+
   ],
   bootstrap: [AppComponent],
   entryComponents: [SuccessMessageComponent, ErrorMessageComponent, SearchMessageComponent]

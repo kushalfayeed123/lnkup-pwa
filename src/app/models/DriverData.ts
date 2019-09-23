@@ -1,15 +1,15 @@
 import { Users } from './Users';
 
 export class DriverData {
-    DriverDataId: string;
-    DriverId: string;
-    CarType: string;
+    driverDataId: string;
+    driverId: string;
+    carType: string;
     // WorkAddress: string;
-    CarLicense: any;
-    CarDocument1: any;
-    CarDocument2: any;
-    Rating: number;
-    RideDeclineCount: number;
-    DriverSeatCapacity: number;
-    MaxCarSeatNumber: number;
+    carLicense: any;
+    carDocument1: any;
+    carDocument2: any;
+    rating: number;
+    rideDeclineCount: number;
+    driverSeatCapacity: number;
+    maxCarSeatNumber: number;
 }   

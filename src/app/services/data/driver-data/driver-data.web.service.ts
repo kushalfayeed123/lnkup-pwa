@@ -10,7 +10,7 @@ import { DriverData } from 'src/app/models/DriverData';
 
 @Injectable({ providedIn: 'root' })
 
-export class ActiveTripWebService implements DriverDataDataService {
+export class DriverDataWebService implements DriverDataDataService {
    
 
 
