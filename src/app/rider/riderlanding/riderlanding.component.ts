@@ -236,8 +236,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     .subscribe(data => {
       const allActiveTrips = data;
       allActiveTrips.forEach(element => {
-        const tripDestinationLat = element.driverEndLatitude;
-        const tripDestinationLong = element.driverEndLongitude;
+        const tripDestinationLat = Number(element.driverEndLatitude);
+        const tripDestinationLong = Number(element.driverEndLongitude);
         const userDestination = JSON.parse(localStorage.getItem('destination'));
         const tripEndLocation = new google.maps.LatLng(tripDestinationLat, tripDestinationLong);
         const riderEndLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
@@ -247,8 +247,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           element.userDriverDestinationDistance = this.destinationDistanceInKm;
           // this.destinationDistanceInKm.push(destinationDistanceInKm);
         });
-        const pickupLat = element.driverStartLatitude;
-        const pickupLng = element.driverStartLongitude;
+        const pickupLat = Number(element.driverStartLatitude);
+        const pickupLng = Number(element.driverStartLongitude);
         this.start = JSON.parse(localStorage.getItem('origin'));
         // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
 

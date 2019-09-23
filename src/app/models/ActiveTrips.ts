@@ -14,6 +14,11 @@ export class ActiveTrips {
   departureDateTime: string;
   allowedRiderCount: number;
   tripType: string;
+  pickupDistance: number;
+  timeToPickup: string;
+  tripPickup: string;
+  tripDriver: any;
+  tripPricePerRider: number;
   userDriverDestinationDistance: number;
   activeRiders: ActiveRiders[];
 }

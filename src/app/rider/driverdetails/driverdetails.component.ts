@@ -43,8 +43,8 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;
         const availableSeats = max - allowed;
-        const destinationLng = trip.driverEndLongitude;
-        const destinationLat = trip.driverEndLatitude;
+        const destinationLng = Number(trip.driverEndLongitude);
+        const destinationLat = Number(trip.driverEndLatitude);
         const pickup = trip.tripPickup;
         this.mapService.findLocation(pickup);
         const pickupCoordinates = JSON.parse(localStorage.getItem('pickup'));

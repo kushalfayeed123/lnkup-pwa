@@ -36,6 +36,8 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
 import { MetaService } from './services/business/metaService.service';
 import { APP_BASE_HREF } from '@angular/common';
 import {NumberPickerModule} from 'ng-number-picker';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
 
 
 
@@ -66,6 +68,7 @@ import {NumberPickerModule} from 'ng-number-picker';
     ReactiveFormsModule,
     AngularMaterialModule,
     NumberPickerModule,
+    NgxMaterialTimepickerModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ' + '&libraries=visualization',
       libraries: ['geometry', 'places']

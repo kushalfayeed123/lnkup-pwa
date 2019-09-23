@@ -1,0 +1,67 @@
+<section class="auth-pages book-seat filled-page">
+    <main class="contain-box">
+        <nav>
+            <a href="">
+                <i class="flaticon-left-arrow"></i>
+            </a>
+        </nav>
+        <div class="page-heading">
+
+        </div>
+        <mat-spinner *ngIf="loading" [diameter]="30" class="loader"></mat-spinner>
+        <!-- <div class="increment-icon">
+              <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
+              <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
+          </div> -->
+        <form [formGroup]="tripForm" id="book-seat-filled-form">
+        
+
+            <!-- <div><a href="">Pickup Spot</a></div> -->
+
+            <mat-form-field class="auth-full-width form-bottom">
+                <input type="text" matInput class="input-color" placeholder="Your destination is"
+                    formControlName="tripDestination" disabled />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width form-bottom">
+                <input type="text" matInput class="input-color" placeholder="Link up with your passengers at" 
+                formControlName="tripPickup" disabled />
+            </mat-form-field>
+
+            <mat-form-field class="auth-full-width form-bottom">
+                <input [ngxTimepicker]="picker"  [min]="'07:15 am'" type="text" matInput class="input-color" placeholder="What time will this trip begin?"
+                formControlName="tripStartDateTime">
+                <ngx-material-timepicker #picker></ngx-material-timepicker>
+            </mat-form-field>
+
+            
+            <mat-form-field class="auth-full-width form-bottom">
+                <input type="number" matInput class="input-color" placeholder="How many riders will be joining this trip?" 
+                formControlName="maxRiderNumber"/>
+            </mat-form-field>
+          
+            <mat-form-field class="auth-full-width">
+                <mat-label>Trip Type</mat-label>
+                <mat-select formControlName="tripType">
+                    <mat-option value="Regular">Regular</mat-option>
+                    <mat-option value="Home Service">Home Service</mat-option>
+                </mat-select>
+            </mat-form-field>  
+            <div class="input-group fare-group">
+                <div class="f-total">
+                    <label for="">Fare Total</label>
+                    <span class="fare-price">&#8358; {{fare}}</span>
+                </div>
+                <button type="submit" id="book-ride" mat-raised-button color="accent" (click)="broadCastTrip()"
+                    class="auth-full-width">Broadcast</button>
+            </div>
+            <div class="payment-options">
+                <div class="c-card">
+                </div>
+
+            </div>
+            <!-- <div (click)=cancelRequest() class="cancel">
+              Cancel Request
+            </div> -->
+        </form>
+    </main>
+</section>

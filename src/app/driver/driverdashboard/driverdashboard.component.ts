@@ -10,6 +10,7 @@ import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { Users } from 'src/app/models/Users';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
+import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,6 +33,17 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   location: any;
   currentUser: Users;
   userId: string;
+  showDestination: boolean;
+  showPickup: boolean;
+  pickupName: any;
+  locationObject: { destination: string,
+                    pickup: string };
+  showLanding: boolean;
+  pickupFull: any;
+  destinationFull: any;
+  destinationLocation: any;
+  pickupLocation: any;
+  driverDataId: string;
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -39,26 +51,15 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
               private _snackBar: MatSnackBar,
               private route: ActivatedRoute,
               private authService: AuthenticateDataService,
-              private mapService: MapBroadcastService) {
-              //   this.activeTripForm = this.fb.group([
-              //     tripPickup: ['', Validators.required],
-              //     driverDataId: ['', Validators.required],
-              //     driverTripStatus: [1],
-              //     driverStartLongitude: ['', Validators.required],
-              //     driverStartLatitude: ['', Validators.required],
-              //     driverEndLongitude: ['', Validators.required],
-              //     drievrEndLatitude: ['', Validators.required],
-              //     maxRiderNumber: ['', Validators.required],
-              //     tripStartDateTime: ['', Validators.required],
-              //     tripEndDateTime: ['', Validators.required],
-              //     departureDateTime: ['', Validators.required],
-              //     allowedRiderCount: [0],
-              //     tripType: ['', Validators.required]
-              // ]);
+              private mapService: MapBroadcastService,
+              private driverDataService: DriverDataDataService) {
                }
 
   ngOnInit() {
+    this.showLanding = true;
+    this.showDestination = true;
     this.getCurrentLocation();
+    this.getDriverData();
     this.zoom = 15;
     this.route.params.subscribe(p => {
       const userId = p.id;
@@ -76,6 +77,15 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
         console.log('user viewing this screen', this.currentUser);
       });
   }
+  getDriverData() {
+    this.driverDataService.getDriverByDriverId(this.userId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(data => {
+      this.driverDataId = data.DriverDataId;
+      localStorage.setItem('driverDataId', this.driverDataId);
+      console.log('driver data id', this.driverDataId);
+    });
+  }
   getCurrentLocation() {
         console.log('get current location');
         this.mapService.locationObject.subscribe(loc => {
@@ -85,27 +95,13 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  createTrip() {
-    this.activeTripService.CreateTrip(this.activeTripForm.value)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subcribe(trip =>  {
-      this.activeTrip = trip;
-      localStorage.setItem('activeTripId', this.activeTrip.tripId);
-      alert('Trip has been created');
-    }, error => {
-      setTimeout(() => {
-        this.loading = false;
-        this.openErrorMessage();
-      }, 3000);
-    });
-
-  }
+ 
 
   getActiveTripById() {
     const activeTripId = localStorage.getItem('activeTripId');
     this.activeTripService.getTripsById(activeTripId)
     .pipe(takeUntil(this.unsubscribe$))
-    .subcribe(response => {
+    .subscribe(response => {
       this.activeTrip = response;
     });
   }
@@ -130,9 +126,9 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       driverEndLng: activeTrip.driverEndLng
     };
 
-    this.activeTripService.UpdateTrip(newActiveTrip, activeTripId)
+    this.activeTripService.updateTrip(newActiveTrip, activeTripId)
     .pipe(takeUntil(this.unsubscribe$))
-    .subcribe(response => {
+    .subscribe(response => {
       this.getActiveTripById();
     });
   }
@@ -143,15 +139,29 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  storeUserCurrentLocation(location) {
-    this.location = location;
+  storeUserDestinationLocation(location) {
+    this.destinationLocation =  location;
     this.destinationName = location.name;
-    console.log('destination', location);
+    this.destinationFull = location.formatted_address;
   }
 
+  storeUserPickupLocation(location) {
+    this.pickupLocation =  location;
+    this.pickupName = location.name;
+    this.pickupFull = location.formatted_address;
+
+  }
   setDestination() {
-    alert(this.location.formatted_address + ' ' + 'has been set as your destination');
-    console.log('set destination', this.location.formatted_address);
+    this.showDestination = false;
+    alert(this.destinationLocation.formatted_address + ' ' + 'has been set as your destination');
+    this.showPickup = true;
+    this.mapService.findDestination(this.destinationFull);
+  }
+  setPickup() {
+    alert(this.pickupLocation.formatted_address + ' ' + 'has been set as your pickup spot');
+    this.showDestination = true;
+    this.showLanding = false;
+    this.mapService.findOrigin(this.pickupFull);
   }
 
   ngOnDestroy() {

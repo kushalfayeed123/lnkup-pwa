@@ -1,11 +1,14 @@
-<form action="" id="search-form">
 
-  <input type="search" name="" id="" class="destination" placeholder="Where are you going?"
-    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
+<form action="" id="search-form" *ngIf="showLanding">
 
+  <input *ngIf="showDestination" type="search" name="" id="" class="destination" placeholder="Where are you going?"
+    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserDestinationLocation($event)"/>
+
+    <input *ngIf="showPickup" type="search" name="" id="" class="destination" placeholder=" Set your pickup spot"
+    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserPickupLocation($event)"/>
 </form>
 
-<div class="avd-container">
+<div class="avd-container" *ngIf="showLanding">
 
   <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false">
     <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker>
@@ -50,17 +53,29 @@
           </div>
           <div class="driver-id">
             <p>{{userId}}</p>
-            <div>
-              <div class="location" style="font-size: 16px;">Your destination</div>
+            <div *ngIf="showDestination">
+              <div class="location" style="font-size: 16px;">Your Destination</div>
               <span class="location" >{{destinationName}}</span>
             </div>
+
+            <div *ngIf="showPickup">
+                <div class="location" style="font-size: 16px;">Your Pickup Spot</div>
+                <span class="location" >{{pickupName}}</span>
+              </div>
           </div>
 
         </div>
        
         <!-- <p><a href="">Forgot password?</a></p> -->
-        <button (click)='setDestination()' mat-raised-button color="accent" class="auth-full-width login-text">Set
-          Destination
+        <button (click)='setDestination()' mat-raised-button color="accent" *ngIf="showDestination"
+         class="auth-full-width login-text" >
+          Set Destination
+          <i class="material-icons right"></i>
+        </button>
+
+        <button (click)='setPickup()' mat-raised-button color="accent" *ngIf="showPickup"
+         class="auth-full-width login-text" >
+          Set Pickup
           <i class="material-icons right"></i>
         </button>
       </mat-card-content>
@@ -68,3 +83,4 @@
     </mat-card>
   </form>
 </div>
+<app-driver-trip-create [destination]="destinationName" [pickup]="pickupName" *ngIf="!showLanding"></app-driver-trip-create>

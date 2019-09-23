@@ -8,10 +8,13 @@ import { AgmDirectionModule } from 'agm-direction';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { AngularMaterialModule } from '../angular-material.module';
+import { DriverTripCreateComponent } from './driver-trip-create/driver-trip-create.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
 
 
 @NgModule({
-  declarations: [DriverdashboardComponent],
+  declarations: [DriverdashboardComponent, DriverTripCreateComponent],
   imports: [
     CommonModule,
     DriverRoutingModule,
@@ -21,6 +24,7 @@ import { AngularMaterialModule } from '../angular-material.module';
     ReactiveFormsModule,
     MatGoogleMapsAutocompleteModule,
     AngularMaterialModule,
+    NgxMaterialTimepickerModule
   ]
 })
 export class DriverModule { }
