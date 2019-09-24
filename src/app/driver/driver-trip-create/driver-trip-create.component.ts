@@ -25,6 +25,9 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   activeTrip: any;
   loading: boolean;
   dateNow: string;
+  tripDistance: number;
+  tripTime: any;
+  tripPricePerRider: number;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
               private activeTripService: ActiveTripDataService) {
@@ -35,7 +38,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     this.getDriverDetails();
     this.getLocationCoordinates();
     this.getTimeValues();
-    this.fare = 1200;
+    this.fare = 0;
     this.tripForm = this.fb.group({
       tripPickup: [this.pickup],
       tripDestination: [this.destination],
@@ -47,7 +50,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       driverEndLatitude: [this.tripEndLat],
       maxRiderNumber: ['', [Validators.required]],
       tripStartDateTime: ['', [Validators.required]],
-      aggregrateTripFee: [this.fare],
+      aggregrateTripFee: [0, [Validators.required]],
       tripType: ['', [Validators.required]],
       allowedRiderCount: [0],
     });
@@ -65,7 +68,27 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     this.tripStartLng = tripStartLatLng.lng.toString();
     this.tripEndLat = tripEndLatLng.lat.toString();
     this.tripEndLng = tripEndLatLng.lng.toString();
+    const origin = new google.maps.LatLng(tripStartLatLng.lat, tripStartLatLng.lng);
+    const destination = new google.maps.LatLng(tripEndLatLng.lat, tripEndLatLng.lng);
 
+    new google.maps.DistanceMatrixService().getDistanceMatrix({origins: [origin], destinations: [destination],
+      travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
+        this.tripDistance =  (results.rows[0].elements[0].distance.value / 1000);
+        this.tripTime = (results.rows[0].elements[0].duration.text);
+        const pricePerRiderPerKm = 44;
+        const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
+        this.tripPricePerRider = tripPricePerRider;
+        console.log('trip price per rider', tripPricePerRider);
+       });
+
+  }
+  computeTripFare(value) {
+    const tripFare = value * this.tripPricePerRider;
+    this.fare = tripFare;
+    this.tripForm.patchValue({
+      aggregrateTripFee:  this.fare
+    });
+    console.log(tripFare);
   }
   getTimeValues() {
     this.dateNow = Date.now().toString();
@@ -90,6 +113,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       console.log('number of riders exceeds car capacity');
     }
   }
+
+ 
 
   
   ngOnDestroy() {

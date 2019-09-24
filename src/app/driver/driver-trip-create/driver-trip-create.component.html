@@ -35,8 +35,8 @@
 
             
             <mat-form-field class="auth-full-width form-bottom">
-                <input type="number" matInput class="input-color" placeholder="How many riders will be joining this trip?" 
-                formControlName="maxRiderNumber"/>
+                <input type="number" #ridersNumber matInput class="input-color" placeholder="How many riders will be joining this trip?" 
+                formControlName="maxRiderNumber" (keyup)="computeTripFare(ridersNumber.value)"/>
             </mat-form-field>
           
             <mat-form-field class="auth-full-width">

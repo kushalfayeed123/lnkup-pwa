@@ -270,7 +270,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
               && d.userDriverDestinationDistance <= 5);
             this.mapService.publishAvailableTrips(this.reachableDrivers);
             this.gettingDrivers = false;
-            console.log('reachable drivers', allActiveTrips );
+            console.log('reachable drivers', this.reachableDrivers );
            });
       });
     });

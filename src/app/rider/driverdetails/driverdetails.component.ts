@@ -64,9 +64,8 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         new google.maps.DistanceMatrixService().getDistanceMatrix({origins: [pickupLocation], destinations: [tripDestination],
               travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
              const tripDistance =  (results.rows[0].elements[0].distance.value / 1000);
-             const pricePerKilometer = 150;
-             const pricePerSeat = pricePerKilometer / max;
-             this.tripPricePerRider = Math.round(pricePerSeat * tripDistance);
+             const pricePerKilometer = 44;
+             this.tripPricePerRider = Math.round(pricePerKilometer * tripDistance);
              const riderRequest = {tripId: this.tripId,
              tripFee: this.tripPricePerRider};
              localStorage.setItem('riderRequest', JSON.stringify(riderRequest));
