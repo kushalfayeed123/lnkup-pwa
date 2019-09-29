@@ -11,6 +11,7 @@ import { Users } from 'src/app/models/Users';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -53,7 +54,10 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private authService: AuthenticateDataService,
               private mapService: MapBroadcastService,
-              private driverDataService: DriverDataDataService) {
+              private driverDataService: DriverDataDataService,
+              private notificationService: NotificationsService) {
+              this.notificationService.intiateConnection();
+
                }
 
   ngOnInit() {

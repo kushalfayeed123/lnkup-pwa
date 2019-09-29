@@ -10,11 +10,12 @@ import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/go
 import { AngularMaterialModule } from '../angular-material.module';
 import { DriverTripCreateComponent } from './driver-trip-create/driver-trip-create.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { RiderRequestComponent } from './rider-request/rider-request.component';
 
 
 
 @NgModule({
-  declarations: [DriverdashboardComponent, DriverTripCreateComponent],
+  declarations: [DriverdashboardComponent, DriverTripCreateComponent, RiderRequestComponent],
   imports: [
     CommonModule,
     DriverRoutingModule,

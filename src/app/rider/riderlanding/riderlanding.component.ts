@@ -20,6 +20,7 @@ import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-
 import {Location, Appearance} from '@angular-material-extensions/google-maps-autocomplete';
 import PlaceResult = google.maps.places.PlaceResult;
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 
 @Component({
@@ -73,8 +74,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar,
     private  activeRider: ActiveRiderDataService,
     private activeTrip: ActiveTripDataService,
-    private broadCastService: BroadcastService
-  ) { }
+    private broadCastService: BroadcastService,
+    private notificationService: NotificationsService
+  ) { 
+    this.notificationService.intiateConnection();
+
+  }
 
   ngOnInit() {
     this.route.queryParams

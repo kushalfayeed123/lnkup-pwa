@@ -39,6 +39,10 @@ import {NumberPickerModule} from 'ng-number-picker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { DriverDataDataService } from './services/data/driver-data/driver-data.data.service';
 import { DriverDataWebService } from './services/data/driver-data/driver-data.web.service';
+import { ToastModule } from 'primeng/toast';
+import { NotificationsService } from './services/business/notificatons.service';
+
+
 
 
 
@@ -58,6 +62,7 @@ import { DriverDataWebService } from './services/data/driver-data/driver-data.we
     SearchMessageComponent,
     PushNotificationComponent,
     PagenotfoundComponent,
+    
 
   ],
   imports: [
@@ -69,6 +74,7 @@ import { DriverDataWebService } from './services/data/driver-data/driver-data.we
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
+    ToastModule,
     NumberPickerModule,
     NgxMaterialTimepickerModule,
     AgmCoreModule.forRoot({
@@ -84,6 +90,7 @@ import { DriverDataWebService } from './services/data/driver-data/driver-data.we
     BroadcastService,
     MapBroadcastService,
     GoogleMapsAPIWrapper,
+    NotificationsService,
     {provide: APP_BASE_HREF, useValue: '/'},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
