@@ -103,7 +103,8 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       });
   }
   getActiveTripById() {
-    const activeTripId = localStorage.getItem('activeTripId');
+    const activeTrip = JSON.parse(localStorage.getItem('activeTripId'));
+    const activeTripId = activeTrip.dataDriverId;
     this.activeTripService.getTripsById(activeTripId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(response => {

@@ -4,6 +4,7 @@ import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.serv
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-driver-trip-create',
@@ -30,7 +31,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   tripPricePerRider: number;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
-              private activeTripService: ActiveTripDataService) {
+              private activeTripService: ActiveTripDataService,
+              private router: Router) {
 
   }
 
@@ -102,8 +104,9 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trip =>  {
         this.activeTrip = trip;
-        localStorage.setItem('activeTripId', this.activeTrip.tripId);
+        localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
         alert('Trip has been created');
+        this.router.navigate(['driver/rider-request']);
       }, error => {
         setTimeout(() => {
           this.loading = false;
@@ -114,9 +117,6 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     }
   }
 
- 
-
-  
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
