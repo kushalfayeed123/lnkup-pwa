@@ -270,7 +270,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.timeToPickup = timeToPickup;
             element.timeToPickup = this.timeToPickup;
             element.pickupDistance = this.pickupDistance;
-
             this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance <= 5
               && d.userDriverDestinationDistance <= 5);
             this.mapService.publishAvailableTrips(this.reachableDrivers);

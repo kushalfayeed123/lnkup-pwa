@@ -28,9 +28,15 @@ export class NotificationsService {
 
         hubConnection
             .start()
-            .then(() => hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`))
+            .then(() => {hubConnection.invoke('GetConnectionId');
+             })
             .catch(() => console.log('Error while establishing connection :( '));
 
-
+        // hubConnection
+        // .invoke('GetConnectionId')
+        //     .then(connectId => {
+        //         const connectionId = connectId;
+        //         localStorage.setItem('connectionId', connectionId);
+        //     });
     }
 }
