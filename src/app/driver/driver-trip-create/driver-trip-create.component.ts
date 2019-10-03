@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./driver-trip-create.component.scss']
 })
 export class DriverTripCreateComponent implements OnInit, OnDestroy {
-  
+
   private unsubscribe$ = new Subject<void>();
   @Input() destination;
   @Input() pickup;
@@ -64,25 +64,26 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
 
   getLocationCoordinates() {
-    const tripStartLatLng = JSON.parse(localStorage.getItem('origin'));
-    const tripEndLatLng = JSON.parse(localStorage.getItem('destination'));
-    this.tripStartLat = tripStartLatLng.lat.toString();
-    this.tripStartLng = tripStartLatLng.lng.toString();
-    this.tripEndLat = tripEndLatLng.lat.toString();
-    this.tripEndLng = tripEndLatLng.lng.toString();
-    const origin = new google.maps.LatLng(tripStartLatLng.lat, tripStartLatLng.lng);
-    const destination = new google.maps.LatLng(tripEndLatLng.lat, tripEndLatLng.lng);
+    setTimeout(() => {
+      const tripStartLatLng = JSON.parse(localStorage.getItem('origin'));
+      const tripEndLatLng = JSON.parse(localStorage.getItem('destination'));
+      this.tripStartLat = tripStartLatLng.lat.toString();
+      this.tripStartLng = tripStartLatLng.lng.toString();
+      this.tripEndLat = tripEndLatLng.lat.toString();
+      this.tripEndLng = tripEndLatLng.lng.toString();
+      const origin = new google.maps.LatLng(tripStartLatLng.lat, tripStartLatLng.lng);
+      const destination = new google.maps.LatLng(tripEndLatLng.lat, tripEndLatLng.lng);
 
-    new google.maps.DistanceMatrixService().getDistanceMatrix({origins: [origin], destinations: [destination],
-      travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
-        this.tripDistance =  (results.rows[0].elements[0].distance.value / 1000);
-        this.tripTime = (results.rows[0].elements[0].duration.text);
-        const pricePerRiderPerKm = 44;
-        const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
-        this.tripPricePerRider = tripPricePerRider;
-        console.log('trip price per rider', tripPricePerRider);
-       });
-
+      new google.maps.DistanceMatrixService().getDistanceMatrix({origins: [origin], destinations: [destination],
+        travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
+          this.tripDistance =  (results.rows[0].elements[0].distance.value / 1000);
+          this.tripTime = (results.rows[0].elements[0].duration.text);
+          const pricePerRiderPerKm = 44;
+          const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
+          this.tripPricePerRider = tripPricePerRider;
+          console.log('trip price per rider', tripPricePerRider);
+        });
+      }, 2000);
   }
   computeTripFare(value) {
     const tripFare = value * this.tripPricePerRider;
