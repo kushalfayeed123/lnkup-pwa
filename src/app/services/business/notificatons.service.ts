@@ -14,7 +14,6 @@ export class NotificationsService {
     constructor() {
         this.webUrl = environment.openConnect;
         this.user = JSON.parse(localStorage.getItem('currentUser'));
-        this.intiateConnection();
     }
 
     intiateConnection() {
@@ -29,21 +28,15 @@ export class NotificationsService {
 
         // hubConnection
         //     .start()
-        //     .then(() => {hubConnection.invoke('GetConnectionId');
-        //      })
+        //     .then(() => (hubConnection.invoke('ReceiveMessage', `Welcome ${this.user.userName}` )))
         //     .catch(() => console.log('Error while establishing connection :( '));
-
-        // hubConnection
-        // .invoke('GetConnectionId')
-        //     .then(connectId => {
-        //         const connectionId = connectId;
-        //         localStorage.setItem('connectionId', connectionId);
-        //     });
 
         hubConnection.start().catch(err => console.error(err.toString()))
         .then(() => {
             hubConnection.invoke('GetConnectionId')
             .then((connectionId) => {
+              sessionStorage.setItem('clientConnectionId', connectionId);
+              hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
               console.log('connection Id', connectionId);
             });
         });

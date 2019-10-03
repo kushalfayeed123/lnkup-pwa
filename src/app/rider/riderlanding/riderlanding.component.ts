@@ -76,7 +76,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private activeTrip: ActiveTripDataService,
     private broadCastService: BroadcastService,
     private notificationService: NotificationsService
-  ) { 
+  ) {
     this.notificationService.intiateConnection();
 
   }
