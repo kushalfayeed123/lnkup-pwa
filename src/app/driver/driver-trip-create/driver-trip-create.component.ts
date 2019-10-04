@@ -64,7 +64,6 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
 
   getLocationCoordinates() {
-    setTimeout(() => {
       const tripStartLatLng = JSON.parse(localStorage.getItem('origin'));
       const tripEndLatLng = JSON.parse(localStorage.getItem('destination'));
       this.tripStartLat = tripStartLatLng.lat.toString();
@@ -82,8 +81,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
           this.tripPricePerRider = tripPricePerRider;
           console.log('trip price per rider', tripPricePerRider);
-        });
-      }, 2000);
+        })
   }
   computeTripFare(value) {
     const tripFare = value * this.tripPricePerRider;

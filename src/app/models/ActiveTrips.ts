@@ -20,5 +20,6 @@ export class ActiveTrips {
   tripDriver: any;
   tripPricePerRider: number;
   userDriverDestinationDistance: number;
+  aggregrateTripFee: number;
   activeRiders: ActiveRiders[];
 }

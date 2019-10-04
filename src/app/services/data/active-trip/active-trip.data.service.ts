@@ -12,5 +12,5 @@ export abstract class ActiveTripDataService {
   abstract createTrip(trips): Observable<any>;
   abstract updateTrip(id, trips): Observable<ActiveTrips>;
   abstract deleteTrips(id);
-
+  abstract sendNotification(id: string, message: string);
 }

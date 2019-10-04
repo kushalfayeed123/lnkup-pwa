@@ -93,6 +93,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       console.log('driver data id', data);
     });
 
+    // this.updateDriverConnect();
   }
   getCurrentLocation() {
         console.log('get current location');
@@ -136,6 +137,15 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(response => {
       this.getActiveTripById();
+    });
+  }
+  updateDriverConnect() {
+    const connectionId = sessionStorage.getItem('clientConnectionId');
+    const driverId =  localStorage.getItem('driverDataId');
+    this.driverDataService.updateDriverData(driverId, connectionId.toString())
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(data => {
+      console.log('connect id was updated');
     });
   }
   openErrorMessage() {

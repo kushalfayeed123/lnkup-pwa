@@ -11,6 +11,7 @@ import { AngularMaterialModule } from '../angular-material.module';
 import { DriverTripCreateComponent } from './driver-trip-create/driver-trip-create.component';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { RiderRequestComponent } from './rider-request/rider-request.component';
+import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 
 
 
@@ -25,7 +26,8 @@ import { RiderRequestComponent } from './rider-request/rider-request.component';
     ReactiveFormsModule,
     MatGoogleMapsAutocompleteModule,
     AngularMaterialModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    NgxUsefulSwiperModule,
   ]
 })
 export class DriverModule { }

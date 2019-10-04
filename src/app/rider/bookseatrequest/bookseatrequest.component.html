@@ -1,12 +1,12 @@
-<section class="auth-pages book-seat filled-page">
-    <main class="contain-box">
-      <nav>
+<section class="auth-pages book-seat  filled-page settings-page auth-pages security" id="ride-confirmation">
+    <main class="contain-box ">
+      <nav class="riderHeader">
         <a href="">
           <i class="flaticon-left-arrow"></i>
         </a>
+        <h1>Request Summary</h1>
       </nav>
       <div class="page-heading">
-        <h1>Request Summary</h1>
         <p>
           Please confirm your seat and pickup spot
         </p>
@@ -14,23 +14,18 @@
       <mat-spinner *ngIf="loading" [diameter]="30"
       class="loader"
     ></mat-spinner>
-      <!-- <div class="increment-icon">
-          <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
-          <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
-      </div> -->
-      <form action="" id="book-seat-filled-form">
-        <!-- <ngx-mat-numberpicker [min]="1" [max]="6" [default]="1" 
-        [disabled]="false" (onChange)="onValueChanged($event)" class="number-picker">
-      </ngx-mat-numberpicker> -->
-            <!-- <mat-form-field class="auth-full-width form-bottom">
-          <input type="number" matInput class="input-color" placeholder="Number of Seats" name="increase" [ngModel]=currentValue />
-        </mat-form-field> -->
-        <!-- <div><a href="">Pickup Spot</a></div> -->
-        <ng-number-picker [(value)]="currentValue" (valueChange)="onValueChanged($event)"></ng-number-picker>
 
+      <form action="" id="book-seat-filled-form">
         <mat-form-field class="auth-full-width form-bottom">
           <input type="text" matInput class="input-color" placeholder="Your Dropoff"name="dropoff" [ngModel]=dropoff disabled/>
         </mat-form-field>
+
+        <mat-form-field class="auth-full-width form-bottom">
+            <input type="number" matInput class="input-color"
+             placeholder="How many seats do you want to book?" name="seatCount" #seatNumber
+            [ngModel]=seatCount (keyup)="computeTripFare(seatNumber.value)"/>
+        </mat-form-field>
+
         <div class="payment-options">
             <div class="c-card">
             </div>
@@ -46,7 +41,7 @@
         <div class="input-group fare-group">
           <div class="f-total">
             <label for="">Fare Total</label>
-            <span class="fare-price">&#8358; {{fare}}</span>
+            <span class="fare-price">&#8358; {{newFare}}</span>
           </div>
           <button type="submit"  id="book-ride" mat-raised-button color="accent"
           (click)="createRiderRequest()" class="auth-full-width">Book Your Ride</button>
