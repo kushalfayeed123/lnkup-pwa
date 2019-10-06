@@ -18,6 +18,7 @@ export class ActiveTrips {
   timeToPickup: string;
   tripPickup: string;
   tripDriver: any;
+  tripConnectionId: string;
   tripPricePerRider: number;
   userDriverDestinationDistance: number;
   aggregrateTripFee: number;

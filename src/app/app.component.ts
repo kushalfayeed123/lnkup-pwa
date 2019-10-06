@@ -36,9 +36,6 @@ export class AppComponent {
     this.showSideNav = false;
       }
 
-
-
-
   reload() {
     this.swUpdate.activated
       // tslint:disable-next-line: deprecation

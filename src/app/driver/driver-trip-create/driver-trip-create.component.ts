@@ -29,6 +29,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   tripDistance: number;
   tripTime: any;
   tripPricePerRider: number;
+  connectionId: string;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
               private activeTripService: ActiveTripDataService,
@@ -55,12 +56,15 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       aggregrateTripFee: [0, [Validators.required]],
       tripType: ['', [Validators.required]],
       allowedRiderCount: [0],
+      tripConnectionId  : [this.connectionId]
     });
   }
 
   getDriverDetails() {
     const driverDataId = localStorage.getItem('driverDataId');
     this.driverDataId = driverDataId;
+    const connectionId = sessionStorage.getItem('clientConnectionId');
+    this.connectionId = connectionId;
   }
 
   getLocationCoordinates() {
@@ -81,7 +85,11 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
           this.tripPricePerRider = tripPricePerRider;
           console.log('trip price per rider', tripPricePerRider);
-        })
+        });
+  }
+
+  updateTrip() {
+    
   }
   computeTripFare(value) {
     const tripFare = value * this.tripPricePerRider;

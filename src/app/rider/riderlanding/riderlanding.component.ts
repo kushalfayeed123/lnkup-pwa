@@ -77,11 +77,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private broadCastService: BroadcastService,
     private notificationService: NotificationsService
   ) {
-    this.notificationService.intiateConnection();
+    // this.notificationService.intiateConnection();
 
   }
 
   ngOnInit() {
+    // this.clearLocalStorage();
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(param => {
@@ -270,8 +271,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.timeToPickup = timeToPickup;
             element.timeToPickup = this.timeToPickup;
             element.pickupDistance = this.pickupDistance;
-            this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance <= 5
-              && d.userDriverDestinationDistance <= 5);
+            console.log('distances', this.pickupDistance, this.destinationDistanceInKm);
+            this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance < 8
+              && d.userDriverDestinationDistance < 8);
             this.mapService.publishAvailableTrips(this.reachableDrivers);
             this.gettingDrivers = false;
             console.log('reachable drivers', this.reachableDrivers );
@@ -290,9 +292,19 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
      this.tripDistance =  (results.rows[0].elements[0].distance.value / 1000) + 2;
      return this.tripDistance;
-     console.log('trip distance', this.tripDistance);
     });
   }
+
+  clearLocalStorage() {
+    localStorage.removeItem('tripDetails');
+    localStorage.removeItem('origin');
+    localStorage.removeItem('storedAddress');
+    localStorage.removeItem('riderRequest');
+    localStorage.removeItem('pickup');
+    localStorage.removeItem('activeRiderRequest');
+    localStorage.removeItem('destination');
+  }
+
 
   ngOnDestroy() {
     this.unsubscribe$.next();

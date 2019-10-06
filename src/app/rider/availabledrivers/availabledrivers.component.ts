@@ -71,7 +71,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.showTripDetails = true;
     console.log(this.showTripDetails);
   }
-
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

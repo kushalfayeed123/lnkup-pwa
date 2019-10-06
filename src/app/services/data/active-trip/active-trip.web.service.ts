@@ -41,10 +41,9 @@ export class ActiveTripWebService implements ActiveTripDataService {
     return this.http.delete(`${this.webUrl}/ActiveTrip`, id);
   }
 
-  sendNotification(id: string, message: string) {
-    const param = {message};
-
-    return this.http.post<any>(`${this.webUrl}/signalr/${id}`, ({params: param}));
+  sendNotification(id: any, clientMessage: string) {
+    const param = {message: clientMessage};
+    return this.http.get(`${this.webUrl}/message/${id}`, ({params: param}));
   }
 
 

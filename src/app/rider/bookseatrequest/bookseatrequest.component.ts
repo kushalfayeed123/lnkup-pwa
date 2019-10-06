@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { Router } from '@angular/router';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-bookseatrequest',
@@ -19,13 +20,17 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   request: any;
   dropoff: string;
   requestData: any;
-  currentValue: number = 1;
+  currentValue = 1;
   loading: boolean;
   seatCount: any;
   newFare: number;
+  tripConnectionId: any;
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
-              private router: Router) { }
+              private router: Router,
+              private notifyService: NotificationsService) {
+                this.getRiderAlert();
+               }
 
   ngOnInit() {
     this.dropoff = localStorage.getItem('storedAddress');
@@ -53,6 +58,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
         this.request.userId = activeRequest.userId;
         this.request.tripStatus = activeRequest.tripStatus;
         this.request.riderConnectId = connectionId;
+        this.tripConnectionId = this.request.tripConnectionId;
         localStorage.setItem('riderRequest', JSON.stringify(this.request));
         console.log(this.dropoff);
   }
@@ -64,11 +70,8 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       this.sendNotification();
-      const user = JSON.parse(localStorage.getItem('currentUser'));
-      const userId = user.id;
       this.requestData = data;
       this.loading = false;
-      this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
     }, error => {
       console.error('We could not send your request, please try again shortly.');
       this.loading = false;
@@ -76,10 +79,23 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   }
 
   sendNotification() {
-    this.activeTrip.sendNotification('B_RPcPzgmRdn4Q_Xu9RfAA', 'a user just requested for a trip')
+    const message = 'A user just requested for a trip';
+    this.activeTrip.sendNotification(this.tripConnectionId, message)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       console.log('message sent', data);
+    });
+  }
+
+ async getRiderAlert() {
+    await this.notifyService.alert
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(alert => {
+      if (alert) {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const userId = user.id;
+        this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
+      }
     });
   }
 

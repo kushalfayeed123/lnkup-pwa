@@ -30,7 +30,7 @@ export class ActiveRiderWebService implements ActiveRiderDataService {
         return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`);
     }
     getById(id: any) {
-        return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`, id);
+        return this.http.get<ActiveRiders>(`${this.webUrl}/ActiveRiders`, id);
     }
 
     getAllTrips() {

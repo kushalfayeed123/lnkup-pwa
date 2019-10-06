@@ -4,6 +4,8 @@ import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { ActiveRiders } from 'src/app/models/ActiveRider';
+import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-rider-request',
@@ -26,10 +28,23 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   riderRequest: ActiveRiders[];
   feePerSeat: number;
 
-  constructor(private tripService: ActiveTripWebService) { }
+  constructor(private tripService: ActiveTripDataService, private notifyService: NotificationsService) { 
+    this.getDriverAlert();
+  }
 
   ngOnInit() {
     this.getActiveTrips();
+
+  }
+
+  async getDriverAlert() {
+    await this.notifyService.alert
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(alert => {
+      if (alert === true) {
+        this.getActiveTrips();
+      }
+    });
   }
 
   getActiveTrips() {
@@ -48,8 +63,20 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       console.log('active trip', this.activeTrip);
     });
   }
-  acceptTripRequest(riderId) {
-    console.log(riderId)
+  acceptTripRequest(rider) {
+    const driverName = this.activeTrip.tripDriver.driver.userName;
+    const pickup = this.activeTrip.tripPickup;
+    const pickupTime = this.activeTrip.tripStartDateTime;
+    const riderConnectionId = rider.riderConnectId;
+    const message  = `Your request has been accepted, please lnkup with ${driverName}
+    at ${pickup} on or before ${pickupTime}` ;
+
+    this.tripService.sendNotification(riderConnectionId, message)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(response => {
+      console.log('message sent');
+    });
+    console.log(rider);
   }
 
   declineTripRequest() {
