@@ -21,6 +21,7 @@ export class ActiveTrips {
   tripConnectionId: string;
   tripPricePerRider: number;
   userDriverDestinationDistance: number;
+  tripDestination: string;
   aggregrateTripFee: number;
   activeRiders: ActiveRiders[];
 }
