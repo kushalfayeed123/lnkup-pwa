@@ -46,5 +46,10 @@ export class ActiveTripWebService implements ActiveTripDataService {
     return this.http.get(`${this.webUrl}/message/${id}`, ({params: param}));
   }
 
+  sendDeclineNotification(id: any, clientDeclineMessage: string) {
+    const param = {message: clientDeclineMessage};
+    return this.http.get(`${this.webUrl}/decline/${id}`, ({params: param}));
+  }
+
 
 }

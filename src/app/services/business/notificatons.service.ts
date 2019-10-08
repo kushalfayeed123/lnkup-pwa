@@ -14,8 +14,11 @@ export class NotificationsService {
     webUrl: string;
     activeTripId: any;
 
-    private _alert = new BehaviorSubject(null);
-    public alert = this._alert.asObservable();
+    private _successAlert = new BehaviorSubject(null);
+    public successAlert = this._successAlert.asObservable();
+
+    private _declineAlert = new BehaviorSubject(null);
+    public declineAlert = new BehaviorSubject(null);
 
 
 
@@ -31,14 +34,27 @@ export class NotificationsService {
             .build();
 
         hubConnection.on('ReceiveMessage', message => {
-            alert(message);
             const user = JSON.parse(localStorage.getItem('currentUser'));
             const userRole = user.role;
             if (userRole === 'Driver') {
-                this.alertDriver();
+                this.alertDriverSuccess();
             } else  {
-                this.alertRider();
+                this.alertRiderSuccess();
             }
+            alert(message);
+
+        });
+
+        hubConnection.on('ReceiveDeclineMessage', message => {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userRole = user.role;
+            if (userRole === 'Driver') {
+                this.alertDriverCancel();
+            } else  {
+                this.alertRiderDecline();
+            }
+            alert(message);
+
         });
 
         hubConnection.start().catch(err => console.error(err.toString()))
@@ -51,14 +67,26 @@ export class NotificationsService {
             });
         });
     }
-    alertDriver() {
+    alertDriverSuccess() {
         const alertDriver = true;
-        this._alert.next(alertDriver);
+        this._successAlert.next(alertDriver);
     }
 
-    alertRider() {
+    alertRiderSuccess() {
         const alertRider = true;
-        this._alert.next(alertRider);
+        this._successAlert.next(alertRider);
     }
+
+
+    alertDriverCancel() {
+        const alertDriver = true;
+        this._declineAlert.next(alertDriver);
+    }
+
+    alertRiderDecline() {
+        const alertRider = false;
+        this._declineAlert.next(alertRider);
+    }
+
 
 }

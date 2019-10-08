@@ -29,7 +29,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   feePerSeat: number;
 
   constructor(private tripService: ActiveTripDataService, private notifyService: NotificationsService) { 
-    this.getDriverAlert();
+    this.getDriverSuccessAlert();
   }
 
   ngOnInit() {
@@ -37,8 +37,18 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
 
   }
 
-  async getDriverAlert() {
-    await this.notifyService.alert
+  async getDriverSuccessAlert() {
+    await this.notifyService.successAlert
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(alert => {
+      if (alert === true) {
+        this.getActiveTrips();
+      }
+    });
+  }
+
+  async getDriverCancelAlert() {
+    await this.notifyService.declineAlert
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(alert => {
       if (alert === true) {
@@ -52,6 +62,12 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     this.activeTripId = activeTrip.tripId;
     this.getTripRequest(this.activeTripId);
   }
+
+  // removeActiveTrip() {
+  //   const activeTrip = JSON.parse(localStorage.getItem('activeTrip'));
+  //   this.activeTripId = activeTrip.tripId;
+  //   this.tripService.de
+  // }
 
   getTripRequest(tripId) {
     this.tripService.getTripsById(tripId)
@@ -79,8 +95,15 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     console.log(rider);
   }
 
-  declineTripRequest() {
+  declineTripRequest(rider) {
+    const riderConnectionId = rider.riderConnectId;
+    const message = `Sorry :(  driver declined your request. Please request another available drivers.`;
 
+    this.tripService.sendDeclineNotification(riderConnectionId, message)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(response => {
+      console.log(response);
+    });
   }
 
   ngOnDestroy() {

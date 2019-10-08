@@ -29,7 +29,8 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
               private notifyService: NotificationsService) {
-                this.getRiderAlert();
+                this.getRiderSuccessAlert();
+                this.getRiderDeclineAlert();
                }
 
   ngOnInit() {
@@ -73,13 +74,13 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       this.requestData = data;
       this.loading = false;
     }, error => {
-      console.error('We could not send your request, please try again shortly.');
+      console.error('We could not send your request, please try again.');
       this.loading = false;
     });
   }
 
   sendNotification() {
-    const message = 'A user just requested for a trip';
+    const message = 'You have a new LnkuP request';
     this.activeTrip.sendNotification(this.tripConnectionId, message)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
@@ -87,14 +88,26 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     });
   }
 
- async getRiderAlert() {
-    await this.notifyService.alert
+ async getRiderSuccessAlert() {
+    await this.notifyService.successAlert
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(alert => {
       if (alert) {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const userId = user.id;
         this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
+      }
+    });
+  }
+
+  async getRiderDeclineAlert() {
+    await this.notifyService.declineAlert
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(alert => {
+      if (!alert) {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const userId = user.id;
+        // this.router.navigate([`rider/home/${userId}`]);
       }
     });
   }
