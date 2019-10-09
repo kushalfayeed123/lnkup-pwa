@@ -22,7 +22,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     spaceBetween: 30
 };
   availableTrips: any;
-  emptyTrips: boolean;
+  emptyTrip: boolean;
   destinationLocation = [];
   availableSeats = [];
   driverUserName = [];
@@ -50,7 +50,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     .subscribe(trips => {
       this.availableTrips = trips;
       if (this.availableTrips.length === 0) {
-        this.emptyTrips = true;
+        this.emptyTrip = true;
         console.log('there are no trips headed in your direction');
       }
       this.availableTrips.forEach(element => {
