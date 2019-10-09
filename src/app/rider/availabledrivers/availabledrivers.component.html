@@ -1,5 +1,5 @@
 
-<div class="destination-container" *ngIf="!showTripDetails">
+<div class="destination-container" *ngIf="!showTripDetails && emptyTrips">
         <swiper [config]="config">
                 <div class="swiper-wrapper">
                 <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">
@@ -39,10 +39,16 @@
                     </mat-card>
                     <!-- <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div> -->
+
+                    <mat-card *ngIf="emptyTrips && !showTripDetails">
+                      <mat-card-content>
+                        <div >Sorry, nobody is going in your direction at this time. Please try later.</div>
+                        <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn" (click)="navToTripSearch()">Back</button>
+                      </mat-card-content>
+                    </mat-card>
         </div>
         </swiper>
       </div>
-<div *ngIf="emptyTrips">There are no trips to display</div>
 
 <app-driverdetails *ngIf="showTripDetails"></app-driverdetails>
 

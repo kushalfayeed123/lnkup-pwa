@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-availabledrivers',
@@ -30,7 +31,9 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   showTripDetails: boolean;
 
 
-  constructor(private mapService: MapBroadcastService, private broadcastService: BroadcastService) { }
+  constructor(private mapService: MapBroadcastService,
+              private broadcastService: BroadcastService,
+              private router: Router) { }
 
   ngOnInit() {
     this.broadcastService.showTripDetails
@@ -71,6 +74,14 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.showTripDetails = true;
     console.log(this.showTripDetails);
   }
+
+  navToTripSearch() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate(['rider/home', userId]);
+     }
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
