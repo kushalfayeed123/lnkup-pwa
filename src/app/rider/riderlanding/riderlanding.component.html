@@ -35,7 +35,7 @@
 
             <mat-card-content *ngIf="!riderLink ">
                 <mat-form-field class="auth-full-width">
-                    <input type="text" matInput class="input-color" placeholder="Tell us your destination" autocorrect="off" autocapitalize="off" spellcheck="off" #search
+                    <input type="text" matInput class="input-color" placeholder="Where are you going?" autocorrect="off" autocapitalize="off" spellcheck="off" #search
                          name="destinationAddress"
                         matGoogleMapsAutocomplete
                         (onAutocompleteSelected)="onAutocompleteSelected($event)"
