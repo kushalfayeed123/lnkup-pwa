@@ -19,6 +19,7 @@ export class NotificationsService {
 
     private _declineAlert = new BehaviorSubject(null);
     public declineAlert = new BehaviorSubject(null);
+    reconnect: boolean;
 
 
 
@@ -65,6 +66,11 @@ export class NotificationsService {
             //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
               console.log('connection Id', connectionId);
             });
+        });
+        hubConnection.onclose(function() {
+            setTimeout(() => {
+           hubConnection.start();
+            }, 5000);
         });
     }
     alertDriverSuccess() {

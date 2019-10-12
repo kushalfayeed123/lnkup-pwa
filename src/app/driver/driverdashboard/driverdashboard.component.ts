@@ -46,6 +46,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   pickupLocation: any;
   driverDataId: string;
   currentUserId: string;
+  driverNavigate: boolean;
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -61,6 +62,12 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
                }
 
   ngOnInit() {
+    // this.route.queryParams
+    // .pipe(takeUntil(this.unsubscribe$))
+    // .subscribe(param => {
+    //   this.driverNavigate = param.driverNavigate;
+    // });
+    this.driverNavigate = false;
     this.showLanding = true;
     this.showDestination = true;
     this.getCurrentLocation();

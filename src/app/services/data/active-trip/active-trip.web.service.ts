@@ -38,7 +38,7 @@ export class ActiveTripWebService implements ActiveTripDataService {
     return this.http.put<ActiveTrips>(`${this.webUrl}/ActiveTrip/${id}`, trips);
   }
   deleteTrips(id: any) {
-    return this.http.delete(`${this.webUrl}/ActiveTrip`, id);
+    return this.http.delete(`${this.webUrl}/ActiveTrip/${id}`);
   }
 
   sendNotification(id: any, clientMessage: string) {

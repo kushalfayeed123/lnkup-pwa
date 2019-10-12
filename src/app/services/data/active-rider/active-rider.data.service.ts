@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 
 export abstract class ActiveRiderDataService {
 
-    abstract update(activetrip, id);
+    abstract update(id, activetrip);
     abstract delete(id);
     abstract create(activetrip);
     abstract get();

@@ -17,11 +17,11 @@ export class ActiveRiderWebService implements ActiveRiderDataService {
 
     }
 
-    update(activerider: any, id: string) {
+    update(id: string, activerider: any, ) {
         return this.http.put(`${this.webUrl}/ActiveRiders/${id}`, activerider);
     }
     delete(id: any) {
-        return this.http.delete(`${this.webUrl}/ActiveRiders`, id);
+        return this.http.delete(`${this.webUrl}/ActiveRiders/${id}`);
     }
     create(activerider: any) {
         return this.http.post(`${this.webUrl}/ActiveRiders`, activerider);
@@ -30,7 +30,7 @@ export class ActiveRiderWebService implements ActiveRiderDataService {
         return this.http.get<ActiveRiders[]>(`${this.webUrl}/ActiveRiders`);
     }
     getById(id: any) {
-        return this.http.get<ActiveRiders>(`${this.webUrl}/ActiveRiders`, id);
+        return this.http.get<ActiveRiders>(`${this.webUrl}/ActiveRiders/${id}`);
     }
 
     getAllTrips() {

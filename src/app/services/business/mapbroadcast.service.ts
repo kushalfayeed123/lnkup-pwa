@@ -244,7 +244,7 @@ public google: any;
           localStorage.setItem('pickup', JSON.stringify(this.pickupLatLng));
           // this.map.triggerResize();
         } else {
-          alert('Sorry, this search produced no results.');
+          console.log('Sorry, this search produced no results.');
         }
       }
     );

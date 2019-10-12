@@ -1,10 +1,10 @@
 export class ActiveRiders {
-    UserId: string;
-    TripId: string;
-    PickupId: string;
-    TripStatus: string;
+    riderId: string;
+    tripId: string;
+    pickupId: string;
+    tripStatus: string;
     currentLocationLongitude: number;
     currentLocationLatitude: number;
-    DestinationLongitude: number;
-    DestinationLatitude: number;
+    destinationLongitude: number;
+    destinationLatitude: number;
 }

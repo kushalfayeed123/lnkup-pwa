@@ -12,11 +12,12 @@ import { DriverTripCreateComponent } from './driver-trip-create/driver-trip-crea
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { RiderRequestComponent } from './rider-request/rider-request.component';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
+import { DriverTripNavigateComponent } from './driver-trip-navigate/driver-trip-navigate.component';
 
 
 
 @NgModule({
-  declarations: [DriverdashboardComponent, DriverTripCreateComponent, RiderRequestComponent],
+  declarations: [DriverdashboardComponent, DriverTripCreateComponent, RiderRequestComponent, DriverTripNavigateComponent],
   imports: [
     CommonModule,
     DriverRoutingModule,

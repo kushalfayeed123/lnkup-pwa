@@ -37,9 +37,12 @@ export class AppComponent {
       }
 
   reload() {
-    this.swUpdate.activated
-      // tslint:disable-next-line: deprecation
-      .subscribe(update => window.location.reload(true));
-    this.swUpdate.activateUpdate();
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.available.subscribe(next => {
+        if (confirm('A new version is available. Do you want to load it?')) {
+          window.location.reload();
+        }
+      });
+    }
   }
 }

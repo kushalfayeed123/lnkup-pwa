@@ -53,7 +53,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       driverEndLatitude: [this.tripEndLat],
       maxRiderNumber: ['', [Validators.required]],
       tripStartDateTime: ['', [Validators.required]],
-      aggregrateTripFee: [0, [Validators.required]],
+      aggregrateTripFee: [this.fare, [Validators.required]],
       tripType: ['', [Validators.required]],
       allowedRiderCount: [0],
       tripConnectionId  : [this.connectionId]
@@ -81,7 +81,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
           this.tripDistance =  (results.rows[0].elements[0].distance.value / 1000);
           this.tripTime = (results.rows[0].elements[0].duration.text);
-          const pricePerRiderPerKm = 44;
+          const pricePerRiderPerKm = 37;
           const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
           this.tripPricePerRider = tripPricePerRider;
           console.log('trip price per rider', tripPricePerRider);

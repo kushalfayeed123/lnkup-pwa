@@ -252,35 +252,34 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         const riderEndLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
         new google.maps.DistanceMatrixService().getDistanceMatrix({origins: [tripEndLocation], destinations: [riderEndLocation],
           travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
-          this.destinationDistanceInKm =  (results.rows[0].elements[0].distance.value / 1000);
-          element.userDriverDestinationDistance = this.destinationDistanceInKm;
+            this.destinationDistanceInKm =  (results.rows[0].elements[0].distance.value / 1000);
+            element.userDriverDestinationDistance = this.destinationDistanceInKm;
           // this.destinationDistanceInKm.push(destinationDistanceInKm);
         });
         const pickupLat = Number(element.driverStartLatitude);
         const pickupLng = Number(element.driverStartLongitude);
-        this.start = JSON.parse(localStorage.getItem('origin'));
-        // console.log('distance between trip destination and user destination in km', element.userDriverDestinationDistance, element);
 
+        this.start = JSON.parse(localStorage.getItem('origin'));
         const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
         const pickupLocation = new google.maps.LatLng(pickupLat, pickupLng);
         localStorage.setItem('pickup', JSON.stringify(pickupLocation));
         new google.maps.DistanceMatrixService().getDistanceMatrix({origins: [currentLocation], destinations: [pickupLocation],
-          travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
-            this.pickupDistance =  (results.rows[0].elements[0].distance.value / 1000);
-            console.log('pickup distance', results);
+            travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
+              this.pickupDistance =  (results.rows[0].elements[0].distance.value / 1000);
+              console.log('pickup distance', results);
+  
+              const timeToPickup = (results.rows[0].elements[0].duration.text);
+              this.timeToPickup = timeToPickup;
+              element.timeToPickup = this.timeToPickup;
+              element.pickupDistance = this.pickupDistance;
+              console.log('distances', this.pickupDistance, this.destinationDistanceInKm);
+              this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance < 8
+                && d.userDriverDestinationDistance < 8);
+              this.mapService.publishAvailableTrips(this.reachableDrivers);
+              this.gettingDrivers = false;
+              console.log('reachable drivers', this.reachableDrivers );
+             });
 
-            const walkingSpeed = 4.5 / 1000;
-            const timeToPickup = (results.rows[0].elements[0].duration.text);
-            this.timeToPickup = timeToPickup;
-            element.timeToPickup = this.timeToPickup;
-            element.pickupDistance = this.pickupDistance;
-            console.log('distances', this.pickupDistance, this.destinationDistanceInKm);
-            this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance < 8
-              && d.userDriverDestinationDistance < 8);
-            this.mapService.publishAvailableTrips(this.reachableDrivers);
-            this.gettingDrivers = false;
-            console.log('reachable drivers', this.reachableDrivers );
-           });
       });
     });
   }
