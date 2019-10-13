@@ -7,6 +7,7 @@ import { ActiveRiders } from 'src/app/models/ActiveRider';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rider-request',
@@ -25,14 +26,19 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     spaceBetween: 30
 };
   activeTripId: string;
-  activeTrip: ActiveTrips;
+  activeTrip: any;
   riderRequest: ActiveRiders[];
   feePerSeat: number;
   allowedRiderCount: number;
+  actriveTripStatus: number;
+  activeTripStatus: number;
+  maxSeat: number;
+  riderRequestLength: number;
 
   constructor(private tripService: ActiveTripDataService,
               private notifyService: NotificationsService,
-              private riderService: ActiveRiderDataService) {
+              private riderService: ActiveRiderDataService,
+              private router: Router) {
     this.getDriverSuccessAlert();
   }
 
@@ -72,9 +78,16 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(activeTrip => {
       this.activeTrip = activeTrip;
-      this.riderRequest = activeTrip.activeRiders;
+      this.riderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '1');
+      this.riderRequestLength = this.riderRequest.length;
       this.feePerSeat = activeTrip.aggregrateTripFee / activeTrip.maxRiderNumber;
-      this.allowedRiderCount = activeTrip.allowedRiderCount;
+      const allowedRiderCount = activeTrip.allowedRiderCount;
+      this.maxSeat = activeTrip.maxRiderNumber;
+      if (allowedRiderCount === 0) {
+        this.allowedRiderCount = this.maxSeat;
+      } else {
+        this.allowedRiderCount = allowedRiderCount;
+      }
       console.log('active trip', this.activeTrip);
     });
   }
@@ -85,25 +98,33 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const pickup = this.activeTrip.tripPickup;
     const riderId = rider.activeRiderId;
     const pickupTime = this.activeTrip.tripStartDateTime;
+    const bookedSeat = rider.bookedSeat;
     const riderConnectionId = rider.riderConnectId;
     const message  = `Your request has been accepted, please lnkup with ${driverName}
     at ${pickup} on or before ${pickupTime}` ;
-    const newAllowedRiderCount = this.allowedRiderCount + 1;
-
-    const activeRider = {tripStatus: 2,
-                        paymentStatus: 0,
+    const newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
+    if (newAllowedRiderCount === 0) {
+      this.activeTripStatus = 0;
+    } else {
+      this.activeTripStatus = 1;
+    }
+    const activeRider = {tripStatus: '2',
+                        paymentStatus: '0',
                         riderConnectId: riderConnectionId};
 
-    const activeTrip = {driverTripStatus: 1,
+    const activeTrip = {driverTripStatus: this.activeTripStatus,
                         allowedRiderCount: newAllowedRiderCount,
                         tripConnectionId};
+
 
     this.riderService.update(riderId, activeRider)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
+      console.log(data);
       this.tripService.updateTrip(this.activeTripId, activeTrip)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
+        this.getActiveTrips();
         this.tripService.sendNotification(riderConnectionId, message)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(response => {
@@ -117,6 +138,12 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     }, error => {
       console.log(error);
     });
+
+    if (this.activeTripStatus === 0) {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const userId = user.id;
+      this.router.navigate([`/driver/home/${userId}`], { queryParams: { driverNav: true }});
+    }
   }
 
   declineTripRequest(rider) {

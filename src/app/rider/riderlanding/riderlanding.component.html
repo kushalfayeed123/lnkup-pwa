@@ -34,6 +34,7 @@
         <mat-card class="example-card">
 
             <mat-card-content *ngIf="!riderLink ">
+                   
                 <mat-form-field class="auth-full-width">
                     <input type="text" matInput class="input-color" placeholder="Where are you going?" autocorrect="off" autocapitalize="off" spellcheck="off" #search
                          name="destinationAddress"
@@ -48,6 +49,8 @@
                     class="auth-full-width login-text">Search
                     <i class="material-icons right">send</i>
                 </button>
+
+               
             </mat-card-content>
             <app-riderlink *ngIf="riderLink"></app-riderlink>
 

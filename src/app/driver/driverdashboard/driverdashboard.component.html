@@ -1,5 +1,5 @@
 
-<form action="" id="search-form" *ngIf="showLanding">
+<form action="" id="search-form" *ngIf="showLanding && !driverNavigate">
 
   <input *ngIf="showDestination" type="search" name="" id="" class="destination" placeholder="Where are you going?"
     matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserDestinationLocation($event)"/>
@@ -38,7 +38,7 @@
             </mat-card-content>
         </mat-card> -->
 
-  <form class="destination-container">
+  <form class="destination-container" *ngIf="!driverNavigate">
     <mat-card class="example-card">
 
       <mat-card-content>
@@ -82,6 +82,6 @@
 
     </mat-card>
   </form>
+  <app-driver-trip-navigate *ngIf="driverNavigate"></app-driver-trip-navigate>
 </div>
 <app-driver-trip-create [destination]="destinationName" [pickup]="pickupName" *ngIf="!showLanding"></app-driver-trip-create>
-<app-driver-trip-navigate *ngIf="driverNavigate"></app-driver-trip-navigate>

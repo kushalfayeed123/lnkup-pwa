@@ -6,6 +6,7 @@ import { ActiveRiderDataService } from 'src/app/services/data/active-rider/activ
 import { Router } from '@angular/router';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import {  ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-bookseatrequest',
@@ -25,9 +26,13 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   seatCount: any;
   newFare: number;
   tripConnectionId: any;
+  availableSeat: number;
+  availableSeats: number;
+  inValidSeat: boolean;
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
+              private toastrService: ToastrService,
               private notifyService: NotificationsService) {
                 this.getRiderSuccessAlert();
                 this.getRiderDeclineAlert();
@@ -35,13 +40,29 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dropoff = localStorage.getItem('storedAddress');
+    this.getTripDetails();
     this.getRiderRequest();
-
   }
   computeTripFare(value) {
     const tripFare = value * this.fare;
-    this.newFare = tripFare;
-    this.seatCount = value;
+    if (value > this.availableSeats) {
+      console.log(`this trip has ${this.availableSeats} seat(s) left.`);
+      this.inValidSeat = true;
+    } else {
+      this.inValidSeat = false;
+      this.seatCount = value;
+      this.newFare = tripFare;
+    }
+  }
+  getTripDetails() {
+    const tripDetails = JSON.parse(localStorage.getItem('tripDetails'));
+    const allowedRiderCount = tripDetails.allowedRiderCount;
+    const maxSeats = tripDetails.maxRiderNumber;
+    if (allowedRiderCount === 0) {
+      this.availableSeats = maxSeats;
+    } else {
+      this.availableSeats =  allowedRiderCount;
+    }
   }
   getRiderRequest() {
         const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
@@ -71,10 +92,13 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       this.sendNotification();
+      const message = 'Your trip request has been sent. Your driver will respond soon.';
+      this.notifyService.showInfoMessage(message);
       this.requestData = data;
       this.loading = false;
     }, error => {
-      console.error('We could not send your request, please try again.');
+      const message = 'We could not send your request, please try again.';
+      this.notifyService.showErrorMessage(message);
       this.loading = false;
     });
   }
@@ -84,7 +108,6 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.activeTrip.sendNotification(this.tripConnectionId, message)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
-      console.log('message sent', data);
     });
   }
 

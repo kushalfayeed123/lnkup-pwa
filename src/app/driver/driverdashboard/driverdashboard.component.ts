@@ -62,12 +62,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
                }
 
   ngOnInit() {
-    // this.route.queryParams
-    // .pipe(takeUntil(this.unsubscribe$))
-    // .subscribe(param => {
-    //   this.driverNavigate = param.driverNavigate;
-    // });
-    this.driverNavigate = false;
+    this.route.queryParams
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(param => {
+      this.driverNavigate = param.driverNav;
+    });
     this.showLanding = true;
     this.showDestination = true;
     this.getCurrentLocation();
@@ -176,12 +175,10 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
   setDestination() {
     this.showDestination = false;
-    alert(this.destinationLocation.formatted_address + ' ' + 'has been set as your destination');
     this.showPickup = true;
     this.mapService.findDestination(this.destinationFull);
   }
   setPickup() {
-    alert(this.pickupLocation.formatted_address + ' ' + 'has been set as your pickup spot');
     this.showDestination = true;
     this.showLanding = false;
     this.mapService.findOrigin(this.pickupFull);

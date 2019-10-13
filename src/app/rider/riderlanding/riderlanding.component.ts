@@ -7,6 +7,7 @@ import {
   NgZone,
   ElementRef
 } from '@angular/core';
+import {formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { Subject } from 'rxjs';
@@ -65,6 +66,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   public pickupDistance: number;
   pickups = [];
   tripSearch: boolean;
+  today = new Date();
+  todaysDataTime = '';
+  greeting: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -83,6 +87,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getCurrentime();
     // this.clearLocalStorage();
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe$))
@@ -267,19 +272,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             travelMode: google.maps.TravelMode.DRIVING}, (results: any) => {
               this.pickupDistance =  (results.rows[0].elements[0].distance.value / 1000);
               console.log('pickup distance', results);
-  
               const timeToPickup = (results.rows[0].elements[0].duration.text);
               this.timeToPickup = timeToPickup;
               element.timeToPickup = this.timeToPickup;
               element.pickupDistance = this.pickupDistance;
               console.log('distances', this.pickupDistance, this.destinationDistanceInKm);
-              this.reachableDrivers = allActiveTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance < 8
-                && d.userDriverDestinationDistance < 8);
+              this.reachableDrivers = allActiveTrips;
               this.mapService.publishAvailableTrips(this.reachableDrivers);
               this.gettingDrivers = false;
               console.log('reachable drivers', this.reachableDrivers );
              });
-
       });
     });
   }
@@ -307,7 +309,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     localStorage.removeItem('destination');
   }
 
-
+  getCurrentime() {
+    this.todaysDataTime = formatDate(this.today, 'dd-MM-yyyy hh:mm:ss a', 'en-US');
+    if (this.today.getHours() < 12) {
+      this.greeting = 'Good Morning';
+    } else if (this.today.getHours() >= 12 && this.today.getHours() <= 17) {
+      this.greeting = 'Good Afternoon';
+    } else {
+      this.greeting = 'Good Evening';
+    }
+  }
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

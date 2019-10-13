@@ -48,7 +48,10 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.mapService.availableTrips
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(trips => {
-      this.availableTrips = trips;
+      const availableTrips = trips;
+      this.availableTrips = availableTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance < 8
+        && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0);
+      console.log('available trips', this.availableTrips);
       if (this.availableTrips.length === 0) {
         this.emptyTrip = true;
         console.log('there are no trips headed in your direction');
@@ -63,8 +66,13 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
         }
         const maxSeats = element.maxRiderNumber;
         const allowedRiderCount = element.allowedRiderCount;
-        const availableSeat =  maxSeats - allowedRiderCount;
-        this.availableSeats.push(availableSeat);
+        if (allowedRiderCount === 0) {
+          const availableSeat = maxSeats;
+          this.availableSeats.push(availableSeat);
+        } else {
+          const availableSeat = allowedRiderCount;
+          this.availableSeats.push(availableSeat);
+        }
       });
     });
   }

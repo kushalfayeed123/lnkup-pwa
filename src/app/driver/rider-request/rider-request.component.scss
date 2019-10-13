@@ -251,6 +251,15 @@ section.auth-pages.security .setting-group, section.auth-pages.security#ride-his
   margin-bottom: 24px;
 }
 
+.emptyRiders{
+  color: #eeeeee;
+  position: relative;
+  top: 100px;
+  padding-left: 22px;
+  text-align: center;
+  padding-right: 20px;
+}
+
 @media only screen and (max-height: 568px) {
   .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
     margin-bottom: 48%;

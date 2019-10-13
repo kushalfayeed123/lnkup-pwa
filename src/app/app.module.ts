@@ -39,8 +39,8 @@ import {NumberPickerModule} from 'ng-number-picker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { DriverDataDataService } from './services/data/driver-data/driver-data.data.service';
 import { DriverDataWebService } from './services/data/driver-data/driver-data.web.service';
-import { ToastModule } from 'primeng/toast';
 import { NotificationsService } from './services/business/notificatons.service';
+import {ToastrModule} from 'ngx-toastr';
 
 
 
@@ -74,12 +74,16 @@ import { NotificationsService } from './services/business/notificatons.service';
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    ToastModule,
     NumberPickerModule,
     NgxMaterialTimepickerModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAftkH0NJdTC0ZoN7A3cvG-7-z4d9oECnQ' + '&libraries=visualization',
       libraries: ['geometry', 'places']
+    }),
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
     }),
     AgmDirectionModule,
     MatGoogleMapsAutocompleteModule.forRoot(),

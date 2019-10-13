@@ -6,6 +6,7 @@ import { ActiveTripDataService } from '../data/active-trip/active-trip.data.serv
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 
@@ -23,7 +24,7 @@ export class NotificationsService {
 
 
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private toastService: ToastrService) {
         this.webUrl = environment.openConnect;
         this.user = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -38,24 +39,20 @@ export class NotificationsService {
             const user = JSON.parse(localStorage.getItem('currentUser'));
             const userRole = user.role;
             if (userRole === 'Driver') {
-                this.alertDriverSuccess();
+                this.alertDriverSuccess(message);
             } else  {
-                this.alertRiderSuccess();
+                this.alertRiderSuccess(message);
             }
-            alert(message);
-
         });
 
         hubConnection.on('ReceiveDeclineMessage', message => {
             const user = JSON.parse(localStorage.getItem('currentUser'));
             const userRole = user.role;
             if (userRole === 'Driver') {
-                this.alertDriverCancel();
+                this.alertDriverCancel(message);
             } else  {
-                this.alertRiderDecline();
+                this.alertRiderDecline(message);
             }
-            alert(message);
-
         });
 
         hubConnection.start().catch(err => console.error(err.toString()))
@@ -64,7 +61,6 @@ export class NotificationsService {
             .then((connectionId) => {
               sessionStorage.setItem('clientConnectionId', connectionId);
             //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
-              console.log('connection Id', connectionId);
             });
         });
         hubConnection.onclose(function() {
@@ -73,26 +69,39 @@ export class NotificationsService {
             }, 5000);
         });
     }
-    alertDriverSuccess() {
+    alertDriverSuccess(message) {
         const alertDriver = true;
         this._successAlert.next(alertDriver);
+        this.showInfoMessage(message);
     }
 
-    alertRiderSuccess() {
+    alertRiderSuccess(message) {
         const alertRider = true;
         this._successAlert.next(alertRider);
+        this.showSuccessMessage(message);
     }
 
 
-    alertDriverCancel() {
+    alertDriverCancel(message) {
         const alertDriver = true;
         this._declineAlert.next(alertDriver);
+        this.showErrorMessage(message);
     }
 
-    alertRiderDecline() {
+    alertRiderDecline(message) {
+        this.showErrorMessage(message);
         const alertRider = false;
         this._declineAlert.next(alertRider);
     }
-
+    
+    showSuccessMessage(message) {
+        this.toastService.success(message, 'Success!');
+    }
+    showErrorMessage(message) {
+        this.toastService.error(message, 'Sorry!');
+    }
+    showInfoMessage(message) {
+        this.toastService.info(message, 'Success!');
+    }
 
 }

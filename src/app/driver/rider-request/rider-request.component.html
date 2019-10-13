@@ -6,8 +6,12 @@
           </a>
           <h1>Request</h1>
         </nav>
-        <swiper [config]="config">
-            <div class="swiper-wrapper">
+
+        <div *ngIf="riderRequestLength === 0" class="emptyRiders">
+          <span>You do not have any LnkuP request currently. You will be alerted once there is a request.</span>
+        </div>
+        <swiper [config]="config" *ngIf="riderRequestLength > 0">
+            <div class="swiper-wrapper" >
           <main class="contain-box  swiper-slide" *ngFor="let request of riderRequest; let i = index;">
             <div class="item-details dd">
               <div class="driver-name">

@@ -5,6 +5,7 @@ import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-driver-trip-create',
@@ -33,7 +34,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
               private activeTripService: ActiveTripDataService,
-              private router: Router) {
+              private router: Router,
+              private notifyService: NotificationsService) {
 
   }
 
@@ -106,13 +108,13 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     const seatCapacity = 4;
     const maxRiderNumber = this.tripForm.value.maxRiderNumber;
     if (this.tripForm.valid && maxRiderNumber <= seatCapacity) {
-      console.log('trip value', this.tripForm.value);
       this.activeTripService.createTrip(this.tripForm.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trip =>  {
         this.activeTrip = trip;
         localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
-        alert('Trip has been created');
+        const message = 'Your trip has been created and is currently being broadcasted';
+        this.notifyService.showSuccessMessage(message);
         this.router.navigate(['driver/rider-request']);
       }, error => {
         setTimeout(() => {
@@ -120,7 +122,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         }, 3000);
       });
     } else {
-      console.log('number of riders exceeds car capacity');
+      const message = 'number of riders exceeds car capacity';
+      this.notifyService.showErrorMessage(message);
     }
   }
 

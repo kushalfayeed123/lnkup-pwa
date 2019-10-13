@@ -45,7 +45,11 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         localStorage.setItem('tripDetails', JSON.stringify(trip));
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;
-        const availableSeats = max - allowed;
+        if(allowed  === 0) {
+          this.availableSeats = max;
+        } else {
+          this.availableSeats = allowed;
+        }
         const destinationLng = Number(trip.driverEndLongitude);
         const destinationLat = Number(trip.driverEndLatitude);
         const pickup = trip.tripPickup;
@@ -56,7 +60,6 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
           this.destination = localStorage.getItem('storedAddress');
           console.log('dropOff', this.destination);
         }, 1000);
-        this.availableSeats = availableSeats;
         this.driverName = trip.tripDriver.driver.userName;
         this.tripPricePerRider = trip.tripPricePerRider;
         this.isTrips = true;
