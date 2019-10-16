@@ -23,7 +23,7 @@ import { SideNavComponent } from '../components/side-nav/side-nav.component';
                  DriverdetailsComponent,
                  BookseatrequestComponent,
                  RiderlinkComponent,
-                 SideNavComponent],
+                 ],
   imports: [
     CommonModule,
     RiderRoutingModule,

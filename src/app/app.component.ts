@@ -24,9 +24,9 @@ export class AppComponent {
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
               private route: Router) {
                 route.events.subscribe(url => {
-                    const routeLink = url;
+                  this.getCurrentRoute();
                 });
-  }
+              }
 
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
@@ -43,6 +43,19 @@ export class AppComponent {
           window.location.reload();
         }
       });
+    }
+  }
+
+  getCurrentRoute() {
+    const route = this.route.url;
+    const riderRoute = route.slice(0, 6);
+    const driverRoute = route.slice(0, 7);
+    if (riderRoute === '/rider') {
+      this.showSideNav = true;
+    } else if (driverRoute === '/driver') {
+      this.showSideNav = true;
+    } else {
+      this.showSideNav = false;
     }
   }
 }

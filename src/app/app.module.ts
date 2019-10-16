@@ -62,6 +62,7 @@ import {ToastrModule} from 'ngx-toastr';
     SearchMessageComponent,
     PushNotificationComponent,
     PagenotfoundComponent,
+    SideNavComponent
     
 
   ],

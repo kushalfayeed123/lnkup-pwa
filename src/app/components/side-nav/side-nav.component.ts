@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import { Router } from '@angular/router';
+import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 export class SideNavComponent implements OnDestroy {
 
   constructor(changeDetectorRef: ChangeDetectorRef,
+    private authService: AuthenticateDataService,
      media: MediaMatcher,
      public _router: Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -25,7 +27,12 @@ export class SideNavComponent implements OnDestroy {
 
   private _mobileQueryListener: () => void;
 
-  shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
+  // shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
+
+  logout() {
+    this.authService.logout();
+    this._router.navigate(['/']);
+  }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
