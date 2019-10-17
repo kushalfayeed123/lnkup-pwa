@@ -32,10 +32,12 @@
     flex-wrap: wrap;
   }
   .riders > div {
-    flex: 0 50%;
+    flex: 0 34%;
+    padding-top: 11px;
   }
   .passengers {
-    padding-top: 8px;
+    padding-top: 10px;
+    padding-left: 6px;
   }
   .avd-container{
     background: #eee;
@@ -79,6 +81,9 @@
     padding-left: 55px;
 
   }
+  .destination {
+    padding-bottom: 13px;
+  }
   ::ng-deep .dark-snackbar-search{
     background: #E040FB !important;
   }
@@ -92,14 +97,13 @@
   .location{
     color: #E040FB;
     font-size: 12px;
-    text-align: right;
   }
   .login-text{
-    left: 9%;
-    top: 28px;
+    left: 56%;
     height: 38px;
-    width: 80%;
+    width: 45%;
     padding-top: 2px;
+    bottom: 37px;
   }
 .mat-form-field-appearance-legacy {
   margin-top: 34px !important;
@@ -262,9 +266,9 @@ body.map-body .avd .container-grid .time-line-container {
   margin-bottom: 20px;
 }
 .time-line-container {
-  margin-left: 45%;
+  margin-left: 39%;
   position: relative;
-  bottom: 86px;
+  bottom: 187px;
 }
 
 body.map-body .avd .container-grid .location {

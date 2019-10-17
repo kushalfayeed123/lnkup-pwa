@@ -1,12 +1,8 @@
 <mat-card class="example-card destination-container">
 
         <mat-card-content>
-                <div class="avd">
-                        <div class="driver-container">
-                          <div class="driver-track">
-                            <div class="driver-item">
+        
                               <div class="container-grid">
-                                <div class="avi-info">
                                   <div class="riders">
                                     <div class="radius">
                                             <div class="avi-info">
@@ -33,31 +29,32 @@
                                                   </div>
                                     </div>
                                   </div>
-                                  <div class="share">
+                                  <!-- <div class="share">
                                     <div class="radius primary">
                                       <i class="flaticon-send-1"></i>
                                     </div>
                                     <div>Share</div>
-                                  </div>
+                                  </div> -->
+
+                                  <button (click)='setDestination()' mat-raised-button color="accent"
+                                    class="auth-full-width login-text" >
+                                   Start Trip
+                                   <i class="material-icons right"></i>
+                                 </button>
                                 </div>
                                 <div class="destination-details">
                                   <div class="time-line-container">
                                     <ul class="tl">
                                       <li class="destination">
-                                        <div class="location">Ibukun way</div>
-                                        <div class="seats sub">N 1200</div>
+                                        <div class="location">Your Pickup</div>
+                                        <div class="seats sub">Tolu ipoyi</div>
                                       </li>
                                       <li class="current-location">
-                                        <div class="location">Tolu Ipoyi Street</div>
-                                        <div class="est sub">Destination</div>
+                                        <div class="location">Your Destination</div>
+                                        <div class="est sub">Tolu ipoyi</div>
                                       </li>
                                     </ul>
                                   </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
         </mat-card-content>
   

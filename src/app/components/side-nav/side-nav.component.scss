@@ -8,8 +8,20 @@
     right: 0;
 
   }
+  // .nav-menu {
+  //   color: #E040FB !important;
+  // }
+  .mat-icon{
+    color:#E040FB;
+  }
   .mat-drawer{
     width: 50% !important;
+  }
+  .mat-drawer-content{
+    overflow: hidden;
+  }
+  .mat-sidenav{
+    background: #121212 !important;
   }
 
   .example-is-mobile .example-toolbar {
