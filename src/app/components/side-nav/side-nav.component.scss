@@ -46,3 +46,7 @@
        `<body>` to be our scrolling element for mobile layouts. */
     flex: 1 0 auto;
   }
+  :host >>> .content {
+  height: -moz-available;          /* WebKit-based browsers will ignore this. */
+  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+}
