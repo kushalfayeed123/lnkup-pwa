@@ -1,16 +1,27 @@
 body.profile-body {
     background-color: #ffffff;
   }
-
+.flaticon-left-arrow{
+  color:  #ffffff !important;
+}
+.left-arrow {
+  padding-right: 30%;
+}
+.profile {
+  padding-right:  37%;
+}
+.icon {
+  padding-right: 10px;
+}
   section.auth-pages.security nav {
     padding: 20px 32px;
-    display: grid;
-    display: -ms-grid;
-    -ms-grid-columns: [cone] 1fr [ctwo];
-        grid-template-columns: [cone] 1fr [ctwo];
-    -ms-grid-rows: [rone] 1fr [rtwo];
-        grid-template-rows: [rone] 1fr [rtwo];
-    grid-column-gap: unset;
+    display: flex;
+    // display: -ms-grid;
+    // -ms-grid-columns: [cone] 1fr [ctwo];
+    //     grid-template-columns: [cone] 1fr [ctwo];
+    // -ms-grid-rows: [rone] 1fr [rtwo];
+    //     grid-template-rows: [rone] 1fr [rtwo];
+    // grid-column-gap: unset;
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
@@ -23,6 +34,8 @@ body.profile-body {
   }
   
   section.auth-pages.security#profile .contain-box {
+    position: relative;
+    bottom: 3.1em;
     padding-bottom: 30px;
   }
   
@@ -176,7 +189,6 @@ body.profile-body {
   }
   .riderHeader {
     position: relative !important;
-    bottom: 51px !important;
     right: 31px !important;
     width: 120% !important;
   }

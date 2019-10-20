@@ -9,6 +9,9 @@ import { ActivatedRoute } from '@angular/router';
 export class ProfileComponent implements OnInit {
   image: string;
   routeId: any;
+  user: any;
+  ref: any;
+  openDialogue: boolean;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -16,9 +19,22 @@ export class ProfileComponent implements OnInit {
     this.route.params.subscribe(p => {
       this.routeId = p['id'];
     });
+    this.getUserData();
   }
 
+  getUserData() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.user = user;
+    const referral = user.token;
+    this.ref = referral.slice(0, 6).toUpperCase();
+  }
+  openUploadDialogue(){
+    this.openDialogue = !this.openDialogue;
+  }
 
+  uploadImage() {
+    this.openDialogue = false;
+  }
   // uploadStorePhoto(event) {
   //   this.getStoreImage();
   //   if (this.storeImage == null) {

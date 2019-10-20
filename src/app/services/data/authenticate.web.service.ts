@@ -13,6 +13,7 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticateWebService implements AuthenticateDataService {
+ 
   public webUrl: string;
   private currentUserSubject: BehaviorSubject<Users>;
   public currentUser: Observable<Users>;
@@ -88,5 +89,15 @@ export class AuthenticateWebService implements AuthenticateDataService {
     } catch (Error) {
      return null;
    }
+  }
+
+  getUserImage(id: string) {
+    throw new Error("Method not implemented.");
+  }
+  uploadUserImage() {
+    throw new Error("Method not implemented.");
+  }
+  updateUserImage(id: any, image: any) {
+    throw new Error("Method not implemented.");
   }
 }
