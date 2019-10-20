@@ -1,52 +1,104 @@
-.example-container {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
 
-  }
-  // .nav-menu {
-  //   color: #E040FB !important;
-  // }
-  .mat-icon{
-    color:#E040FB;
-  }
-  .mat-drawer{
-    width: 50% !important;
-  }
-  .mat-drawer-content{
-    overflow: hidden;
-  }
-  .mat-sidenav{
-    background: #121212 !important;
-  }
-
-  .example-is-mobile .example-toolbar {
-    position: fixed;
-    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-    z-index: 2;
-    background: #121212 !important;
-  }
-
-  h1.example-app-name {
-    margin-left: 8px;
-  }
-
-  .example-sidenav-container {
-    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-    flex: 1;
-  }
-
-  .example-is-mobile .example-sidenav-container {
-    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-       `<body>` to be our scrolling element for mobile layouts. */
-    flex: 1 0 auto;
-  }
-  :host >>> .content {
-  height: -moz-available;          /* WebKit-based browsers will ignore this. */
-  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+.navbar-default {
+  background: #202020;
+  border: none;
+  border-left: 6px solid #d54ab6;
+  padding-right: 40px;
+  margin: 0 !important;
+  position: relative;
+  top: 20px;
 }
+
+.navbar-default .navbar-brand {
+  font-size: 40px;
+  line-height: 40px;
+  padding-top: 4px;
+ }
+ .img-responsive{
+   height: 35px !important;
+ }
+.navbar-default .navbar-nav li a {
+color: #f2f2f2;
+font-size: 13px;
+font-weight: 400;
+line-height: 40px;
+transition: all 0.4s ease-in;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+color: #d54ab6;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #d54ab6;
+  background-color: transparent;
+}
+.navbar-default .navbar-toggle {
+  background: #d54ab6;
+  border-radius: 0px;
+   border: none;
+   margin-top: 20px;
+   margin-bottom: 30px;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background: #fff;
+  border-color: transparent;
+}
+.hamburger-inner::after	{
+  background-color: #d54ab6 !important;
+}
+.hamburger-inner::before	{
+  background-color: #d54ab6 !important;
+}
+.hamburger-inner	{
+  background-color: #d54ab6 !important;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus { 
+background-color: transparent 
+}
+
+
+.navbar-nav{
+  flex-direction: row !important;
+}
+.nav-items{
+  padding-right: 20px;
+  font-family: 'verdana';
+}
+.navbar-brand{
+  position: relative;
+  right: 10px;
+}
+.navbar-toggler{
+  position: relative;
+  left: 29px;
+  top: 5px;
+  border: none;
+}
+
+
+@media(max-width: 1025px){
+  .nav-link{
+    font-size: 12px;
+  }
+}
+@media (max-width: 800px) {
+  #mobile-nav-toggle {
+    display: inline;
+  }
+  .nav-menu{
+    width: 41%;
+  }
+  .nav-item{
+    padding-left: 20px;
+   
+  }
+  .navbar-nav{
+    width: 52%;
+  }
+}
+
+
+

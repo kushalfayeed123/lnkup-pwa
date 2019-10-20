@@ -42,6 +42,9 @@ import { DriverDataWebService } from './services/data/driver-data/driver-data.we
 import { NotificationsService } from './services/business/notificatons.service';
 import {ToastrModule} from 'ngx-toastr';
 import { ProfileComponent } from './components/profile/profile.component';
+import { SidebarModule } from 'ng-sidebar';
+
+
 
 
 
@@ -64,11 +67,11 @@ import { ProfileComponent } from './components/profile/profile.component';
     PushNotificationComponent,
     PagenotfoundComponent,
     ProfileComponent,
-    
-
+    SideNavComponent,
   ],
   imports: [
     BrowserModule,
+    SidebarModule.forRoot(),
     NgxUsefulSwiperModule,
     BrowserAnimationsModule,
     AppRoutingModule,
