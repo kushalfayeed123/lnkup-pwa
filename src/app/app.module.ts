@@ -63,8 +63,6 @@ import { ProfileComponent } from './components/profile/profile.component';
     PushNotificationComponent,
     PagenotfoundComponent,
     ProfileComponent,
-    
-
   ],
   imports: [
     BrowserModule,
