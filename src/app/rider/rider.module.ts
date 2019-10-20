@@ -12,7 +12,6 @@ import { AvailabledriversComponent } from './availabledrivers/availabledrivers.c
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.component';
-import {NumberPickerModule} from 'ng-number-picker';
 import { RiderlinkComponent } from './riderlink/riderlink.component';
 import { SideNavComponent } from '../components/side-nav/side-nav.component';
 import { SidebarModule } from 'ng-sidebar';
