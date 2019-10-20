@@ -23,16 +23,24 @@
   </div>
  -->
 
- <ng-sidebar-container>
+ <ng-sidebar-container >
  
   <!-- A sidebar -->
   <ng-sidebar [(opened)]="_opened">
-    <p>Sidebar contents</p>
-  </ng-sidebar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="." class="nav-menu">Profile</a>
+      <a mat-list-item routerLink="." class="nav-menu">Payment</a>
+      <a mat-list-item routerLink="." class="nav-menu">Support</a>
+      <a mat-list-item routerLink="." class="nav-menu">Executive Ride</a>
+      <a mat-list-item routerLink="."class="nav-menu" >Driver App</a>
+      <a mat-list-item (click)="logout()" class="nav-menu">Logout</a>
+    </mat-nav-list>  </ng-sidebar>
 
   <!-- Page content -->
   <div ng-sidebar-content>
     <button (click)="_toggleSidebar()">Toggle sidebar</button>
+    <router-outlet></router-outlet>
+
   </div>
 
 </ng-sidebar-container>	

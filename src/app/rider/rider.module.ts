@@ -15,6 +15,7 @@ import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.comp
 import {NumberPickerModule} from 'ng-number-picker';
 import { RiderlinkComponent } from './riderlink/riderlink.component';
 import { SideNavComponent } from '../components/side-nav/side-nav.component';
+import { SidebarModule } from 'ng-sidebar';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { SideNavComponent } from '../components/side-nav/side-nav.component';
                  DriverdetailsComponent,
                  BookseatrequestComponent,
                  RiderlinkComponent,
+                 SideNavComponent,
                  ],
   imports: [
     CommonModule,
@@ -34,8 +36,7 @@ import { SideNavComponent } from '../components/side-nav/side-nav.component';
     ReactiveFormsModule,
     MatGoogleMapsAutocompleteModule,
     AngularMaterialModule,
-    NumberPickerModule,
-    
+    SidebarModule.forRoot(),
   ]
 })
 export class RiderModule { }

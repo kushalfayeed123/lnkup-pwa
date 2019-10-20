@@ -67,11 +67,9 @@ import { SidebarModule } from 'ng-sidebar';
     PushNotificationComponent,
     PagenotfoundComponent,
     ProfileComponent,
-    SideNavComponent,
   ],
   imports: [
     BrowserModule,
-    SidebarModule.forRoot(),
     NgxUsefulSwiperModule,
     BrowserAnimationsModule,
     AppRoutingModule,
