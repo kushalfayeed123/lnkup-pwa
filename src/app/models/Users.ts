@@ -6,4 +6,11 @@ export class Users{
     verificationCode: string;
     Role: string;
     userStatus: string;
+    token: string;
+    userImage: UserImage;
+}
+
+export class UserImage {
+    imageId: string;
+    image: string;
 }

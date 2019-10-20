@@ -46,6 +46,10 @@ export class AuthenticateWebService implements AuthenticateDataService {
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.loggedIn.next(true);
           this.currentUserSubject.next(user);
+          this.getUserImage(user.id)
+          .subscribe(img => {
+            localStorage.setItem('userImage', JSON.stringify(img));
+          });
         }
 
         return user;
@@ -92,12 +96,12 @@ export class AuthenticateWebService implements AuthenticateDataService {
   }
 
   getUserImage(id: string) {
-    throw new Error("Method not implemented.");
+    return this.http.get(`${this.webUrl}/user/image/${id}`);
   }
-  uploadUserImage() {
-    throw new Error("Method not implemented.");
+  uploadUserImage(image: any) {
+    return this.http.post(`${this.webUrl}/user/image`, image);
   }
   updateUserImage(id: any, image: any) {
-    throw new Error("Method not implemented.");
+    return this.http.put(`${this.webUrl}/user/image/${id}`, image);
   }
 }

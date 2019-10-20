@@ -15,8 +15,9 @@
             <i class="flaticon-cog"></i>
           </button>
         </div>
-        <div class="profile-info">
-          <img src="assets/Images/Avatar3.png" alt="" class="avi" />
+        <div class="profile-info" (deferLoad)="image != null">
+            <img src="data:image/jpeg;base64,{{image}}" alt="" class="avi" *ngIf="image">
+          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="!image">
           <div class="name-container">
             <h2 class="name">{{user.userName}}</h2>
             <span class="e-mail">{{user.email}}</span>
@@ -33,19 +34,16 @@
           </div>
         </div>
       </div>
-
+  
       <div class="user-details" *ngIf="openDialogue" >
         <div style="padding-bottom: 20px;">Upload Profile Image</div>
-          <!-- <div class="profile-info">
-            <img src="assets/Images/Avatar3.png" alt="" class="avi" />
-            <div class="name-container">
-              <h2 class="name">{{user.userName}}</h2>
-              <span class="e-mail">{{user.email}}</span>
-            </div>
-          </div> -->
+        <mat-spinner *ngIf="loading"  [diameter]="30"
+        class="loader"
+      ></mat-spinner>
           <div >
-              <input type="file" style="padding-bottom: 20px;" >
-              <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text" (click)="uploadImage()">
+              <input type="file" style="padding-bottom: 20px;" (change)="uploadImage($event)" #PhotoInput hidden>
+              <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
+              (click)="PhotoInput.click()" >
                   Upload
                 </button>
             </div>

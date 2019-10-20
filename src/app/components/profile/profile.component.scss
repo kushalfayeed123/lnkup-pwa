@@ -7,6 +7,10 @@ body.profile-body {
 .left-arrow {
   padding-right: 30%;
 }
+.mat-spinner {
+  margin-left: 40% !important;
+  top: 25px;
+}
 .profile {
   padding-right:  37%;
 }
@@ -111,15 +115,16 @@ body.profile-body {
     max-width: 64px;
     -o-object-fit: cover;
        object-fit: cover;
-    -o-object-position: center;
-       object-position: center;
+    -o-object-position: top;
+       object-position: top;
     width: 64px;
+    height: 64px;
     border-radius: 50px;
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
     -ms-border-radius: 50px;
     -o-border-radius: 50px;
-    margin-right: 5px;
+    margin-right: 10px;
   }
   
   section.auth-pages.security#profile .profile-info .name {
