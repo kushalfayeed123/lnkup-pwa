@@ -16,4 +16,7 @@ export abstract class AuthenticateDataService {
     abstract get currentUserValue();
     abstract updateUserStatus(user);
     abstract decode();
+    abstract getUserImage(id);
+    abstract uploadUserImage(id, image);
+    abstract updateUserImage(id, image);
 }

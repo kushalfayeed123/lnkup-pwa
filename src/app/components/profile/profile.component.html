@@ -1,12 +1,12 @@
 <section class="settings-page auth-pages security" id="profile">
     <main class="contain-box">
             <nav class="riderHeader">
-                    <a href="">
+                    <a href="" class="left-arrow">
                       <i class="flaticon-left-arrow"></i>
                     </a>
-                    <h1>Profile</h1>
-                    <button id="edit">
-                            <i class="flaticon-pencil"></i>
+                    <h1 class="profile">Profile</h1>
+                    <button id="edit" class="edit-btn">
+                      <img src="./assets/icons/create-24px.svg" alt="" (click)="openUploadDialogue()">
                           </button>
                   </nav>
       <div class="user-details">
@@ -18,8 +18,8 @@
         <div class="profile-info">
           <img src="assets/Images/Avatar3.png" alt="" class="avi" />
           <div class="name-container">
-            <h2 class="name">Lucy Ukwa</h2>
-            <span class="e-mail">lucyukwa@gmail.com</span>
+            <h2 class="name">{{user.userName}}</h2>
+            <span class="e-mail">{{user.email}}</span>
           </div>
         </div>
         <div class="user-stats">
@@ -33,20 +33,39 @@
           </div>
         </div>
       </div>
+
+      <div class="user-details" *ngIf="openDialogue" >
+        <div style="padding-bottom: 20px;">Upload Profile Image</div>
+          <!-- <div class="profile-info">
+            <img src="assets/Images/Avatar3.png" alt="" class="avi" />
+            <div class="name-container">
+              <h2 class="name">{{user.userName}}</h2>
+              <span class="e-mail">{{user.email}}</span>
+            </div>
+          </div> -->
+          <div >
+              <input type="file" style="padding-bottom: 20px;" >
+              <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text" (click)="uploadImage()">
+                  Upload
+                </button>
+            </div>
+        </div>
+
+
       <div class="contact-info">
         <div class="contact">
-          <i class="flaticon-closed-mail-envelope"></i>
-          <span class="contact-details">Email Address</span>
+            <img src="./assets/icons/markunread-24px.svg" alt="" class="icon">
+            <span class="contact-details">{{user.email}}</span>
         </div>
         <div class="contact">
-          <i class="flaticon-smartphone-outline"></i>
-          <span class="contact-details"> Phone Number</span>
+            <img src="./assets/icons/call-24px.svg" alt="" class="icon">
+              <span class="contact-details">{{user.phoneNumber}}</span>
         </div>
       </div>
       <div class="share">
         <div class="referrals">
           <span class="ref-label"> Referral Code</span>
-          <h2 class="ref-code">XXLUC23</h2>
+          <h2 class="ref-code">{{ref}}</h2>
         </div>
         <a href="" class="invite-friend">Invite Friends</a>
       </div>

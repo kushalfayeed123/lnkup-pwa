@@ -9,6 +9,8 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements OnDestroy {
+   _opened: boolean = false;
+
 
   constructor(changeDetectorRef: ChangeDetectorRef,
     private authService: AuthenticateDataService,
@@ -27,8 +29,10 @@ export class SideNavComponent implements OnDestroy {
 
   private _mobileQueryListener: () => void;
 
-  // shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
-
+   _toggleSidebar() {
+    this._opened = !this._opened;
+  }
+  
   logout() {
     this.authService.logout();
     this._router.navigate(['/']);

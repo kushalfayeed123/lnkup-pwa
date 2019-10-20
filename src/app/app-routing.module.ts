@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'verify', component: VerifycodeComponent },
   { path: 'login', component: AuthenticateUserComponent },
   { path: 'register', component: RegisterUserComponent },
-  { path: 'profile/:d', component: ProfileComponent },
+  { path: 'profile/:id', component: ProfileComponent },
 
   {
     path: 'admin',
