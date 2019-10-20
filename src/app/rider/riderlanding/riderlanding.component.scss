@@ -55,7 +55,9 @@
   }
   .mat-card{
     background: #121212;
-    height: 162px !important;
+    height: 81px !important;
+    position: relative;
+    top: 19px;
 
   }
   
@@ -337,4 +339,10 @@ body.map-body .avd li:first-of-type::before {
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
   -o-border-radius: 50%;
+}
+
+@media only screen and (max-width: 320px) {
+  .login-text{
+    left: 65.6%;
+  }
 }

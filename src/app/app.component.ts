@@ -24,7 +24,7 @@ export class AppComponent {
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
               private route: Router) {
                 route.events.subscribe(url => {
-                  this.getCurrentRoute();
+                  // this.getCurrentRoute();
                 });
               }
 

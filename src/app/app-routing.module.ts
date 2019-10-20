@@ -6,6 +6,7 @@ import { AuthenticateUserComponent } from './components/authenticate-user/authen
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { VerifycodeComponent } from './components/verifycode/verifycode.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,8 @@ const routes: Routes = [
   { path: 'verify', component: VerifycodeComponent },
   { path: 'login', component: AuthenticateUserComponent },
   { path: 'register', component: RegisterUserComponent },
+  { path: 'profile/:d', component: ProfileComponent },
+
   {
     path: 'admin',
     loadChildren: './admin/admin.module#AdminModule'

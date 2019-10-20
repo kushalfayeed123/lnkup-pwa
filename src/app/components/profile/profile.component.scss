@@ -1,0 +1,200 @@
+body.profile-body {
+    background-color: #ffffff;
+  }
+
+  section.auth-pages.security nav {
+    padding: 20px 32px;
+    display: grid;
+    display: -ms-grid;
+    -ms-grid-columns: [cone] 1fr [ctwo];
+        grid-template-columns: [cone] 1fr [ctwo];
+    -ms-grid-rows: [rone] 1fr [rtwo];
+        grid-template-rows: [rone] 1fr [rtwo];
+    grid-column-gap: unset;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    color: #ffffff;
+    background-color: #d54ab6;
+    margin-top: 0;
+  }
+  section.auth-pages.security#profile nav {
+    margin-bottom: 20px;
+  }
+  
+  section.auth-pages.security#profile .contain-box {
+    padding-bottom: 30px;
+  }
+  
+  section.auth-pages.security#profile #edit {
+    -ms-grid-column-align: right;
+        justify-self: right;
+    grid-row: rone/rtwo;
+    grid-column: cone/ctwo;
+    border: 0;
+    background-color: transparent;
+  }
+  
+  section.auth-pages.security#profile #edit .flaticon-pencil::before {
+    color: #ffffff;
+    font-size: 20px;
+  }
+  
+  section.auth-pages.security#profile .icon-container {
+    text-align: right;
+  }
+  
+  section.auth-pages.security#profile #settings {
+    background-color: transparent;
+    border: 0;
+    margin-bottom: 5px;
+    display: inline-block;
+    outline: none;
+  }
+  
+  section.auth-pages.security#profile #settings:focus {
+    outline: none;
+  }
+  
+  section.auth-pages.security#profile #settings .flaticon-cog::before {
+    color: #d54ab6;
+    font-size: 20px;
+  }
+  
+  section.auth-pages.security#profile .user-details {
+    background-color: #424242;
+    // -webkit-box-shadow: 0px 2px 10px rgba(224, 224, 224, 0.25);
+    //         box-shadow: 0px 2px 10px rgba(224, 224, 224, 0.25);
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    padding: 10px 10px 25px 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  section.auth-pages.security#profile .profile-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: left;
+        -ms-flex-pack: left;
+            justify-content: left;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+    margin-bottom: 30px;
+  }
+  
+  section.auth-pages.security#profile .profile-info img {
+    max-width: 64px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -o-object-position: center;
+       object-position: center;
+    width: 64px;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    -ms-border-radius: 50px;
+    -o-border-radius: 50px;
+    margin-right: 5px;
+  }
+  
+  section.auth-pages.security#profile .profile-info .name {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  section.auth-pages.security#profile .user-stats {
+    display: grid;
+    display: -ms-grid;
+    -ms-grid-columns: 50% 50%;
+        grid-template-columns: 50% 50%;
+    -ms-grid-rows: auto;
+        grid-template-rows: auto;
+    grid-column-gap: unset;
+    justify-items: left;
+    -webkit-box-pack: left;
+        -ms-flex-pack: left;
+            justify-content: left;
+    font-family: "Lato";
+  }
+  
+  section.auth-pages.security#profile .user-stats .figures {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  section.auth-pages.security#profile .user-stats .label {
+    font-weight: bold;
+  }
+  
+  section.auth-pages.security#profile .contact-info .contact {
+    background-color: #f5f5f5;
+    margin-bottom: 25px;
+    padding: 12px 15px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    color: #b2b2b2;
+    font-weight: 500;
+  }
+  
+  section.auth-pages.security#profile .contact-info i {
+    margin-right: 12px;
+  }
+  
+  section.auth-pages.security#profile .contact-info i::before {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d54ab6;
+  }
+
+  
+  section.auth-pages.security#profile .share {
+    text-align: center;
+    background-color: #424242;
+    padding: 24px 0;
+    // -webkit-box-shadow: 0px 4px 10px rgba(224, 224, 224, 0.25);
+    //         box-shadow: 0px 4px 10px rgba(224, 224, 224, 0.25);
+    border-radius: 4px;
+  }
+  
+  section.auth-pages.security#profile .referrals {
+    border-bottom: 1px solid #e4e4e4;
+  }
+  .riderHeader {
+    position: relative !important;
+    bottom: 51px !important;
+    right: 31px !important;
+    width: 120% !important;
+  }
+  section.auth-pages.security#profile .ref-label {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  section.auth-pages.security#profile .ref-code {
+    color: #d54ab6;
+    font-size: 25px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    margin-bottom: 13px;
+  }
+  
+  section.auth-pages.security#profile .invite-friend {
+    margin-top: 12px;
+    display: inline-block;
+    font-weight: 500;
+  }

@@ -36,8 +36,7 @@ Font imports
 cursor: pointer;
 }
 .flaticon-left-arrow {
-  position: relative;
-  bottom: 35px;
+ 
   color: #E040FB
 }
 
@@ -144,7 +143,6 @@ section {
 }
 
 nav {
-  margin-top: 45px;
   margin-bottom: 20px;
   max-width: 1024px;
   margin-left: auto;
@@ -533,3 +531,19 @@ Region Toastr
 End Region
 =================
 */
+
+section.auth-pages .page-heading h1 {
+  color: #E040FB;
+  font-weight: bold;
+  font-size: 32px;
+  font-family: "Poppins";
+}
+section.auth-pages.security nav h1 {
+  -ms-grid-column-align: center;
+      justify-self: center;
+  grid-row: rone/rtwo;
+  grid-column: cone/ctwo;
+  font-size: 20px;
+  margin-bottom: 0;
+  font-weight: normal;
+}

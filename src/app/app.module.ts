@@ -41,6 +41,7 @@ import { DriverDataDataService } from './services/data/driver-data/driver-data.d
 import { DriverDataWebService } from './services/data/driver-data/driver-data.web.service';
 import { NotificationsService } from './services/business/notificatons.service';
 import {ToastrModule} from 'ngx-toastr';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 
@@ -62,7 +63,7 @@ import {ToastrModule} from 'ngx-toastr';
     SearchMessageComponent,
     PushNotificationComponent,
     PagenotfoundComponent,
-    SideNavComponent
+    ProfileComponent,
     
 
   ],
