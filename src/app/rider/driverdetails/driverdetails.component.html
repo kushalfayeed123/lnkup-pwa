@@ -10,8 +10,10 @@
                         <div class="driver-track">
                           <div class="driver-item">
                             <div class="container-grid">
-                              <div class="avi-info">
-                                <img src="assets/Images/Avatar1.png" alt="" class="avi" />
+                              <div class="avi-info" (deferLoad)="image != null">
+                                <img src="data:image/jpeg;base64,{{image}}" alt="" class="profile-info" *ngIf="image"/>
+                                <img src="./assets/Images/default-user.png" class="profile-info" alt="" *ngIf="!image">
+
                                 <h3 class="driver-name">{{driverName}}</h3>
                                 <span class="driver-stats">4.33</span>
                               </div>

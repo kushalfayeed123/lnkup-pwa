@@ -82,7 +82,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.showTripDetails = true;
     console.log(this.showTripDetails);
   }
-
   navToTripSearch() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;

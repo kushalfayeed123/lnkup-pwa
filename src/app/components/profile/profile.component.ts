@@ -89,12 +89,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
         const imageId = userImage.imageId;
         const file = reader.result.toString().split(',')[1];
         const model = { File: file };
-        this.image = model.File;
-        const image = { image: this.image, imageId: this.imageId };
+        const image = { image: this.image, userId: this.routeId };
         this.authService
-          .updateUserImage(imageId, image)
+          .updateUserImage(this.routeId, image)
           .subscribe(
             img => {console.log('success');
+                    this.image = model.File;
+
                     this.getUserProfileImage();
                     this.loading = false;
                   },

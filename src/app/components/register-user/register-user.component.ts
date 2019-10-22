@@ -47,7 +47,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     this.loading = true;
     localStorage.removeItem('userVerification');
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const validateCode = randomCode.slice(0, 3) + '-' + randomCode.slice(3, 6);
+    const validateCode = randomCode.slice(0, 6);
     localStorage.setItem('userVerification', validateCode);
     this.registerForm.patchValue({verificationCode: validateCode});
     const registerValues = this.registerForm.value;

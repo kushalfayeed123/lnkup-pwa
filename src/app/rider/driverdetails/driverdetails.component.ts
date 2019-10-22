@@ -21,6 +21,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
   tripPricePerRider: any;
   end: any;
   tripId: any;
+  image: any;
 
 
   constructor(private mapService: MapBroadcastService,
@@ -42,6 +43,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
       this.activeTripService.getTripsById(this.tripId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trip => {
+        this.image = trip.tripDriver.driver.userImage.image;
         localStorage.setItem('tripDetails', JSON.stringify(trip));
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;

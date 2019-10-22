@@ -10,8 +10,12 @@
                               <div class="driver-track">
                                 <div class="driver-item">
                                   <div class="container-grid">
-                                    <div class="avi-info">
-                                      <img src="assets/Images/Avatar1.png" alt="" class="avi" />
+                                    <div class="avi-info" (deferLoad)="trips.tripDriver.driver.userImage.image != null">
+                                        <img src="data:image/jpeg;base64,{{trips.tripDriver.driver.userImage.image}}" alt=""
+                                         class="profile-info" *ngIf="trips.tripDriver.driver.userImage.image">
+                                        <img src="./assets/Images/default-user.png"
+                                         class="profile-info" alt="" *ngIf="!trips.tripDriver.driver.userImage.image">
+                                      <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
                                       <h3 class="driver-name">{{driverUserName[i]}}</h3>
                                       <span class="driver-stats">4.33</span>
                                     </div>
