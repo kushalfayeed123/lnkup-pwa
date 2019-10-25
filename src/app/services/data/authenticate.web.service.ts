@@ -48,7 +48,6 @@ export class AuthenticateWebService implements AuthenticateDataService {
           this.currentUserSubject.next(user);
           this.getUserImage(user.id)
           .subscribe(img => {
-            localStorage.setItem('userImage', JSON.stringify(img));
           });
         }
 

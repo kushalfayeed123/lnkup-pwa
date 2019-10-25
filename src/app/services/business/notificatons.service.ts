@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
-import { ConnectionPositionPair } from '@angular/cdk/overlay';
-import { ActiveTripDataService } from '../data/active-trip/active-trip.data.service';
-import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { PushNotificationService, PushNotificationOptions } from 'ngx-push-notifications';
 
 @Injectable()
 
@@ -14,6 +12,8 @@ export class NotificationsService {
     user: any;
     webUrl: string;
     activeTripId: any;
+
+ 
 
     private _successAlert = new BehaviorSubject(null);
     public successAlert = this._successAlert.asObservable();
@@ -24,9 +24,11 @@ export class NotificationsService {
 
 
 
-    constructor(private router: Router, private toastService: ToastrService) {
+    constructor(private router: Router, private toastService: ToastrService,
+                private _pushNotificationService: PushNotificationService) {
         this.webUrl = environment.openConnect;
         this.user = JSON.parse(localStorage.getItem('currentUser'));
+        this._pushNotificationService.requestPermission();
     }
 
     intiateConnection() {
@@ -73,12 +75,15 @@ export class NotificationsService {
         const alertDriver = true;
         this._successAlert.next(alertDriver);
         this.showInfoMessage(message);
+        this.pushNotification(message);
     }
 
     alertRiderSuccess(message) {
         const alertRider = true;
         this._successAlert.next(alertRider);
         this.showSuccessMessage(message);
+        this.pushNotification(message);
+
     }
 
 
@@ -86,12 +91,15 @@ export class NotificationsService {
         const alertDriver = true;
         this._declineAlert.next(alertDriver);
         this.showErrorMessage(message);
+        this.pushNotification(message);
     }
 
     alertRiderDecline(message) {
         this.showErrorMessage(message);
         const alertRider = false;
         this._declineAlert.next(alertRider);
+        this.pushNotification(message);
+
     }
     
     showSuccessMessage(message) {
@@ -102,6 +110,30 @@ export class NotificationsService {
     }
     showInfoMessage(message) {
         this.toastService.info(message, 'Success!');
+    }
+    pushNotification(message) {
+        const title = 'Hello';
+        const options = new PushNotificationOptions();
+        options.body = message;
+ 
+        this._pushNotificationService.create(title, options).subscribe((notif) => {
+      if (notif.event.type === 'show') {
+        console.log('onshow');
+        setTimeout(() => {
+          notif.notification.close();
+        }, 3000);
+      }
+      if (notif.event.type === 'click') {
+        console.log('click');
+        notif.notification.close();
+      }
+      if (notif.event.type === 'close') {
+        console.log('close');
+      }
+    },
+    (err) => {
+         console.log(err);
+    });
     }
 
 }

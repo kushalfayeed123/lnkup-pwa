@@ -44,7 +44,8 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trip => {
         this.image = trip.tripDriver.driver.userImage.image;
-        localStorage.setItem('tripDetails', JSON.stringify(trip));
+        // localStorage.setItem('tripDetails', JSON.stringify(trip));
+        this.broadcastService.toggleAvailableTrips(trip);
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;
         if(allowed  === 0) {

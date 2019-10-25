@@ -47,6 +47,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   driverDataId: string;
   currentUserId: string;
   driverNavigate: boolean;
+  driverImage: any;
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -95,6 +96,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       this.driverDataId = data.driverDataId;
+      this.driverImage = data.driver.userImage.image;
       localStorage.setItem('driverDataId', this.driverDataId);
       console.log('driver data id', data);
     });

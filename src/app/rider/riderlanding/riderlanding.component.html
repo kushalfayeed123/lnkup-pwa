@@ -1,24 +1,19 @@
 <!-- <app-side-nav></app-side-nav> -->
 <form action="" id="search-form">
-    <input *ngIf="!riderLink "
-    type="search"
-    name=""
-    id=""
-    class="destination"
-    placeholder="Enter Your Current Location"
-    matGoogleMapsAutocomplete
-    (onAutocompleteSelected)="storeUserCurrentLocation($event)"
-  />
+    <input *ngIf="!riderLink " type="search" name="" id="" class="destination" placeholder="Enter Your Current Location"
+        matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
 
-  </form>
+</form>
 
 <div class="avd-container">
 
     <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()"
         [zoomControl]="false">
-        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" *ngIf="loadMarker"></agm-marker>
+        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" *ngIf="loadMarker">
+        </agm-marker>
 
-        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" [animation]="userLocationMarkerAnimation" *ngIf="gettingDrivers"></agm-marker>
+        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"
+            [animation]="userLocationMarkerAnimation" *ngIf="gettingDrivers"></agm-marker>
 
         <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
             [circleDraggable]="false" [editable]="false" *ngIf="gettingDrivers"></agm-circle>
@@ -31,30 +26,31 @@
     class="loader"
   ></mat-spinner> -->
     <form class="destination-container" *ngIf="!reachableDrivers ">
-        <mat-card class="example-card">
+        <mat-card *ngIf="!riderLink ">
 
-            <mat-card-content *ngIf="!riderLink ">
-                   
+            <mat-card-content>
                 <mat-form-field class="auth-full-width">
-                    <input type="text" matInput class="input-color" placeholder="Where are you going?" autocorrect="off" autocapitalize="off" spellcheck="off" #search
-                         name="destinationAddress"
-                        matGoogleMapsAutocomplete
-                        (onAutocompleteSelected)="onAutocompleteSelected($event)"
-                        (onLocationSelected)="onLocationSelected($event)"
-                        >
-                        
+                    <input type="text" matInput class="input-color" placeholder="Where are you going?" autocorrect="off"
+                        autocapitalize="off" spellcheck="off" #search name="destinationAddress"
+                        matGoogleMapsAutocomplete (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                        (onLocationSelected)="onLocationSelected($event)">
+
                 </mat-form-field>
                 <!-- <p><a href="">Forgot password?</a></p> -->
-            <button (click)='getDrivers()' mat-raised-button color="accent"
+                <button (click)='getDrivers()' mat-raised-button color="accent"
                     class="auth-full-width login-text">Search
                     <i class="material-icons right">send</i>
                 </button>
-
-               
-            </mat-card-content>
-            <app-riderlink *ngIf="riderLink"></app-riderlink>
-
+                </mat-card-content>
         </mat-card>
+        <mat-card class="example-card" *ngIf="riderLink ">
+                <mat-card-content>
+                <app-riderlink></app-riderlink>
+                </mat-card-content>
+                </mat-card>
     </form>
 </div>
+
+
+
 <app-availabledrivers *ngIf="reachableDrivers"></app-availabledrivers>

@@ -13,6 +13,7 @@ export class BroadcastService {
     public showTripDetails = this._riderRequest.asObservable();
 
 
+
     constructor() {
 
     }
@@ -29,4 +30,5 @@ export class BroadcastService {
     toggleAvailableTrips(showTripDetails) {
         this._showTripDetails.next(showTripDetails);
     }
+  
 }

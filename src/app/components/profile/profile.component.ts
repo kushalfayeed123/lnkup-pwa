@@ -43,16 +43,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.image = userImage.image;
     }
   }
+  
   openUploadDialogue(){
     this.openDialogue = !this.openDialogue;
   }
+
   async getUserProfileImage() {
     await this.authService.getUserImage(this.routeId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(img => {
+      console.log('user image', img);
       this.image = img.image;
       this.imageId = img.imageId;
-      localStorage.setItem('userImage', JSON.stringify(img));
     });
   }
 
@@ -68,7 +70,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         const image = { image: model.File, userId: this.routeId };
         this.authService.uploadUserImage(image).subscribe(
           data => {
-            this.image = model.File;
             this.getUserProfileImage();
             this.loading = false;
             this.openDialogue = false;
@@ -85,17 +86,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = async () => {
         this.loading = true;
-        const userImage = JSON.parse(localStorage.getItem('userImage'));
-        const imageId = userImage.imageId;
         const file = reader.result.toString().split(',')[1];
         const model = { File: file };
-        const image = { image: this.image, userId: this.routeId };
+        const image = { image: model.File };
         this.authService
           .updateUserImage(this.routeId, image)
           .subscribe(
             img => {console.log('success');
-                    this.image = model.File;
-
                     this.getUserProfileImage();
                     this.loading = false;
                   },

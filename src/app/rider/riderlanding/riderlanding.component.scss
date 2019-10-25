@@ -39,7 +39,7 @@
 
   .example-card {
     max-width: 400px;
-    height: 127px;
+    height: 157px !important;
   }
   .mat-form-field{
     width: 100% !important ;
@@ -48,11 +48,11 @@
     top: 39px;
   }
   .mat-input-element {
-    padding-right: 31%;
+    padding-right: 41%;
   }
   .mat-card{
     background: #121212;
-    height: 81px !important;
+    height: 81px ;
     position: relative;
     top: 19px;
 
@@ -342,4 +342,11 @@ body.map-body .avd li:first-of-type::before {
   .login-text{
     left: 65.6%;
   }
+  .example-card {
+    height: 191px !important;
+  }
+}
+
+@media only screen and (max-height: 569){
+ 
 }

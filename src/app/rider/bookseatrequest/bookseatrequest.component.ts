@@ -32,6 +32,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
+              private broadcastService: BroadcastService,
               private toastrService: ToastrService,
               private notifyService: NotificationsService) {
                 this.getRiderSuccessAlert();
@@ -55,14 +56,18 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     }
   }
   getTripDetails() {
-    const tripDetails = JSON.parse(localStorage.getItem('tripDetails'));
-    const allowedRiderCount = tripDetails.allowedRiderCount;
-    const maxSeats = tripDetails.maxRiderNumber;
-    if (allowedRiderCount === 0) {
-      this.availableSeats = maxSeats;
-    } else {
-      this.availableSeats =  allowedRiderCount;
-    }
+    // const tripDetails = JSON.parse(localStorage.getItem('tripDetails'));
+    this.broadcastService.showTripDetails
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(tripDetails => {
+      const allowedRiderCount = tripDetails.allowedRiderCount;
+      const maxSeats = tripDetails.maxRiderNumber;
+      if (allowedRiderCount === 0) {
+        this.availableSeats = maxSeats;
+      } else {
+        this.availableSeats =  allowedRiderCount;
+      }
+    });
   }
   getRiderRequest() {
         const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
