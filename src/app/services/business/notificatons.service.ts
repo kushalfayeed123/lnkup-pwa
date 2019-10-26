@@ -31,9 +31,40 @@ export class NotificationsService {
         this._pushNotificationService.requestPermission();
     }
 
+    sendAcceptMessage(user?, messages?){
+        const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(`${this.webUrl}`)
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+        // const userId = this.user.id.toString;
+        // const  userId = JSON.stringify('7e9069cd-1999-411b-137c-08d728fcafcf');
+        hubConnection.start().catch(err => console.error(err.toString()))
+        .then(() => {
+            hubConnection.invoke('ReceiveMessage', user, messages)
+            .then((res) => {
+                console.log(user);
+            });
+        });    }
+
+        rejectMessage(userId, message) {
+            const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(`${this.webUrl}`)
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+        // const userId = this.user.id.toString;
+
+            hubConnection.start().catch(err => console.error(err.toString()))
+        .then(() => {
+            hubConnection.invoke('ReceiveDeclineMessage', userId, message)
+            .then((res) => {
+                console.log(res);
+            });
+        }); 
+        }
+
     intiateConnection() {
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(`${this.webUrl}?token=${this.user.token}`)
+            .withUrl(`${this.webUrl}`)
             .configureLogging(signalR.LogLevel.Information)
             .build();
 

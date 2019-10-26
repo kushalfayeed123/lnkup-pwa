@@ -32,7 +32,6 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getTripId();
-    this.notificationService.intiateConnection();
   }
 
   getTripId() {
@@ -44,10 +43,12 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trip => {
         this.image = trip.tripDriver.driver.userImage.image;
-        // localStorage.setItem('tripDetails', JSON.stringify(trip));
         this.broadcastService.toggleAvailableTrips(trip);
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;
+        const driverId = trip.tripDriver.driverId;
+        const tripDetails = {allowedRiderCount: allowed, maxRiderNumber: max, driverId };
+        localStorage.setItem('tripDetails', JSON.stringify(tripDetails));
         if(allowed  === 0) {
           this.availableSeats = max;
         } else {

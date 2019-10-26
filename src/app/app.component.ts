@@ -22,10 +22,13 @@ export class AppComponent {
   // tslint:disable-next-line: variable-name
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
+              private notificationService: NotificationsService,
               private route: Router) {
                 route.events.subscribe(url => {
                   // this.getCurrentRoute();
                 });
+                this.notificationService.intiateConnection();
+
               }
 
   // tslint:disable-next-line: use-lifecycle-interface

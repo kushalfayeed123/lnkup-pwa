@@ -44,6 +44,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getActiveTrips();
+    // this.notifyService.intiateConnection();
 
   }
 
@@ -125,13 +126,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
         this.getActiveTrips();
-        this.tripService.sendNotification(riderConnectionId, message)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(response => {
-          console.log('message sent');
-        }, error => {
-          console.log(error);
-        });
+        // this.notifyService.sendAcceptMessage(riderId, message);
       }, error => {
         console.log(error);
       });
@@ -145,6 +140,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       this.router.navigate([`/driver/home/${userId}`], { queryParams: { driverNav: true }});
     }
   }
+
 
   declineTripRequest(rider) {
     console.log(rider);

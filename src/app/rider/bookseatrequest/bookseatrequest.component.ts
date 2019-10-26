@@ -29,6 +29,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   availableSeat: number;
   availableSeats: number;
   inValidSeat: boolean;
+  driverId: any;
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
@@ -43,6 +44,10 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.dropoff = localStorage.getItem('storedAddress');
     this.getTripDetails();
     this.getRiderRequest();
+    // this.notifyService.intiateConnection();
+
+    // this.notifyService.sendAcceptMessage();
+
   }
   computeTripFare(value) {
     const tripFare = value * this.fare;
@@ -56,18 +61,16 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     }
   }
   getTripDetails() {
-    // const tripDetails = JSON.parse(localStorage.getItem('tripDetails'));
-    this.broadcastService.showTripDetails
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(tripDetails => {
-      const allowedRiderCount = tripDetails.allowedRiderCount;
-      const maxSeats = tripDetails.maxRiderNumber;
-      if (allowedRiderCount === 0) {
-        this.availableSeats = maxSeats;
-      } else {
-        this.availableSeats =  allowedRiderCount;
-      }
-    });
+    const tripDetails = JSON.parse(localStorage.getItem('tripDetails'));
+    const allowedRiderCount = tripDetails.allowedRiderCount;
+    const maxSeats = tripDetails.maxRiderNumber;
+    this.driverId = tripDetails.driverId.toString;
+    console.log('DRIVER ID', this.driverId);
+    if (allowedRiderCount === 0) {
+      this.availableSeats = maxSeats;
+    } else {
+      this.availableSeats =  allowedRiderCount;
+    }
   }
   getRiderRequest() {
         const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
@@ -110,11 +113,11 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
 
   sendNotification() {
     const message = 'You have a new LnkuP request';
-    this.activeTrip.sendNotification(this.tripConnectionId, message)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-    });
+    const userId =  this.driverId;
+    console.log('who to send to', userId);
+    this.notifyService.sendAcceptMessage(userId, message);
   }
+
 
  async getRiderSuccessAlert() {
     await this.notifyService.successAlert

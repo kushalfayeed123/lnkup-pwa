@@ -58,8 +58,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
               private mapService: MapBroadcastService,
               private driverDataService: DriverDataDataService,
               private notificationService: NotificationsService) {
-              this.notificationService.intiateConnection();
-
                }
 
   ngOnInit() {
