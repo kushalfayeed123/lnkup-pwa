@@ -75,6 +75,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       const userId = p.id;
       this.getUserById(userId);
     });
+    this.notificationService.intiateConnection();
   }
 
   getUserById(userId) {

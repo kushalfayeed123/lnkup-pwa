@@ -4,7 +4,6 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { PushNotificationService, PushNotificationOptions } from 'ngx-push-notifications';
 
 @Injectable()
 
@@ -13,7 +12,7 @@ export class NotificationsService {
     webUrl: string;
     activeTripId: any;
 
- 
+
 
     private _successAlert = new BehaviorSubject(null);
     public successAlert = this._successAlert.asObservable();
@@ -25,46 +24,51 @@ export class NotificationsService {
 
 
     constructor(private router: Router, private toastService: ToastrService,
-                private _pushNotificationService: PushNotificationService) {
+    ) {
         this.webUrl = environment.openConnect;
-        this.user = JSON.parse(localStorage.getItem('currentUser'));
-        this._pushNotificationService.requestPermission();
     }
 
-    sendAcceptMessage(user?, messages?){
+    sendAcceptMessage(user?, messages?) {
+        this.user = JSON.parse(localStorage.getItem('currentUser'));
+        const loginToken = this.user.token;
         const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl(`${this.webUrl}`)
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
+            .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
         // const userId = this.user.id.toString;
         // const  userId = JSON.stringify('7e9069cd-1999-411b-137c-08d728fcafcf');
         hubConnection.start().catch(err => console.error(err.toString()))
-        .then(() => {
-            hubConnection.invoke('ReceiveMessage', user, messages)
-            .then((res) => {
-                console.log(user);
+            .then(() => {
+                hubConnection.invoke('ReceiveMessage', user, messages)
+                    .then((res) => {
+                        console.log(user);
+                    });
             });
-        });    }
+    }
 
-        rejectMessage(userId, message) {
-            const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl(`${this.webUrl}`)
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
+    rejectMessage(userId, message) {
+        this.user = JSON.parse(localStorage.getItem('currentUser'));
+        const loginToken = this.user.token;
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
         // const userId = this.user.id.toString;
 
-            hubConnection.start().catch(err => console.error(err.toString()))
-        .then(() => {
-            hubConnection.invoke('ReceiveDeclineMessage', userId, message)
-            .then((res) => {
-                console.log(res);
+        hubConnection.start().catch(err => console.error(err.toString()))
+            .then(() => {
+                hubConnection.invoke('ReceiveDeclineMessage', userId, message)
+                    .then((res) => {
+                        console.log(res);
+                    });
             });
-        }); 
-        }
+    }
 
     intiateConnection() {
+        this.user = JSON.parse(localStorage.getItem('currentUser'));
+        const loginToken = this.user.token;
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(`${this.webUrl}`)
+            .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
             .configureLogging(signalR.LogLevel.Information)
             .build();
 
@@ -73,7 +77,7 @@ export class NotificationsService {
             const userRole = user.role;
             if (userRole === 'Driver') {
                 this.alertDriverSuccess(message);
-            } else  {
+            } else {
                 this.alertRiderSuccess(message);
             }
         });
@@ -83,22 +87,22 @@ export class NotificationsService {
             const userRole = user.role;
             if (userRole === 'Driver') {
                 this.alertDriverCancel(message);
-            } else  {
+            } else {
                 this.alertRiderDecline(message);
             }
         });
 
         hubConnection.start().catch(err => console.error(err.toString()))
-        .then(() => {
-            hubConnection.invoke('GetConnectionId')
-            .then((connectionId) => {
-              sessionStorage.setItem('clientConnectionId', connectionId);
-            //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
+            .then(() => {
+                hubConnection.invoke('GetConnectionId')
+                    .then((connectionId) => {
+                        sessionStorage.setItem('clientConnectionId', connectionId);
+                        //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
+                    });
             });
-        });
-        hubConnection.onclose(function() {
+        hubConnection.onclose(function () {
             setTimeout(() => {
-           hubConnection.start();
+                hubConnection.start();
             }, 5000);
         });
     }
@@ -106,14 +110,12 @@ export class NotificationsService {
         const alertDriver = true;
         this._successAlert.next(alertDriver);
         this.showInfoMessage(message);
-        this.pushNotification(message);
     }
 
     alertRiderSuccess(message) {
         const alertRider = true;
         this._successAlert.next(alertRider);
         this.showSuccessMessage(message);
-        this.pushNotification(message);
 
     }
 
@@ -122,17 +124,15 @@ export class NotificationsService {
         const alertDriver = true;
         this._declineAlert.next(alertDriver);
         this.showErrorMessage(message);
-        this.pushNotification(message);
     }
 
     alertRiderDecline(message) {
         this.showErrorMessage(message);
         const alertRider = false;
         this._declineAlert.next(alertRider);
-        this.pushNotification(message);
 
     }
-    
+
     showSuccessMessage(message) {
         this.toastService.success(message, 'Success!');
     }
@@ -142,29 +142,29 @@ export class NotificationsService {
     showInfoMessage(message) {
         this.toastService.info(message, 'Success!');
     }
-    pushNotification(message) {
-        const title = 'Hello';
-        const options = new PushNotificationOptions();
-        options.body = message;
- 
-        this._pushNotificationService.create(title, options).subscribe((notif) => {
-      if (notif.event.type === 'show') {
-        console.log('onshow');
-        setTimeout(() => {
-          notif.notification.close();
-        }, 3000);
-      }
-      if (notif.event.type === 'click') {
-        console.log('click');
-        notif.notification.close();
-      }
-      if (notif.event.type === 'close') {
-        console.log('close');
-      }
-    },
-    (err) => {
-         console.log(err);
-    });
-    }
+    // pushNotification(message) {
+    //     const title = 'Hello';
+    //     const options = new PushNotificationOptions();
+    //     options.body = message;
+
+    //     this._pushNotificationService.create(title, options).subscribe((notif) => {
+    //   if (notif.event.type === 'show') {
+    //     console.log('onshow');
+    //     setTimeout(() => {
+    //       notif.notification.close();
+    //     }, 3000);
+    //   }
+    //   if (notif.event.type === 'click') {
+    //     console.log('click');
+    //     notif.notification.close();
+    //   }
+    //   if (notif.event.type === 'close') {
+    //     console.log('close');
+    //   }
+    // },
+    // (err) => {
+    //      console.log(err);
+    // });
+    // }
 
 }

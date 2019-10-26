@@ -44,10 +44,12 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
       .subscribe(trip => {
         this.image = trip.tripDriver.driver.userImage.image;
         this.broadcastService.toggleAvailableTrips(trip);
+        console.log(trip);
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;
         const driverId = trip.tripDriver.driverId;
-        const tripDetails = {allowedRiderCount: allowed, maxRiderNumber: max, driverId };
+        const driverEmail = trip.tripDriver.driver.email;
+        const tripDetails = {allowedRiderCount: allowed, maxRiderNumber: max, driverId, driverEmail };
         localStorage.setItem('tripDetails', JSON.stringify(tripDetails));
         if(allowed  === 0) {
           this.availableSeats = max;

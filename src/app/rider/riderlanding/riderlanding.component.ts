@@ -110,6 +110,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getCurrentLocation();
     this.zoom = 17;
     // this.location.marker.draggable = true;
+    this.notificationService.intiateConnection();
   }
   getUserById(userId) {
     this.authService

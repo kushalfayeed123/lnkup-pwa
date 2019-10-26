@@ -27,7 +27,7 @@ export class AppComponent {
                 route.events.subscribe(url => {
                   // this.getCurrentRoute();
                 });
-                this.notificationService.intiateConnection();
+                // this.notificationService.intiateConnection();
 
               }
 

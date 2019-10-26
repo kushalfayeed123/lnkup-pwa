@@ -30,14 +30,15 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   availableSeats: number;
   inValidSeat: boolean;
   driverId: any;
+  driverEmail: any;
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
               private broadcastService: BroadcastService,
               private toastrService: ToastrService,
               private notifyService: NotificationsService) {
-                this.getRiderSuccessAlert();
-                this.getRiderDeclineAlert();
+                // this.getRiderSuccessAlert();
+                // this.getRiderDeclineAlert();
                }
 
   ngOnInit() {
@@ -64,7 +65,8 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     const tripDetails = JSON.parse(localStorage.getItem('tripDetails'));
     const allowedRiderCount = tripDetails.allowedRiderCount;
     const maxSeats = tripDetails.maxRiderNumber;
-    this.driverId = tripDetails.driverId.toString;
+    this.driverId = tripDetails.driverId;
+    this.driverEmail = tripDetails.driverEmail;
     console.log('DRIVER ID', this.driverId);
     if (allowedRiderCount === 0) {
       this.availableSeats = maxSeats;
@@ -119,17 +121,17 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   }
 
 
- async getRiderSuccessAlert() {
-    await this.notifyService.successAlert
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(alert => {
-      if (alert) {
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        const userId = user.id;
-        this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
-      }
-    });
-  }
+//  async getRiderSuccessAlert() {
+//     await this.notifyService.successAlert
+//     .pipe(takeUntil(this.unsubscribe$))
+//     .subscribe(alert => {
+//       if (alert) {
+//         const user = JSON.parse(localStorage.getItem('currentUser'));
+//         const userId = user.id;
+//         this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
+//       }
+//     });
+//   }
 
   async getRiderDeclineAlert() {
     await this.notifyService.declineAlert

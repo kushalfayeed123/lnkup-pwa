@@ -43,7 +43,6 @@
     "moment-timezone": "^0.5.26",
     "ng-sidebar": "^9.1.1",
     "ngx-material-timepicker": "^5.1.1",
-    "ngx-push-notifications": "^7.0.2",
     "ngx-toastr": "^11.1.0",
     "ngx-useful-swiper": "^8.0.1",
     "primeicons": "^2.0.0",
