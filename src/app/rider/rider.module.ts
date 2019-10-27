@@ -23,7 +23,6 @@ import { SidebarModule } from 'ng-sidebar';
                  DriverdetailsComponent,
                  BookseatrequestComponent,
                  RiderlinkComponent,
-                 SideNavComponent,
                  ],
   imports: [
     CommonModule,

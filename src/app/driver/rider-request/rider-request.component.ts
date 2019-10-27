@@ -44,7 +44,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getActiveTrips();
-    // this.notifyService.intiateConnection();
+    this.notifyService.intiateConnection();
 
   }
 
@@ -98,6 +98,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const driverName = this.activeTrip.tripDriver.driver.userName;
     const pickup = this.activeTrip.tripPickup;
     const riderId = rider.activeRiderId;
+    const receiverId = rider.user.userId;
     const pickupTime = this.activeTrip.tripStartDateTime;
     const bookedSeat = rider.bookedSeat;
     const riderConnectionId = rider.riderConnectId;
@@ -126,7 +127,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
         this.getActiveTrips();
-        // this.notifyService.sendAcceptMessage(riderId, message);
+        this.notifyService.sendAcceptMessage(receiverId, message);
       }, error => {
         console.log(error);
       });
@@ -135,6 +136,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     });
 
     if (this.activeTripStatus === 0) {
+      this.notifyService.sendAcceptMessage(receiverId, message);
       const user = JSON.parse(localStorage.getItem('currentUser'));
       const userId = user.id;
       this.router.navigate([`/driver/home/${userId}`], { queryParams: { driverNav: true }});
@@ -146,18 +148,16 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     console.log(rider);
     const riderConnectionId = rider.riderConnectId;
     const riderId = rider.activeRiderId;
+    const receiverId = rider.user.userId;
     const driverName = this.activeTrip.tripDriver.driver.userName;
     const message = `Sorry, ${driverName} declined your request. Do you want to LnkuP with another driver?`;
     this.riderService.delete(riderId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
-      this.tripService.sendDeclineNotification(riderConnectionId, message)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(response => {
-        this.getActiveTrips();
-      }, error => {
-        console.log('Network error');
-      });
+      this.notifyService.rejectMessage(receiverId, message);
+      this.getActiveTrips();
+    }, error => {
+      console.log('An error occured');
     });
   }
 

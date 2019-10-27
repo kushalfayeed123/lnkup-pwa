@@ -37,15 +37,15 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
               private broadcastService: BroadcastService,
               private toastrService: ToastrService,
               private notifyService: NotificationsService) {
-                // this.getRiderSuccessAlert();
-                // this.getRiderDeclineAlert();
+                this.getRiderSuccessAlert();
+                this.getRiderDeclineAlert();
                }
 
   ngOnInit() {
     this.dropoff = localStorage.getItem('storedAddress');
     this.getTripDetails();
     this.getRiderRequest();
-    // this.notifyService.intiateConnection();
+    this.notifyService.intiateConnection();
 
     // this.notifyService.sendAcceptMessage();
 
@@ -121,26 +121,27 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   }
 
 
-//  async getRiderSuccessAlert() {
-//     await this.notifyService.successAlert
-//     .pipe(takeUntil(this.unsubscribe$))
-//     .subscribe(alert => {
-//       if (alert) {
-//         const user = JSON.parse(localStorage.getItem('currentUser'));
-//         const userId = user.id;
-//         this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
-//       }
-//     });
-//   }
+ async getRiderSuccessAlert() {
+    await this.notifyService.successAlert
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(alert => {
+      if (alert) {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const userId = user.id;
+        this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
+      }
+    });
+  }
 
   async getRiderDeclineAlert() {
     await this.notifyService.declineAlert
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(alert => {
-      if (!alert) {
+      if (alert) {
+        console.log('alert', alert);
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const userId = user.id;
-        // this.router.navigate([`rider/home/${userId}`]);
+        this.router.navigate([`rider/home/${userId}`]);
       }
     });
   }

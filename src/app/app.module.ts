@@ -53,6 +53,7 @@ import { ProfileComponent } from './components/profile/profile.component';
   declarations: [
     AppComponent,
     SplashScreenComponent,
+    SideNavComponent,
     OnboardingComponent,
     RegisterUserComponent,
     AuthenticateUserComponent,

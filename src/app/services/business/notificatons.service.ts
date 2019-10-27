@@ -119,7 +119,6 @@ export class NotificationsService {
 
     }
 
-
     alertDriverCancel(message) {
         const alertDriver = true;
         this._declineAlert.next(alertDriver);
@@ -127,10 +126,9 @@ export class NotificationsService {
     }
 
     alertRiderDecline(message) {
-        this.showErrorMessage(message);
-        const alertRider = false;
+        const alertRider = true;
         this._declineAlert.next(alertRider);
-
+        this.showErrorMessage(message);
     }
 
     showSuccessMessage(message) {

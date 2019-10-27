@@ -1,47 +1,69 @@
- <!-- <div class="example-container" [class.example-is-mobile]="mobileQuery.matches" >
-    <mat-toolbar class="example-toolbar" >
-      <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-    </mat-toolbar>
-
-    <mat-sidenav-container class="example-sidenav-container"
-                           [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-      <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                   [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-        <mat-nav-list>
-          <a mat-list-item routerLink="." class="nav-menu">Profile</a>
-          <a mat-list-item routerLink="." class="nav-menu">Payment</a>
-          <a mat-list-item routerLink="." class="nav-menu">Support</a>
-          <a mat-list-item routerLink="." class="nav-menu">Executive Ride</a>
-          <a mat-list-item routerLink="."class="nav-menu" >Driver App</a>
-          <a mat-list-item (click)="logout()" class="nav-menu">Logout</a>
-        </mat-nav-list>
-      </mat-sidenav>
-      <mat-sidenav-content style="background: #121212" class="content">
-        <router-outlet></router-outlet>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  </div>
- -->
-
- <ng-sidebar-container >
- 
-  <!-- A sidebar -->
-  <ng-sidebar [(opened)]="_opened">
-    <mat-nav-list>
-      <a mat-list-item routerLink="." class="nav-menu">Profile</a>
-      <a mat-list-item routerLink="." class="nav-menu">Payment</a>
-      <a mat-list-item routerLink="." class="nav-menu">Support</a>
-      <a mat-list-item routerLink="." class="nav-menu">Executive Ride</a>
-      <a mat-list-item routerLink="."class="nav-menu" >Driver App</a>
-      <a mat-list-item (click)="logout()" class="nav-menu">Logout</a>
-    </mat-nav-list>  </ng-sidebar>
-
-  <!-- Page content -->
-  <div ng-sidebar-content>
-    <button (click)="_toggleSidebar()">Toggle sidebar</button>
+  <button class="hamburger-button" type="button">
+    <span class="hamburger-box">
+      <span class="hamburger-inner"> </span>
+    </span>
+  </button>
+  <header class="nav-container side-nav">
+    <nav class="nav-header">
+      <div class="container">
+        <div class="top-nav">
+          <div class="details">
+            <div class="admin-name">Solomon Chokor</div>
+            <i class="">
+              <svg
+                version="1.1"
+                id="Capa_1"
+                x="0px"
+                y="0px"
+                viewBox="0 0 54 54"
+                style="enable-background:new 0 0 54 54;"
+                xml:space="preserve"
+                width="16px"
+                height="16px"
+                class=""
+              >
+                <g>
+                  <g>
+                    <g>
+                      <g>
+                        <path
+                          style="fill:#D54AB6"
+                          d="M1,27L1,27C1,12.641,12.641,1,27,1h0c14.359,0,26,11.641,26,26v0c0,14.359-11.641,26-26,26h0    C12.641,53,1,41.359,1,27z"
+                          data-original="#D54AB6"
+                          class=""
+                          data-old_color="#4FBA6F"
+                        />
+                        <path
+                          style="fill:#D54AB6"
+                          d="M27,54C12.112,54,0,41.888,0,27S12.112,0,27,0s27,12.112,27,27S41.888,54,27,54z M27,2    C13.215,2,2,13.215,2,27s11.215,25,25,25s25-11.215,25-25S40.785,2,27,2z"
+                          data-original="#D54AB6"
+                          class=""
+                          data-old_color="#4FBA6F"
+                        />
+                      </g>
+                      <path
+                        style="fill:#FFFFFF"
+                        d="M27,34.999c-0.438,0-0.875-0.167-1.209-0.5L14.293,23.001c-0.391-0.391-0.391-1.023,0-1.414   s1.023-0.391,1.414,0L27,32.88l11.293-11.293c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414L28.209,34.499   C27.876,34.832,27.438,34.999,27,34.999z"
+                        data-original="#FFFFFF"
+                        class="active-path"
+                        data-old_color="#FFFFFF"
+                      />
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </i>
+          </div>
+        </div>
+        <ul class="nav-links">
+          <li class="link-item"><a href="#" class="link">Home</a></li>
+          <li class="link-item"><a href="#" class="link">Users</a></li>
+          <li class="link-item"><a href="#" class="link">Payments</a></li>
+          <li class="link-item"><a href="#" class="link">Settings</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main class="all-content">
     <router-outlet></router-outlet>
-
-  </div>
-
-</ng-sidebar-container>	
-
+  </main>
