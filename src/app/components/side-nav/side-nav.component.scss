@@ -3,7 +3,7 @@ mat-sidenav {
     padding:15px;
 }
 .mat-drawer { 
-    background-color: #121212;;
+    background-color: #121212;
     color:#fff
 }
 .main-content {
@@ -14,6 +14,9 @@ mat-sidenav {
 }
 .sidenav-toolbar {
   background-color: transparent;
+}
+.hideMenu {
+    visibility: hidden;
 }
 @media (max-width: 599px){
   .mat-toolbar-row, .mat-toolbar-single-row {

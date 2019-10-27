@@ -4,6 +4,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
+import { BroadcastService } from './services/business/broadcastdata.service';
 
 
 
@@ -22,7 +23,7 @@ export class AppComponent {
   // tslint:disable-next-line: variable-name
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
-              private notificationService: NotificationsService,
+              private broadCastService: BroadcastService,
               private route: Router) {
                 route.events.subscribe(url => {
                   this.getCurrentRoute();
@@ -37,6 +38,7 @@ export class AppComponent {
     this.swUpdate.available
     .subscribe(update => this.newVersion = true);
     this.showSideNav = false;
+    this.reload();
       }
 
   reload() {
@@ -54,11 +56,17 @@ export class AppComponent {
     const riderRoute = route.slice(0, 6);
     const driverRoute = route.slice(0, 7);
     if (riderRoute === '/rider') {
-      this.showSideNav = true;
+      const showSideNav = true;
+      this.broadCastService.publishSideNavValue(showSideNav)
+      // localStorage.setItem('showSideNav', JSON.stringify(this.showSideNav));
     } else if (driverRoute === '/driver') {
-      this.showSideNav = true;
+      const showSideNav = true;
+      this.broadCastService.publishSideNavValue(showSideNav)
+      // localStorage.setItem('showSideNav', JSON.stringify(this.showSideNav));
     } else {
-      this.showSideNav = false;
+      const showSideNav = false;
+      this.broadCastService.publishSideNavValue(showSideNav)
+      // localStorage.setItem('showSideNav', JSON.stringify(this.showSideNav));
     }
   }
 }

@@ -12,6 +12,9 @@ export class BroadcastService {
     private _showTripDetails = new BehaviorSubject(null);
     public showTripDetails = this._riderRequest.asObservable();
 
+    private _showSideNav = new BehaviorSubject(null);
+    public showSideNav = this._showSideNav.asObservable();
+
 
 
     constructor() {
@@ -30,5 +33,8 @@ export class BroadcastService {
     toggleAvailableTrips(showTripDetails) {
         this._showTripDetails.next(showTripDetails);
     }
-  
+
+    publishSideNavValue(showSideNav) {
+        this._showSideNav.next(showSideNav);
+    }
 }

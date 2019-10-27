@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-side-nav',
@@ -9,16 +12,24 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements OnDestroy {
+    private unsubscribe$ = new Subject<void>();
    _opened: boolean = false;
+   showSideNav: boolean;
 
 
   constructor(changeDetectorRef: ChangeDetectorRef,
-    private authService: AuthenticateDataService,
-     media: MediaMatcher,
-     public _router: Router) {
+              private authService: AuthenticateDataService,
+              private broadCastService: BroadcastService,
+              media: MediaMatcher,
+              public _router: Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+    this.broadCastService.showSideNav
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(showNav => {
+      this.showSideNav = showNav;
+    });
   }
 
   mobileQuery: MediaQueryList;
@@ -40,6 +51,8 @@ export class SideNavComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 }
