@@ -17,7 +17,10 @@ import { DriverTripNavigateComponent } from './driver-trip-navigate/driver-trip-
 
 
 @NgModule({
-  declarations: [DriverdashboardComponent, DriverTripCreateComponent, RiderRequestComponent, DriverTripNavigateComponent],
+  declarations: [DriverdashboardComponent,
+                 DriverTripCreateComponent,
+                 RiderRequestComponent,
+                 DriverTripNavigateComponent],
   imports: [
     CommonModule,
     DriverRoutingModule,

@@ -62,6 +62,7 @@ Imports
   max-width: 992px;
   margin: 0 auto;
 }
+
 .mat-spinner{
   margin-left: 17% !important;
 }
@@ -569,6 +570,6 @@ section.auth-pages.security nav h1 {
   margin-bottom: 0;
   font-weight: normal;
 }
-
-
-
+router-outlet ~ * {
+  height: 89%;
+}
