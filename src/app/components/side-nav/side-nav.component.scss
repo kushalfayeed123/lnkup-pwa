@@ -1,6 +1,5 @@
 mat-sidenav {
-    width: 180px;
-    padding:15px;
+    width: 222px;
 }
 .mat-drawer { 
     background-color: #121212;
@@ -24,3 +23,106 @@ mat-sidenav {
 }
 }
 
+/* 
+=============================
+  side-nav component     
+=============================
+*/
+// .hamburger-button {
+//   position: fixed;
+//   top: 10px;
+//   left: 10px;
+// }
+.side-nav {
+  background-color: rgba(0, 0, 0, 0.2);
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-transition: all ease-out 200ms;
+  transition: all ease-out 200ms;
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+}
+
+ .nav-header {
+  background-color: #121212;
+  height: 100%;
+  color: #fa7fdf;
+  margin: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+ .container {
+  padding: 0;
+  max-width: 1140px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+}
+
+ .top-nav {
+  padding-top: 35px;
+  padding-bottom: 35px;
+  border-bottom: 1px solid #ffffff;
+}
+// .top-nav {
+//     height: 140px;
+//     1px solid #ffffff
+// }
+ .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+ .admin-name {
+  font-family: "Roboto";
+  opacity: 0.9;
+  font-size: 21px;
+  color: #ffffff;
+  margin-right: 10px;
+  padding-left: 16px;
+}
+
+.side-nav nav {
+  margin: 0 auto 0 auto;
+}
+
+.nav-links {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+ .link-item {
+  margin-right: 0;
+}
+
+.link {
+  color: #fa7fdf;
+  display: inline-block;
+  -webkit-transition: all ease-out 200ms;
+  transition: all ease-out 200ms;
+  width: 100%;
+  padding: 1em;
+  font-family: "Roboto";
+}
+
+.link a:focus, .link a:hover {
+  background-color: rgba(250, 127, 223, 0.1);
+  -webkit-transition: all ease-in 200ms;
+  transition: all ease-in 200ms;
+}

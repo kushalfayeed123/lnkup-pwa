@@ -15,6 +15,9 @@ export class SideNavComponent implements OnDestroy {
     private unsubscribe$ = new Subject<void>();
    _opened: boolean = false;
    showSideNav: boolean;
+  userName: any;
+  userId: any;
+  userRole: any;
 
 
   constructor(changeDetectorRef: ChangeDetectorRef,
@@ -22,14 +25,12 @@ export class SideNavComponent implements OnDestroy {
               private broadCastService: BroadcastService,
               media: MediaMatcher,
               public _router: Router) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
     this.broadCastService.showSideNav
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(showNav => {
       this.showSideNav = showNav;
     });
+    this.getCurrentUser();
   }
 
   mobileQuery: MediaQueryList;
@@ -43,10 +44,26 @@ export class SideNavComponent implements OnDestroy {
    _toggleSidebar() {
     this._opened = !this._opened;
   }
-  
+  navToHome() {
+    this._toggleSidebar();
+    this._router.navigate([`${this.userRole}/home/${this.userId}`]);
+  }
+  navToProfile() {
+    this._toggleSidebar();
+    this._router.navigate([`profile/${this.userId}`]);
+
+  }
   logout() {
     this.authService.logout();
+    this._toggleSidebar();
     this._router.navigate(['/']);
+  }
+
+  getCurrentUser() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.userName = user.userName;
+    this.userId = user.id;
+    this.userRole = user.role.toLowerCase();
   }
 
   ngOnDestroy(): void {
