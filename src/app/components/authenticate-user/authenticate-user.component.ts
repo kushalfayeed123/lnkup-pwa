@@ -59,8 +59,8 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       }, 3000);
       return;
     }
-    // localStorage.setItem('userPassword', JSON.stringify(this.loginForm.value));
-    this.authenticate.login(this.f.username.value, this.f.password.value)
+    const userName = this.f.username.value.toLowerCase();
+    this.authenticate.login(userName, this.f.password.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         data => {

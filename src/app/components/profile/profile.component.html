@@ -1,23 +1,21 @@
-<section class="settings-page auth-pages security" id="profile">
+<div class="settings-page auth-pages security user-profiles">
     <main class="contain-box">
-            <nav class="riderHeader">
-                    <a href="" class="left-arrow">
+            <!-- <nav class="riderHeader">
+                    <a (click)="navToHome()" class="left-arrow">
                       <i class="flaticon-left-arrow"></i>
                     </a>
                     <h1 class="profile">Profile</h1>
-                    <button id="edit" class="edit-btn">
-                      <img src="./assets/icons/create-24px.svg" alt="" (click)="openUploadDialogue()">
-                          </button>
-                  </nav>
+                    
+                  </nav> -->
       <div class="user-details">
         <div class="icon-container">
-          <button id="settings">
-            <i class="flaticon-cog"></i>
-          </button>
+          <button id="edit" class="edit-btn">
+            <img src="./assets/icons/create-24px.svg" alt="" (click)="openUploadDialogue()">
+                </button>
         </div>
         <div class="profile-info" (deferLoad)="image != null">
-            <img src="data:image/jpeg;base64,{{image}}" alt="" class="avi" *ngIf="image">
-          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="!image">
+            <img src="data:image/jpeg;base64,{{image}}" alt="" class="avi" *ngIf="!showBackupImg">
+          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="showBackupImg">
           <div class="name-container">
             <h2 class="name">{{user.userName}}</h2>
             <span class="e-mail">{{user.email}}</span>
@@ -65,7 +63,7 @@
           <span class="ref-label"> Referral Code</span>
           <h2 class="ref-code">{{ref}}</h2>
         </div>
-        <a href="" class="invite-friend">Invite Friends</a>
+        <!-- <a href="" class="invite-friend">Invite Friends</a> -->
       </div>
     </main>
-  </section>
+  </div>

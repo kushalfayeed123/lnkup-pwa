@@ -19,13 +19,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   imageId: any;
   userImage: { file: string; };
+  showBackupImg: boolean;
 
 
   constructor(private route: ActivatedRoute, private authService: AuthenticateDataService) { }
 
   ngOnInit() {
     this.route.params.subscribe(p => {
-      this.routeId = p['id'];
+      this.routeId = p.id;
     });
     this.getUserProfileImage();
     this.getUserData();
@@ -36,15 +37,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.user = user;
     const referral = user.token;
     this.ref = referral.slice(0, 6).toUpperCase();
-    const userImage = JSON.parse(localStorage.getItem('userImage'));
-    if (userImage === null) {
-      return;
-    } else {
-      this.image = userImage.image;
-    }
   }
   
-  openUploadDialogue(){
+
+  openUploadDialogue() {
     this.openDialogue = !this.openDialogue;
   }
 
@@ -52,9 +48,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     await this.authService.getUserImage(this.routeId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(img => {
-      console.log('user image', img);
-      this.image = img.image;
-      this.imageId = img.imageId;
+      if (!img) {
+        this.showBackupImg = true;
+        return;
+      } else {
+        this.showBackupImg = false;
+        this.image = img.image;
+        this.imageId = img.imageId;
+      }
     });
   }
 

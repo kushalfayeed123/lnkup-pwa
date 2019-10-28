@@ -53,20 +53,21 @@ export class AppComponent {
 
   getCurrentRoute() {
     const route = this.route.url;
+    const profileRoute = route.slice(0, 8);
     const riderRoute = route.slice(0, 6);
     const driverRoute = route.slice(0, 7);
     if (riderRoute === '/rider') {
       const showSideNav = true;
-      this.broadCastService.publishSideNavValue(showSideNav)
-      // localStorage.setItem('showSideNav', JSON.stringify(this.showSideNav));
+      this.broadCastService.publishSideNavValue(showSideNav);
     } else if (driverRoute === '/driver') {
       const showSideNav = true;
-      this.broadCastService.publishSideNavValue(showSideNav)
-      // localStorage.setItem('showSideNav', JSON.stringify(this.showSideNav));
+      this.broadCastService.publishSideNavValue(showSideNav);
+    } else if (profileRoute === '/profile') {
+      const showSideNav = true;
+      this.broadCastService.publishSideNavValue(showSideNav);
     } else {
       const showSideNav = false;
-      this.broadCastService.publishSideNavValue(showSideNav)
-      // localStorage.setItem('showSideNav', JSON.stringify(this.showSideNav));
+      this.broadCastService.publishSideNavValue(showSideNav);
     }
   }
 }

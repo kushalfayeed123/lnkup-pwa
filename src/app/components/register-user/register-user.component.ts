@@ -47,11 +47,12 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     this.loading = true;
     const countryCode = '+234';
     const userPhone = countryCode + this.registerForm.value.phoneNumber ;
+    const username = this.registerForm.value.userName.toLowerCase();
     localStorage.removeItem('userVerification');
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
     const validateCode = randomCode.slice(0, 6);
     localStorage.setItem('userVerification', validateCode);
-    this.registerForm.patchValue({verificationCode: validateCode, phoneNumber: userPhone});
+    this.registerForm.patchValue({verificationCode: validateCode, phoneNumber: userPhone, userName: username});
     const registerValues = this.registerForm.value;
     this.authService.register(registerValues)
     .pipe(takeUntil(this.unsubscribe$))
