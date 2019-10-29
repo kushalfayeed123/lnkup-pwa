@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
 import { BroadcastService } from './services/business/broadcastdata.service';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -49,6 +50,9 @@ export class AppComponent {
         }
       });
     }
+  }
+  pushNotificationSub()  {
+    const vapidKey = environment.vapidPublicKey;
   }
 
   getCurrentRoute() {
