@@ -61,9 +61,13 @@ export class SideNavComponent implements OnDestroy {
 
   async getCurrentUser() {
       const user = await  JSON.parse(localStorage.getItem('currentUser'));
-      this.userName = user.userName;
-      this.userId = user.id;
-      this.userRole = user.role.toLowerCase();
+      if (user) {
+        this.userName = user.userName;
+        this.userId = user.id;
+        this.userRole = user.role.toLowerCase();
+      } else {
+        return;
+      }
   }
 
 

@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MetaService } from './services/business/metaService.service';
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, SwPush } from '@angular/service-worker';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
@@ -21,14 +21,17 @@ export class AppComponent {
   title = 'lnkup';
   newVersion: boolean;
   showSideNav: boolean;
+  readonly VAPID_PUBLIC_KEY = '9dIdipwZchTnDphNemFLYbCNNzW9LfOpMhcc-gmxXJE';
   // tslint:disable-next-line: variable-name
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
               private broadCastService: BroadcastService,
-              private route: Router) {
+              private route: Router,
+              private swPush: SwPush) {
                 route.events.subscribe(url => {
                   this.getCurrentRoute();
                 });
+                this.pushNotificationSub();
                 // this.notificationService.intiateConnection();
 
               }
@@ -52,7 +55,12 @@ export class AppComponent {
     }
   }
   pushNotificationSub()  {
-    const vapidKey = environment.vapidPublicKey;
+
+    this.swPush.requestSubscription({
+      serverPublicKey: this.VAPID_PUBLIC_KEY
+    })
+    .then(sub => console.log(sub) )
+    .catch(err => console.error('Could not subscribe to notifications'));
   }
 
   getCurrentRoute() {

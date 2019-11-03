@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   webUrl : 'https://linkup20190824020415.azurewebsites.net/api',
   openConnect: 'https://linkup20190824020415.azurewebsites.net/notifyHub',
-  vapidPublicKey: '9dIdipwZchTnDphNemFLYbCNNzW9LfOpMhcc-gmxXJE',
+  vapidPublicKey: 'BCleJ0xgtXBcFHep4RmZXWX3Fa6S6ofO-XCzK56AHW3CXPlXZBsOtQ1ydmoidDBXaPeZdvA70ybSXB6atJBq7Jc',
 };
 
 /*

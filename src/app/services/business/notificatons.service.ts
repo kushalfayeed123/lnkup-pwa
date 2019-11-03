@@ -35,8 +35,6 @@ export class NotificationsService {
             .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
             .configureLogging(signalR.LogLevel.Information)
             .build();
-        // const userId = this.user.id.toString;
-        // const  userId = JSON.stringify('7e9069cd-1999-411b-137c-08d728fcafcf');
         hubConnection.start().catch(err => console.error(err.toString()))
             .then(() => {
                 hubConnection.invoke('ReceiveMessage', user, messages)
@@ -132,13 +130,13 @@ export class NotificationsService {
     }
 
     showSuccessMessage(message) {
-        this.toastService.success(message, 'Success!');
+        this.toastService.success(message);
     }
     showErrorMessage(message) {
-        this.toastService.error(message, 'Sorry!');
+        this.toastService.error(message);
     }
     showInfoMessage(message) {
-        this.toastService.info(message, 'Success!');
+        this.toastService.info(message);
     }
     // pushNotification(message) {
     //     const title = 'Hello';

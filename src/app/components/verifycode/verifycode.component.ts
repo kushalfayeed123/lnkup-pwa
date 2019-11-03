@@ -9,6 +9,9 @@ import { fadeInAnimation } from 'src/app/services/misc/animation';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessMessageComponent } from '../success-message/success-message.component';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
+import { ToastrService } from 'ngx-toastr';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-verifycode',
@@ -22,14 +25,16 @@ export class VerifycodeComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   public loading: boolean;
   public durationInSeconds = 4;
+  message: string;
 
 
   constructor(private formBuilder: FormBuilder,
-    private route: Router,
-    private _snackBar: MatSnackBar) { }
+              private route: Router,
+              private _snackBar: MatSnackBar,
+              private toastService: NotificationsService) { }
 
   ngOnInit() {
-
+    
     this.verifyForm = this.formBuilder.group({
       verifycode: ['', Validators.required]
     })
@@ -56,6 +61,12 @@ export class VerifycodeComponent implements OnInit, OnDestroy {
       }, 4000);
     }
   }
+  resendCode() {
+    const userVerification = localStorage.getItem('userVerification');
+    this.message = `Your verification code is ${userVerification}`;
+    this.toastService.showInfoMessage(this.message);
+  }
+
   openSuccessMessage() {
     this._snackBar.openFromComponent(SuccessMessageComponent, {
       duration: this.durationInSeconds * 1000,

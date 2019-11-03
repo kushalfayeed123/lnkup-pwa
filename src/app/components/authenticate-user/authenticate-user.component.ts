@@ -8,6 +8,8 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
 import { fadeInAnimation } from 'src/app/services/misc/animation';
 import { MatSnackBar } from '@angular/material';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
+import { ToastrService } from 'ngx-toastr';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-authenticate-user',
@@ -27,6 +29,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   public userRole = {} as any;
   public loading: boolean;
   public durationInSeconds = 4;
+  message: string;
 
 
   constructor(private router: Router,
@@ -34,7 +37,8 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
               private formBuilder: FormBuilder,
               // tslint:disable-next-line: variable-name
               private _snackBar: MatSnackBar,
-              private authenticate: AuthenticateDataService) { }
+              private authenticate: AuthenticateDataService,
+              private toastService: NotificationsService) { }
 
   ngOnInit() {
 
@@ -51,11 +55,12 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.loading = true;
+    this.message = 'Please check your username or password and try again.';
     // // stop here if form is invalid
     if (this.loginForm.invalid) {
       setTimeout(() => {
         this.loading = false;
-        this.openErrorMessage();
+        this.toastService.showErrorMessage(this.message);
       }, 3000);
       return;
     }
@@ -73,7 +78,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
           this.error = error;
           setTimeout(() => {
             this.loading = false;
-            this.openErrorMessage();
+            this.toastService.showErrorMessage(this.message);
           }, 3000);
         }
       );

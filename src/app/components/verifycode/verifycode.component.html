@@ -7,7 +7,7 @@
       </nav>
       <div class="input-group checker">
         <p >
-          We just sent you a verification code (xxx-xxx), Please enter the digits below, or tap on resend code to request a new code. Thanks!! <br />
+          We just sent you a verification code (xxxxxx), Please enter the digits below, or tap on resend code to request a new code. Thanks!! <br />
         </p>
       </div>
       <mat-spinner *ngIf="loading" [diameter]="30"
@@ -15,9 +15,9 @@
     ></mat-spinner>
       <form  id="auth-form" (ngSubmit)="verifyUser()" [formGroup]="verifyForm" >
           <mat-form-field class="auth-full-width">
-              <input type="text" matInput class="input-color" placeholder="xxx-xxx" formControlName="verifycode" />
+              <input type="text" matInput class="input-color" placeholder="xxxxxx" formControlName="verifycode" />
             </mat-form-field>
-        <p ><a class="input-group checker" href="">Resend Code</a></p>
+        <p ><a class="input-group checker" (click)="resendCode()">Resend Code</a></p>
         <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text">Confirm</button>
       </form>
       
