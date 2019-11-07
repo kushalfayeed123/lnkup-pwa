@@ -65,7 +65,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   getDriverDetails() {
     const driverDataId = localStorage.getItem('driverDataId');
     this.driverDataId = driverDataId;
-    const connectionId = sessionStorage.getItem('clientConnectionId');
+    const connectionId = sessionStorage. getItem('clientConnectionId');
     this.connectionId = connectionId;
   }
 
@@ -105,25 +105,32 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     this.dateNow = Date.now().toString();
   }
   broadCastTrip() {
-    const seatCapacity = 4;
-    const maxRiderNumber = this.tripForm.value.maxRiderNumber;
-    if (this.tripForm.valid && maxRiderNumber <= seatCapacity) {
-      this.activeTripService.createTrip(this.tripForm.value)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(trip =>  {
-        this.activeTrip = trip;
-        localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
-        const message = 'Your trip has been created and is currently being broadcasted';
-        this.notifyService.showSuccessMessage(message);
-        this.router.navigate(['driver/rider-request']);
-      }, error => {
-        setTimeout(() => {
-          this.loading = false;
-        }, 3000);
-      });
-    } else {
-      const message = 'number of riders exceeds car capacity';
+    if (!this.driverDataId) {
+      const message = 'You can not create a trip at the moment. Please update your information in your profile.';
       this.notifyService.showErrorMessage(message);
+      return;
+
+    } else {
+      const seatCapacity = 4;
+      const maxRiderNumber = this.tripForm.value.maxRiderNumber;
+      if (this.tripForm.valid && maxRiderNumber <= seatCapacity) {
+        this.activeTripService.createTrip(this.tripForm.value)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(trip =>  {
+          this.activeTrip = trip;
+          localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
+          const message = 'Your trip has been created and is currently being broadcasted';
+          this.notifyService.showSuccessMessage(message);
+          this.router.navigate(['driver/rider-request']);
+        }, error => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 3000);
+        });
+      } else {
+        const message = 'number of riders exceeds car capacity';
+        this.notifyService.showErrorMessage(message);
+      }
     }
   }
 

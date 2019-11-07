@@ -99,7 +99,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       localStorage.setItem('driverDataId', this.driverDataId);
       console.log('driver data id', data);
     });
-
     // this.updateDriverConnect();
   }
   getCurrentLocation() {

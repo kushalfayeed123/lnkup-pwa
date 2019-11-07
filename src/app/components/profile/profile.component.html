@@ -14,8 +14,8 @@
                 </button>
         </div>
         <div class="profile-info" (deferLoad)="image != null">
-            <img src="data:image/jpeg;base64,{{image}}" alt="" class="avi" *ngIf="!showBackupImg">
-          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="showBackupImg">
+            <img src="data:image/jpeg;base64,{{image}}" alt="" class="avi" *ngIf="image">
+          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="!image">
           <div class="name-container">
             <h2 class="name">{{user.userName}}</h2>
             <span class="e-mail">{{user.email}}</span>

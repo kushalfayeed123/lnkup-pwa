@@ -47,9 +47,11 @@
                     Move the marker to your destination or enter your destination above
                   </p> -->
           <div class="avi-info" (deferLoad)="driverImage != null">
-            <img src="data:image/jpeg;base64,{{driverImage}}" alt="" class="profile-info avi" />
-            <h3 class="driver-name">{{currentUser?.userName}}</h3>
-            <span class="driver-stats">4.33</span>
+            <img src="data:image/jpeg;base64{{driverImage}}" alt="" class="profile-info avi" *ngIf="!driverImage"/>
+            <img src="./assets/Images/default-user.png" class="profile-info avi" alt="" *ngIf="!driverImage">
+
+            <div class="driver-name">{{currentUser?.userName}}</div>
+            <!-- <span class="driver-stats">Departure: 10:00 am</span> -->
           </div>
           <div class="driver-id">
             <p>{{userId}}</p>
