@@ -71,6 +71,24 @@
     bottom: 0;
     width: -webkit-fill-available;
   }
+  .blink_me {
+    color: 	#00ff40;
+    position: relative;
+    left: 100%;
+    bottom: 9px;
+    width: 10px;
+    border: 2px solid;
+    border-radius: 100%;
+    height: 10px;
+    animation: blinker 1s linear infinite;
+    background: #00ff40
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
   .driver-id {
     padding-left: 22%;
     padding-top: 18px;
@@ -79,6 +97,8 @@
   .destination-details {
     display: flex;
     padding-left: 55px;
+    padding-bottom: 24px;
+    padding-top: 5px;
 
   }
   .destination {
@@ -99,11 +119,12 @@
     font-size: 12px;
   }
   .login-text{
-    left: 56%;
+    left: 45%;
     height: 38px;
     width: 45%;
     padding-top: 2px;
-    bottom: 37px;
+    bottom: 22px;
+    position: absolute;
   }
 .mat-form-field-appearance-legacy {
   margin-top: 34px !important;
@@ -212,7 +233,9 @@ body.map-body .avd .driver-track {
   -ms-overflow-style: none;
   scroll-behavior: smooth;
 }
-
+.avi-info {
+  text-align: center;
+}
 
 body.map-body .avd .driver-track::-webkit-scrollbar {
   display: none;
@@ -230,11 +253,11 @@ body.map-body .avd .driver-item {
   -o-border-radius: 8px;
 }
 
-body.map-body .avd .driver-item:not(:last-of-type) {
+ .driver-item:not(:last-of-type) {
   margin-right: 20px;
 }
 
-body.map-body .avd .container-grid {
+ .container-grid {
   display: grid;
   display: -ms-grid;
   -ms-grid-columns: 30% 70%;
@@ -243,44 +266,35 @@ body.map-body .avd .container-grid {
       grid-template-rows: auto;
   grid-column-gap: unset;
 }
-
-body.map-body .avd .container-grid img {
+ .container-grid img {
   width: 40px;
   height: 40px;
   margin-bottom: 5px;
 }
-
-body.map-body .avd .container-grid .driver-name {
+ .container-grid .driver-name {
   color: #d54ab6;
   font-size: 14px;
   margin-bottom: 0px;
 }
-
-body.map-body .avd .container-grid .driver-stats {
+ .container-grid .driver-stats {
   font-size: 14px;
 }
 .driver-stats {
   padding-left: 5px;
 }
-body.map-body .avd .container-grid .time-line-container {
+ .container-grid .time-line-container {
   margin-bottom: 20px;
 }
-.time-line-container {
-  margin-left: 39%;
-  position: relative;
-  bottom: 187px;
-}
 
-body.map-body .avd .container-grid .location {
+ .container-grid .location {
   color: #d54ab6;
   font-size: 14px;
 }
 
-body.map-body .avd .container-grid .sub {
+ .container-grid .sub {
   font-size: 11px;
 }
-
-body.map-body .avd .container-grid .est:last-of-type::before {
+ .container-grid .est:last-of-type::before {
   content: '';
   width: 5px;
   height: 5px;
@@ -295,8 +309,7 @@ body.map-body .avd .container-grid .est:last-of-type::before {
   -ms-border-radius: 50%;
   -o-border-radius: 50%;
 }
-
-body.map-body .avd .container-grid .select-driver {
+ .container-grid .select-driver {
   display: inline-block;
   white-space: nowrap;
   font-size: 16px;
@@ -320,19 +333,17 @@ body.map-body .avd .container-grid .select-driver {
   padding: 8px 16px;
   margin-left: 25px;
 }
-
-body.map-body .avd .container-grid .select-driver:focus, body.map-body .avd .container-grid .select-driver:active, body.map-body .avd .container-grid .select-driver:hover {
+ .container-grid .select-driver:focus, body.map-body .avd .container-grid .select-driver:active, body.map-body .avd .container-grid .select-driver:hover {
   outline: none;
-}
-
-body.map-body .avd ul.tl {
+ }
+ .avd ul.tl {
   list-style: none;
   margin: 0;
   padding: 0;
   position: relative;
 }
 
-body.map-body .avd ul.tl::before {
+ .avd ul.tl::before {
   content: '';
   position: absolute;
   top: 0;
@@ -347,16 +358,15 @@ body.map-body .avd ul.tl::before {
   margin: auto;
 }
 
-body.map-body .avd li {
+ .avd li {
   position: relative;
   padding-left: 25px;
 }
-
-body.map-body .avd li:first-of-type {
+.avd li:first-of-type {
   margin-bottom: 10px;
 }
 
-body.map-body .avd li:first-of-type::before {
+ .avd li:first-of-type::before {
   content: '';
   width: 5px;
   height: 5px;

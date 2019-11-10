@@ -1,62 +1,54 @@
 <mat-card class="example-card destination-container">
 
-        <mat-card-content>
-        
-                              <div class="container-grid">
-                                  <div class="riders">
-                                    <div class="radius">
-                                            <div class="avi-info">
-                                                    <img src="assets/Images/Avatar1.png" alt="" class="avi" />
-                                                    <div class="passengers">Jeff</div>
-                                                  </div>
-                                    </div>
-                                    <div class="radius">
-                                            <div class="avi-info">
-                                                    <img src="assets/Images/Avatar1.png" alt="" class="avi" />
-                                                    <div class="passengers">Jeff</div>
-                                                  </div>
-                                    </div>
-                                    <div class="radius">
-                                            <div class="avi-info">
-                                                    <img src="assets/Images/Avatar1.png" alt="" class="avi" />
-                                                    <div class="passengers">Jeff</div>
-                                                  </div>
-                                    </div>
-                                    <div class="radius">
-                                            <div class="avi-info">
-                                                    <img src="assets/Images/Avatar1.png" alt="" class="avi" />
-                                                    <div class="passengers">Jeff</div>
-                                                  </div>
-                                    </div>
-                                  </div>
-                                  <!-- <div class="share">
+  <mat-card-content>
+    <div class="blink_me" *ngIf="endTrip"></div>
+
+    <div class="container-grid" *ngIf="activeTrip">
+      <div class="riders">
+        <div class="radius" *ngFor="let rider of tripRiders">
+          <div class="avi-info" (deferLoad)="rider.user.userImage !== null">
+            <img src="assets/Images/default-user.png" alt="" class="avi" *ngIf="rider.user.userImage === null" />
+            <img src="data:image/jpeg;base64{{rider.user.userImage}}" alt="" class="avi"
+              *ngIf="rider.user.userImage !== null" />
+
+            <div class="passengers">{{rider.user.userName}}</div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="share">
                                     <div class="radius primary">
                                       <i class="flaticon-send-1"></i>
                                     </div>
                                     <div>Share</div>
                                   </div> -->
 
-                                  <button  mat-raised-button color="accent"
-                                    class="auth-full-width login-text" >
-                                   Start Trip
-                                   <i class="material-icons right"></i>
-                                 </button>
-                                </div>
-                                <div class="destination-details">
-                                  <div class="time-line-container">
-                                    <ul class="tl">
-                                      <li class="destination">
-                                        <div class="location">Your Pickup</div>
-                                        <div class="seats sub">Tolu ipoyi</div>
-                                      </li>
-                                      <li class="current-location">
-                                        <div class="location">Your Destination</div>
-                                        <div class="est sub">Tolu ipoyi</div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                      </div>
-        </mat-card-content>
-  
-      </mat-card>
 
+      <div class="destination-details">
+        <div class="time-line-container">
+          <ul class="tl">
+            <li class="destination">
+              <div class="location">Your Pickup</div>
+              <div class="seats sub">{{activeTrip.tripPickup}}</div>
+            </li>
+            <li class="current-location">
+              <div class="location">Your Destination</div>
+              <div class="est sub">{{activeTrip.tripDestination}}</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <button mat-raised-button color="accent" *ngIf="!endTrip" class="auth-full-width login-text"
+      (click)="startActiveTrip()">
+      Start Trip
+      <i class="material-icons right"></i>
+    </button>
+    <button mat-raised-button color="accent" *ngIf="endTrip" class="auth-full-width login-text"
+      (click)="endActiveTrip()">
+      End Trip
+      <i class="material-icons right"></i>
+    </button>
+
+  </mat-card-content>
+
+</mat-card>

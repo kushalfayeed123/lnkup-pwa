@@ -41,6 +41,7 @@ import { DriverDataWebService } from './services/data/driver-data/driver-data.we
 import { NotificationsService } from './services/business/notificatons.service';
 import {ToastrModule} from 'ngx-toastr';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 
 
@@ -64,6 +65,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     PushNotificationComponent,
     PagenotfoundComponent,
     ProfileComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,7 +106,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SuccessMessageComponent, ErrorMessageComponent, SearchMessageComponent]
+  entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent]
 
 })
 export class AppModule { }

@@ -20,6 +20,7 @@ import {
    MatTableModule,
    MatPaginatorModule,
    MatCardModule,
+   MatDialogModule,
 } from '@angular/material';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
@@ -53,7 +54,8 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
       MatSnackBarModule,
       MatTabsModule,
       MatSidenavModule,
-      MatCarouselModule
+      MatCarouselModule,
+      MatDialogModule
    ],
    exports: [
       MatButtonModule,
@@ -78,7 +80,8 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
       MatSidenavModule,
       MatSnackBarModule,
       MatTabsModule,
-      MatCarouselModule
+      MatCarouselModule,
+      MatDialogModule
       ],
    providers: [
       MatDatepickerModule,

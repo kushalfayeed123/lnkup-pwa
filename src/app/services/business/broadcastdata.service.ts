@@ -15,6 +15,9 @@ export class BroadcastService {
     private _showSideNav = new BehaviorSubject(null);
     public showSideNav = this._showSideNav.asObservable();
 
+    private _startTrip = new BehaviorSubject(null);
+    public startTrip = this._startTrip.asObservable();
+
 
 
     constructor() {
@@ -36,5 +39,8 @@ export class BroadcastService {
 
     publishSideNavValue(showSideNav) {
         this._showSideNav.next(showSideNav);
+    }
+    publishStartTrip(startTrip) {
+        this._startTrip.next(startTrip);
     }
 }

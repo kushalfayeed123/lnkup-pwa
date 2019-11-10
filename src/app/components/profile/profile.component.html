@@ -14,8 +14,8 @@
                 </button>
         </div>
         <div class="profile-info" (deferLoad)="image != null">
-            <img src="data:image/jpeg;base64,{{image}}" alt="" class="avi" *ngIf="image">
-          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="!image">
+            <img src="data:image/jpeg;base64{{image}}" alt="" class="avi" *ngIf="image">
+          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="image==null">
           <div class="name-container">
             <h2 class="name">{{user.userName}}</h2>
             <span class="e-mail">{{user.email}}</span>
@@ -23,12 +23,12 @@
         </div>
         <div class="user-stats">
           <div class="rides">
-            <h4 class="figures">40</h4>
-            <span class="label">rides</span>
+            <!-- <h4 class="figures">40</h4>
+            <span class="label">rides</span> -->
           </div>
           <div class="saved-drivers">
-            <h4 class="figures">15</h4>
-            <span class="label">saved drivers</span>
+            <!-- <h4 class="figures">15</h4>
+            <span class="label">saved drivers</span> -->
           </div>
         </div>
       </div>

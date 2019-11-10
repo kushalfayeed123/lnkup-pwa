@@ -12,6 +12,7 @@ import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.serv
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,6 +49,9 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   currentUserId: string;
   driverNavigate: boolean;
   driverImage: any;
+  origin: { lat: any; lng: any; };
+  destination: { lat: any; lng: any; };
+  renderOptions: { polylineOptions: { strokeColor: string; geodesic: boolean; strokeOpacity: number; strokeWeight: number; editable: boolean; }; };
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -57,7 +61,9 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
               private authService: AuthenticateDataService,
               private mapService: MapBroadcastService,
               private driverDataService: DriverDataDataService,
-              private notificationService: NotificationsService) {
+              private notificationService: NotificationsService,
+              private broadCastService: BroadcastService) {
+                this.startTrip();
                }
 
   ngOnInit() {
@@ -78,6 +84,14 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.notificationService.intiateConnection();
   }
 
+  startTrip() {
+    this.broadCastService.startTrip
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(trip => {
+      this.startTrip = trip;
+      this.getUserDirection();
+    });
+  }
   getUserById(userId) {
     this.authService
       .getById(userId)
@@ -171,7 +185,26 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.pickupLocation =  location;
     this.pickupName = location.name;
     this.pickupFull = location.formatted_address;
-
+  }
+  getUserDirection() {
+    const origin = JSON.parse(localStorage.getItem('origin'));
+    const  destination = JSON.parse(localStorage.getItem('destination'));
+    console.log(origin, destination);
+    this.getDirection(origin, destination);
+  }
+  getDirection(origin, destination) {
+    setTimeout(() => {
+      const cl = origin;
+      this.origin = { lat: cl.lat, lng: cl.lng };
+      this.destination = { lat: destination.lat, lng: destination.lng };
+      this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6',
+                                              geodesic : true,
+                                              strokeOpacity: 0.6,
+                                              strokeWeight: 5,
+                                              editable: false, } };
+      this.latitude = cl.lat;
+      this.longitude = cl.lng;
+    }, 2000); 
   }
   setDestination() {
     this.showDestination = false;

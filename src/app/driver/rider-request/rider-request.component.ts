@@ -139,7 +139,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       this.notifyService.sendAcceptMessage(receiverId, message);
       const user = JSON.parse(localStorage.getItem('currentUser'));
       const userId = user.id;
-      this.router.navigate([`/driver/home/${userId}`], { queryParams: { driverNav: true }});
+      this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true }});
     }
   }
 

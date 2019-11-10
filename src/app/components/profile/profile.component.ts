@@ -48,11 +48,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     await this.authService.getUserImage(this.routeId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(img => {
-      if (!img) {
-        this.showBackupImg = true;
+      if(img == null) {
         return;
       } else {
-        this.showBackupImg = false;
         this.image = img.image;
         this.imageId = img.imageId;
       }
