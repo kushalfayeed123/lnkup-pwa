@@ -1,6 +1,6 @@
 <mat-sidenav-container fullscreen style="background-color: #121212;">
   <mat-sidenav  #sidenav  position="start" (opened)="opened"
-  (closed)="!opened">
+  (closed)="opened">
     <nav class="nav-header">
       <div class="container">
         <div class="top-nav">
@@ -55,8 +55,10 @@
         <ul class="nav-links">
           <li class="link-item"><a (click) = "navToHome()" class="link">Home</a></li>
           <li class="link-item"><a (click) = "navToProfile()" class="link">Profile</a></li>
-          <!-- <li class="link-item"><a href="#" class="link">Payments</a></li>
-          <li class="link-item"><a href="#" class="link">Settings</a></li> -->
+          <!-- <li class="link-item"><a (click) = "navToHome()" class="link">Security</a></li>
+          <li class="link-item"><a (click) = "navToHome()" class="link">Ride History</a></li>
+          <li class="link-item"><a (click) = "navToHome()" class="link">Payment</a></li>
+          <li class="link-item"><a (click) = "navToHome()" class="link">Contact Support </a></li> -->
           <li class="link-item"><a (click) = "logout()" class="link">Logout</a></li>
 
         </ul>

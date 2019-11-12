@@ -34,6 +34,7 @@
     "@types/hammerjs": "^2.0.36",
     "@types/jquery": "^3.3.31",
     "agm-direction": "^0.7.8",
+    "angular-rave": "^2.0.1",
     "angular2-carousel": "^1.0.17",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.0",

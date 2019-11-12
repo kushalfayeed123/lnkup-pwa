@@ -16,22 +16,23 @@ body.profile-body {
 }
 .icon {
   padding-right: 10px;
-}
-  .auth-pages.security nav {
-    padding: 20px 32px;
-    display: flex;
-    // display: -ms-grid;
-    // -ms-grid-columns: [cone] 1fr [ctwo];
-    //     grid-template-columns: [cone] 1fr [ctwo];
-    // -ms-grid-rows: [rone] 1fr [rtwo];
-    //     grid-template-rows: [rone] 1fr [rtwo];
-    // grid-column-gap: unset;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    color: #ffffff;
-    background-color: #d54ab6;
-    margin-top: 0;
+} 
+
+.auth-pages.security nav {
+  padding: 20px 32px;
+  display: flex;
+  // display: -ms-grid;
+  // -ms-grid-columns: [cone] 1fr [ctwo];
+  //     grid-template-columns: [cone] 1fr [ctwo];
+  // -ms-grid-rows: [rone] 1fr [rtwo];
+  //     grid-template-rows: [rone] 1fr [rtwo];
+  // grid-column-gap: unset;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #ffffff;
+  background-color: #d54ab6;
+  margin-top: 0;
   }
 .auth-pages.security.user-profiles nav {
     margin-bottom: 20px;

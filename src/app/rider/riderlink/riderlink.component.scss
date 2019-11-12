@@ -6,6 +6,8 @@
     position: relative;
     height: 50px;
     width: 40%;
+    left: 27%;
+    top: 58px;
   }
 
   .available-driver-card {
@@ -15,13 +17,14 @@
   .container-grid{
     display: grid;
     margin-bottom: 0;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 40% 60%;
     -ms-grid-rows: auto;
     grid-template-rows: auto;
     grid-column-gap: unset;
   }
   .auth-full-width {
-    width: 50%;
+    width: 59%;
+    margin-left: 36%;
   }
   .mat-form-field{
     width: 100% !important ;
@@ -55,7 +58,7 @@
     margin-left: 15%;
   }
   .driver-name{
-    padding-top: 6px;
+    padding-top: 11px;
     font-size: 16px;
     color: #E040FB;
   }

@@ -17,7 +17,9 @@
                                          class="profile-info" alt="" *ngIf="!trips.tripDriver.driver.userImage.image">
                                       <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
                                       <h3 class="driver-name">{{driverUserName[i]}}</h3>
-                                      <span class="driver-stats">4.33</span>
+                                      <!-- <span class="driver-stats">Trip Time: {{trips.tripStartDateTime}}</span> -->
+                                      <div class="location time-text">Trip Start Time</div>
+                                      <div class="est sub time">{{trips.tripStartDateTime}}</div>
                                     </div>
                                     <div class="destination-details">
                                       <div class="time-line-container">
@@ -28,11 +30,11 @@
                                           </li>
                                           <li class="current-location">
                                             <div class="location">You are {{trips.timeToPickup}} away</div>
-                                            <div class="est sub">{{availableSeats[i]}} seats available</div>
+                                            <div class="est sub ">{{availableSeats[i]}} seats available</div>
                                           </li>
                                         </ul>
                                       </div>
-                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="passTripDetails(trips.tripId)">Choose Driver</button>
+                                      <button type="submit" mat-raised-button color="accent" class="auth-full-width auth-full" (click)="passTripDetails(trips.tripId)">Choose Driver</button>
                                     </div>
                                   </div>
                                 </div>

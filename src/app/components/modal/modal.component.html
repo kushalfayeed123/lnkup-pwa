@@ -1,11 +1,10 @@
-    <h1 mat-dialog-title>Your fare for this trip</h1>
+    <h1 mat-dialog-title>{{data.name}}</h1>
 <div mat-dialog-content>
   <p>&#8358; {{data.price}}</p>
  
 </div>
 <div mat-dialog-actions class="close-btn">
-  <button mat-raised-button color="accent" (click)="onNoClick()"
-  (click)="startActiveTrip()">
+  <button mat-raised-button color="accent" (click)="onNoClick()">
   Close
 </button>  <!-- <button mat-button [mat-dialog-close]="data.price" cdkFocusInitial>Ok</button> -->
 </div>

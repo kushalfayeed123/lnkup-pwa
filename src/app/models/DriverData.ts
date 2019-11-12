@@ -1,12 +1,11 @@
-import { Users, UserImage } from './Users';
+import { Users } from './Users';
 
 export class DriverData {
     driverDataId: string;
     driverId: string;
     carType: string;
     carLicense: any;
-    carDocument1: any;
-    carDocument2: any;
+    plateNumber: number;
     rating: number;
     rideDeclineCount: number;
     driverSeatCapacity: number;

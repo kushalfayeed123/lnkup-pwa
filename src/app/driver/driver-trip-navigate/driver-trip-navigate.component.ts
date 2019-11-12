@@ -65,6 +65,7 @@ export class DriverTripNavigateComponent implements OnInit {
   }
 
   endActiveTrip() {
+    this.name = 'Your fare for this trip';
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
@@ -80,7 +81,7 @@ export class DriverTripNavigateComponent implements OnInit {
   sendTripEndMessage() {
     this.tripRiders.forEach(element => {
       const recieverId = element.userId;
-      const message = `Your trip has end, please pay ${element.tripFee} to your driver`;
+      const message = `Your trip has ended, please pay ${element.tripFee} to your driver`;
       this.notifyService.sendAcceptMessage(recieverId, message);
     });
   }

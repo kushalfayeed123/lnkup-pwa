@@ -6,6 +6,7 @@
     position: relative;
     height: 50px;
     width: 40%;
+    left: 26%;
   }
 
   .available-driver-card {
@@ -15,12 +16,21 @@
   .container-grid{
     display: grid;
     margin-bottom: 0;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 36% 64%;
     -ms-grid-rows: auto;
     grid-template-rows: auto;
     grid-column-gap: unset;
   }
-
+  .profile-info {
+    padding-left: 6px;
+  }
+  .time-text {
+    padding-left: 7px;
+    padding-bottom: 5px;
+  }
+  .time  {
+    padding-left: 7px;
+  }
   .mat-form-field{
     width: 100% !important ;
   }

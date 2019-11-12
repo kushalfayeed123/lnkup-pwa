@@ -49,7 +49,7 @@
                     Move the marker to your destination or enter your destination above
                   </p> -->
           <div class="avi-info" (deferLoad)="driverImage != null">
-            <img src="data:image/jpeg;base64{{driverImage}}" alt="" class="profile-info avi" *ngIf="!driverImage"/>
+            <img src="data:image/png;base64,{{driverImage}}" alt="" class="profile-info avi" *ngIf="!driverImage"/>
             <img src="./assets/Images/default-user.png" class="profile-info avi" alt="" *ngIf="!driverImage">
 
             <div class="driver-name">{{currentUser?.userName}}</div>

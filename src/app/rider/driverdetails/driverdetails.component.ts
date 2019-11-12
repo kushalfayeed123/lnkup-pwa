@@ -22,6 +22,8 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
   end: any;
   tripId: any;
   image: any;
+  userId: any;
+  tripStartTime: string;
 
 
   constructor(private mapService: MapBroadcastService,
@@ -32,6 +34,11 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getTripId();
+  }
+
+  getCurrentUser() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.userId = user.id;
   }
 
   getTripId() {
@@ -50,6 +57,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         const driverId = trip.tripDriver.driverId;
         const driverEmail = trip.tripDriver.driver.email;
         const tripPickup = trip.tripPickup;
+        const activeRiders = trip.activeRiders;
         const tripDetails = {allowedRiderCount: allowed, maxRiderNumber: max, driverId, driverEmail, tripPickup };
         localStorage.setItem('tripDetails', JSON.stringify(tripDetails));
         if(allowed  === 0) {
@@ -65,10 +73,10 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         this.mapService.findAddressByCoordinates(destinationLat, destinationLng);
         setTimeout(() => {
           this.destination = localStorage.getItem('storedAddress');
-          console.log('dropOff', this.destination);
         }, 1000);
         this.driverName = trip.tripDriver.driver.userName;
         this.tripPricePerRider = trip.tripPricePerRider;
+        this.tripStartTime = trip.tripStartDateTime;
         this.isTrips = true;
 
         const tripDestination = new google.maps.LatLng(destinationLat, destinationLng);
@@ -80,9 +88,11 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
              const pricePerKilometer = 37;
              this.tripPricePerRider = Math.round(pricePerKilometer * tripDistance);
              const tripConnectionId = trip.tripConnectionId;
+             const activeRider = activeRiders.filter(x => x.userId === this.userId);
              const riderRequest = {tripId: this.tripId,
                                    tripFee: this.tripPricePerRider,
-                                   tripConnectionId};
+                                   tripConnectionId,
+                                  activeRider};
              localStorage.setItem('riderRequest', JSON.stringify(riderRequest));
         });
         });

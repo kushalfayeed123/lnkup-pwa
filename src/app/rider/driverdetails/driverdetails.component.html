@@ -4,6 +4,9 @@
           <div class="swiper-wrapper">
           <mat-card class="available-drivers-card swiper-slide" >
           <mat-card-content>
+              <mat-spinner *ngIf="!isTrips"  [diameter]="30"
+              class="loader"
+            ></mat-spinner>
                     <div class="avd" *ngIf="isTrips">
                       <!-- <h2 class="heading">Available Drivers</h2> -->
                       <div class="driver-container">
@@ -15,8 +18,9 @@
                                 <img src="./assets/Images/default-user.png" class="profile-info" alt="" *ngIf="!image">
 
                                 <h3 class="driver-name">{{driverName}}</h3>
-                                <span class="driver-stats">4.33</span>
-                              </div>
+                                <div class="location time-text">Trip Start Time</div>
+                                <div class="est sub time">{{tripStartTime}}</div>
+                                </div>
                               <div class="destination-details">
                                 <div class="time-line-container">
                                   <ul class="tl">

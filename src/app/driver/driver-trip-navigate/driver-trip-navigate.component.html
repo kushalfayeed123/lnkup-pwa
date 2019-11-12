@@ -8,7 +8,7 @@
         <div class="radius" *ngFor="let rider of tripRiders">
           <div class="avi-info" (deferLoad)="rider.user.userImage !== null">
             <img src="assets/Images/default-user.png" alt="" class="avi" *ngIf="rider.user.userImage === null" />
-            <img src="data:image/jpeg;base64{{rider.user.userImage}}" alt="" class="avi"
+            <img src="data:image/png;base64,{{rider.user.userImage}}" alt="" class="avi"
               *ngIf="rider.user.userImage !== null" />
 
             <div class="passengers">{{rider.user.userName}}</div>

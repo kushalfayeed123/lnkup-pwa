@@ -7,6 +7,7 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { VerifycodeComponent } from './components/verifycode/verifycode.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'verify', component: VerifycodeComponent },
   { path: 'login', component: AuthenticateUserComponent },
   { path: 'register', component: RegisterUserComponent },
+  { path: 'payment/:id', component: PaymentComponent },
   { path: 'profile/:id', component: ProfileComponent },
 
   {

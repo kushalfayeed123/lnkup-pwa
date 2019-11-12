@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { Router } from '@angular/router';
+import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
 
 @Component({
   selector: 'app-riderlink',
@@ -17,8 +18,11 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   pickupAddress: string;
   driverName: any;
   userId: any;
+  driverId: any;
+  driverData: import("c:/sandbox/lnkup-mobile/src/app/models/DriverData").DriverData;
+  driverImage: string;
 
-  constructor(private mapService: MapBroadcastService,
+  constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
               private tripService: ActiveTripDataService,
               private router: Router) { }
@@ -35,9 +39,25 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.userId = user.id;
     this.pickupAddress = trip.tripPickup;
-    this.driverName = trip.tripDriver.driver.userName;
+    const driverId = trip.driverId;
+    this.getDriverData(driverId);
   }
 
+  getDriverData(driverId) {
+    this.driverDataService.getDriverByDriverId(driverId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      this.driverData = res;
+      this.driverImage = res.driver.userImage.image;
+      console.log('driverData', this.driverData);
+    });
+  }
+
+  confirmCancelRequest() {
+    if (confirm('You will be charged N400 if you cancel, continue?')) {
+      this.cancelRequest();
+    }
+  }
   cancelRequest() {
     const trip = JSON.parse(localStorage.getItem('tripDetails'));
     const activerRiderId = trip.activeRiders[0].activeRiderId;
@@ -56,6 +76,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       });
     });
   }
+
+  
 
   ngOnDestroy() {
     this.unsubscribe$.next();

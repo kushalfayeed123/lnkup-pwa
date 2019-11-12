@@ -42,6 +42,9 @@ import { NotificationsService } from './services/business/notificatons.service';
 import {ToastrModule} from 'ngx-toastr';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { AngularRaveModule } from 'angular-rave';
+import { PaymentComponent } from './components/payment/payment.component';
+
 
 
 
@@ -66,6 +69,7 @@ import { ModalComponent } from './components/modal/modal.component';
     PagenotfoundComponent,
     ProfileComponent,
     ModalComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,7 +93,12 @@ import { ModalComponent } from './components/modal/modal.component';
     AgmDirectionModule,
     MatGoogleMapsAutocompleteModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    AngularRaveModule.forRoot({
+      key: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
+      isTest: true,
+    }),
   ],
+  
   providers: [
     MetaService,
     BroadcastService,

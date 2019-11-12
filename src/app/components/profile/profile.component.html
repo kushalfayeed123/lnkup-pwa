@@ -13,9 +13,9 @@
             <img src="./assets/icons/create-24px.svg" alt="" (click)="openUploadDialogue()">
                 </button>
         </div>
-        <div class="profile-info" (deferLoad)="image != null">
-            <img src="data:image/jpeg;base64{{image}}" alt="" class="avi" *ngIf="image">
-          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="image==null">
+        <div class="profile-info" (deferLoad)="image !== null">
+            <img src="data:image/png;base64,{{image}}" alt="" class="avi" *ngIf="image !== null">
+          <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="image === null">
           <div class="name-container">
             <h2 class="name">{{user.userName}}</h2>
             <span class="e-mail">{{user.email}}</span>
@@ -46,6 +46,20 @@
                 </button>
             </div>
         </div>
+
+        <!-- <div class="user-details">
+          <div style="padding-bottom: 20px;">Upload your drivers license</div>
+          <mat-spinner *ngIf="loading"  [diameter]="30"
+          class="loader"
+        ></mat-spinner>
+            <div >
+                <input type="file" style="padding-bottom: 20px;" (change)="uploadImage($event)" #PhotoInput hidden>
+                <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
+                (click)="PhotoInput.click()" >
+                    Submit
+                  </button>
+              </div>
+          </div> -->
 
 
       <div class="contact-info">

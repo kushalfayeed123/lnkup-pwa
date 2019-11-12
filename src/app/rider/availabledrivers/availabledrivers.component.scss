@@ -11,21 +11,34 @@
   .available-driver-card {
     max-width: 400px;
     height: 127px;
+    border-radius: 9px;
   }
   .cancel-btn {
     width: 40% !important;
     margin-left: 28% !important;
     margin-top: 20px !important;
   }
+  .time-text {
+    padding-left: 7px;
+    padding-bottom: 5px;
+  }
+  .time  {
+    padding-left: 7px;
+  }
+  .auth-full{
+    left: 35%; 
+  }
   .container-grid{
     display: grid;
     margin-bottom: 0;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 36% 64%;
     -ms-grid-rows: auto;
     grid-template-rows: auto;
     grid-column-gap: unset;
   }
-
+  .profile-info {
+    padding-left: 6px;
+  }
   .mat-form-field{
     width: 100% !important ;
   }

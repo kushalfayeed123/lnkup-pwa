@@ -1,12 +1,18 @@
-<div class="avd">
+<div class="avd" *ngIf="driverData">
     <!-- <h2 class="heading">Available Drivers</h2> -->
     <div class="driver-container">
       <div class="driver-track">
         <div class="driver-item">
           <div class="container-grid">
-            <div class="avi-info">
-              <img src="assets/Images/Avatar1.png" alt="" class="avi" />
-              <h3 class="driver-name">{{driverName}}</h3>
+            <div class="avi-info" (deferLoad)="driverImage != null">
+              <img src="data:image/png;base64,{{driverImage}}" alt=""
+              class="profile-info" *ngIf="driverImage">
+             <img src="./assets/Images/default-user.png"
+              class="profile-info" alt="" *ngIf="!driverImage">
+              <h3 class="driver-name">{{driverData.driver.userName}}</h3>
+              <div>
+                <div class="seats sub">XYZ66YhD</div>
+              </div>
             </div>
             <div class="destination-details">
               <div class="time-line-container">
@@ -21,10 +27,14 @@
                   </li>
                 </ul>
               </div>
-              <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="cancelRequest()">Cancel</button>
+              <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="confirmCancelRequest()">Cancel Trip</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <mat-spinner *ngIf="!driverData"  [diameter]="30"
+  class="loader"
+></mat-spinner>
