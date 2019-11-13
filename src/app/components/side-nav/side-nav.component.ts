@@ -36,7 +36,7 @@ export class SideNavComponent implements OnDestroy {
     });
     setTimeout(() => {
       this.getCurrentUser();
-    }, 5000);
+    }, 3000);
   }
 
    _toggleSidebar() {
