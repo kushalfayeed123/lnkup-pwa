@@ -38,12 +38,22 @@ export class AppComponent {
 
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
+    this.getLoggedInUser();
     this.metaService.createCanonicalURL();
-    this.swUpdate.available
-    .subscribe(update => this.newVersion = true);
     this.showSideNav = false;
     this.reload();
       }
+
+  getLoggedInUser() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (user) {
+      let role = user.role;
+      role = role.toLowerCase();
+      this.route.navigate([`${role}/home/${user.id}`]);
+    } else {
+      this.route.navigate(['/']);
+    }
+  }
 
   reload() {
     if (this.swUpdate.isEnabled) {
