@@ -6,6 +6,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { Router } from '@angular/router';
 import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
+import { DriverData } from 'src/app/models/DriverData';
 
 @Component({
   selector: 'app-riderlink',
@@ -19,7 +20,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   driverName: any;
   userId: any;
   driverId: any;
-  driverData: import("c:/sandbox/lnkup-mobile/src/app/models/DriverData").DriverData;
+  driverData: DriverData;
   driverImage: string;
 
   constructor(private driverDataService: DriverDataDataService,
@@ -77,7 +78,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+
 
   ngOnDestroy() {
     this.unsubscribe$.next();
