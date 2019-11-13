@@ -93,12 +93,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(param => {
       this.riderLink = param.riderLink;
-      this.tripSearch = param.tripSearch;
       if (this.riderLink) {
         this.getPickupDirection();
       }
     });
-    console.log('trip search', this.tripSearch);
     localStorage.removeItem('userLocation');
     this.loadMarker = true;
     this.route.params.subscribe(p => {

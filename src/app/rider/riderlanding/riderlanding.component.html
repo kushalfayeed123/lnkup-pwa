@@ -1,6 +1,6 @@
 <!-- <app-side-nav></app-side-nav> -->
 <form action="" id="search-form">
-    <input *ngIf="!riderLink " type="search" name="" id="" class="destination" placeholder="Enter Your Current Location"
+    <input *ngIf="!riderLink" type="search" name="" id="" class="destination" placeholder="Enter Your Current Location"
         matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
 
 </form>

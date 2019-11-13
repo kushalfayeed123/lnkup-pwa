@@ -57,8 +57,6 @@ public google: any;
     this.mapsApiLoader.load().then(() => {
       this.geocoder = new google.maps.Geocoder();
     });
-
-    this.getCurrentLocation();
   }
 
 
@@ -133,7 +131,6 @@ public google: any;
               lat: this.location.lat
             };
             localStorage.setItem('destination', JSON.stringify(destination));
-            console.log('coordinates', this.location.lat, this.location.lng);
           }
 
           // this.map.triggerResize();
@@ -192,7 +189,7 @@ public google: any;
 
           // this.map.triggerResize();
         } else {
-          alert('Sorry, this search produced no results.');
+          return;
         }
       }
     );
@@ -244,7 +241,7 @@ public google: any;
           localStorage.setItem('pickup', JSON.stringify(this.pickupLatLng));
           // this.map.triggerResize();
         } else {
-          console.log('Sorry, this search produced no results.');
+          return;
         }
       }
     );
@@ -256,7 +253,6 @@ public google: any;
   // }
   getDesinationLocations(destinationLocation) {
     destinationLocation.forEach(element => {
-      console.log('locations', element.lat, element.lng);
       this.findAddressByCoordinates(element.lat, element.lng);
     });
   }
@@ -265,7 +261,6 @@ public google: any;
     const request = {latLng: latlng};
     this.geocoder.geocode(request,
       (results, status) => {
-        console.log('results', results);
         this.decomposeAddressComponents(results);
       }
     );
@@ -308,7 +303,6 @@ public google: any;
       }
     }
     localStorage.setItem('storedAddress', this.location.address_level_1);
-    console.log('addresslevel', this.location.address_level_1);
   }
 
   publishAvailableTrips(availableTrips: []) {
