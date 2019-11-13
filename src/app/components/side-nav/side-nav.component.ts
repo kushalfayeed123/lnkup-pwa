@@ -43,15 +43,10 @@ export class SideNavComponent implements OnDestroy {
     this._opened = !this._opened;
   }
   navToHome() {
-    this._toggleSidebar();
-    this.opened = false;
     this._router.navigate([`${this.userRole}/home/${this.userId}`]);
   }
   navToProfile() {
-    this._toggleSidebar();
-    this.opened = false;
     this._router.navigate([`profile/${this.userId}`]);
-
   }
   logout() {
     this.authService.logout();
