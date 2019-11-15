@@ -33,6 +33,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       userName: ['', Validators.required],
+      lastName: ['', Validators.required],
       password: ['', Validators.required],
       role: ['', Validators.required],
       email: ['', Validators.required],
@@ -48,11 +49,14 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     const countryCode = '+234';
     const userPhone = countryCode + this.registerForm.value.phoneNumber ;
     const username = this.registerForm.value.userName.toLowerCase();
+    const lastname = this.registerForm.value.lastName.toLowerCase();
+
     localStorage.removeItem('userVerification');
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
     const validateCode = randomCode.slice(0, 6);
     localStorage.setItem('userVerification', validateCode);
-    this.registerForm.patchValue({verificationCode: validateCode, phoneNumber: userPhone, userName: username});
+    this.registerForm.patchValue({verificationCode: validateCode, phoneNumber: userPhone,
+       userName: username, lastName: lastname });
     const registerValues = this.registerForm.value;
     this.authService.register(registerValues)
     .pipe(takeUntil(this.unsubscribe$))

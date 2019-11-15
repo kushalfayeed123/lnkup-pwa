@@ -7,6 +7,8 @@ import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-
 import { Router } from '@angular/router';
 import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
 import { DriverData } from 'src/app/models/DriverData';
+import { MatDialog } from '@angular/material';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
 
 @Component({
   selector: 'app-riderlink',
@@ -22,10 +24,12 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   driverId: any;
   driverData: DriverData;
   driverImage: string;
+  name: string;
 
   constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
               private tripService: ActiveTripDataService,
+              public dialog: MatDialog,
               private router: Router) { }
 
   ngOnInit() {
@@ -56,7 +60,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
 
   confirmCancelRequest() {
     if (confirm('You will be charged N400 if you cancel, continue?')) {
-      this.cancelRequest();
+      this.showPaymentMessage();
+      // this.cancelRequest();
     }
   }
   cancelRequest() {
@@ -78,6 +83,20 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     });
   }
 
+  showPaymentMessage() {
+    const request = JSON.parse(localStorage.getItem('riderRequest'));
+    const  tripFee = request.tripFee;
+    this.name = 'Your fare for this trip';
+    const dialogRef = this.dialog.open(ModalComponent, {
+      width: '90%',
+      panelClass: 'dialog',
+      data: {name: this.name, price: tripFee}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigate(['rider/home', this.userId]);
+    });
+  }
 
 
   ngOnDestroy() {

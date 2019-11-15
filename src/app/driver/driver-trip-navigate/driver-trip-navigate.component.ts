@@ -65,11 +65,14 @@ export class DriverTripNavigateComponent implements OnInit {
   }
 
   endActiveTrip() {
-    this.name = 'Your fare for this trip';
+    const tripFee = this.activeTrip.aggregrateTripFee
+    const newTripFee = (20 / 100) * tripFee;
+    const driverFee = tripFee - newTripFee;
+    this.name = 'Your balance for this trip is';
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: { price: this.activeTrip.aggregrateTripFee}
+      data: {name: this.name, price: driverFee}
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -93,6 +93,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
                                    tripFee: this.tripPricePerRider,
                                    tripConnectionId,
                                   activeRider};
+            console.log('ride request', riderRequest);
              localStorage.setItem('riderRequest', JSON.stringify(riderRequest));
         });
         });

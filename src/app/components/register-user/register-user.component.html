@@ -16,7 +16,10 @@
     ></mat-spinner>
     <form [formGroup]="registerForm" (ngSubmit)="registerUser()" id="sign-up-form">
       <mat-form-field class="auth-full-width">
-        <input type="text" matInput class="input-color" placeholder="username" formControlName="userName" />
+        <input type="text" matInput class="input-color" placeholder="firstname" formControlName="userName" />
+      </mat-form-field>
+      <mat-form-field class="auth-full-width">
+        <input type="text" matInput class="input-color" placeholder="lastname" formControlName="lastName" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
         <input type="text" matInput class="input-color" placeholder="email" formControlName="email" />
