@@ -107,10 +107,10 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
         this.loading = false;
       });
   }
-  getDriverData() {
+  async getDriverData() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
-    this.driverDataService.getDriverByDriverId(userId)
+    await this.driverDataService.getDriverByDriverId(userId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       this.driverDataId = data.driverDataId;

@@ -45,33 +45,36 @@
         </div>
       </div>
 
-      <div class="user-details" *ngIf="userRole == 'Driver'">
-        <div style="padding-bottom: 20px;">{{driverData ? 'Update your vehicle details' : 'Please enter your vehicle details'}}</div>
-        <mat-spinner *ngIf="licenseLoad"  [diameter]="30"
-            class="loader"
-          ></mat-spinner>
-        <form action="" [formGroup]="registerCarDetails" (ngSubmit)="registerCar()">
-          <mat-form-field class="auth-full-width">
-            <input type="text" matInput class="input-color" placeholder="Your Car Model" formControlName="carType" />
-          </mat-form-field>
-          <mat-form-field class="auth-full-width">
-              <input type="text" matInput class="input-color" placeholder="Your Vehicle Plate Number" formControlName="carDocument2" />
-            </mat-form-field>
-            <mat-form-field class="auth-full-width">
-                <input type="text" matInput class="input-color" placeholder="Your Address" formControlName="workAddress" />
+      <div class="user-details" *ngIf="userRole == 'Driver' ">
+        <div *ngIf= "driverData || driverData == null">
+            <div style="padding-bottom: 20px;">{{driverData ? 'Update your vehicle details' : 'Please enter your vehicle details'}}</div>
+            <mat-spinner *ngIf="licenseLoad"  [diameter]="30"
+                class="loader"
+              ></mat-spinner>
+            <form action="" [formGroup]="registerCarDetails" (ngSubmit)="registerCar()">
+              <mat-form-field class="auth-full-width">
+                <input type="text" matInput class="input-color" placeholder="Your Car Model" formControlName="carType" />
               </mat-form-field>
-          <button *ngIf="license" type="submit" mat-raised-button color="accent" 
-          class="auth-full-width login-text submit-license">{{driverData ? 'Update' : 'Submit'}}</button>
-        </form>
-        <div>
-            <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
-            <button   mat-raised-button color="accent" class="auth-full-width login-text"
-              (click)="licenseInput.click()">
-              Upload License
-            </button>
-            <!-- <img *ngIf="license" src="{{licenseImage}}" alt=""> -->
+              <mat-form-field class="auth-full-width">
+                  <input type="text" matInput class="input-color" placeholder="Your Vehicle Plate Number" formControlName="carDocument2" />
+                </mat-form-field>
+                <mat-form-field class="auth-full-width">
+                    <input type="text" matInput class="input-color" placeholder="Your Address" formControlName="workAddress" />
+                  </mat-form-field>
+              <button *ngIf="license" type="submit" mat-raised-button color="accent" 
+              class="auth-full-width login-text submit-license">{{driverData ? 'Update' : 'Submit'}}</button>
+            </form>
+            <div>
+                <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
+                <button   mat-raised-button color="accent" class="auth-full-width login-text"
+                  (click)="licenseInput.click()">
+                  Upload License
+                </button>
+                <!-- <img *ngIf="license" src="{{licenseImage}}" alt=""> -->
+              </div>
           </div>
-      </div>
+        </div>
+       
     </div>
 
 

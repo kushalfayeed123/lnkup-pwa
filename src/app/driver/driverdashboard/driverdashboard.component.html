@@ -34,8 +34,9 @@
             <!-- <span class="driver-stats">Departure: 10:00 am</span> -->
           </div>
           <div class="driver-id">
-            <p>{{plateNumber}}</p>
-            <div *ngIf="showDestination">
+            <div>{{plateNumber}}</div>
+
+            <div *ngIf="showDestination" class="destination-location">
               <div class="location" style="font-size: 16px;">Your Destination</div>
               <span class="location">{{destinationName}}</span>
             </div>

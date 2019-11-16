@@ -110,10 +110,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.openDialogue = false;
             const message = 'Your profile picture uploaded successfully.';
             this.notifyService.showSuccessMessage(message);
+            this.openDialogue = false;
           },
           error => {
             this.loading = false;
-            const message = 'Your profile image failed to upload, please try uploading again shortly.';
+            const message = 'Your profile image failed to upload, please try uploading again.';
             this.notifyService.showErrorMessage(message);
           }
         );
@@ -134,6 +135,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     this.notifyService.showSuccessMessage(message);
                     this.getUserProfileImage();
                     this.loading = false;
+                    this.openDialogue = false;
                   },
             error => {
               const message = 'Your profile image failed to upload, please try uploading again shortly.';
@@ -148,9 +150,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   registerCar() {
   
     this.licenseLoad = true;
-    const message = 'Your details are being uploaded, this might take a while.';
-    const successMessage = 'Your profile has been updated.';
-    const errorMessage = 'We were not able to update your profile due to some errors, please try again shortly.';
+    const message = 'Your information is being uploaded, this might take a while.';
+    const successMessage = 'Thank you! Our team will review and get back to you when your submission has been approved.';
+    const errorMessage = 'We were unable to update your profile due to some errors, please try again shortly.';
     // this.registerCarDetails.value.carType = this.driverData.carType;
     // this.registerCarDetails.value.carDocument2 = this.driverData.carDocument2;
 
@@ -164,6 +166,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.notifyService.showSuccessMessage(successMessage);
         this.licenseLoad = false;
+        this.openDialogue = false;
       }, error => {
         this.notifyService.showErrorMessage(errorMessage);
         this.licenseLoad = false;
@@ -174,7 +177,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.licenseLoad = false;
         this.notifyService.showSuccessMessage(successMessage);
-        console.log(res);
+        this.openDialogue = false;
       }, error => {
         this.licenseLoad = false;
         this.notifyService.showErrorMessage(errorMessage);
