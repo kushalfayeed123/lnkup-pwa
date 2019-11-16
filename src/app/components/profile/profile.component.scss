@@ -45,6 +45,15 @@ body.profile-body {
   .contain-box {
     padding: 7px 32px !important;
   }
+  .submit-license {
+    position: relative;
+    top: 35px;
+    width: 36%;
+    left: 50%;
+  }
+  .mat-form-field {
+    width: 91%;
+  }
   .auth-pages.security.user-profiles #edit {
     -ms-grid-column-align: right;
         justify-self: right;

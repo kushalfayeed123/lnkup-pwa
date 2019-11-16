@@ -48,10 +48,12 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   driverDataId: string;
   currentUserId: string;
   driverNavigate: boolean;
-  driverImage: any;
+  driverImage = '';
   origin: { lat: any; lng: any; };
   destination: { lat: any; lng: any; };
   renderOptions: { polylineOptions: { strokeColor: string; geodesic: boolean; strokeOpacity: number; strokeWeight: number; editable: boolean; }; };
+  platNumber: any;
+  plateNumber: any;
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -80,6 +82,8 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(p => {
       const userId = p.id;
       this.getUserById(userId);
+      this.getUserProfileImage(userId);
+
     });
     this.notificationService.intiateConnection();
   }
@@ -93,13 +97,14 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     });
   }
   getUserById(userId) {
+    this.loading = true;
     this.authService
       .getById(userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
         this.currentUser = user;
         this.userId = user.userId.substring(27).toUpperCase();
-        console.log('user viewing this screen', this.currentUser);
+        this.loading = false;
       });
   }
   getDriverData() {
@@ -109,15 +114,25 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       this.driverDataId = data.driverDataId;
-      this.driverImage = data.driver.userImage.image;
+      this.plateNumber = data.carDocument2.toUpperCase();
       localStorage.setItem('driverDataId', this.driverDataId);
-      console.log('driver data id', data);
     });
     // this.updateDriverConnect();
   }
+  async getUserProfileImage(userId) {
+    await this.authService.getUserImage(userId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(img => {
+      if (img == null) {
+        return;
+      } else {
+        this.driverImage = 'data:image/png;base64,' + img.image;
+      }
+    });
+  }
   getCurrentLocation() {
-        console.log('get current location');
-        this.mapService.locationObject.subscribe(loc => {
+    this.mapService.getCurrentLocation();
+    this.mapService.locationObject.subscribe(loc => {
         this.latitude = loc.lat;
         this.longitude  = loc.lng;
         this.currentLocation = {lat: loc.lat, lng: loc.lng};
@@ -189,8 +204,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   getUserDirection() {
     const origin = JSON.parse(localStorage.getItem('origin'));
     const  destination = JSON.parse(localStorage.getItem('destination'));
-    console.log(origin, destination);
-    this.getDirection(origin, destination);
+    if (origin && destination) {
+      this.getDirection(origin, destination);
+    } else {
+      return;
+    }
   }
   getDirection(origin, destination) {
     setTimeout(() => {

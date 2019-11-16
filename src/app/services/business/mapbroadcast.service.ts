@@ -78,7 +78,6 @@ public google: any;
     this.findOrigin(origin);
   }
   storeLocation(originaddress: string, destinationaddress: string) {
-    console.log(originaddress, destinationaddress);
     originaddress = originaddress || ' ';
     destinationaddress = destinationaddress || '';
     this.findOrigin(originaddress);

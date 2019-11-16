@@ -1,84 +1,60 @@
-
 <form action="" id="search-form" *ngIf="showLanding && !driverNavigate">
 
   <input *ngIf="showDestination" type="search" name="" id="" class="destination" placeholder="Where are you going?"
-    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserDestinationLocation($event)"/>
+    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserDestinationLocation($event)" />
 
-    <input *ngIf="showPickup" type="search" name="" id="" class="destination" placeholder=" Set your pickup spot"
-    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserPickupLocation($event)"/>
+  <input *ngIf="showPickup" type="search" name="" id="" class="destination" placeholder=" Set your pickup spot"
+    matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserPickupLocation($event)" />
 </form>
 
 <div class="avd-container" *ngIf="showLanding">
 
   <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false">
     <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker>
-    <agm-direction *ngIf="startTrip" [origin]="origin" [destination]="destination" [renderOptions]="renderOptions"></agm-direction>
+    <agm-direction *ngIf="startTrip" [origin]="origin" [destination]="destination" [renderOptions]="renderOptions">
+    </agm-direction>
 
   </agm-map>
 
-  <!-- <mat-card class="example-card">
-
-            <mat-card-content>
-                    <div class="avd">
-                            <h2 class="heading">Pick Up Spot</h2>
-                            <div class="driver-container">
-                              <div class="driver-track">
-                                <div class="driver-item">
-                                  <div class="destination-details">
-                                    <p class="move">
-                                      Move the map marker to your exact pickup location
-                                    </p>
-                                    <p class="address">Ibukun 6435 Way, Off Awolowo</p>
-                                    <button  mat-raised-button color="accent"
-                                    class="auth-full-width login-text">Set Destination
-                                    <i class="material-icons right">send</i>
-                                </button>                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-            </mat-card-content>
-        </mat-card> -->
-
   <form class="destination-container" *ngIf="!driverNavigate">
     <mat-card class="example-card">
-
-      <mat-card-content>
+        <mat-spinner *ngIf="loading"  [diameter]="30"
+        class="loader"
+      ></mat-spinner>
+      <mat-card-content *ngIf="currentUser">
         <div class="destination-details">
           <!-- <p class="move">
                     Move the marker to your destination or enter your destination above
                   </p> -->
-          <div class="avi-info" (deferLoad)="driverImage != null">
-            <img src="data:image/png;base64,{{driverImage}}" alt="" class="profile-info avi" *ngIf="!driverImage"/>
-            <img src="./assets/Images/default-user.png" class="profile-info avi" alt="" *ngIf="!driverImage">
+          <div class="avi-info" (deferLoad)="driverImage !== ''">
+            <img src="{{driverImage}}" alt="" class="profile-info avi" *ngIf="driverImage !== ''" />
+            <img src="./assets/Images/default-user.png" class="profile-info avi" alt="" *ngIf="driverImage == ''">
 
             <div class="driver-name">{{currentUser?.userName}}</div>
             <!-- <span class="driver-stats">Departure: 10:00 am</span> -->
           </div>
           <div class="driver-id">
-            <p>{{userId}}</p>
+            <p>{{plateNumber}}</p>
             <div *ngIf="showDestination">
               <div class="location" style="font-size: 16px;">Your Destination</div>
-              <span class="location" >{{destinationName}}</span>
+              <span class="location">{{destinationName}}</span>
             </div>
 
             <div *ngIf="showPickup">
-                <div class="location" style="font-size: 16px;">Your Pickup Spot</div>
-                <span class="location" >{{pickupName}}</span>
-              </div>
+              <div class="location" style="font-size: 16px;">Your Pickup Spot</div>
+              <span class="location">{{pickupName}}</span>
+            </div>
           </div>
 
         </div>
-       
-        <!-- <p><a href="">Forgot password?</a></p> -->
         <button (click)='setDestination()' mat-raised-button color="accent" *ngIf="showDestination"
-         class="auth-full-width login-text" >
+          class="auth-full-width login-text">
           Set Destination
           <i class="material-icons right"></i>
         </button>
 
         <button (click)='setPickup()' mat-raised-button color="accent" *ngIf="showPickup"
-         class="auth-full-width login-text" >
+          class="auth-full-width login-text">
           Set Pickup
           <i class="material-icons right"></i>
         </button>
@@ -88,4 +64,5 @@
   </form>
   <app-driver-trip-navigate *ngIf="driverNavigate"></app-driver-trip-navigate>
 </div>
-<app-driver-trip-create [destination]="destinationName" [pickup]="pickupName" *ngIf="!showLanding"></app-driver-trip-create>
+<app-driver-trip-create [destination]="destinationName" [pickup]="pickupName" *ngIf="!showLanding">
+</app-driver-trip-create>

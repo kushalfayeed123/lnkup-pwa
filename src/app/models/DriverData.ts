@@ -6,6 +6,7 @@ export class DriverData {
     carType: string;
     carLicense: any;
     plateNumber: number;
+    carDocument2: string;
     rating: number;
     rideDeclineCount: number;
     driverSeatCapacity: number;
