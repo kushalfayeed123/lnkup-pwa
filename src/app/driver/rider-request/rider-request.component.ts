@@ -135,7 +135,6 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     }, error => {
       console.log(error);
     });
-   
   }
 
 
@@ -145,7 +144,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const riderId = rider.activeRiderId;
     const receiverId = rider.user.userId;
     const driverName = this.activeTrip.tripDriver.driver.userName;
-    const message = `Sorry, ${driverName} declined your request. Do you want to LnkuP with another driver?`;
+    const message = `Sorry, ${driverName} declined your request. We will you link you up with other drivers shortly.`;
     this.riderService.delete(riderId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {

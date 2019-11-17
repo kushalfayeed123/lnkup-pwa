@@ -64,12 +64,16 @@
   }
   .destination-location {
     position: absolute;
-    top: 56px;
+    top: 62px;
   }
 
   .destination-details {
     display: flex;
     padding-left: 23px;
+
+  }
+  .destination{
+    padding: 14px 10px 14px 18px !important;
 
   }
   ::ng-deep .dark-snackbar-search{
@@ -87,7 +91,7 @@
     font-size: 12px;
     text-align: right;
     position: relative;
-    top: 23px;
+    top: 18px;
   }
   .login-text{
     left: 9%;
