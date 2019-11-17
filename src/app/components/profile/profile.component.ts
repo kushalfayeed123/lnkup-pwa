@@ -31,6 +31,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   licenseLoad: boolean;
   driverDataId: any;
   driverData: import("c:/sandbox/lnkup-mobile/src/app/models/DriverData").DriverData;
+  isDriver: boolean;
 
 
   constructor(private route: ActivatedRoute,
@@ -55,6 +56,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
     this.route.params.subscribe(p => {
       this.routeId = p.id;
+      this.getDriverData();
+
     });
     this.getUserProfileImage();
     this.getUserData();
@@ -67,11 +70,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userRole = user.role;
     const referral = user.token;
     this.ref = referral.slice(0, 6).toUpperCase();
+    if ( this.userRole === 'Driver') {
+      this.isDriver = true;
+    } else {
+      this.isDriver = false;
+    }
+  }
+
+  getDriverData() {
     this.driverDataService.getDriverByDriverId(this.routeId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
       this.driverData = res;
       this.driverDataId = res.driverDataId;
+    }, error => {
+      console.log(error);
     });
   }
 
@@ -148,41 +161,45 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   registerCar() {
-  
     this.licenseLoad = true;
     const message = 'Your information is being uploaded, this might take a while.';
     const successMessage = 'Thank you! Our team will review and get back to you when your submission has been approved.';
     const errorMessage = 'We were unable to update your profile due to some errors, please try again shortly.';
+    if (this.driverData === undefined) {
+       this.notifyService.showInfoMessage(message);
+       this.registerCarDetails.patchValue({driverId: this.userId});
+       const registerCar = this.registerCarDetails.value;
+       this.driverDataService.createDriverData(registerCar)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(res => {
+          this.licenseLoad = false;
+          this.notifyService.showSuccessMessage(successMessage);
+          this.openDialogue = false;
+        }, error => {
+          this.licenseLoad = false;
+          this.notifyService.showErrorMessage(errorMessage);
+        });
+      
+    } else {
+      this.licenseLoad = false;
+      const declineMessage = 'Sorry! you can not change your vehicle details.';
+      this.notifyService.showErrorMessage(declineMessage);
+      }
     // this.registerCarDetails.value.carType = this.driverData.carType;
     // this.registerCarDetails.value.carDocument2 = this.driverData.carDocument2;
 
-    this.notifyService.showInfoMessage(message);
-    this.registerCarDetails.patchValue({driverId: this.userId});
-    const registerCar = this.registerCarDetails.value;
-    if (this.driverData) {
-      const driverDataId =localStorage.getItem('driverDataId');
-      this.driverDataService.updateDriverData(driverDataId, registerCar)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        this.notifyService.showSuccessMessage(successMessage);
-        this.licenseLoad = false;
-        this.openDialogue = false;
-      }, error => {
-        this.notifyService.showErrorMessage(errorMessage);
-        this.licenseLoad = false;
-      });
-    } else {
-      this.driverDataService.createDriverData(registerCar)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        this.licenseLoad = false;
-        this.notifyService.showSuccessMessage(successMessage);
-        this.openDialogue = false;
-      }, error => {
-        this.licenseLoad = false;
-        this.notifyService.showErrorMessage(errorMessage);
-      });
-    }
+   
+      // const driverDataId = localStorage.getItem('driverDataId');
+      // this.driverDataService.updateDriverData(driverDataId, registerCar)
+      // .pipe(takeUntil(this.unsubscribe$))
+      // .subscribe(res => {
+      //   this.notifyService.showSuccessMessage(successMessage);
+      //   this.licenseLoad = false;
+      //   this.openDialogue = false;
+      // }, error => {
+      //   this.notifyService.showErrorMessage(errorMessage);
+      //   this.licenseLoad = false;
+      // });
   }
 
   uploadLicense(event) {

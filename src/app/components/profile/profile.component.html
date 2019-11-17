@@ -45,9 +45,9 @@
         </div>
       </div>
 
-      <div class="user-details" *ngIf="userRole == 'Driver' ">
-        <div *ngIf= "driverData || driverData == null">
-            <div style="padding-bottom: 20px;">{{driverData ? 'Update your vehicle details' : 'Please enter your vehicle details'}}</div>
+      <div class="user-details" *ngIf="isDriver">
+        <div>
+            <div style="padding-bottom: 20px;">Please enter your vehicle details</div>
             <mat-spinner *ngIf="licenseLoad"  [diameter]="30"
                 class="loader"
               ></mat-spinner>
@@ -62,7 +62,7 @@
                     <input type="text" matInput class="input-color" placeholder="Your Address" formControlName="workAddress" />
                   </mat-form-field>
               <button *ngIf="license" type="submit" mat-raised-button color="accent" 
-              class="auth-full-width login-text submit-license">{{driverData ? 'Update' : 'Submit'}}</button>
+              class="auth-full-width login-text submit-license">Submit</button>
             </form>
             <div>
                 <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>

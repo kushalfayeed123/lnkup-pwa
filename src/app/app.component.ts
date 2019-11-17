@@ -32,13 +32,13 @@ export class AppComponent {
                   this.getCurrentRoute();
                 });
                 this.pushNotificationSub();
+                // this.getLoggedInUser();
                 // this.notificationService.intiateConnection();
 
               }
 
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
-    this.getLoggedInUser();
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
     this.reload();

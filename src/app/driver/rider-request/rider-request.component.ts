@@ -84,13 +84,8 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       this.feePerSeat = activeTrip.aggregrateTripFee / activeTrip.maxRiderNumber;
       const allowedRiderCount = activeTrip.allowedRiderCount;
       this.maxSeat = activeTrip.maxRiderNumber;
-      if (allowedRiderCount === 0) {
-        this.allowedRiderCount = this.maxSeat;
-      } else {
-        this.allowedRiderCount = allowedRiderCount;
-      }
-      console.log('active trip', this.activeTrip);
     });
+    console.log('active trip', this.allowedRiderCount);
   }
   acceptTripRequest(rider) {
     console.log(rider);
@@ -104,7 +99,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const riderConnectionId = rider.riderConnectId;
     const message  = `Your request has been accepted, please lnkup with ${driverName}
     at ${pickup} on or before ${pickupTime}` ;
-    const newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
+    const newAllowedRiderCount = this.maxSeat - bookedSeat;
     if (newAllowedRiderCount === 0) {
       this.activeTripStatus = 0;
     } else {
@@ -123,24 +118,24 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       console.log(data);
-      this.tripService.updateTrip(this.activeTripId, activeTrip)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(response => {
-        this.getActiveTrips();
-        this.notifyService.sendAcceptMessage(receiverId, message);
-      }, error => {
-        console.log(error);
-      });
     }, error => {
       console.log(error);
     });
-
-    if (this.activeTripStatus === 0) {
+    this.tripService.updateTrip(this.activeTripId, activeTrip)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(response => {
+      this.getActiveTrips();
       this.notifyService.sendAcceptMessage(receiverId, message);
-      const user = JSON.parse(localStorage.getItem('currentUser'));
-      const userId = user.id;
-      this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true }});
-    }
+      if (this.activeTripStatus === 0) {
+        this.notifyService.sendAcceptMessage(receiverId, message);
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const userId = user.id;
+        this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true }});
+      }
+    }, error => {
+      console.log(error);
+    });
+   
   }
 
 

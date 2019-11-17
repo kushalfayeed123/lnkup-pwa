@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-driver-trip-create',
@@ -26,11 +27,11 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   tripEndLng: any;
   activeTrip: any;
   loading: boolean;
-  dateNow: string;
   tripDistance: number;
   tripTime: any;
   tripPricePerRider: number;
   connectionId: string;
+  dateNow: string;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
               private activeTripService: ActiveTripDataService,
@@ -69,6 +70,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     this.connectionId = connectionId;
   }
 
+
   getLocationCoordinates() {
       const tripStartLatLng = JSON.parse(localStorage.getItem('origin'));
       const tripEndLatLng = JSON.parse(localStorage.getItem('destination'));
@@ -102,7 +104,9 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     console.log(tripFare);
   }
   getTimeValues() {
-    this.dateNow = Date.now().toString();
+    const dateNow = new Date().getTime();
+    this.dateNow = formatDate(dateNow, ' hh:mm a', 'en-US');
+    // console.log(dateNow);
   }
   broadCastTrip() {
     if (!this.driverDataId) {
@@ -127,11 +131,15 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
             this.loading = false;
           }, 3000);
         });
+      } else if (this.tripForm.value.tripStartDateTime ) {
+
       } else {
         const message = 'number of riders exceeds car capacity';
         this.notifyService.showErrorMessage(message);
       }
     }
+    // const newDate = new Date(this.tripForm.value.tripStartDateTime)
+    // console.log(newDate);
   }
 
   ngOnDestroy() {

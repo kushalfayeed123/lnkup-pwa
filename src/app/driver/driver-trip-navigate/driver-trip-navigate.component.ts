@@ -65,7 +65,7 @@ export class DriverTripNavigateComponent implements OnInit {
   }
 
   endActiveTrip() {
-    const tripFee = this.activeTrip.aggregrateTripFee
+    const tripFee = this.activeTrip.aggregrateTripFee;
     const newTripFee = (20 / 100) * tripFee;
     const driverFee = tripFee - newTripFee;
     this.name = 'Your balance for this trip is';
