@@ -44,6 +44,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { AngularRaveModule } from 'angular-rave';
 import { PaymentComponent } from './components/payment/payment.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 
 
@@ -70,6 +71,7 @@ import { PaymentComponent } from './components/payment/payment.component';
     ProfileComponent,
     ModalComponent,
     PaymentComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,

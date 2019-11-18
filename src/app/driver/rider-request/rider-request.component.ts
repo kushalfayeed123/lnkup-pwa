@@ -24,7 +24,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     },
 
     spaceBetween: 30
-};
+  };
   activeTripId: string;
   activeTrip: any;
   riderRequest: ActiveRiders[];
@@ -34,11 +34,12 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   activeTripStatus: number;
   maxSeat: number;
   riderRequestLength: number;
+  newAllowedRiderCount: number;
 
   constructor(private tripService: ActiveTripDataService,
-              private notifyService: NotificationsService,
-              private riderService: ActiveRiderDataService,
-              private router: Router) {
+    private notifyService: NotificationsService,
+    private riderService: ActiveRiderDataService,
+    private router: Router) {
     this.getDriverSuccessAlert();
   }
 
@@ -50,22 +51,22 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
 
   async getDriverSuccessAlert() {
     await this.notifyService.successAlert
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(alert => {
-      if (alert === true) {
-        this.getActiveTrips();
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(alert => {
+        if (alert === true) {
+          this.getActiveTrips();
+        }
+      });
   }
 
   async getDriverCancelAlert() {
     await this.notifyService.declineAlert
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(alert => {
-      if (alert === true) {
-        this.getActiveTrips();
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(alert => {
+        if (alert === true) {
+          this.getActiveTrips();
+        }
+      });
   }
 
   getActiveTrips() {
@@ -76,15 +77,16 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
 
   getTripRequest(tripId) {
     this.tripService.getTripsById(tripId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(activeTrip => {
-      this.activeTrip = activeTrip;
-      this.riderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '1');
-      this.riderRequestLength = this.riderRequest.length;
-      this.feePerSeat = activeTrip.aggregrateTripFee / activeTrip.maxRiderNumber;
-      const allowedRiderCount = activeTrip.allowedRiderCount;
-      this.maxSeat = activeTrip.maxRiderNumber;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(activeTrip => {
+        this.activeTrip = activeTrip;
+        this.riderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '1');
+        this.riderRequestLength = this.riderRequest.length;
+        this.feePerSeat = activeTrip.aggregrateTripFee / activeTrip.maxRiderNumber;
+        const allowedRiderCount = activeTrip.allowedRiderCount;
+        this.allowedRiderCount = allowedRiderCount;
+        this.maxSeat = activeTrip.maxRiderNumber;
+      });
     console.log('active trip', this.allowedRiderCount);
   }
   acceptTripRequest(rider) {
@@ -97,44 +99,58 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const pickupTime = this.activeTrip.tripStartDateTime;
     const bookedSeat = rider.bookedSeat;
     const riderConnectionId = rider.riderConnectId;
-    const message  = `Your request has been accepted, please lnkup with ${driverName}
-    at ${pickup} on or before ${pickupTime}` ;
-    const newAllowedRiderCount = this.maxSeat - bookedSeat;
-    if (newAllowedRiderCount === 0) {
+    const message = `Your request has been accepted, please lnkup with ${driverName}
+    at ${pickup} on or before ${pickupTime}`;
+    if (this.allowedRiderCount <= 0) {
+      this.newAllowedRiderCount = this.maxSeat - bookedSeat;
+    } else {
+      this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
+    }
+    console.log('allowed rider count', this.newAllowedRiderCount);
+    const activeRider = {
+      tripStatus: '2',
+      paymentStatus: '0',
+      riderConnectId: riderConnectionId
+    };
+
+
+
+
+    this.riderService.update(riderId, activeRider)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        console.log(data);
+      }, error => {
+        console.log(error);
+      });
+
+    if (this.newAllowedRiderCount <= 0) {
       this.activeTripStatus = 0;
     } else {
       this.activeTripStatus = 1;
     }
-    const activeRider = {tripStatus: '2',
-                        paymentStatus: '0',
-                        riderConnectId: riderConnectionId};
 
-    const activeTrip = {driverTripStatus: this.activeTripStatus,
-                        allowedRiderCount: newAllowedRiderCount,
-                        tripConnectionId};
+    const activeTrip = {
+      driverTripStatus: this.activeTripStatus,
+      allowedRiderCount: this.newAllowedRiderCount,
+      tripConnectionId
+    };
 
 
-    this.riderService.update(riderId, activeRider)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      console.log(data);
-    }, error => {
-      console.log(error);
-    });
     this.tripService.updateTrip(this.activeTripId, activeTrip)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(response => {
-      this.getActiveTrips();
-      this.notifyService.sendAcceptMessage(receiverId, message);
-      if (this.activeTripStatus === 0) {
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
+        this.getActiveTrips();
         this.notifyService.sendAcceptMessage(receiverId, message);
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        const userId = user.id;
-        this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true }});
-      }
-    }, error => {
-      console.log(error);
-    });
+        if (this.activeTripStatus === 0) {
+          this.notifyService.sendAcceptMessage(receiverId, message);
+          const user = JSON.parse(localStorage.getItem('currentUser'));
+          const userId = user.id;
+          this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
+        }
+      }, error => {
+        console.log(error);
+      });
   }
 
 
@@ -146,13 +162,13 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const driverName = this.activeTrip.tripDriver.driver.userName;
     const message = `Sorry, ${driverName} declined your request. We will you link you up with other drivers shortly.`;
     this.riderService.delete(riderId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      this.notifyService.rejectMessage(receiverId, message);
-      this.getActiveTrips();
-    }, error => {
-      console.log('An error occured');
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.notifyService.rejectMessage(receiverId, message);
+        this.getActiveTrips();
+      }, error => {
+        console.log('An error occured');
+      });
   }
 
   ngOnDestroy() {

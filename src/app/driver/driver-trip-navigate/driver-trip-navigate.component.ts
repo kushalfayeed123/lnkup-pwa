@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
@@ -16,7 +16,15 @@ import { NotificationsService } from 'src/app/services/business/notificatons.ser
   templateUrl: './driver-trip-navigate.component.html',
   styleUrls: ['./driver-trip-navigate.component.scss']
 })
-export class DriverTripNavigateComponent implements OnInit {
+export class DriverTripNavigateComponent implements OnInit, OnDestroy {
+  public config: any = {
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
+
+    spaceBetween: 10
+};
   activeTripId: string;
   private unsubscribe$ = new Subject<void>();
   activeTrip: ActiveTrips;
