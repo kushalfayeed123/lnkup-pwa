@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   licenseImage: any;
   licenseLoad: boolean;
   driverDataId: any;
-  driverData: import("c:/sandbox/lnkup-mobile/src/app/models/DriverData").DriverData;
+  driverData: any;
   isDriver: boolean;
 
 
@@ -179,7 +179,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.licenseLoad = false;
           this.notifyService.showErrorMessage(errorMessage);
         });
-      
+
     } else {
       this.licenseLoad = false;
       const declineMessage = 'Sorry! you can not change your vehicle details.';
@@ -188,7 +188,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     // this.registerCarDetails.value.carType = this.driverData.carType;
     // this.registerCarDetails.value.carDocument2 = this.driverData.carDocument2;
 
-   
+
       // const driverDataId = localStorage.getItem('driverDataId');
       // this.driverDataService.updateDriverData(driverDataId, registerCar)
       // .pipe(takeUntil(this.unsubscribe$))
