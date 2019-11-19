@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
 import { BroadcastService } from './services/business/broadcastdata.service';
 import { environment } from 'src/environments/environment';
+import { AuthenticateDataService } from './services/data/authenticate.data.service';
 
 
 
@@ -22,19 +23,20 @@ export class AppComponent {
   newVersion: boolean;
   showSideNav: boolean;
   readonly VAPID_PUBLIC_KEY = '9dIdipwZchTnDphNemFLYbCNNzW9LfOpMhcc-gmxXJE';
+  public userRole = {} as any;
+
   // tslint:disable-next-line: variable-name
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
               private broadCastService: BroadcastService,
+              private authenticate: AuthenticateDataService,
               private route: Router,
               private swPush: SwPush) {
                 route.events.subscribe(url => {
                   this.getCurrentRoute();
+                  this.redirectUser();
                 });
                 this.pushNotificationSub();
-                // this.getLoggedInUser();
-                // this.notificationService.intiateConnection();
-
               }
 
   // tslint:disable-next-line: use-lifecycle-interface
@@ -44,14 +46,21 @@ export class AppComponent {
     this.reload();
       }
 
-  getLoggedInUser() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user) {
-      let role = user.role;
-      role = role.toLowerCase();
-      this.route.navigate([`${role}/home/${user.id}`]);
-    } else {
-      this.route.navigate(['/']);
+ 
+  redirectUser() {
+    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (loggedInUser) {
+      this.userRole = this.authenticate.decode();
+      const userId = loggedInUser.id;
+      if (this.userRole.role === 'Rider') {
+        this.route.navigate(['rider/home', userId]);
+      } else if (this.userRole.role ===  'Driver') {
+        this.route.navigate(['driver/home', userId]);
+      } else if (this.userRole.role === 'Admin') {
+        this.route.navigate(['admin/dashboard', userId]);
+      } else {
+        this.route.navigate(['login']);
+      }
     }
   }
 
