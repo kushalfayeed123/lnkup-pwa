@@ -33,17 +33,20 @@ export class SideNavComponent implements OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(showNav => {
       this.showSideNav = showNav;
+      if (this.showSideNav === true) {
+        this.getCurrentUser();
+      } else {
+        return;
+      }
     });
-    setTimeout(() => {
-      this.getCurrentUser();
-    }, 3000);
+
   }
 
    _toggleSidebar() {
     this._opened = !this._opened;
   }
   navToHome() {
-    
+
     this._router.navigate([`${this.userRole}/home/${this.userId}`]);
   }
   navToProfile() {
@@ -55,13 +58,19 @@ export class SideNavComponent implements OnDestroy {
     this._router.navigate(['/']);
   }
 
-  async getCurrentUser() {
-      const user = await  JSON.parse(localStorage.getItem('currentUser'));
+   getCurrentUser() {
+      const user =  JSON.parse(localStorage.getItem('currentUser'));
       if (user) {
         this.userName = user.userName;
         this.userId = user.id;
         this.userRole = user.role.toLowerCase();
       } else {
+        setTimeout(() => {
+          const user =  JSON.parse(localStorage.getItem('currentUser'));
+          this.userName = user.userName;
+          this.userId = user.id;
+          this.userRole = user.role.toLowerCase();
+        }, 5000);
         return;
       }
   }
