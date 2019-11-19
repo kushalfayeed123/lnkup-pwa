@@ -8,6 +8,8 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
 import { fadeInAnimation } from 'src/app/services/misc/animation';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { format } from 'url';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-register-user',
@@ -22,6 +24,8 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   public loading: boolean;
   public durationInSeconds = 4;
+  currentDate: string;
+  currentTime: string;
 
 
   constructor( private formBuilder: FormBuilder,
@@ -31,6 +35,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
      ) { }
 
   ngOnInit() {
+    this.getTime();
     this.registerForm = this.formBuilder.group({
       userName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -40,8 +45,16 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
       verificationCode : ['', Validators.required],
       phoneNumber: ['', Validators.required],
       termsAgree: ['', Validators.required],
-      userStatus: [0, Validators.required]
+      userStatus: [0, Validators.required],
+      signupDate: ['', Validators.required],
+      signupTime: ['', Validators.required]
     });
+  }
+
+  getTime() {
+    const currentDate = new Date();
+    this.currentTime = formatDate(currentDate, ' hh:mm a', 'en-US');
+    this.currentDate = formatDate(currentDate, ' MMMM d, y', 'en-US');
   }
 
   registerUser() {
@@ -55,8 +68,10 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
     const validateCode = randomCode.slice(0, 6);
     localStorage.setItem('userVerification', validateCode);
+
     this.registerForm.patchValue({verificationCode: validateCode, phoneNumber: userPhone,
-       userName: username, lastName: lastname });
+       userName: username, lastName: lastname, signupDate: this.currentDate, signupTime: this.currentTime });
+
     const registerValues = this.registerForm.value;
     this.authService.register(registerValues)
     .pipe(takeUntil(this.unsubscribe$))
