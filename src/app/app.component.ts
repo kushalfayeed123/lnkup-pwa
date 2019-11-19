@@ -1,3 +1,4 @@
+import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MetaService } from './services/business/metaService.service';
 import { SwUpdate, SwPush } from '@angular/service-worker';
@@ -26,6 +27,7 @@ export class AppComponent {
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
               private broadCastService: BroadcastService,
+              private authenticateService: AuthenticateDataService,
               private route: Router,
               private swPush: SwPush) {
                 route.events.subscribe(url => {
@@ -59,6 +61,7 @@ export class AppComponent {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe(next => {
         if (confirm('A new version is available. Do you want to load it?')) {
+          this.authenticateService.logout();
           window.location.reload();
         }
       });
