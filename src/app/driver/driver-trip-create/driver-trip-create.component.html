@@ -13,7 +13,7 @@
               <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
               <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
           </div> -->
-        <form [formGroup]="tripForm" id="book-seat-filled-form">
+        <form [formGroup]="tripForm" id="book-seat-filled-form" *ngIf="!loading">
         
 
             <!-- <div><a href="">Pickup Spot</a></div> -->
