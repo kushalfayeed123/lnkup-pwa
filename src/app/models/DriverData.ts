@@ -3,6 +3,7 @@ import { Users } from './Users';
 export class DriverData {
     driverDataId: string;
     driverId: string;
+    driverStatus: number;
     carType: string;
     carLicense: any;
     plateNumber: number;

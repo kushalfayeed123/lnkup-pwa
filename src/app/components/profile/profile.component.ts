@@ -188,7 +188,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     } else {
       this.licenseLoad = false;
-      const declineMessage = 'Sorry! you can not change your vehicle details.';
+      const declineMessage = 'You have previously uploaded your details, to update your details please send us a message on our support channel.';
       this.notifyService.showErrorMessage(declineMessage);
       }
     // this.registerCarDetails.value.carType = this.driverData.carType;

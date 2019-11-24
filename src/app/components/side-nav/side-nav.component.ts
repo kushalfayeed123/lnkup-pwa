@@ -53,6 +53,9 @@ export class SideNavComponent implements OnDestroy {
   navToProfile() {
     this._router.navigate([`profile/${this.userId}`]);
   }
+  navToSupport() {
+    this._router.navigate([`support/${this.userId}`]);
+  }
   logout() {
     this.authService.logout();
     this.opened = false;

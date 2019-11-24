@@ -45,6 +45,9 @@ import { ModalComponent } from './components/modal/modal.component';
 import { AngularRaveModule } from 'angular-rave';
 import { PaymentComponent } from './components/payment/payment.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { SupportComponent } from './components/support/support.component';
+import { AppReviewDataService } from './services/data/app-review/app-review.data.service';
+import { AppReviewWebService } from './services/data/app-review/app-review.web.service';
 
 
 
@@ -72,6 +75,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     ModalComponent,
     PaymentComponent,
     SpinnerComponent,
+    SupportComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,7 +117,9 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     {provide: AuthenticateDataService, useClass: AuthenticateWebService},
     {provide: ActiveRiderDataService, useClass: ActiveRiderWebService},
     {provide: ActiveTripDataService, useClass: ActiveTripWebService},
-    {provide: DriverDataDataService, useClass: DriverDataWebService}
+    {provide: DriverDataDataService, useClass: DriverDataWebService},
+    {provide: AppReviewDataService, useClass: AppReviewWebService}
+
 
   ],
   bootstrap: [AppComponent],

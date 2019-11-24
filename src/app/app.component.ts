@@ -77,10 +77,15 @@ export class AppComponent implements OnInit, OnDestroy{
     })
     .then(sub => this.authenticateService.saveSubscription(sub)
     .pipe(takeUntil(this.unsubscribe$))
-    .subscribe()
+    .subscribe(res => {
+      if (res !== null) {
+        console.log('subsription successful');
+      } else {
+        return;
+      }
+    })
     )
     .catch(err => console.error('Could not subscribe to notifications'));
-    // console.log(JSON.parse(JSON.stringify(sub)))
   }
 
   getCurrentRoute() {

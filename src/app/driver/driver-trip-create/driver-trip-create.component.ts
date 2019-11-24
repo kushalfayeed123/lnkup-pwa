@@ -32,6 +32,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   tripPricePerRider: number;
   connectionId: string;
   dateNow: string;
+  approvedStatus: any;
+  driverStatus: any;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
     private activeTripService: ActiveTripDataService,
@@ -64,8 +66,9 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
 
   getDriverDetails() {
-    const driverDataId = localStorage.getItem('driverDataId');
-    this.driverDataId = driverDataId;
+    const driverData = JSON.parse(localStorage.getItem('driverData'));
+    this.driverDataId = driverData.driverDataId;
+    this.driverStatus = driverData.driverStatus;
     const connectionId = sessionStorage.getItem('clientConnectionId');
     this.connectionId = connectionId;
   }
@@ -140,10 +143,14 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
   broadCastTrip() {
     if (!this.driverDataId) {
-      const message = 'You can not create a trip at the moment. Please update your information in your profile.';
+      const message = 'You can not create a trip at the moment. Please update your profile for approval.';
       this.notifyService.showErrorMessage(message);
       return;
 
+    } else if (this.driverStatus < 1) {
+      const message = 'Your aprroval is pending. We will review your documents and get back to you.';
+      this.notifyService.showErrorMessage(message);
+      return;
     } else {
       const seatCapacity = 4;
       const maxRiderNumber = this.tripForm.value.maxRiderNumber;

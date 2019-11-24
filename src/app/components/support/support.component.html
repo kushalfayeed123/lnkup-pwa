@@ -1,0 +1,68 @@
+<section class="chat-pages">
+    <nav>
+      <a (click)="navToHome()">
+          <img class="flaticon-back" src="./assets/Images/back-arrow.svg" alt="">
+      </a>
+      <div class="driver-details">
+        <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
+        <div class="name-container">
+          <h2 class="name">LnkuP Support</h2>
+          <span class="stats">Help Center</span>
+        </div>
+      </div>
+
+      <div class="toggle-comment">
+            <!-- <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
+            (click)="toggleReview()">
+            {{showReview ?'Report an issue' : 'Add a comment'}}          
+        </button> -->
+      </div>
+    </nav>
+    <main class="contain-box">
+      <!-- <div class="chat-box" *ngIf="!showReview">
+        <div class="send message">
+          What is the problem Ma?
+        </div>
+        <div class="receive message">
+          My driver stole my bag at the dropoff point and i would like him to
+          be caught
+        </div>
+        <div class="send message">
+          Ok we would handle this as an urgent matter
+        </div>
+        <div id="anchor"></div>
+      </div> -->
+      <div class="chat-box" *ngIf="!showReview">
+          <div>Hi, We would love to have your feedback, you can enter your comments below.
+               Please note that any comments you post here will be published on our website.
+                Thank you for riding with us.</div>
+            <div class="receive message"  *ngFor="let newMessge of allMessages; let i=index">
+              <div *ngIf="message">
+                  {{newMessge}}
+              </div>
+            </div>
+            <div class="send message" *ngIf="showResponse">
+                Thank you for your feedback, your comment will be published on our website.
+                 <!-- To send us a direct message please tap on 'Report an issue'. -->
+            </div>
+      </div>
+      <div class="compose">
+        <form [formGroup]="messageForm"  class="compose-content" id="send-form">
+          <textarea
+            formControlName = "userReview"
+            name=""
+            id="chat-box"
+            cols=""
+            rows="1"
+            placeholder="Message"
+            autofocus
+          ></textarea>
+          <!-- <input type="text" name="" id="" placeholder="Message" /> -->
+
+          <button id="send-message" (click)="sendMessage()">
+            <i class="material-icons right">send</i>
+        </button>
+        </form>
+      </div>
+    </main>
+  </section>

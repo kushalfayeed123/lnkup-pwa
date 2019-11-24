@@ -54,6 +54,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   renderOptions: { polylineOptions: { strokeColor: string; geodesic: boolean; strokeOpacity: number; strokeWeight: number; editable: boolean; }; };
   platNumber: any;
   plateNumber: any;
+  driverStatus: any;
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -107,20 +108,22 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
         this.loading = false;
       });
   }
-  async getDriverData() {
+  getDriverData() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
-    await this.driverDataService.getDriverByDriverId(userId)
+    this.driverDataService.getDriverByDriverId(userId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
       this.driverDataId = data.driverDataId;
       this.plateNumber = data.carDocument2.toUpperCase();
-      localStorage.setItem('driverDataId', this.driverDataId);
+      this.driverStatus = data.driverStatus;
+      const driverData = {driverDataId: this.driverDataId, driverStatus: this.driverStatus};
+      localStorage.setItem('driverData', JSON.stringify(driverData));
     });
     // this.updateDriverConnect();
   }
-  async getUserProfileImage(userId) {
-    await this.authService.getUserImage(userId)
+   getUserProfileImage(userId) {
+     this.authService.getUserImage(userId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(img => {
       if (img == null) {
@@ -222,7 +225,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
                                               editable: false, } };
       this.latitude = cl.lat;
       this.longitude = cl.lng;
-    }, 2000); 
+    }, 2000);
   }
   setDestination() {
     this.showDestination = false;

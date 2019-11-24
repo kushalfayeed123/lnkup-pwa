@@ -8,6 +8,7 @@ import { VerifycodeComponent } from './components/verifycode/verifycode.componen
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { SupportComponent } from './components/support/support.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
   { path: 'payment/:id', component: PaymentComponent },
   { path: 'profile/:id', component: ProfileComponent },
+  { path: 'support/:id', component: SupportComponent },
+
 
   {
     path: 'admin',
