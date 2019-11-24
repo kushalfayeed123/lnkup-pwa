@@ -22,13 +22,18 @@
         <agm-direction [origin]="origin" [destination]="destination" [renderOptions]="renderOptions"></agm-direction>
 
     </agm-map>
-    <!-- <mat-spinner *ngIf="loading"  [diameter]="30"
-    class="loader"
-  ></mat-spinner> -->
+
     <form class="destination-container" *ngIf="!reachableDrivers ">
         <mat-card *ngIf="!riderLink ">
+            <div *ngIf="gettingDrivers">
+                    <p class="search">Please hold on while we search for drivers near you</p>
+                    <mat-spinner   [diameter]="30"
+                    class="loader"
+                  ></mat-spinner>
+            </div>
+           
 
-            <mat-card-content>
+            <mat-card-content *ngIf="!gettingDrivers">
                 <mat-form-field class="auth-full-width">
                     <input type="text" matInput class="input-color" placeholder="Where are you going?" autocorrect="off"
                         autocapitalize="off" spellcheck="off" #search name="destinationAddress"

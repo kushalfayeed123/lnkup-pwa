@@ -4,9 +4,13 @@
           <div class="swiper-wrapper">
           <mat-card class="available-drivers-card swiper-slide" >
           <mat-card-content>
-              <mat-spinner *ngIf="!isTrips"  [diameter]="30"
-              class="loader"
-            ></mat-spinner>
+            <div *ngIf="!isTrips">
+                <p class="search">Contacting your driver</p>
+                <mat-spinner   [diameter]="30"
+                class="loader"
+              ></mat-spinner>
+            </div>
+             
                     <div class="avd" *ngIf="isTrips">
                       <!-- <h2 class="heading">Available Drivers</h2> -->
                       <div class="driver-container">

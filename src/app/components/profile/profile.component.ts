@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   driverDataId: any;
   driverData: any;
   isDriver: boolean;
+  isImage: boolean;
 
 
   constructor(private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
      ) { }
 
   ngOnInit() {
+    this.isImage = false;
     this.registerCarDetails = this.formBuilder.group({
       carType: ['', Validators.required],
       carLicense: ['', Validators.required],
@@ -64,6 +66,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getUserData() {
+    console.log('is image', this.isImage);
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.user = user;
     this.userId = user.id;
@@ -93,15 +96,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.openDialogue = !this.openDialogue;
   }
 
-  async getUserProfileImage() {
-    await this.authService.getUserImage(this.routeId)
+   getUserProfileImage() {
+     this.authService.getUserImage(this.routeId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(img => {
+      this.isImage = false;
+
       if (img == null) {
-        return;
+        this.isImage = false;
       } else {
         this.image = 'data:image/png;base64,' + img.image;
         this.imageId = img.imageId;
+        this.isImage = true;
       }
     });
   }

@@ -23,9 +23,8 @@ export class ActiveTripWebService implements ActiveTripDataService {
 
 
 
-  getAllActiveTrips(ActiveTripStatus)  {
-    const param = {status: ActiveTripStatus};
-    return this.http.get<ActiveTrips[]>(`${this.webUrl}/ActiveTrip`, ({params: param}));
+  getAllActiveTrips()  {
+    return this.http.get<ActiveTrips[]>(`${this.webUrl}/ActiveTrip`);
   }
   getTripsById(id: any) {
     return this.http.get<ActiveTrips>(`${this.webUrl}/ActiveTrip/${id}`);

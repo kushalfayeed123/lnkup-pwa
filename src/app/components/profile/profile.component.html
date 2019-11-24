@@ -13,9 +13,9 @@
           <img src="./assets/icons/create-24px.svg" alt="" (click)="openUploadDialogue()">
         </button>
       </div>
-      <div class="profile-info" (deferLoad)="image !== ''">
-        <img src="{{image}}" alt="" class="avi" *ngIf="image !== ''">
-        <img src="./assets/Images/default-user.png" class="avi" alt="" *ngIf="image === ''">
+      <div class="profile-info" (deferLoad)="!isImage">
+        <img src="{{image}}"  class="avi" *ngIf="isImage">
+        <img src="./assets/Images/default-user.png" class="avi"  *ngIf="!isImage">
         <div class="name-container">
           <h2 class="name">{{user.userName}}</h2>
           <span class="e-mail">{{user.email}}</span>

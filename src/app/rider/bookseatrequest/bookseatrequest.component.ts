@@ -31,6 +31,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   inValidSeat: boolean;
   driverId: any;
   driverEmail: any;
+  gettingDrivers: boolean;
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
@@ -80,7 +81,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
         const connectionId = sessionStorage.getItem('clientConnectionId');
         this.fare = this.request.tripFee;
         this.request.tripFee = this.newFare;
-        this.request.paymentType = 'cash';
+        this.request.paymentType = 'card';
         this.request.paymentStatus = 'Pending';
         this.request.bookedSeat  =  this.seatCount;
         this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
@@ -106,6 +107,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       this.notifyService.showInfoMessage(message);
       this.requestData = data;
       this.loading = false;
+      this.gettingDrivers = true;
     }, error => {
       const message = 'We could not send your request, please try again.';
       this.notifyService.showErrorMessage(message);

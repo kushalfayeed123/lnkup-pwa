@@ -7,7 +7,7 @@ import { ActiveTrips } from 'src/app/models/ActiveTrips';
 
 export abstract class ActiveTripDataService {
 
-  abstract getAllActiveTrips(status): Observable<ActiveTrips[]>;
+  abstract getAllActiveTrips(): Observable<ActiveTrips[]>;
   abstract getTripsById(id): Observable<ActiveTrips>;
   abstract createTrip(trips): Observable<any>;
   abstract updateTrip(id, trips): Observable<ActiveTrips>;

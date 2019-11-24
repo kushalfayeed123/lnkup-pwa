@@ -1,5 +1,11 @@
 <section class="auth-pages book-seat  filled-page settings-page auth-pages security" id="ride-confirmation">
-    <main class="contain-box ">
+    <div *ngIf="gettingDrivers">
+        <p class="search">Waiting for your driver to approve your request.</p>
+        <mat-spinner   [diameter]="30"
+        class="loader"
+      ></mat-spinner>
+</div>
+    <main class="contain-box " *ngIf="!gettingDrivers">
       <!-- <nav class="riderHeader">
         <a href="">
           <i class="flaticon-left-arrow"></i>
@@ -8,7 +14,7 @@
       </nav> -->
       <div class="page-heading">
         <p>
-          Please confirm your seat and pickup spot
+          Please confirm your seat and Drop off spot
         </p>
       </div>
       <mat-spinner *ngIf="loading" [diameter]="30"
@@ -26,18 +32,17 @@
             [ngModel]=seatCount (keyup)="computeTripFare(seatNumber.value)"/>
         </mat-form-field>
 
-        <div class="payment-options">
+        <!-- <div class="payment-options">
             <div class="c-card">
             </div>
             <mat-form-field class="auth-full-width">
-              <mat-label>Change Payment Options</mat-label>
+              <mat-label>Choose your payment method</mat-label>
               <mat-select >
                   <mat-option value="Card">Card</mat-option>
-                  <mat-option value="Cash">Cash</mat-option>
                   <mat-option value="Wallet">Wallet</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
+          </div> -->
         <div class="input-group fare-group">
           <div class="f-total">
             <label for="">Fare Total</label>
@@ -51,5 +56,7 @@
           Cancel Request
         </div> -->
       </form>
+    
     </main>
+   
   </section>

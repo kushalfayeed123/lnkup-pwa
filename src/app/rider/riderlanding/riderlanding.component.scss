@@ -35,8 +35,15 @@
     position: relative;
     height: 50px;
     width: 40%;
+    left: 28%;
+    bottom: 15px;
   }
-
+  .search {
+    text-align: left;
+    font-family: "Lato";
+    color: #ffffff;
+    font-size: 14px;
+  }
   .example-card {
     max-width: 400px;
     height: 157px !important;

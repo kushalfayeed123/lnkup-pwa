@@ -49,12 +49,14 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(trips => {
       const availableTrips = trips;
-      this.availableTrips = availableTrips.filter(d => d.driverTripStatus === 1 && d.pickupDistance < 8
+      this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
         && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0);
       console.log('available trips', this.availableTrips);
       if (this.availableTrips.length === 0) {
         this.emptyTrip = true;
         console.log('there are no trips headed in your direction');
+      } else {
+        return;
       }
       this.availableTrips.forEach(element => {
         const userName = element.tripDriver;

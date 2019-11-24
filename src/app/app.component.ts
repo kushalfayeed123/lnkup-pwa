@@ -1,5 +1,5 @@
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 import { MetaService } from './services/business/metaService.service';
 import { SwUpdate, SwPush } from '@angular/service-worker';
 import { Router } from '@angular/router';
@@ -7,6 +7,8 @@ import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
 import { BroadcastService } from './services/business/broadcastdata.service';
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 
@@ -18,11 +20,13 @@ import { environment } from 'src/environments/environment';
   encapsulation: ViewEncapsulation.None
 
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy{
   title = 'lnkup';
   newVersion: boolean;
   showSideNav: boolean;
-  readonly VAPID_PUBLIC_KEY = '9dIdipwZchTnDphNemFLYbCNNzW9LfOpMhcc-gmxXJE';
+  readonly VAPID_PUBLIC_KEY = environment.vapidPublicKey;
+  private unsubscribe$ = new Subject<void>();
+
   // tslint:disable-next-line: variable-name
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
@@ -68,12 +72,15 @@ export class AppComponent {
     }
   }
   pushNotificationSub()  {
-
     this.swPush.requestSubscription({
       serverPublicKey: this.VAPID_PUBLIC_KEY
     })
-    .then(sub => console.log(sub) )
+    .then(sub => this.authenticateService.saveSubscription(sub)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe()
+    )
     .catch(err => console.error('Could not subscribe to notifications'));
+    // console.log(JSON.parse(JSON.stringify(sub)))
   }
 
   getCurrentRoute() {
@@ -94,5 +101,10 @@ export class AppComponent {
       const showSideNav = false;
       this.broadCastService.publishSideNavValue(showSideNav);
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

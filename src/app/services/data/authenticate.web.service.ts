@@ -67,6 +67,9 @@ export class AuthenticateWebService implements AuthenticateDataService {
   register(user: any) {
     return this.http.post(`${this.webUrl}/user/register`, user);
   }
+  saveSubscription(sub: any) {
+    return this.http.post(`${this.webUrl}/subscribe`, sub);
+  }
   update(user: any) {
     console.log('from the service', user);
     return this.http.put(`${this.webUrl}/user/${user.id}`, user);
