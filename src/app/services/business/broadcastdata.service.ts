@@ -18,6 +18,9 @@ export class BroadcastService {
     private _startTrip = new BehaviorSubject(null);
     public startTrip = this._startTrip.asObservable();
 
+    private _driverImage = new BehaviorSubject(null);
+    public driverImage = this._driverImage.asObservable();
+
 
 
     constructor() {
@@ -42,5 +45,8 @@ export class BroadcastService {
     }
     publishStartTrip(startTrip) {
         this._startTrip.next(startTrip);
+    }
+    publishDriverImage(driverImage) {
+        this._driverImage.next(driverImage);
     }
 }

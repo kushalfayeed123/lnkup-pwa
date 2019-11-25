@@ -4,14 +4,14 @@
       <div class="driver-track">
         <div class="driver-item">
           <div class="container-grid">
-            <div class="avi-info" (deferLoad)="driverImage != null">
-              <img src="data:image/png;base64,{{driverImage}}" alt=""
-              class="profile-info" *ngIf="driverImage">
-             <img src="./assets/Images/default-user.png"
-              class="profile-info" alt="" *ngIf="!driverImage">
-              <h3 class="driver-name">{{driverData.driver.userName}}</h3>
+            <div class="avi-info" (deferLoad)="driverData.userImage.image != null">
+              <img *ngIf="driverData.userImage.image" src="data:image/png;base64,{{driverData.userImage.image}}" alt=""
+              class="profile-info" >
+             <img *ngIf="!driverData.userImage.image" src="./assets/Images/default-user.png"
+              class="profile-info" alt="" >
+              <h3 class="driver-name">{{driverData.userName}}</h3>
               <div>
-                <div class="seats sub">XYZ66YhD</div>
+                <div class="seats sub">{{plateNumber}}</div>
               </div>
             </div>
             <div class="destination-details">

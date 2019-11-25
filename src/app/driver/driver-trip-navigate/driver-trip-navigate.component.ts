@@ -85,6 +85,9 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       this.endTrip = false;
+      localStorage.removeItem('activeTrip');
+      localStorage.removeItem('origin');
+      localStorage.removeItem('destination');
       this.sendTripEndMessage();
       this.router.navigate(['driver/home', this.userId]);
     });

@@ -9,6 +9,9 @@ import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-
 import { DriverData } from 'src/app/models/DriverData';
 import { MatDialog } from '@angular/material';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
+import { Users } from 'src/app/models/Users';
 
 @Component({
   selector: 'app-riderlink',
@@ -22,13 +25,15 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   driverName: any;
   userId: any;
   driverId: any;
-  driverData: DriverData;
+  driverData: Users;
   driverImage: string;
   name: string;
+  plateNumber: any;
 
   constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
               private tripService: ActiveTripDataService,
+              private authService: AuthenticateDataService,
               public dialog: MatDialog,
               private router: Router) { }
 
@@ -45,17 +50,20 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     this.userId = user.id;
     this.pickupAddress = trip.tripPickup;
     const driverId = trip.driverId;
-    this.getDriverData(driverId);
+    this.getDriverData();
   }
 
-  getDriverData(driverId) {
-    this.driverDataService.getDriverByDriverId(driverId)
+  getDriverData() {
+    const driverData = JSON.parse(localStorage.getItem('tripDetails'));
+    const driverUserId = driverData.driverUserId;
+    this.plateNumber = driverData.plateNumber;
+    this.authService.getById(driverUserId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
       this.driverData = res;
-      this.driverImage = res.driver.userImage.image;
-      console.log('driverData', this.driverData);
+      console.log('driver', res);
     });
+  
   }
 
   confirmCancelRequest() {
