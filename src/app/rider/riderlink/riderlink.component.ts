@@ -66,6 +66,10 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   
   }
 
+  makePayment() {
+    this.showPaymentMessage();
+  }
+
   confirmCancelRequest() {
     if (confirm('You will be charged N400 if you cancel, continue?')) {
       this.showPaymentMessage();
