@@ -34,6 +34,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   dateNow: string;
   approvedStatus: any;
   driverStatus: any;
+  loader: boolean;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
     private activeTripService: ActiveTripDataService,
@@ -142,14 +143,17 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     // console.log(dateNow);
   }
   broadCastTrip() {
+    this.loader = true;
     if (!this.driverDataId) {
       const message = 'You can not create a trip at the moment. Please update your profile for approval.';
       this.notifyService.showErrorMessage(message);
+      this.loader = false;
       return;
 
     } else if (this.driverStatus < 1) {
       const message = 'Your aprroval is pending. We will review your documents and get back to you.';
       this.notifyService.showErrorMessage(message);
+      this.loader = false;
       return;
     } else {
       const seatCapacity = 4;
@@ -158,6 +162,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         this.activeTripService.createTrip(this.tripForm.value)
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(trip => {
+            this.loader = false;
             this.activeTrip = trip;
             localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
             const message = 'Your trip has been created and is currently being broadcasted';
@@ -168,9 +173,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
               this.loading = false;
             }, 3000);
           });
-      } else if (this.tripForm.value.tripStartDateTime) {
-
-      } else {
+        } else {
+        this.loader = false;
         const message = 'number of riders exceeds car capacity';
         this.notifyService.showErrorMessage(message);
       }

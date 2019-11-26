@@ -33,16 +33,15 @@
         <div id="anchor"></div>
       </div> -->
       <div class="chat-box" *ngIf="!showReview">
-          <div>Hi, We would love to have your feedback, you can enter your comments below.
-               Please note that any comments you post here will be published on our website.
-                Thank you for riding with us.</div>
+          <div>Hi, we would love to have your feedback, please enter your comments below. Thank you for riding with us!
+              </div>
             <div class="receive message"  *ngFor="let newMessge of allMessages; let i=index">
               <div *ngIf="message">
                   {{newMessge}}
               </div>
             </div>
             <div class="send message" *ngIf="showResponse">
-                Thank you for your feedback, your comment will be published on our website.
+                Thank you for your feedback, our customer service representative will get back as soon as possible.
                  <!-- To send us a direct message please tap on 'Report an issue'. -->
             </div>
       </div>
