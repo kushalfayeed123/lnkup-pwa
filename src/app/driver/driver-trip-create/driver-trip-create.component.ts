@@ -60,7 +60,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       maxRiderNumber: ['', [Validators.required]],
       tripStartDateTime: ['', [Validators.required]],
       aggregrateTripFee: [this.fare, [Validators.required]],
-      tripType: ['', [Validators.required]],
+      tripType: ['Regular', [Validators.required]],
       allowedRiderCount: [0, [Validators.required]],
       tripConnectionId: [this.connectionId, [Validators.required]]
     });
