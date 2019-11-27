@@ -69,6 +69,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   today = new Date();
   todaysDataTime = '';
   greeting: string;
+  showNoTripMessage: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -252,7 +253,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         const allActiveTrips = data;
-      
+        if (data.length === 0) {
+          this.showNoTripMessage = true;
+          setTimeout(() => {
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            this.router.onSameUrlNavigation = 'reload';
+            this.router.navigate([`rider/home/${this.userId}`]);
+          }, 5000);
+
+        }
+
         allActiveTrips.forEach(element => {
           const tripDestinationLat = Number(element.driverEndLatitude);
           const tripDestinationLong = Number(element.driverEndLongitude);

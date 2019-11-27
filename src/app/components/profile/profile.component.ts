@@ -212,25 +212,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   uploadLicense(event) {
-    this.licenseLoad = true;
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(event.target.files[0]);
-    fileReader.onload = async () => {
-        const file = fileReader.result.toString().split(',')[1];
+    const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = async () => {
+        this.licenseLoad = true;
+        const file = reader.result.toString().split(',')[1];
         const model = { File: file };
-        this.license = { image: model.File };
-        this.licenseImage = 'data:image/png;base64,' + this.license.image;
-        this.carLicenseForm.patchValue({carLicense: this.license.image, driverId: this.userId});
+        const image = { image: model.File };
+        this.carLicenseForm.patchValue({carLicense: image.image, driverId: this.userId});
+        if (image) {
+          // this.notifyService.showInfoMessage('Your License is uploading, this will take a while.');
+          this.driverDataService.uploadDriverLicense(this.carLicenseForm.value)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(res => {
+            this.notifyService.showSuccessMessage('Your license has been uploaded successfully.');
+            this.licenseLoad = false;
+          }, error => {
+            this.notifyService.showErrorMessage('An error occured. This might be network related.')
+          });
+        }
       };
-    if (this.licenseImage) {
-        this.notifyService.showInfoMessage('Your License is uploading, this will take a while.');
-        this.driverDataService.uploadDriverLicense(this.carLicenseForm)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(res => {
-          this.notifyService.showSuccessMessage('Your license has been uploaded successfully');
-          this.licenseLoad = false;
-        });
-      }
+   
   }
 
 

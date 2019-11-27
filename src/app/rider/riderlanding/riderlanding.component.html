@@ -25,15 +25,17 @@
 
     <form class="destination-container" *ngIf="!reachableDrivers ">
         <mat-card *ngIf="!riderLink ">
-            <div *ngIf="gettingDrivers">
+            <div *ngIf="gettingDrivers && !showNoTripMessage">
                     <p class="search">Please hold on while we search for drivers near you</p>
                     <mat-spinner   [diameter]="30"
                     class="loader"
                   ></mat-spinner>
             </div>
-           
 
-            <mat-card-content *ngIf="!gettingDrivers">
+            <div *ngIf="showNoTripMessage">Sorry there are no trips at the moment. Please try again later.</div>
+
+
+            <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
                 <mat-form-field class="auth-full-width">
                     <input type="text" matInput class="input-color" placeholder="Where are you going?" autocorrect="off"
                         autocapitalize="off" spellcheck="off" #search name="destinationAddress"
