@@ -74,11 +74,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(param => {
       this.driverNavigate = param.driverNav;
+      this.getDriverData();
     });
     this.showLanding = true;
     this.showDestination = true;
     this.getCurrentLocation();
-    this.getDriverData();
     this.zoom = 15;
     this.route.params.subscribe(p => {
       const userId = p.id;
@@ -234,8 +234,14 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
   setPickup() {
     this.showDestination = true;
-    this.showLanding = false;
-    this.mapService.findOrigin(this.pickupFull);
+    if (!this.driverDataId) {
+      this.showDestination = false;
+      this.notificationService.showErrorMessage('Sorry you can not create a trip at the moment. Please complete your vehicle registration')
+    } else {
+      this.showLanding = false;
+      this.mapService.findOrigin(this.pickupFull);
+    }
+   
   }
 
   ngOnDestroy() {

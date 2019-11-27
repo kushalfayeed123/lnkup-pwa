@@ -68,6 +68,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
 
   getDriverDetails() {
     const driverData = JSON.parse(localStorage.getItem('driverData'));
+  
     this.driverDataId = driverData.driverDataId;
     this.driverStatus = driverData.driverStatus;
     const connectionId = sessionStorage.getItem('clientConnectionId');
@@ -151,7 +152,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       return;
 
     } else if (this.driverStatus < 1) {
-      const message = 'Your aprroval is pending. We will review your documents and get back to you.';
+      const message = 'Your approval is pending. We will review your documents and get back to you.';
       this.notifyService.showErrorMessage(message);
       this.loader = false;
       return;

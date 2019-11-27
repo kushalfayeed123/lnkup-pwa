@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy{
                   this.getCurrentRoute();
                 });
                 this.pushNotificationSub();
-                // this.getLoggedInUser();
+                this.getLoggedInUser();
                 // this.notificationService.intiateConnection();
 
               }

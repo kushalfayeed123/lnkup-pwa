@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   userImage: { file: string; };
   showBackupImg: boolean;
   registerCarDetails: FormGroup;
+  carLicenseForm: FormGroup;
   userId: any;
   userRole: any;
   license: { image: string; };
@@ -46,8 +47,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.isImage = false;
     this.registerCarDetails = this.formBuilder.group({
       carType: ['', Validators.required],
-      carLicense: ['', Validators.required],
-      carDocument1: ['', Validators.required],
       carDocument2: ['', Validators.required],
       driverId: ['', Validators.required],
       rating: [0, Validators.required],
@@ -56,6 +55,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       maxCarSeatNumber: [4, Validators.required],
       workAddress: ['', Validators.required]
     });
+    this.carLicenseForm = this.formBuilder.group({
+      driverId: ['', Validators.required],
+      carLicense: ['', Validators.required],
+    })
     this.route.params.subscribe(p => {
       this.routeId = p.id;
       this.getDriverData();
@@ -168,7 +171,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   registerCar() {
     this.licenseLoad = true;
-    const message = 'Your information is being uploaded, this might take a while.';
+    const message = 'Your information is being uploaded.';
     const successMessage = 'Thank you! Our team will review and get back to you when your submission has been approved.';
     const errorMessage = 'We were unable to update your profile due to some errors, please try again shortly.';
     if (this.driverData === undefined) {
@@ -217,11 +220,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
         const model = { File: file };
         this.license = { image: model.File };
         this.licenseImage = 'data:image/png;base64,' + this.license.image;
-        this.registerCarDetails.patchValue({carLicense: this.license.image});
-        this.loading = false;
+        this.carLicenseForm.patchValue({carLicense: this.license.image, driverId: this.userId});
       };
     if (this.license !== null) {
-        console.log('image has been uploaded', event.target);
+        this.notifyService.showInfoMessage('Your License is uploading, this will take a while.');
+        this.driverDataService.uploadDriverLicense(this.carLicenseForm)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(res => {
+          this.notifyService.showSuccessMessage('Your license has been uploaded successfully');
+          this.loading = false;
+        });
       }
   }
 

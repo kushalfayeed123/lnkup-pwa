@@ -49,15 +49,20 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(trips => {
       const availableTrips = trips;
-      this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
-        && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0);
-      console.log('available trips', this.availableTrips);
-      if (this.availableTrips.length === 0) {
+      if (!trips) {
         this.emptyTrip = true;
-        console.log('there are no trips headed in your direction');
-      } else {
         return;
       }
+      this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
+          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0);
+      if (this.availableTrips.length === 0) {
+            this.emptyTrip = true;
+            console.log('there are no trips headed in your direction');
+          } else {
+            return;
+          }
+      console.log('available trips', this.availableTrips);
+      
       this.availableTrips.forEach(element => {
         const userName = element.tripDriver;
         if (userName) {
@@ -79,19 +84,19 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     });
   }
 
-  passTripDetails(userTripId) {
+passTripDetails(userTripId) {
     this.mapService.publishTripDetails(userTripId);
     this.showTripDetails = true;
     console.log(this.showTripDetails);
   }
-  navToTripSearch() {
+navToTripSearch() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['rider/home', userId]);
      }
-  ngOnDestroy() {
+ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

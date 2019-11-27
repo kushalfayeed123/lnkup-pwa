@@ -252,6 +252,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         const allActiveTrips = data;
+      
         allActiveTrips.forEach(element => {
           const tripDestinationLat = Number(element.driverEndLatitude);
           const tripDestinationLong = Number(element.driverEndLongitude);
