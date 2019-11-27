@@ -146,13 +146,13 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   broadCastTrip() {
     this.loader = true;
     if (!this.driverDataId) {
-      const message = 'You can not create a trip at the moment. Please update your profile for approval.';
+      const message = 'Your profile is incomplete. Please complete your driver registration to start sharing a ride.';
       this.notifyService.showErrorMessage(message);
       this.loader = false;
       return;
 
     } else if (this.driverStatus < 1) {
-      const message = 'Your approval is pending. We will review your documents and get back to you.';
+      const message = 'Your document is currently under review for approval. We will get back to you as soon as we complete our background checks.';
       this.notifyService.showErrorMessage(message);
       this.loader = false;
       return;
@@ -176,7 +176,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           });
         } else {
         this.loader = false;
-        const message = 'number of riders exceeds car capacity';
+        const message = 'Number of riders exceeds car capacity';
         this.notifyService.showErrorMessage(message);
       }
     }
