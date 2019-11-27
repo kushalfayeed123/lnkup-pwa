@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.carLicenseForm = this.formBuilder.group({
       driverId: ['', Validators.required],
       carLicense: ['', Validators.required],
-    })
+    });
     this.route.params.subscribe(p => {
       this.routeId = p.id;
       this.getDriverData();
@@ -212,7 +212,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   uploadLicense(event) {
-    this.loading = true;
+    this.licenseLoad = true;
     const fileReader = new FileReader();
     fileReader.readAsDataURL(event.target.files[0]);
     fileReader.onload = async () => {
@@ -222,13 +222,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.licenseImage = 'data:image/png;base64,' + this.license.image;
         this.carLicenseForm.patchValue({carLicense: this.license.image, driverId: this.userId});
       };
-    if (this.license !== null) {
+    if (this.licenseImage) {
         this.notifyService.showInfoMessage('Your License is uploading, this will take a while.');
         this.driverDataService.uploadDriverLicense(this.carLicenseForm)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
           this.notifyService.showSuccessMessage('Your license has been uploaded successfully');
-          this.loading = false;
+          this.licenseLoad = false;
         });
       }
   }
