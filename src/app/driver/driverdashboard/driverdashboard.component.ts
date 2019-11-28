@@ -74,6 +74,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(param => {
       this.driverNavigate = param.driverNav;
+      this.clearLocations();
       this.getDriverData();
     });
     this.showLanding = true;
@@ -243,7 +244,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     }
    
   }
+  clearLocations() {
+    localStorage.removeItem('origin');
+    localStorage.removeItem('destination');
 
+  }
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

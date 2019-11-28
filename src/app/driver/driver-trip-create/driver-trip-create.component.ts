@@ -49,14 +49,14 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     this.getTimeValues();
     this.fare = 0;
     this.tripForm = this.fb.group({
-      tripPickup: [this.pickup, [Validators.required]],
-      tripDestination: [this.destination, [Validators.required]],
+      tripPickup: [{ value: this.pickup, disabled: true }, [Validators.required]],
+      tripDestination: [{ value: this.destination, disabled: true }, [Validators.required]],
       driverDataId: [this.driverDataId, [Validators.required]],
       driverTripStatus: [1, [Validators.required]],
-      driverStartLongitude: [this.tripStartLng, [Validators.required]],
-      driverStartLatitude: [this.tripStartLat, [Validators.required]],
-      driverEndLongitude: [this.tripEndLng, [Validators.required]],
-      driverEndLatitude: [this.tripEndLat, [Validators.required]],
+      driverStartLongitude: ['', [Validators.required]],
+      driverStartLatitude: ['', [Validators.required]],
+      driverEndLongitude: ['', [Validators.required]],
+      driverEndLatitude: ['', [Validators.required]],
       maxRiderNumber: ['', [Validators.required]],
       tripStartDateTime: ['', [Validators.required]],
       aggregrateTripFee: [this.fare, [Validators.required]],
@@ -68,7 +68,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
 
   getDriverDetails() {
     const driverData = JSON.parse(localStorage.getItem('driverData'));
-  
+
     this.driverDataId = driverData.driverDataId;
     this.driverStatus = driverData.driverStatus;
     const connectionId = sessionStorage.getItem('clientConnectionId');
@@ -97,7 +97,12 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         const pricePerRiderPerKm = 37;
         const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
         this.tripPricePerRider = tripPricePerRider;
-        console.log('trip price per rider', tripPricePerRider);
+        this.tripForm.patchValue({
+          driverEndLatitude: this.tripEndLat,
+          driverEndLongitude: this.tripEndLng,
+          driverStartLatitude: this.tripStartLat,
+          driverStartLongitude: this.tripStartLng
+        });
         this.loading = false;
       });
     } else {
@@ -120,10 +125,15 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           const pricePerRiderPerKm = 37;
           const tripPricePerRider = Math.round(pricePerRiderPerKm * this.tripDistance);
           this.tripPricePerRider = tripPricePerRider;
-          console.log('trip price per rider', tripPricePerRider);
+          this.tripForm.patchValue({
+            driverEndLatitude: this.tripEndLat,
+            driverEndLongitude: this.tripEndLng,
+            driverStartLatitude: this.tripStartLat,
+            driverStartLongitude: this.tripStartLng
+          });
           this.loading = false;
         });
-      }, 2000);
+      }, 5000);
     }
   }
 
@@ -174,9 +184,9 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
               this.loading = false;
             }, 3000);
           });
-        } else {
+      } else {
         this.loader = false;
-        const message = 'Number of riders exceeds car capacity';
+        const message = 'Number of riders exceeds car seating capacity';
         this.notifyService.showErrorMessage(message);
       }
     }

@@ -20,83 +20,85 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     },
 
     spaceBetween: 30
-};
+  };
   availableTrips: any;
   emptyTrip: boolean;
   destinationLocation = [];
   availableSeats = [];
   driverUserName = [];
-  pickUp  =  [];
+  pickUp = [];
   pickupAddress: any;
   showTripDetails: boolean;
 
 
   constructor(private mapService: MapBroadcastService,
-              private broadcastService: BroadcastService,
-              private router: Router) { }
+    private broadcastService: BroadcastService,
+    private router: Router) { }
 
   ngOnInit() {
     this.broadcastService.showTripDetails
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      this.showTripDetails = data;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.showTripDetails = data;
+      });
     this.getAvailableTrips();
   }
 
   getAvailableTrips() {
     this.mapService.availableTrips
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(trips => {
-      const availableTrips = trips;
-      if (!trips) {
-        this.emptyTrip = true;
-        return;
-      }
-      this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
-          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0);
-      if (this.availableTrips.length === 0) {
-            this.emptyTrip = true;
-            console.log('there are no trips headed in your direction');
-          } else {
-            return;
-          }
-      console.log('available trips', this.availableTrips);
-      
-      this.availableTrips.forEach(element => {
-        const userName = element.tripDriver;
-        if (userName) {
-          this.driverUserName.push(userName.driver.userName);
-          console.log(userName.driver.userName);
-        } else {
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(trips => {
+        const availableTrips = trips;
+        if (!trips) {
+          this.emptyTrip = true;
           return;
         }
-        const maxSeats = element.maxRiderNumber;
-        const allowedRiderCount = element.allowedRiderCount;
-        if (allowedRiderCount === 0) {
-          const availableSeat = maxSeats;
-          this.availableSeats.push(availableSeat);
+        this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
+          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0);
+        if (this.availableTrips.length === 0) {
+          this.emptyTrip = true;
+          console.log('there are no trips headed in your direction');
         } else {
-          const availableSeat = allowedRiderCount;
-          this.availableSeats.push(availableSeat);
+          this.availableTrips.forEach(element => {
+            const userName = element.tripDriver;
+            if (userName) {
+              this.driverUserName.push(userName.driver.userName);
+              console.log(userName.driver.userName);
+            } else {
+              return;
+            }
+            const maxSeats = element.maxRiderNumber;
+            const allowedRiderCount = element.allowedRiderCount;
+            if (allowedRiderCount === 0) {
+              const availableSeat = maxSeats;
+              this.availableSeats.push(availableSeat);
+              console.log('available seats', this.availableSeats);
+
+            } else {
+              const availableSeat = allowedRiderCount;
+              this.availableSeats.push(availableSeat);
+              console.log('available seats', this.availableSeats);
+            }
+          });
         }
+        console.log('available trips', this.availableTrips);
+
       });
-    });
   }
 
-passTripDetails(userTripId) {
+  passTripDetails(userTripId) {
     this.mapService.publishTripDetails(userTripId);
     this.showTripDetails = true;
     console.log(this.showTripDetails);
   }
-navToTripSearch() {
+  navToTripSearch() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['rider/home', userId]);
-     }
-ngOnDestroy() {
+  }
+  ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

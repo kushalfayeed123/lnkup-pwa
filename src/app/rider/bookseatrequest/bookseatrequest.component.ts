@@ -79,21 +79,40 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
         const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
         this.request = JSON.parse(localStorage.getItem('riderRequest'));
         const connectionId = sessionStorage.getItem('clientConnectionId');
-        this.fare = this.request.tripFee;
-        this.request.tripFee = this.newFare;
-        this.request.paymentType = 'card';
-        this.request.paymentStatus = 'Pending';
-        this.request.bookedSeat  =  this.seatCount;
-        this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
-        this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
-        this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
-        this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
-        this.request.userId = activeRequest.userId;
-        this.request.tripStatus = activeRequest.tripStatus;
-        this.request.riderConnectId = connectionId;
-        this.tripConnectionId = this.request.tripConnectionId;
-        localStorage.setItem('riderRequest', JSON.stringify(this.request));
-        console.log(this.dropoff);
+        if (activeRequest != null && this.request != null) {
+          this.fare = this.request.tripFee;
+          this.request.tripFee = this.newFare;
+          this.request.paymentType = 'card';
+          this.request.paymentStatus = 'Pending';
+          this.request.bookedSeat  =  this.seatCount;
+          this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
+          this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
+          this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
+          this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
+          this.request.userId = activeRequest.userId;
+          this.request.tripStatus = activeRequest.tripStatus;
+          this.request.riderConnectId = connectionId;
+          this.tripConnectionId = this.request.tripConnectionId;
+          localStorage.setItem('riderRequest', JSON.stringify(this.request));
+        } else {
+          setTimeout(() => {
+            this.fare = this.request.tripFee;
+            this.request.tripFee = this.newFare;
+            this.request.paymentType = 'card';
+            this.request.paymentStatus = 'Pending';
+            this.request.bookedSeat  =  this.seatCount;
+            this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
+            this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
+            this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
+            this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
+            this.request.userId = activeRequest.userId;
+            this.request.tripStatus = activeRequest.tripStatus;
+            this.request.riderConnectId = connectionId;
+            this.tripConnectionId = this.request.tripConnectionId;
+            localStorage.setItem('riderRequest', JSON.stringify(this.request));
+          }, 5000);
+        }
+       
   }
 
   createRiderRequest() {
