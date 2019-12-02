@@ -42,12 +42,13 @@ import { NotificationsService } from './services/business/notificatons.service';
 import {ToastrModule} from 'ngx-toastr';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { AngularRaveModule } from 'angular-rave';
 import { PaymentComponent } from './components/payment/payment.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { SupportComponent } from './components/support/support.component';
 import { AppReviewDataService } from './services/data/app-review/app-review.data.service';
 import { AppReviewWebService } from './services/data/app-review/app-review.web.service';
+import { PaymentDataService } from './services/data/payment/payment.data.service';
+import { PaymentWebService } from './services/data/payment/payment.web.service';
 
 
 
@@ -99,10 +100,6 @@ import { AppReviewWebService } from './services/data/app-review/app-review.web.s
     AgmDirectionModule,
     MatGoogleMapsAutocompleteModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    AngularRaveModule.forRoot({
-      key: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
-      isTest: true,
-    }),
   ],
   
   providers: [
@@ -118,9 +115,8 @@ import { AppReviewWebService } from './services/data/app-review/app-review.web.s
     {provide: ActiveRiderDataService, useClass: ActiveRiderWebService},
     {provide: ActiveTripDataService, useClass: ActiveTripWebService},
     {provide: DriverDataDataService, useClass: DriverDataWebService},
-    {provide: AppReviewDataService, useClass: AppReviewWebService}
-
-
+    {provide: AppReviewDataService, useClass: AppReviewWebService},
+    {provide: PaymentDataService, useClass: PaymentWebService}
   ],
   bootstrap: [AppComponent],
   entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent]
