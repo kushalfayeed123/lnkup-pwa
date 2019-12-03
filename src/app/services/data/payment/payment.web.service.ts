@@ -13,8 +13,8 @@ import { VerifyPayment, Payment, UserPaymentToken, EncryptedPayment } from 'src/
 @Injectable({ providedIn: 'root' })
 
 export class PaymentWebService implements PaymentDataService {
-  
-   
+
+
     public webUrl: string;
     public raveUrl: string;
     constructor(private http: HttpClient) {
@@ -45,8 +45,8 @@ export class PaymentWebService implements PaymentDataService {
     getEncryptKey() {
         return this.http.get<Payment>(`${this.webUrl}/encrypt/getKey`);
     }
-    EncryptPaymentPayload(payment: any) {
-        return this.http.post<any>(`${this.webUrl}/encrypt/encryptPayload`, payment);
+    EncryptPaymentPayload(key: string, payment: any) {
+        return this.http.post<any>(`${this.webUrl}/encrypt/${key}`, payment);
     }
 
     makePayment(encryptedPayload: any) {

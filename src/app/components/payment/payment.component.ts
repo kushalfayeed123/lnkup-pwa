@@ -48,11 +48,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   encryptedData: Payment;
   userRole: any;
+  firstPaymentData: import('c:/xampp/htdocs/lnkup-mobile/src/app/models/payment').EncryptedPayment;
 
   constructor(private fb: FormBuilder,
               private paymentDataService: PaymentDataService,
-              private _router: Router) {
-    this.PBFPubKey = 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X';
+              private router: Router) {
+    this.PBFPubKey = environment.ravePubKey;
     this.currency = 'NGN';
     this.country = 'NG';
     this.amount = '10';
@@ -61,7 +62,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getCurrentUser();
     this.cardDetailsForm = this.fb.group({
-      userId: ['', [Validators.required]],
       PBFPubKey: ['', [Validators.required]],
       cardno: ['', [Validators.required]],
       cvv: ['', [Validators.required]],
@@ -74,25 +74,23 @@ export class PaymentComponent implements OnInit, OnDestroy {
       firstname: ['', [Validators.required]],
       phonenumber: ['', [Validators.required]],
       txRef: ['', [Validators.required]],
-      redirect_url: ['', [Validators.required]],
-      encryptionKey: ['', [Validators.required]],
-
+      redirect_url: ['', [Validators.required]]
     });
 
     this.generateReference();
   }
 
   navToHome() {
-    this._router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this._router.onSameUrlNavigation = 'reload';
-    this._router.navigate([`${this.userRole}/home/${this.userId}`]);
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate([`${this.userRole}/home/${this.userId}`]);
   }
 
   getCurrentUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.userName = user.userName;
     this.userId = user.id;
-    this.userPhone = user.phoneNumber;
+    this.userPhone = user.phoneNumber.substring(4);
     this.userEmail = user.email;
     this.userRole = user.role;
     this.redirect = `http://localhost:4200/payment/${this.userId}`;
@@ -106,8 +104,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       if (key) {
         const encryptionKey = key.encryptionKey;
         this.cardDetailsForm.patchValue({
-          userId: this.userId,
-          PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
+          PBFPubKey: this.PBFPubKey,
           currency: this.currency,
           country: this.country,
           amount: this.amount,
@@ -120,10 +117,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
           expirymonth: this.expiryMonth,
           expiryyear: this.expiryYear,
           cvv: this.cvv,
-          encryptionKey
         });
         const payLoad = this.cardDetailsForm.value;
-        this.paymentDataService.EncryptPaymentPayload(payLoad)
+        this.paymentDataService.EncryptPaymentPayload(encryptionKey, payLoad)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
           if (res) {
@@ -136,7 +132,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(payment => {
               if (payment) {
-                console.log('payment', payment);
+                this.paymentAuthCheck(payment);
+                localStorage.setItem('firstPaymentData', JSON.stringify(this.firstPaymentData));
               }
             });
           }
@@ -154,11 +151,43 @@ export class PaymentComponent implements OnInit, OnDestroy {
     const expirymonth = this.cardDetailsForm.value.expirymonth;
     const expiryyear = this.cardDetailsForm.value.expiryyear;
     const cvv = this.cardDetailsForm.value.cvv;
- 
     this.cardno = JSON.stringify(cardno);
     this.expiryYear = JSON.stringify(expiryyear);
     this.cvv = JSON.stringify(cvv);
-    this.expiryMonth = JSON.stringify(expirymonth);
+    this.expiryMonth = expirymonth;
+  }
+
+  paymentAuthCheck(body) {
+    if (body.status === 'success' && body.data.suggested_auth === 'NOAUTH_INTERNATIONAL') {
+
+      /*
+      *card requires AVS authentication so you need to
+      *1. Update payload with billing info - billingzip, billingcity, billingaddress, billingstate,
+       billingcountry and the suggested_auth returned
+      *2. Re-encrypt the payload
+      *3. Call the charge endpoint once again with this updated encrypted payload
+      */
+    } else if (body.status === 'success' && body.data.suggested_auth === 'PIN') {
+        /*
+        *card requires pin authentication so you need to
+        *1. Update payload with pin and the suggested_auth returned
+        *2. Re-encrypt the payload
+        *3. Call the charge endpoint once again with this updated encrypted payload
+        */
+    } else if (body.status === 'success' && body.data.suggested_auth === 'GTB_OTP') {
+        /*
+        *card requires OTP authentication so you need to
+        *1. Collect OTP from user
+        *2. Call Rave Validate endpoint
+        */
+    } else if (body.status === 'success' && body.data.authurl !== 'N/A') {
+        /*
+          *card requires 3dsecure authentication so you need to
+          *1. Load the authurl in an iframe for your user to complete the transaction
+          */
+    } else {
+      // an error has probably occurred.
+    }
   }
 
   openCash() {
