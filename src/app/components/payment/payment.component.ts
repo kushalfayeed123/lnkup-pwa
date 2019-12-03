@@ -54,7 +54,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
               private _router: Router) {
     this.PBFPubKey = 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X';
     this.currency = 'NGN';
-    this.country = 'Nigeria';
+    this.country = 'NG';
     this.amount = '10';
   }
 
@@ -107,7 +107,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         const encryptionKey = key.encryptionKey;
         this.cardDetailsForm.patchValue({
           userId: this.userId,
-          PBFPubKey: this.PBFPubKey,
+          PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
           currency: this.currency,
           country: this.country,
           amount: this.amount,
@@ -127,7 +127,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
           if (res) {
-            this.paymentDataService.makePayment(res)
+            const paymentPayload = {
+              PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
+              client: res.encryptionData,
+              alg: '3DES-24'
+            };
+            this.paymentDataService.makePayment(paymentPayload)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(payment => {
               if (payment) {
@@ -174,6 +179,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     for (let i = 0; i < 10; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
       this.tfx = text;
+      console.log(this.tfx);
     }
   }
 

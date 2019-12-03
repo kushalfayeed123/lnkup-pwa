@@ -15,7 +15,7 @@ export abstract class PaymentDataService {
     abstract delete(paymentId): Observable<UserPaymentToken>;
 
     abstract getEncryptKey(): Observable<Payment>;
-    abstract EncryptPaymentPayload(payment): Observable<Payment>;
+    abstract EncryptPaymentPayload(payment): Observable<any>;
 
     abstract makePayment(encryptedPayload): Observable<EncryptedPayment>;
 }

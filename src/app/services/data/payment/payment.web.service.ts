@@ -46,7 +46,7 @@ export class PaymentWebService implements PaymentDataService {
         return this.http.get<Payment>(`${this.webUrl}/encrypt/getKey`);
     }
     EncryptPaymentPayload(payment: any) {
-        return this.http.post<Payment>(`${this.webUrl}/encrypt/encryptPayload`, payment);
+        return this.http.post<any>(`${this.webUrl}/encrypt/encryptPayload`, payment);
     }
 
     makePayment(encryptedPayload: any) {

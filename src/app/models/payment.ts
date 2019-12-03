@@ -26,7 +26,7 @@ export class VerifyPayment {
 
 export class EncryptedPayment {
     pbfPubKey: string;
-    client: string;
+    encryptionData: string;
     alg: string;
 }
 
