@@ -18,10 +18,10 @@ export class Payment {
     lastName: string;
 }
 
-export class VerifyPayment {
-    txRef: string;
-    secKey: string;
-    amount: number;
+export class ValidatePayment {
+    PBFPubKey: string;
+    transaction_reference: string;
+    otp: number;
 }
 
 export class EncryptedPayment {

@@ -7,24 +7,27 @@ import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { DriverData } from 'src/app/models/DriverData';
 import { DriverLicense } from 'src/app/models/DriverLicense';
 import { PaymentDataService } from './payment.data.service';
-import { VerifyPayment, Payment, UserPaymentToken, EncryptedPayment } from 'src/app/models/payment';
+import { Payment, UserPaymentToken, EncryptedPayment, ValidatePayment } from 'src/app/models/payment';
 
 
 @Injectable({ providedIn: 'root' })
 
 export class PaymentWebService implements PaymentDataService {
+  
 
 
     public webUrl: string;
     public raveUrl: string;
+    validateUrl: string;
     constructor(private http: HttpClient) {
         this.webUrl = environment.webUrl;
         this.raveUrl = environment.raveEndpoint;
+        this.validateUrl = environment.raveValidateEndpoint;
     }
 
-    verify(verifyPayment: any) {
-        return this.http.post<VerifyPayment>(`${this.webUrl}/payment/verify`, verifyPayment);
-    }
+    // verify(verifyPayment: any) {
+    //     return this.http.post<VerifyPayment>(`${this.webUrl}/payment/verify`, verifyPayment);
+    // }
     create(payment: any) {
         return this.http.post<UserPaymentToken>(`${this.webUrl}`, payment);
     }
@@ -51,5 +54,9 @@ export class PaymentWebService implements PaymentDataService {
 
     makePayment(encryptedPayload: any) {
         return this.http.post<EncryptedPayment>(`${this.raveUrl}`, encryptedPayload);
+    }
+
+    validatePayment(payload: any) {
+       return this.http.post<ValidatePayment>(`${this.validateUrl}`, payload);
     }
 }

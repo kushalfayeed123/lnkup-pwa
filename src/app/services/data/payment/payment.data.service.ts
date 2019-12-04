@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Users } from 'src/app/models/Users';
-import { Payment, VerifyPayment, UserPaymentToken, EncryptedPayment } from 'src/app/models/payment';
+import { Payment, UserPaymentToken, EncryptedPayment, ValidatePayment } from 'src/app/models/payment';
 
 
 @Injectable()
 
 export abstract class PaymentDataService {
-    abstract verify(verifyPayment): Observable<VerifyPayment>;
     abstract create(payment): Observable<UserPaymentToken>;
     abstract getAllPayments(): Observable<UserPaymentToken[]>;
     abstract getPaymentById(paymentId): Observable<UserPaymentToken>;
@@ -17,4 +16,6 @@ export abstract class PaymentDataService {
     abstract getEncryptKey(): Observable<Payment>;
     abstract EncryptPaymentPayload(key, payment): Observable<any>;
     abstract makePayment(encryptedPayload): Observable<EncryptedPayment>;
+
+    abstract validatePayment(payload): Observable<ValidatePayment>;
 }
