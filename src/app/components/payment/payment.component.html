@@ -1,71 +1,117 @@
 <section class="settings-page auth-pages security" id="payment-page">
-    <nav>
-        <a (click)="navToHome()">
-            <img class="flaticon-back" src="./assets/Images/back-arrow.svg" alt="">
-        </a>
-        <h1>Payment</h1>
-    </nav>
-    <main class="contain-box">
-        <form action="" id="payment-form" [formGroup]="cardDetailsForm">
-            <div class="cards-container">
-                <div class="header-text" *ngIf="!isCash && !isCard"> Select your prefered payment method </div>
-                <img src="./assets/Images/003-left-arrow.svg" *ngIf="isCash || isCard" class="left-arrow" alt=""
-                    (click)="togglePaymentMethods()">
-                <div class="payment-option">
-                    <div class="setting-group" (click)="openCash()" *ngIf="!isCash && !isCard">
-                        <button class="payment-method">
-                            Cash
-                        </button>
-                        <img class="right-arrow" src="./assets/Images/arrow-point-to-right.svg" alt="">
-                    </div>
-                    <div class="setting-group" (click)="openCard()" *ngIf="!isCard && !isCash">
-                        <button class="payment-method">
-                            Card
-                        </button>
-                        <img class="right-arrow" src="./assets/Images/arrow-point-to-right.svg" alt="">
+  <nav>
+    <a (click)="navToHome()">
+      <img class="flaticon-back" src="./assets/Images/back-arrow.svg" alt="">
+    </a>
+    <h1>Payment</h1>
+  </nav>
+  <main class="contain-box">
+    <form id="payment-form" [formGroup]="cardDetailsForm">
+      <div class="cards-container">
+        <div class="header-text" *ngIf="!isCash && !isCard"> Select your prefered payment method </div>
+        <img src="./assets/Images/003-left-arrow.svg" *ngIf="isCash || isCard" class="left-arrow" alt=""
+          (click)="togglePaymentMethods()">
+        <div class="payment-option"  *ngIf="!isCard && !isCash">
+          <div class="setting-group" (click)="openCash()">
+            <button class="payment-method">
+              Cash
+            </button>
+            <img class="right-arrow" src="./assets/Images/arrow-point-to-right.svg" alt="">
+          </div>
+          <div class="setting-group" (click)="openCard()">
+            <button class="payment-method">
+              Card
+            </button>
+            <img class="right-arrow" src="./assets/Images/arrow-point-to-right.svg" alt="">
 
-                    </div>
-                </div>
+          </div>
+        </div>
 
-            </div>
-            <div class="cardDetails-container" *ngIf="isCard && !isCash">
-                <div>
-                    <mat-form-field class="auth-full-width card-number">
-                        <input type="number" matInput placeholder="xxxx xxxx xxxx xxxx" formControlName="cardno"/>
-                    </mat-form-field>
-                </div>
-                <div class="card-details">
-                    <mat-form-field class="auth-full-width card-subdetails">
-                        <input type="text" matInput class="input-color" placeholder=" Month" formControlName="expirymonth"/>
-                    </mat-form-field>
-                    <mat-form-field class="auth-full-width card-subdetails">
-                        <input type="number" matInput class="input-color" placeholder=" Year" formControlName="expiryyear"/>
-                    </mat-form-field>
-                    <mat-form-field class="auth-full-width card-subdetails">
-                        <input type="number" matInput class="input-color" placeholder="cvv" formControlName="cvv"/>
-                    </mat-form-field>
-                </div>
-            </div>
+      </div>
+      <div class="cardDetails-container" *ngIf="isCard && !isCash">
+        <div *ngIf="!isAvs && !isPin && !isOtp">
+            <div>
+                <mat-form-field class="auth-full-width card-number">
+                  <input type="number" matInput placeholder="xxxx xxxx xxxx xxxx" formControlName="cardno" />
+                </mat-form-field>
+              </div>
+              <div class="card-details">
+                <mat-form-field class="auth-full-width card-subdetails">
+                  <input type="text" matInput class="input-color" placeholder=" Month" formControlName="expirymonth" />
+                </mat-form-field>
+                <mat-form-field class="auth-full-width card-subdetails">
+                  <input type="number" matInput class="input-color" placeholder=" Year" formControlName="expiryyear" />
+                </mat-form-field>
+                <mat-form-field class="auth-full-width card-subdetails">
+                  <input type="number" matInput class="input-color" placeholder="cvv" formControlName="cvv" />
+                </mat-form-field>
+              </div>
+        </div>
+      
+        <div *ngIf="isAvs">
+          <div>
+            <mat-form-field class="auth-full-width card-subdetails avs-details">
+              <input type="text" matInput class="input-color" placeholder="Address"
+                formControlName="billingaddress" />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width card-subdetails zip-details">
+              <input type="text" matInput class="input-color" placeholder="Zip" formControlName="billingzip" />
+            </mat-form-field>
+          </div>
+          <div class="card-details">
+  
+            <mat-form-field class="auth-full-width card-subdetails">
+              <input type="text" matInput class="input-color" placeholder="City" formControlName="billingcity" />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width card-subdetails">
+              <input type="text" matInput class="input-color" placeholder="State"
+                formControlName="billingstate" />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width card-subdetails">
+              <input type="text" matInput class="input-color" placeholder="Country"
+                formControlName="billingcountry" />
+            </mat-form-field>
+          </div>
+        </div>
+      
+        <div class="card-details">
+          <div *ngIf="isPin">
+            <mat-form-field class="auth-full-width card-number">
+              <input type="number" matInput placeholder="Pin" formControlName="pin" />
+            </mat-form-field>
+          </div>
 
-            <div *ngIf="isCash && !isCard">
-                <span>
-                    After your trip has been completed the price of the trip will show up on your screen.
-                </span>
-            </div>
+          <div *ngIf="isOtp">
+            <mat-form-field class="auth-full-width card-number">
+              <input type="number" matInput placeholder="OTP"
+                formControlName="OTP" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
 
-            <div class="alternate-method">
-                <!-- <span>Alternate Payment Method</span> -->
-                <i class="flaticon-square-add-button" id="add-method"></i>
-            </div>
-            <button id="use-payment"
-                *ngIf="isCard" (click)="initiatePayment()">Save payment</button>
-        </form>
+      <div *ngIf="isCash && !isCard">
+        <span>
+          After your trip has been completed the price of the trip will show up on your screen.
+        </span>
+      </div>
 
-        <!-- <div>
+      <div class="alternate-method">
+        <!-- <span>Alternate Payment Method</span> -->
+        <i class="flaticon-square-add-button" id="add-method"></i>
+      </div>
+      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save payment</button>
+      <button id="use-payment" *ngIf="isCard && !isAvs && isPin " (click)="initiatePinAuth()">Submit Pin</button>
+      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit OTP</button>
+
+
+    </form>
+
+    <!-- <div>
             <div class="saved-payment">Your saved payment method</div>
             <div class="setting-group">
                 Cash
             </div>
         </div> -->
-    </main>
+  </main>
 </section>

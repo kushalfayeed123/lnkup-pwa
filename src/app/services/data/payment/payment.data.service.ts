@@ -15,7 +15,7 @@ export abstract class PaymentDataService {
 
     abstract getEncryptKey(): Observable<Payment>;
     abstract EncryptPaymentPayload(key, payment): Observable<any>;
-    abstract makePayment(encryptedPayload): Observable<EncryptedPayment>;
+    abstract makePayment(encryptedPayload): Observable<any>;
 
-    abstract validatePayment(payload): Observable<ValidatePayment>;
+    abstract validatePayment(payload): Observable<any>;
 }

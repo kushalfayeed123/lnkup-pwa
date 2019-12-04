@@ -97,7 +97,7 @@ section.auth-pages.security#security-page #cp-button {
   =============================
   */
 section.auth-pages.security#payment-page .cards-container {
-  margin: 80px 0 32px 0;
+  margin: 15px 0 32px 0;
 }
 .payment-option {
   padding-top: 50px;
@@ -228,4 +228,12 @@ section.auth-pages.security#payment-page #use-payment:focus,
 section.auth-pages.security#payment-page #use-payment:active,
 section.auth-pages.security#payment-page #use-payment:hover {
   outline: none;
+}
+
+.avs-details {
+  width: 70% !important;
+}
+.zip-details {
+  width: 30% !important;
+  padding-right: 0px !important;
 }
