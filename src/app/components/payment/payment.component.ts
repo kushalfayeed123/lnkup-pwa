@@ -1,5 +1,5 @@
 import { NotificationsService } from './../../services/business/notificatons.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { PaymentInstance, RaveOptions } from 'angular-rave';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Payment } from 'src/app/models/payment';
 import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-payment',
@@ -15,19 +16,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./payment.component.scss']
 })
 export class PaymentComponent implements OnInit, OnDestroy {
+
+
+
   paymentInstance: PaymentInstance;
   token: string;
-  paymentOptions: RaveOptions = {
-    PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
-    customer_email: 'segunajanaku@gmail.com',
-    customer_firstname: 'segs',
-    customer_lastname: 'test',
-    currency: 'NGN',
-    custom_description: 'Payment for goods',
-    amount: 500,
-    customer_phone: '09026464646',
-    txref: 'ksdfdshd8487djd'
-  };
   isCard: boolean;
   isCash: boolean;
   cardDetailsForm: FormGroup;
@@ -68,7 +61,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private paymentDataService: PaymentDataService,
     private router: Router,
-    private notifyService: NotificationsService
+    private notifyService: NotificationsService,
+    public sanitizer: DomSanitizer
   ) {
     this.PBFPubKey = environment.ravePubKey;
     this.currency = 'NGN';
@@ -104,6 +98,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     this.generateReference();
   }
+
+
 
   navToHome() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -343,8 +339,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   loadIFrame(authurl) {
-    this.loadAuthIframe = true;
     this.authUrl = authurl;
+    this.loadAuthIframe = true;
   }
 
   paymentAuthCheck(body) {

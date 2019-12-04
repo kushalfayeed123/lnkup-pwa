@@ -77,6 +77,7 @@ import { PaymentWebService } from './services/data/payment/payment.web.service';
     PaymentComponent,
     SpinnerComponent,
     SupportComponent,
+    
   ],
   imports: [
     BrowserModule,
