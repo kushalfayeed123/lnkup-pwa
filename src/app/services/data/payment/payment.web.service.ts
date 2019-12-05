@@ -13,7 +13,7 @@ import { Payment, UserPaymentToken, EncryptedPayment, ValidatePayment } from 'sr
 @Injectable({ providedIn: 'root' })
 
 export class PaymentWebService implements PaymentDataService {
-  
+
 
 
     public webUrl: string;
@@ -29,7 +29,7 @@ export class PaymentWebService implements PaymentDataService {
     //     return this.http.post<VerifyPayment>(`${this.webUrl}/payment/verify`, verifyPayment);
     // }
     create(payment: any) {
-        return this.http.post<UserPaymentToken>(`${this.webUrl}`, payment);
+        return this.http.post<UserPaymentToken>(`${this.webUrl}/payment`, payment);
     }
     getAllPayments() {
         return this.http.get<UserPaymentToken[]>(`${this.webUrl}/payment`);
@@ -58,5 +58,9 @@ export class PaymentWebService implements PaymentDataService {
 
     validatePayment(payload: any) {
        return this.http.post<ValidatePayment>(`${this.validateUrl}`, payload);
+    }
+
+    redirect() {
+      return this.http.get<any>(`${this.webUrl}/redirect`);
     }
 }

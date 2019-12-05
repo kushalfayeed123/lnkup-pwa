@@ -18,4 +18,6 @@ export abstract class PaymentDataService {
     abstract makePayment(encryptedPayload): Observable<any>;
 
     abstract validatePayment(payload): Observable<any>;
+
+    abstract redirect(): Observable<any>;
 }

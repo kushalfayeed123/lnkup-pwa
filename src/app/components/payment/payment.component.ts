@@ -1,11 +1,18 @@
+import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { NotificationsService } from './../../services/business/notificatons.service';
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { PaymentInstance, RaveOptions } from 'angular-rave';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Payment } from 'src/app/models/payment';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -16,9 +23,6 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./payment.component.scss']
 })
 export class PaymentComponent implements OnInit, OnDestroy {
-
-
-
   paymentInstance: PaymentInstance;
   token: string;
   isCard: boolean;
@@ -56,13 +60,15 @@ export class PaymentComponent implements OnInit, OnDestroy {
   suggestedAuth: any;
   isOtp: boolean;
   transaction_ref: any;
+  paymentToken: any;
 
   constructor(
     private fb: FormBuilder,
     private paymentDataService: PaymentDataService,
     private router: Router,
     private notifyService: NotificationsService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private authService: AuthenticateDataService
   ) {
     this.PBFPubKey = environment.ravePubKey;
     this.currency = 'NGN';
@@ -99,8 +105,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.generateReference();
   }
 
-
-
   navToHome() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
@@ -114,7 +118,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.userPhone = user.phoneNumber.substring(4);
     this.userEmail = user.email;
     this.userRole = user.role.toLowerCase();
-    this.redirect = `http://localhost:4200/payment/${this.userId}`;
+    this.redirect =
+      'https://linkup20191021111853.azurewebsites.net/api/redirect';
   }
 
   initiatePayment() {
@@ -174,13 +179,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
     const expirymonth = this.cardDetailsForm.value.expirymonth;
     const expiryyear = this.cardDetailsForm.value.expiryyear;
     const cvv = this.cardDetailsForm.value.cvv;
-   
 
     this.cardno = JSON.stringify(cardno);
     this.expiryYear = JSON.stringify(expiryyear);
     this.cvv = JSON.stringify(cvv);
     this.expiryMonth = expirymonth;
-    
   }
 
   initiateAvsAuth() {
@@ -241,7 +244,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
                       const url = payment.data.authurl;
                       this.loadIFrame(url);
                     }
-                });
+                  });
               }
             });
         } else {
@@ -320,16 +323,26 @@ export class PaymentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         if (data.status === 'success') {
-          this.notifyService.showSuccessMessage('Your Payment details has been saved in a secure vault.');
+          this.notifyService.showSuccessMessage(
+            'Your Payment details has been saved in a secure vault.'
+          );
           this.isCard = false;
-          this.isCash  = false;
+          this.isCash = false;
           this.clearCardDetailsForm();
+          const paymentToken = data.data.tx.chargeToken.embed_token;
+          this.saveCardToken(paymentToken);
         }
       });
   }
   loadIFrame(authurl) {
     this.authUrl = authurl;
     this.loadAuthIframe = true;
+    this.paymentDataService
+      .redirect()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        console.log('response from iframe', res);
+      });
   }
 
   paymentAuthCheck(body) {
@@ -383,6 +396,40 @@ export class PaymentComponent implements OnInit, OnDestroy {
     } else {
       // an error has probably occurred.
     }
+  }
+
+  saveCardToken(token) {
+    this.authService.getById(this.userId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(user => {
+      if (user.userPaymentData === null) {
+        const cardDetails = {
+          userId: this.userId,
+          paymentToken: token
+        };
+        this.paymentDataService
+          .create(cardDetails)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(res => {
+            console.log('card was saved', res);
+          });
+      } else {
+        this.updateCardToken(token);
+      }
+    });
+  }
+
+  updateCardToken(token) {
+    this.authService
+      .getById(this.userId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        // const userPaymentData = res.userPayment.paymentToken;
+        // if (userPaymentData === token) {
+
+        // }
+        console.log('payment response', res);
+      });
   }
 
   openCash() {

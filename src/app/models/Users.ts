@@ -1,3 +1,5 @@
+import { UserPaymentToken } from './payment';
+
 export class Users{
     userId: string;
     userName: string;
@@ -8,6 +10,7 @@ export class Users{
     userStatus: string;
     token: string;
     userImage: UserImage;
+    userPaymentData: UserPaymentToken;
 }
 
 export class UserImage {
