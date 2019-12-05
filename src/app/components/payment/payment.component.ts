@@ -174,24 +174,27 @@ export class PaymentComponent implements OnInit, OnDestroy {
     const expirymonth = this.cardDetailsForm.value.expirymonth;
     const expiryyear = this.cardDetailsForm.value.expiryyear;
     const cvv = this.cardDetailsForm.value.cvv;
-    const billingZip = this.cardDetailsForm.value.billingzip;
-    const billingaddress = this.cardDetailsForm.value.billingaddress;
-    const billingcity = this.cardDetailsForm.value.billingcity;
-    const billingCountry = this.cardDetailsForm.value.billingcountry;
-    const billingState = this.cardDetailsForm.value.billingstate;
+   
 
     this.cardno = JSON.stringify(cardno);
     this.expiryYear = JSON.stringify(expiryyear);
     this.cvv = JSON.stringify(cvv);
     this.expiryMonth = expirymonth;
+    
+  }
+
+  initiateAvsAuth() {
+    const billingZip = this.cardDetailsForm.value.billingzip;
+    const billingaddress = this.cardDetailsForm.value.billingaddress;
+    const billingcity = this.cardDetailsForm.value.billingcity;
+    const billingCountry = this.cardDetailsForm.value.billingcountry;
+    const billingState = this.cardDetailsForm.value.billingstate;
     this.billingZip = billingZip;
     this.billingaddress = billingaddress;
     this.billingcity = billingcity;
     this.billingCountry = billingCountry;
     this.billingState = billingState;
-  }
 
-  initiateAvsAuth(auth) {
     this.cardDetailsForm.patchValue({
       PBFPubKey: this.PBFPubKey,
       currency: this.currency,
@@ -211,7 +214,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       billingcity: this.billingcity,
       billingcountry: this.billingCountry,
       billingState: this.billingState,
-      suggested_auth: auth
+      suggested_auth: this.suggestedAuth
     });
 
     this.paymentDataService
@@ -221,7 +224,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if (key) {
           const payLoad = this.cardDetailsForm.value;
           this.paymentDataService
-            .EncryptPaymentPayload(key, payLoad)
+            .EncryptPaymentPayload(key.encryptionKey, payLoad)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(res => {
               if (res) {
@@ -235,9 +238,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
                   .pipe(takeUntil(this.unsubscribe$))
                   .subscribe(payment => {
                     if (payment) {
-                      // const url = payment.authUrl;
+                      const url = payment.data.authurl;
+                      this.loadIFrame(url);
                     }
-                  });
+                });
               }
             });
         } else {
@@ -323,21 +327,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         }
       });
   }
-
-  initiateGtbAtuh() {
-    const authPayLoad = {
-      PBFPubKey: this.PBFPubKey,
-      transaction_reference: this.tfx,
-      otp: this.OTP
-    };
-    this.paymentDataService
-      .validatePayment(authPayLoad)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        console.log('pin payment response', data);
-      });
-  }
-
   loadIFrame(authurl) {
     this.authUrl = authurl;
     this.loadAuthIframe = true;
@@ -355,10 +344,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
       *2. Re-encrypt the payload
       *3. Call the charge endpoint once again with this updated encrypted payload
       */
-      this.isGtb = false;
+      this.isOtp = false;
       this.isPin = false;
       this.isAvs = true;
-      this.initiateAvsAuth(body.data.suggested_auth);
+      this.suggestedAuth = body.data.suggested_auth;
     } else if (
       body.status === 'success' &&
       body.data.suggested_auth === 'PIN'
@@ -369,7 +358,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
        *2. Re-encrypt the payload
        *3. Call the charge endpoint once again with this updated encrypted payload
        */
-      this.isGtb = false;
+      this.isOtp = false;
       this.isAvs = false;
       this.isPin = true;
       this.suggestedAuth = body.data.suggested_auth;
@@ -384,8 +373,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
        */
       this.isAvs = false;
       this.isPin = false;
-      this.isGtb = true;
-      this.initiateGtbAtuh();
+      this.isOtp = true;
     } else if (body.status === 'success' && body.data.authurl !== 'N/A') {
       /*
        *card requires 3dsecure authentication so you need to
@@ -416,7 +404,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
     for (let i = 0; i < 10; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
       this.tfx = text;
-      console.log(this.tfx);
     }
   }
   clearCardDetailsForm() {

@@ -102,6 +102,7 @@
       </div>
       <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save payment</button>
       <button id="use-payment" *ngIf="isCard && !isAvs && isPin " (click)="initiatePinAuth()">Submit Pin</button>
+      <button id="use-payment" *ngIf="isCard && isAvs && !isPin && !isOtp" (click)="initiateAvsAuth()">Submit Billing Details</button>
       <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit OTP</button>
 
 
