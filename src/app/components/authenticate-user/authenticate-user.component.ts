@@ -115,6 +115,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       this.authenticate.update(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
+          this.getLoggedInUserPaymentData();
         });
     }
   }
@@ -131,6 +132,16 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['login']);
     }
+  }
+
+  getLoggedInUserPaymentData() {
+    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = loggedInUser.id;
+    this.authenticate.getById(userId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(token => {
+      console.log('token', token);
+    });
   }
 
 

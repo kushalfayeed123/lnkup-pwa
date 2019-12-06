@@ -231,12 +231,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(res => {
               if (res) {
-                const paymentPayload = {
+                  const paymentPayload = {
                   PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
                   client: res.encryptionData,
                   alg: '3DES-24'
                 };
-                this.paymentDataService
+                  this.paymentDataService
                   .makePayment(paymentPayload)
                   .pipe(takeUntil(this.unsubscribe$))
                   .subscribe(payment => {
@@ -323,9 +323,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         if (data.status === 'success') {
-          this.notifyService.showSuccessMessage(
-            'Your Payment details has been saved in a secure vault.'
-          );
           this.isCard = false;
           this.isCash = false;
           this.clearCardDetailsForm();
@@ -411,7 +408,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
           .create(cardDetails)
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(res => {
-            console.log('card was saved', res);
+            this.notifyService.showSuccessMessage(
+              'Your Payment details has been saved in a secure vault.'
+            );
           });
       } else {
         this.updateCardToken(token);
