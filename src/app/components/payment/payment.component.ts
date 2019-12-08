@@ -399,7 +399,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.authService.getById(this.userId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(user => {
-      if (user.userPaymentData === null) {
+      const paymentData: any = user.userPaymentData;
+      if (paymentData.length === 0) {
         const cardDetails = {
           userId: this.userId,
           paymentToken: token

@@ -70,6 +70,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   todaysDataTime = '';
   greeting: string;
   showNoTripMessage: boolean;
+  userPaymentData: import("c:/sandbox/lnkup-mobile/src/app/models/payment").UserPaymentToken;
 
   constructor(
     private route: ActivatedRoute,
@@ -123,6 +124,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   mapReading() {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
+ 
+
 
   getCurrentLocation() {
     this.mapService.getCurrentLocation();

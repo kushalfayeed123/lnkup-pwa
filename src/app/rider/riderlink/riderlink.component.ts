@@ -12,6 +12,9 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { Users } from 'src/app/models/Users';
+import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { UserPaymentToken } from 'src/app/models/payment';
 
 @Component({
   selector: 'app-riderlink',
@@ -29,15 +32,24 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   driverImage: string;
   name: string;
   plateNumber: any;
+  tfx: string;
+  token: any;
+  tripFee: any;
+  email: any;
+  paymentId: any;
+  userPaymentData: any;
 
   constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
               private tripService: ActiveTripDataService,
               private authService: AuthenticateDataService,
               public dialog: MatDialog,
+              private notifyService: NotificationsService,
+              private paymentService: PaymentDataService,
               private router: Router) { }
 
   ngOnInit() {
+    this.getUserdata();
     this.getRiderRequest();
   }
 
@@ -52,6 +64,10 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     const driverId = trip.driverId;
     this.getDriverData();
   }
+  getUserdata() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.email = user.email;
+  }
 
   getDriverData() {
     const driverData = JSON.parse(localStorage.getItem('tripDetails'));
@@ -63,11 +79,87 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       this.driverData = res;
       console.log('driver', res);
     });
-  
+  }
+
+  getLoggedInUserPaymentData() {
+    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = loggedInUser.id;
+    this.authService.getById(userId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(token => {
+      this.userPaymentData = token.userPaymentData;
+    });
   }
 
   makePayment() {
+    this.generateReference();
     this.showPaymentMessage();
+    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = loggedInUser.id;
+    this.authService.getById(userId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(token => {
+      this.userPaymentData = token.userPaymentData;
+      this.userPaymentData.forEach(element => {
+        this.paymentId = element.paymentId;
+        if (this.userPaymentData.length > 1) {
+          this.token = element[0].paymentToken;
+        } else {
+          this.token = element.paymentToken;
+        }
+      });
+      this.confirmPayment();
+    });
+  }
+
+  confirmPayment() {
+    this.paymentService.getSecKey()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(key => {
+      if (key) {
+        const payLoad = {
+          SECKEY: key.encryptionKey,
+          token: this.token,
+          amount: this.tripFee,
+          email: this.email,
+          txRef: this.tfx,
+          currency: 'NGN'
+        };
+        // console.log('payment payload', payLoad);
+        this.paymentService.tokenizedPayment(payLoad)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(res => {
+          if (res.status === 'success') {
+            this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
+            const newToken = {
+              paymentToken: res.data.chargeToken.embed_token
+            };
+            console.log('res', res);
+            this.paymentService.updatePayment(this.paymentId, newToken)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(token => {
+            }, error => {
+              console.error('could not update payment');
+            });
+            // this.router.navigate(['rider/home', this.userId]);
+          } else {
+            return;
+          }
+        });
+      } else {
+        return;
+      }
+    });
+  }
+
+  generateReference() {
+    let text = '';
+    const possible =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 10; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+      this.tfx = text;
+    }
   }
 
   confirmCancelRequest() {
@@ -97,16 +189,16 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
 
   showPaymentMessage() {
     const request = JSON.parse(localStorage.getItem('riderRequest'));
-    const  tripFee = request.tripFee;
+    this.tripFee = request.tripFee;
     this.name = 'Your fare for this trip';
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: {name: this.name, price: tripFee}
+      data: {name: this.name, price: this.tripFee}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(['rider/home', this.userId]);
+      // this.router.navigate(['rider/home', this.userId]);
     });
   }
 
