@@ -58,17 +58,20 @@ export class PaymentWebService implements PaymentDataService {
     }
 
     makePayment(encryptedPayload: any) {
+        const parameter =  { use_polling: '1'};
         return this.http.post<EncryptedPayment>(`${this.raveUrl}`, encryptedPayload);
     }
 
     validatePayment(payload: any) {
-       return this.http.post<ValidatePayment>(`${this.validateUrl}`, payload);
+        const parameter =  { use_polling: '1'};
+        return this.http.post<ValidatePayment>(`${this.validateUrl}`, payload);
     }
 
     redirect() {
       return this.http.get<any>(`${this.webUrl}/redirect`);
     }
     tokenizedPayment(payload: any) {
+        const parameter =  { use_polling: '1'};
         return this.http.post<any>(`${this.tokenizedUrl}`, payload);
     }
 }

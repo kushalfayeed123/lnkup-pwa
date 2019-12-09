@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { DriverData } from 'src/app/models/DriverData';
 import { DriverLicense } from 'src/app/models/DriverLicense';
+import { Bank } from 'src/app/models/Bank';
 
 
 @Injectable()
@@ -22,4 +23,6 @@ export abstract class DriverDataDataService {
   abstract updateDriverLicense(id: string, license: DriverLicense): Observable<DriverLicense>;
   abstract deleteDriverLicense(id);
 
+  abstract createDriverAccount(payload): Observable<any>;
+  abstract getBanksLookup(): Observable<any>;
 }

@@ -38,6 +38,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   email: any;
   paymentId: any;
   userPaymentData: any;
+  driverAccountId: any;
 
   constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
@@ -73,6 +74,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     const driverData = JSON.parse(localStorage.getItem('tripDetails'));
     const driverUserId = driverData.driverUserId;
     this.plateNumber = driverData.plateNumber;
+    this.driverAccountId = driverData.driverAccountId;
     this.authService.getById(driverUserId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
@@ -123,7 +125,10 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
           amount: this.tripFee,
           email: this.email,
           txRef: this.tfx,
-          currency: 'NGN'
+          currency: 'NGN',
+          subaccounts: [{
+            id: this.driverAccountId
+          }]
         };
         // console.log('payment payload', payLoad);
         this.paymentService.tokenizedPayment(payLoad)
@@ -141,7 +146,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
             }, error => {
               console.error('could not update payment');
             });
-            // this.router.navigate(['rider/home', this.userId]);
+            this.router.navigate(['rider/home', this.userId]);
           } else {
             return;
           }

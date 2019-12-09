@@ -6,6 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { Bank } from 'src/app/models/Bank';
+import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
 
 @Component({
   selector: 'app-profile',
@@ -34,13 +36,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
   driverData: any;
   isDriver: boolean;
   isImage: boolean;
+  banks: Bank;
+  userName: any;
+  userPhone: any;
+  email: any;
+  secKey: any;
+  driverAccountId: any;
 
 
   constructor(private route: ActivatedRoute,
               private authService: AuthenticateDataService,
               private formBuilder: FormBuilder,
               private driverDataService: DriverDataDataService,
-              private notifyService: NotificationsService
+              private notifyService: NotificationsService,
+              private paymentService: PaymentDataService
      ) { }
 
   ngOnInit() {
@@ -53,7 +62,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
       rideDeclineCount: [0, Validators.required],
       driverSeatCapacity: [4, Validators.required],
       maxCarSeatNumber: [4, Validators.required],
-      workAddress: ['', Validators.required]
+      workAddress: ['', Validators.required],
+      driverBank: ['', [Validators.required]],
+      accountNumber: ['', [Validators.required]],
+      PaymentAccountId: ['', [Validators.required]]
+
     });
     this.carLicenseForm = this.formBuilder.group({
       driverId: ['', Validators.required],
@@ -66,6 +79,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
     this.getUserProfileImage();
     this.getUserData();
+    this.getBanksLookup();
+    this.getSecKey();
   }
 
   getUserData() {
@@ -74,6 +89,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.user = user;
     this.userId = user.id;
     this.userRole = user.role;
+    this.userName = user.userName;
+    this.userPhone = user.phoneNumber.substring(4);
+    this.email = user.email;
     const referral = user.token;
     this.ref = referral.slice(0, 6).toUpperCase();
     if ( this.userRole === 'Driver') {
@@ -176,7 +194,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const errorMessage = 'We were unable to update your profile due to some errors, please try again shortly.';
     if (this.driverData === undefined) {
        this.notifyService.showInfoMessage(message);
-       this.registerCarDetails.patchValue({driverId: this.userId});
+       this.registerCarDetails.patchValue({driverId: this.userId, PaymentAccountId: this.driverAccountId});
        const registerCar = this.registerCarDetails.value;
        this.driverDataService.createDriverData(registerCar)
         .pipe(takeUntil(this.unsubscribe$))
@@ -213,8 +231,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   uploadLicense(event) {
     const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = async () => {
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = async () => {
         this.licenseLoad = true;
         const file = reader.result.toString().split(',')[1];
         const model = { File: file };
@@ -228,11 +246,53 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.notifyService.showSuccessMessage('Your license has been uploaded successfully.');
             this.licenseLoad = false;
           }, error => {
-            this.notifyService.showErrorMessage('An error occured. This might be network related.')
+            this.notifyService.showErrorMessage('An error occured. This might be network related.');
           });
         }
       };
    
+  }
+
+  getBanksLookup() {
+    this.driverDataService.getBanksLookup()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(bank => {
+      this.banks = bank.data.Banks;
+      console.log('banks', this.banks);
+    });
+  }
+
+  getSecKey() {
+    this.paymentService.getSecKey()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(key => {
+      this.secKey = key.encryptionKey;
+    });
+  }
+
+  creatDriverAccount() {
+    const accountPayload = {
+      account_bank: this.registerCarDetails.value.driverBank,
+      account_number: this.registerCarDetails.value.accountNumber,
+      business_name: this.userName,
+      business_email: this.email,
+      business_mobile: this.userPhone,
+      seckey: this.secKey,
+      split_type: 'percentage',
+      split_value: '0.80',
+      country: 'NG'
+    };
+    console.log(accountPayload);
+    this.driverDataService.createDriverAccount(accountPayload)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(acc => {
+      if (acc) {
+        this.driverAccountId = acc.data.subaccount_id;
+        this.registerCar();
+      } else {
+        return;
+      }
+    });
   }
 
 
