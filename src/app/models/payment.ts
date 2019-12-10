@@ -34,3 +34,13 @@ export class UserPaymentToken {
     userId: string;
     paymentToken: string;
 }
+
+export class TokenizedPayment {
+    SECKEY: string;
+    token: string;
+    currency: string;
+    amount: string;
+    email: string;
+    txRef: string;
+    status: string;
+}

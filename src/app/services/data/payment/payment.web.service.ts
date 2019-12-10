@@ -7,7 +7,7 @@ import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { DriverData } from 'src/app/models/DriverData';
 import { DriverLicense } from 'src/app/models/DriverLicense';
 import { PaymentDataService } from './payment.data.service';
-import { Payment, UserPaymentToken, EncryptedPayment, ValidatePayment } from 'src/app/models/payment';
+import { Payment, UserPaymentToken, EncryptedPayment, ValidatePayment, TokenizedPayment } from 'src/app/models/payment';
 
 
 @Injectable({ providedIn: 'root' })
@@ -19,10 +19,12 @@ export class PaymentWebService implements PaymentDataService {
     public webUrl: string;
     public raveUrl: string;
     validateUrl: string;
+    tokenizedUrl: string;
     constructor(private http: HttpClient) {
         this.webUrl = environment.webUrl;
         this.raveUrl = environment.raveEndpoint;
         this.validateUrl = environment.raveValidateEndpoint;
+        this.tokenizedUrl = environment.raveTokenizedEndpoint;
     }
 
     // verify(verifyPayment: any) {
@@ -48,19 +50,28 @@ export class PaymentWebService implements PaymentDataService {
     getEncryptKey() {
         return this.http.get<Payment>(`${this.webUrl}/encrypt/getKey`);
     }
+    getSecKey() {
+        return this.http.get<any>(`${this.webUrl}/encrypt/seckey`);
+    }
     EncryptPaymentPayload(key: string, payment: any) {
         return this.http.post<any>(`${this.webUrl}/encrypt/${key}`, payment);
     }
 
     makePayment(encryptedPayload: any) {
+        const parameter =  { use_polling: '1'};
         return this.http.post<EncryptedPayment>(`${this.raveUrl}`, encryptedPayload);
     }
 
     validatePayment(payload: any) {
-       return this.http.post<ValidatePayment>(`${this.validateUrl}`, payload);
+        const parameter =  { use_polling: '1'};
+        return this.http.post<ValidatePayment>(`${this.validateUrl}`, payload);
     }
 
     redirect() {
       return this.http.get<any>(`${this.webUrl}/redirect`);
+    }
+    tokenizedPayment(payload: any) {
+        const parameter =  { use_polling: '1'};
+        return this.http.post<any>(`${this.tokenizedUrl}`, payload);
     }
 }

@@ -7,6 +7,8 @@ export const environment = {
   // raveEndpoint: 'https://api.ravepay.co/flwv3-pug/getpaidx/api/charge',
   // raveValidateEndpoint: 'https://api.ravepay.co/flwv3-pug/getpaidx/api/validatecharge'
   raveTokenizedEndpoint: 'https://api.ravepay.co/flwv3-pug/getpaidx/api/tokenized/charge',
+  raveSubAccountEndpoint: 'https://api.ravepay.co/v2/gpx/subaccounts',
+  raveBanksEndpoint: 'https://api.ravepay.co/v2/banks',
   
   ravePubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
   raveEndpoint: 'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/charge',

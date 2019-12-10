@@ -170,6 +170,9 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       const seatCapacity = 4;
       const maxRiderNumber = this.tripForm.value.maxRiderNumber;
       if (this.tripForm.valid && maxRiderNumber <= seatCapacity) {
+        // const tripPayLoad = this.tripForm.patchValue({
+
+        // })
         this.activeTripService.createTrip(this.tripForm.value)
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(trip => {

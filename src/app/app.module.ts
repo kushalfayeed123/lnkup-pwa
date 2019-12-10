@@ -49,6 +49,7 @@ import { AppReviewDataService } from './services/data/app-review/app-review.data
 import { AppReviewWebService } from './services/data/app-review/app-review.web.service';
 import { PaymentDataService } from './services/data/payment/payment.data.service';
 import { PaymentWebService } from './services/data/payment/payment.web.service';
+import { PaymentModalComponent } from './components/payment-modal/payment-modal.component';
 
 
 
@@ -77,6 +78,7 @@ import { PaymentWebService } from './services/data/payment/payment.web.service';
     PaymentComponent,
     SpinnerComponent,
     SupportComponent,
+    PaymentModalComponent,
     
   ],
   imports: [
@@ -120,7 +122,7 @@ import { PaymentWebService } from './services/data/payment/payment.web.service';
     {provide: PaymentDataService, useClass: PaymentWebService}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent]
+  entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent, PaymentModalComponent]
 
 })
 export class AppModule { }

@@ -7,6 +7,7 @@ import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { DriverDataDataService } from './driver-data.data.service';
 import { DriverData } from 'src/app/models/DriverData';
 import { DriverLicense } from 'src/app/models/DriverLicense';
+import { Bank } from 'src/app/models/Bank';
 
 
 @Injectable({ providedIn: 'root' })
@@ -17,11 +18,17 @@ export class DriverDataWebService implements DriverDataDataService {
 
 
   public webUrl: string;
+  subAccountUrl: string;
+  bankLookupUrl: string;
+  country: string;
 
 
   constructor(private http: HttpClient) {
 
     this.webUrl = environment.webUrl;
+    this.subAccountUrl = environment.raveSubAccountEndpoint;
+    this.bankLookupUrl = environment.raveBanksEndpoint;
+    this.country = 'NG';
 
   }
 
@@ -76,5 +83,13 @@ export class DriverDataWebService implements DriverDataDataService {
       return this.http.delete(`${this.webUrl}/license`, id);
     }
 
+    createDriverAccount(payload) {
+      return this.http.post(`${this.subAccountUrl}/create`, payload);
+    }
+
+    getBanksLookup() {
+      const parameter = {public_key: environment.ravePubKey};
+      return this.http.get<any>(`${this.bankLookupUrl}/${this.country}`, {params: parameter});
+    }
 
 }

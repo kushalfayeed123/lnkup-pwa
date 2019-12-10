@@ -16,6 +16,8 @@ import { takeUntil, take } from 'rxjs/operators';
 import { Payment } from 'src/app/models/payment';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material';
+import { PaymentModalComponent } from '../payment-modal/payment-modal.component';
 
 @Component({
   selector: 'app-payment',
@@ -61,14 +63,16 @@ export class PaymentComponent implements OnInit, OnDestroy {
   isOtp: boolean;
   transaction_ref: any;
   paymentToken: any;
+  name: any;
 
   constructor(
     private fb: FormBuilder,
     private paymentDataService: PaymentDataService,
     private router: Router,
     private notifyService: NotificationsService,
-    public sanitizer: DomSanitizer,
-    private authService: AuthenticateDataService
+    private authService: AuthenticateDataService,
+    public dialog: MatDialog,
+
   ) {
     this.PBFPubKey = environment.ravePubKey;
     this.currency = 'NGN';
@@ -334,13 +338,25 @@ export class PaymentComponent implements OnInit, OnDestroy {
   loadIFrame(authurl) {
     this.authUrl = authurl;
     this.loadAuthIframe = true;
-    this.paymentDataService
-      .redirect()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        console.log('response from iframe', res);
-      });
+    // this.paymentDataService
+    //   .redirect()
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe(res => {
+    //     console.log('response from iframe', res);
+    //   });
+    this.name = 'Lnkup Secure Payment.';
+    const urlMessage = 'Sorry we can not currently process payment on this card, please use another card. Thank you.';
+    const dialogRef = this.dialog.open(PaymentModalComponent, {
+      width: '90%',
+      panelClass: 'dialog',
+      data: {name: this.name, url: urlMessage}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // this.router.navigate(['rider/home', this.userId]);
+    });
   }
+
 
   paymentAuthCheck(body) {
     if (
@@ -391,7 +407,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
        */
       this.loadIFrame(body.data.authurl);
     } else {
-      // an error has probably occurred.
+      this.notifyService.showErrorMessage('An error occured, this might be due to a poor network connection, please try again.')
     }
   }
 
@@ -399,7 +415,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.authService.getById(this.userId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(user => {
-      if (user.userPaymentData === null) {
+      const paymentData: any = user.userPaymentData;
+      if (paymentData.length === 0) {
         const cardDetails = {
           userId: this.userId,
           paymentToken: token

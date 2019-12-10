@@ -61,8 +61,9 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         const tripPickup = trip.tripPickup;
         const activeRiders = trip.activeRiders;
         const plateNumber = trip.tripDriver.carDocument2;
+        const driverAccountId = trip.tripDriver.paymentAccountId;
         const tripDetails = {allowedRiderCount: allowed, maxRiderNumber: max, driverId,
-           driverEmail, tripPickup, driverUserId, plateNumber };
+           driverEmail, tripPickup, driverUserId, plateNumber, driverAccountId};
         localStorage.setItem('tripDetails', JSON.stringify(tripDetails));
         if(allowed  === 0) {
           this.availableSeats = max;
