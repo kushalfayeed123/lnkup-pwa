@@ -22,6 +22,7 @@ import { Location, Appearance } from '@angular-material-extensions/google-maps-a
 import PlaceResult = google.maps.places.PlaceResult;
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { UserPaymentToken } from 'src/app/models/payment';
 
 
 @Component({
@@ -70,7 +71,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   todaysDataTime = '';
   greeting: string;
   showNoTripMessage: boolean;
-  userPaymentData: import("c:/sandbox/lnkup-mobile/src/app/models/payment").UserPaymentToken;
+  userPaymentData: UserPaymentToken;
 
   constructor(
     private route: ActivatedRoute,
@@ -124,7 +125,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   mapReading() {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
- 
+
 
 
   getCurrentLocation() {

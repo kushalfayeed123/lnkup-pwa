@@ -14,7 +14,7 @@
               <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
           </div> -->
         <form [formGroup]="tripForm" id="book-seat-filled-form" *ngIf="!loading">
-        
+
 
             <!-- <div><a href="">Pickup Spot</a></div> -->
 
@@ -23,7 +23,7 @@
                     formControlName="tripDestination"  />
             </mat-form-field>
             <mat-form-field class="auth-full-width form-bottom">
-                <input type="text" matInput class="input-color" placeholder="Link up with your passengers at" 
+                <input type="text" matInput class="input-color" placeholder="Link up with your passengers at"
                 formControlName="tripPickup"  />
             </mat-form-field>
 
@@ -33,12 +33,12 @@
                 <ngx-material-timepicker #picker></ngx-material-timepicker>
             </mat-form-field>
 
-            
+
             <mat-form-field class="auth-full-width form-bottom">
-                <input type="number" #ridersNumber matInput class="input-color" placeholder="How many riders will be joining this trip?" 
+                <input type="number" #ridersNumber matInput class="input-color" placeholder="How many riders will be joining this trip?"
                 formControlName="maxRiderNumber" (keyup)="computeTripFare(ridersNumber.value)"/>
             </mat-form-field>
-          
+
             <!-- <mat-form-field class="auth-full-width">
                 <mat-label>Trip Type</mat-label>
                 <mat-select formControlName="tripType">
