@@ -45,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
+    window.scrollTo(0, 0);
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
     this.reload();

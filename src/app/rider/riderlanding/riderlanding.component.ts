@@ -125,6 +125,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   getCurrentLocation() {
+    window.scrollTo(0, 0);
     this.mapService.getCurrentLocation();
     const userLocation = localStorage.getItem('userLocation');
     if (userLocation !== null || !' ') {

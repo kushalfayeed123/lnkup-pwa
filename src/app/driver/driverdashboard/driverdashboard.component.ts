@@ -73,6 +73,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(param => {
+      window.scrollTo(0, 0);
       this.driverNavigate = param.driverNav;
       this.clearLocations();
       this.getDriverData();
@@ -242,7 +243,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.showLanding = false;
       this.mapService.findOrigin(this.pickupFull);
     }
-   
+
   }
   clearLocations() {
     localStorage.removeItem('origin');
