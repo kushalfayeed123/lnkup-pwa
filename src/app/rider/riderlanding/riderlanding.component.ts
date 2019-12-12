@@ -72,6 +72,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   greeting: string;
   showNoTripMessage: boolean;
   userPaymentData: UserPaymentToken;
+  userPayment: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -118,8 +119,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .getById(userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
-        const currentUser = user;
-        console.log('user viewing this screen', currentUser);
+        const userPaymentData = user.userPaymentData;
+        if (userPaymentData.length < 1) {
+          this.userPayment = false;
+        } else {
+          this.userPayment = true;
+        }
+        this.broadCastService.publishUserPaymentStatus(this.userPayment);
       });
   }
   mapReading() {
@@ -202,13 +208,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
   getDrivers() {
-    this.loadMarker = false;
-    this.getCurrentLocation();
-    this.getDestinationCordinates();
-    this.passDirection();
-    this.gettingDrivers = true;
-    this.loading = true;
-    this.createTripRequest();
+    if (this.userPayment) {
+      this.loadMarker = false;
+      this.getCurrentLocation();
+      this.getDestinationCordinates();
+      this.passDirection();
+      this.gettingDrivers = true;
+      this.loading = true;
+      this.createTripRequest();
+    } else {
+      this.notificationService.showInfoMessage('Please add your payment details to lnkup');
+    }
+
   }
   onAutocompleteSelected(result: PlaceResult) {
     console.log('onAutocompleteSelected: ', result.formatted_address);

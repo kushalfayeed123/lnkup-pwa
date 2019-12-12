@@ -1,4 +1,4 @@
-/* 
+/*
 ================
 Security-theme
 ================
@@ -66,7 +66,7 @@ section.auth-pages.security#saved-drivers .driver-details {
   margin-bottom: 24px;
 }
 
-/* 
+/*
   =============================
   Security-confirmation variant
   =============================
@@ -91,9 +91,9 @@ section.auth-pages.security#security-page #cp-button {
   margin-top: 160px;
 }
 
-/* 
+/*
   =============================
-  payement method variant 
+  payement method variant
   =============================
   */
 section.auth-pages.security#payment-page .cards-container {
@@ -201,9 +201,23 @@ section.auth-pages.security#payment-page .flaticon-square-add-button:before {
   font-weight: normal;
   font-family: "Circular";
 }
-
+.confirm-btn {
+  margin-top: 35px;
+  margin-right: 55px;
+  width: 40% !important;
+}
 .setting-group button:focus {
   outline: none;
+}
+.btn-container {
+  display: flex;
+}
+.no-btn {
+  margin-right: 0 !important;
+}
+.card-message {
+  position: relative;
+  bottom: 125px;
 }
 section.auth-pages.security#payment-page #use-payment {
   padding: 15px 0;

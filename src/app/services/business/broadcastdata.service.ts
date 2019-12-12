@@ -8,7 +8,7 @@ export class BroadcastService {
 
     private _riderRequest = new BehaviorSubject(null);
     public riderRequest = this._riderRequest.asObservable();
-    
+
     private _showTripDetails = new BehaviorSubject(null);
     public showTripDetails = this._riderRequest.asObservable();
 
@@ -20,6 +20,9 @@ export class BroadcastService {
 
     private _driverImage = new BehaviorSubject(null);
     public driverImage = this._driverImage.asObservable();
+
+    private _paymentStatus = new BehaviorSubject(null);
+    public paymentStatus = this._paymentStatus.asObservable();
 
 
 
@@ -48,5 +51,9 @@ export class BroadcastService {
     }
     publishDriverImage(driverImage) {
         this._driverImage.next(driverImage);
+    }
+
+    publishUserPaymentStatus(paymentStatus) {
+      this._paymentStatus.next(paymentStatus);
     }
 }

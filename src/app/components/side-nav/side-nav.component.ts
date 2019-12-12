@@ -56,6 +56,9 @@ export class SideNavComponent implements OnDestroy {
   navToSupport() {
     this._router.navigate([`support/${this.userId}`]);
   }
+  navToPayment() {
+    this._router.navigate([`payment/${this.userId}`]);
+  }
   logout() {
     this.authService.logout();
     this.opened = false;
@@ -78,6 +81,7 @@ export class SideNavComponent implements OnDestroy {
         return;
       }
   }
+
 
 
   ngOnDestroy(): void {
