@@ -23,7 +23,6 @@ import { AngularMaterialModule } from './angular-material.module';
 import { SuccessMessageComponent } from './components/success-message/success-message.component';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
-import { PushNotificationComponent } from './components/push-notification/push-notification.component';
 import { MapBroadcastService } from './services/business/mapbroadcast.service';
 import { SearchMessageComponent } from './components/search-message/search-message.component';
 import { ActiveRiderDataService } from './services/data/active-rider/active-rider.data.service';
@@ -50,6 +49,7 @@ import { AppReviewWebService } from './services/data/app-review/app-review.web.s
 import { PaymentDataService } from './services/data/payment/payment.data.service';
 import { PaymentWebService } from './services/data/payment/payment.web.service';
 import { PaymentModalComponent } from './components/payment-modal/payment-modal.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 
 
@@ -71,7 +71,6 @@ import { PaymentModalComponent } from './components/payment-modal/payment-modal.
     SuccessMessageComponent,
     ErrorMessageComponent,
     SearchMessageComponent,
-    PushNotificationComponent,
     PagenotfoundComponent,
     ProfileComponent,
     ModalComponent,
@@ -79,7 +78,8 @@ import { PaymentModalComponent } from './components/payment-modal/payment-modal.
     SpinnerComponent,
     SupportComponent,
     PaymentModalComponent,
-    
+    NotificationComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -104,7 +104,7 @@ import { PaymentModalComponent } from './components/payment-modal/payment-modal.
     MatGoogleMapsAutocompleteModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
-  
+
   providers: [
     MetaService,
     BroadcastService,

@@ -55,6 +55,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   platNumber: any;
   plateNumber: any;
   driverStatus: any;
+  userPayment: boolean;
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -108,6 +109,13 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
         this.currentUser = user;
         this.userId = user.userId.substring(27).toUpperCase();
         this.loading = false;
+        const userPaymentData = user.userPaymentData;
+        if (userPaymentData.length < 1) {
+          this.userPayment = false;
+        } else {
+          this.userPayment = true;
+        }
+        this.broadCastService.publishUserPaymentStatus(this.userPayment);
       });
   }
   getDriverData() {
