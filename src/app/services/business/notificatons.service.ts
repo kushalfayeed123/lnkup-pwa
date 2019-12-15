@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { AngularFireMessaging } from '@angular/fire/messaging';
+import { AuthenticateDataService } from '../data/authenticate.data.service';
 
 @Injectable()
 
@@ -24,9 +26,39 @@ export class NotificationsService {
 
 
     constructor(private router: Router, private toastService: ToastrService,
+                private angularFireMessaging: AngularFireMessaging,
+                private authenticateService: AuthenticateDataService
     ) {
         this.webUrl = environment.openConnect;
+        this.angularFireMessenger();
     }
+
+
+    angularFireMessenger() {
+        this.angularFireMessaging.messaging
+        .subscribe(messagingContext => {
+            messagingContext.onMessage = messagingContext.onMessage.bind(messagingContext);
+            messagingContext.onTokenRefresh = messagingContext.onTokenRefresh.bind(messagingContext)
+        });
+
+    }
+
+    requestPermission = () => this.angularFireMessaging.requestToken;
+
+    recieveMessage = () => this.angularFireMessaging.messages;
+
+    requestPermision()  {
+        this.angularFireMessaging.requestToken
+        .subscribe(sub => this.authenticateService.saveSubscription(sub)
+        .subscribe(res => {
+          if (res !== null) {
+            console.log('subsription successful');
+          } else {
+            return;
+          }
+        })
+        );
+      }
 
     sendAcceptMessage(user?, messages?) {
         this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -98,7 +130,7 @@ export class NotificationsService {
                         //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
                     });
             });
-        hubConnection.onclose(function () {
+        hubConnection.onclose(function() {
             setTimeout(() => {
                 hubConnection.start();
             }, 5000);

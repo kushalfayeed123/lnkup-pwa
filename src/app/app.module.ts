@@ -50,13 +50,8 @@ import { AppReviewWebService } from './services/data/app-review/app-review.web.s
 import { PaymentDataService } from './services/data/payment/payment.data.service';
 import { PaymentWebService } from './services/data/payment/payment.web.service';
 import { PaymentModalComponent } from './components/payment-modal/payment-modal.component';
-
-
-
-
-
-
-
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
 
 @NgModule({
@@ -102,7 +97,16 @@ import { PaymentModalComponent } from './components/payment-modal/payment-modal.
     }),
     AgmDirectionModule,
     MatGoogleMapsAutocompleteModule.forRoot(),
+
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    AngularFireModule.initializeApp({ /* See project settings in Firebase Console for this information */
+      apiKey: 'AIzaSyBmzd4YZ1GaJLImzKe2mJZTUOXMy0kdf-o',
+      projectId: 'lnkup-d039c',
+      storageBucket: 'lnkup-d039c.appspot.com',
+      messagingSenderId: '528306024116',
+      appId: '1:528306024116:web:53edf7520bff2a8919b1e1'
+     }),
+     AngularFireMessagingModule,
   ],
   
   providers: [

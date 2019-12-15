@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy{
                 route.events.subscribe(url => {
                   this.getCurrentRoute();
                 });
-                this.pushNotificationSub();
+                // this.pushNotificationSub();
                 // this.getLoggedInUser();
                 // this.notificationService.intiateConnection();
 
@@ -71,23 +71,7 @@ export class AppComponent implements OnInit, OnDestroy{
       });
     }
   }
-  pushNotificationSub()  {
-    this.swPush.requestSubscription({
-      serverPublicKey: this.VAPID_PUBLIC_KEY
-    })
-    .then(sub => this.authenticateService.saveSubscription(sub)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      if (res !== null) {
-        console.log('subsription successful');
-      } else {
-        return;
-      }
-    })
-    )
-    .catch(err => console.error('Could not subscribe to notifications'));
-  }
-
+ 
   getCurrentRoute() {
     const route = this.route.url;
     const profileRoute = route.slice(0, 8);
