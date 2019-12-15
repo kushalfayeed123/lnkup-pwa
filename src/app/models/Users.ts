@@ -10,7 +10,7 @@ export class Users{
     userStatus: string;
     token: string;
     userImage: UserImage;
-    userPaymentData: UserPaymentToken;
+    userPaymentData: UserPaymentToken[];
 }
 
 export class UserImage {

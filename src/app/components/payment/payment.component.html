@@ -11,7 +11,7 @@
         <div class="header-text" *ngIf="!isCash && !isCard"> Select your prefered payment method </div>
         <img src="./assets/Images/003-left-arrow.svg" *ngIf="isCash || isCard" class="left-arrow" alt=""
           (click)="togglePaymentMethods()">
-        <div class="payment-option"  *ngIf="!isCard && !isCash">
+        <div class="payment-option" *ngIf="!isCard && !isCash && !addCard">
           <div class="setting-group" (click)="openCash()">
             <button class="payment-method">
               Cash
@@ -30,50 +30,47 @@
       </div>
       <div class="cardDetails-container" *ngIf="isCard && !isCash">
         <div *ngIf="!isAvs && !isPin && !isOtp">
-            <div>
-                <mat-form-field class="auth-full-width card-number">
-                  <input type="number" matInput placeholder="xxxx xxxx xxxx xxxx" formControlName="cardno" />
-                </mat-form-field>
-              </div>
-              <div class="card-details">
-                <mat-form-field class="auth-full-width card-subdetails">
-                  <input type="text" matInput class="input-color" placeholder=" Month" formControlName="expirymonth" />
-                </mat-form-field>
-                <mat-form-field class="auth-full-width card-subdetails">
-                  <input type="number" matInput class="input-color" placeholder=" Year" formControlName="expiryyear" />
-                </mat-form-field>
-                <mat-form-field class="auth-full-width card-subdetails">
-                  <input type="number" matInput class="input-color" placeholder="cvv" formControlName="cvv" />
-                </mat-form-field>
-              </div>
+          <div>
+            <mat-form-field class="auth-full-width card-number">
+              <input type="number" matInput placeholder="xxxx xxxx xxxx xxxx" formControlName="cardno" />
+            </mat-form-field>
+          </div>
+          <div class="card-details">
+            <mat-form-field class="auth-full-width card-subdetails">
+              <input type="text" matInput class="input-color" placeholder=" Month" formControlName="expirymonth" />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width card-subdetails">
+              <input type="number" matInput class="input-color" placeholder=" Year" formControlName="expiryyear" />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width card-subdetails">
+              <input type="number" matInput class="input-color" placeholder="cvv" formControlName="cvv" />
+            </mat-form-field>
+          </div>
         </div>
-      
+
         <div *ngIf="isAvs">
           <div>
             <mat-form-field class="auth-full-width card-subdetails avs-details">
-              <input type="text" matInput class="input-color" placeholder="Address"
-                formControlName="billingaddress" />
+              <input type="text" matInput class="input-color" placeholder="Address" formControlName="billingaddress" />
             </mat-form-field>
             <mat-form-field class="auth-full-width card-subdetails zip-details">
               <input type="text" matInput class="input-color" placeholder="Zip" formControlName="billingzip" />
             </mat-form-field>
           </div>
           <div class="card-details">
-  
+
             <mat-form-field class="auth-full-width card-subdetails">
               <input type="text" matInput class="input-color" placeholder="City" formControlName="billingcity" />
             </mat-form-field>
             <mat-form-field class="auth-full-width card-subdetails">
-              <input type="text" matInput class="input-color" placeholder="State"
-                formControlName="billingstate" />
+              <input type="text" matInput class="input-color" placeholder="State" formControlName="billingstate" />
             </mat-form-field>
             <mat-form-field class="auth-full-width card-subdetails">
-              <input type="text" matInput class="input-color" placeholder="Country"
-                formControlName="billingcountry" />
+              <input type="text" matInput class="input-color" placeholder="Country" formControlName="billingcountry" />
             </mat-form-field>
           </div>
         </div>
-      
+
         <div class="card-details">
           <div *ngIf="isPin">
             <mat-form-field class="auth-full-width card-number">
@@ -83,8 +80,7 @@
 
           <div *ngIf="isOtp">
             <mat-form-field class="auth-full-width card-number">
-              <input type="number" matInput placeholder="OTP"
-                formControlName="OTP" />
+              <input type="number" matInput placeholder="OTP" formControlName="OTP" />
             </mat-form-field>
           </div>
         </div>
@@ -100,19 +96,32 @@
         <!-- <span>Alternate Payment Method</span> -->
         <i class="flaticon-square-add-button" id="add-method"></i>
       </div>
-      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save payment</button>
+      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save
+        payment</button>
       <button id="use-payment" *ngIf="isCard && !isAvs && isPin " (click)="initiatePinAuth()">Submit Pin</button>
-      <button id="use-payment" *ngIf="isCard && isAvs && !isPin && !isOtp" (click)="initiateAvsAuth()">Submit Billing Details</button>
-      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit OTP</button>
+      <button id="use-payment" *ngIf="isCard && isAvs && !isPin && !isOtp" (click)="initiateAvsAuth()">Submit Billing
+        Details</button>
+      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit
+        OTP</button>
 
 
     </form>
+    <div *ngIf="addCard" class="card-message">
+      <span>
+        You have a card saved already. Do you want to add another card?
+      </span>
+      <div class="btn-container">
+          <button id="use-payment" class="confirm-btn" (click)="onYesClick()">Yes</button>
+          <button id="use-payment" class="confirm-btn no-btn" (click)="onNoClick()">No</button>
+      </div>
 
+
+    </div>
     <!-- <div *ngIf="loadAuthIframe">
         <iframe [src]="sanitizer.bypassSecurityTrustResourceUrl(authUrl)" height="600" width="300" style="background-color: #ffffff;"></iframe>
     </div> -->
 
-    
+
 
     <!-- <div>
             <div class="saved-payment">Your saved payment method</div>

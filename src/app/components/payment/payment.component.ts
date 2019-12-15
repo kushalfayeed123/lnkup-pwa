@@ -1,3 +1,4 @@
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { NotificationsService } from './../../services/business/notificatons.service';
 import {
@@ -64,6 +65,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
   transaction_ref: any;
   paymentToken: any;
   name: any;
+  paymentStatus: any;
+  addCard: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +75,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private notifyService: NotificationsService,
     private authService: AuthenticateDataService,
     public dialog: MatDialog,
+    private broadcastService: BroadcastService
 
   ) {
     this.PBFPubKey = environment.ravePubKey;
@@ -82,6 +86,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCurrentUser();
+    this.getUserPaymentStatus();
     this.cardDetailsForm = this.fb.group({
       PBFPubKey: [''],
       cardno: [''],
@@ -113,6 +118,14 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate([`${this.userRole}/home/${this.userId}`]);
+  }
+  getUserPaymentStatus() {
+    this.broadcastService.paymentStatus
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      this.paymentStatus = res;
+      console.log('user has added card', this.paymentStatus);
+    });
   }
 
   getCurrentUser() {
@@ -452,7 +465,20 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.isCash = !this.isCash;
   }
   openCard() {
+    if (this.paymentStatus === false) {
+      this.isCard = !this.isCard;
+    } else {
+      this.addCard = true;
+    }
+  }
+  onYesClick() {
     this.isCard = !this.isCard;
+    this.addCard = false;
+  }
+
+  onNoClick() {
+    this.addCard = false;
+    this.togglePaymentMethods();
   }
 
   togglePaymentMethods() {

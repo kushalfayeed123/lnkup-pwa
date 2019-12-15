@@ -22,6 +22,7 @@ import { Location, Appearance } from '@angular-material-extensions/google-maps-a
 import PlaceResult = google.maps.places.PlaceResult;
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { UserPaymentToken } from 'src/app/models/payment';
 
 
 @Component({
@@ -70,7 +71,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   todaysDataTime = '';
   greeting: string;
   showNoTripMessage: boolean;
-  userPaymentData: import("c:/sandbox/lnkup-mobile/src/app/models/payment").UserPaymentToken;
+  userPaymentData: UserPaymentToken;
+  userPayment: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -117,17 +119,23 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .getById(userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
-        const currentUser = user;
-        console.log('user viewing this screen', currentUser);
+        const userPaymentData = user.userPaymentData;
+        if (userPaymentData.length < 1) {
+          this.userPayment = false;
+        } else {
+          this.userPayment = true;
+        }
+        this.broadCastService.publishUserPaymentStatus(this.userPayment);
       });
   }
   mapReading() {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
- 
+
 
 
   getCurrentLocation() {
+    window.scrollTo(0, 0);
     this.mapService.getCurrentLocation();
     const userLocation = localStorage.getItem('userLocation');
     if (userLocation !== null || !' ') {
@@ -200,13 +208,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
   getDrivers() {
-    this.loadMarker = false;
-    this.getCurrentLocation();
-    this.getDestinationCordinates();
-    this.passDirection();
-    this.gettingDrivers = true;
-    this.loading = true;
-    this.createTripRequest();
+    if (this.userPayment) {
+      this.loadMarker = false;
+      this.getCurrentLocation();
+      this.getDestinationCordinates();
+      this.passDirection();
+      this.gettingDrivers = true;
+      this.loading = true;
+      this.createTripRequest();
+    } else {
+      this.notificationService.showInfoMessage('Please add your payment details to lnkup');
+    }
+
   }
   onAutocompleteSelected(result: PlaceResult) {
     console.log('onAutocompleteSelected: ', result.formatted_address);

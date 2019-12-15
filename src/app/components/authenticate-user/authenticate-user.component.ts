@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { UserPaymentToken } from 'src/app/models/payment';
 
 @Component({
   selector: 'app-authenticate-user',
@@ -30,7 +31,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public durationInSeconds = 4;
   message: string;
-  userPaymentData: import("c:/sandbox/lnkup-mobile/src/app/models/payment").UserPaymentToken;
+  userPaymentData: UserPaymentToken;
 
 
   constructor(private router: Router,
