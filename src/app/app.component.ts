@@ -33,14 +33,13 @@ export class AppComponent implements OnInit, OnDestroy{
               private broadCastService: BroadcastService,
               private authenticateService: AuthenticateDataService,
               private route: Router,
-              private swPush: SwPush) {
+              private notifyService: NotificationsService) {
                 route.events.subscribe(url => {
                   this.getCurrentRoute();
                 });
                 // this.pushNotificationSub();
                 // this.getLoggedInUser();
                 // this.notificationService.intiateConnection();
-
               }
 
   // tslint:disable-next-line: use-lifecycle-interface

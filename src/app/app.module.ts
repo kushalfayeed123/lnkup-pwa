@@ -100,7 +100,7 @@ import { NotificationComponent } from './components/notification/notification.co
     MatGoogleMapsAutocompleteModule.forRoot(),
 
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    AngularFireModule.initializeApp({ /* See project settings in Firebase Console for this information */
+    AngularFireModule.initializeApp({
       apiKey: 'AIzaSyBmzd4YZ1GaJLImzKe2mJZTUOXMy0kdf-o',
       projectId: 'lnkup-d039c',
       storageBucket: 'lnkup-d039c.appspot.com',

@@ -47,15 +47,18 @@ export class NotificationsService {
 
     requestPermision()  {
         this.angularFireMessaging.requestToken
-        .subscribe(sub => this.authenticateService.saveSubscription(sub)
-        .subscribe(res => {
-          if (res !== null) {
-            console.log('subsription successful');
-          } else {
-            return;
-          }
-        })
-        );
+        .subscribe(sub => {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userId = user.id;
+            const pushSubscription = {
+                token: sub,
+                userId
+            };
+            this.authenticateService.saveSubscription(pushSubscription)
+            .subscribe(res => {
+                console.log('saved notification sub', res);
+            });
+        });
       }
 
       recieveMessage() {

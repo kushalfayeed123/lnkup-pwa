@@ -68,6 +68,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
               private notificationService: NotificationsService,
               private broadCastService: BroadcastService) {
                 this.startTrip();
+                this.notificationService.requestPermision();
                }
 
   ngOnInit() {

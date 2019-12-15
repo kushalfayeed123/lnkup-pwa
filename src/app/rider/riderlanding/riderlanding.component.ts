@@ -87,6 +87,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private notificationService: NotificationsService
   ) {
     // this.notificationService.intiateConnection();
+    this.notificationService.requestPermision();
+
 
   }
 
