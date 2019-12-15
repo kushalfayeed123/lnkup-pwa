@@ -43,9 +43,7 @@ export class NotificationsService {
 
     }
 
-    requestPermission = () => this.angularFireMessaging.requestToken;
 
-    recieveMessage = () => this.angularFireMessaging.messages;
 
     requestPermision()  {
         this.angularFireMessaging.requestToken
@@ -58,6 +56,13 @@ export class NotificationsService {
           }
         })
         );
+      }
+
+      recieveMessage() {
+          this.angularFireMessaging.messages
+          .subscribe(message => {
+              console.log('message', message)
+          });
       }
 
     sendAcceptMessage(user?, messages?) {
