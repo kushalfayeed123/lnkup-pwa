@@ -40,6 +40,7 @@ export class AppComponent implements OnInit, OnDestroy{
                 // this.pushNotificationSub();
                 // this.getLoggedInUser();
                 // this.notificationService.intiateConnection();
+                this.notifyService.receiveMessage();
               }
 
   // tslint:disable-next-line: use-lifecycle-interface
