@@ -36,11 +36,11 @@ export class NotificationsService {
 
     angularFireMessenger() {
         this.angularFireMessaging.messaging
-        .subscribe(messagingContext => {
+        .subscribe((messagingContext) => {
             messagingContext.onMessage = messagingContext.onMessage.bind(messagingContext);
             messagingContext.onTokenRefresh = messagingContext.onTokenRefresh.bind(messagingContext);
+            console.log('angular fire messaging', messagingContext);
         });
-
     }
 
 
@@ -61,13 +61,7 @@ export class NotificationsService {
         });
       }
 
-      receiveMessage() {
-        console.log('receive method called');
-        this.angularFireMessaging.messages
-          .subscribe(message => {
-              console.log('message', message);
-          });
-      }
+    receiveMessage = () => this.angularFireMessaging.messages;
 
     sendAcceptMessage(user?, messages?) {
         this.user = JSON.parse(localStorage.getItem('currentUser'));

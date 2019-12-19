@@ -40,7 +40,10 @@ export class AppComponent implements OnInit, OnDestroy{
                 // this.pushNotificationSub();
                 // this.getLoggedInUser();
                 // this.notificationService.intiateConnection();
-                this.notifyService.receiveMessage();
+                this.notifyService.receiveMessage()
+                .subscribe(message => {
+                  console.log(message);
+                });
               }
 
   // tslint:disable-next-line: use-lifecycle-interface
@@ -72,7 +75,7 @@ export class AppComponent implements OnInit, OnDestroy{
       });
     }
   }
- 
+
   getCurrentRoute() {
     const route = this.route.url;
     const profileRoute = route.slice(0, 8);
