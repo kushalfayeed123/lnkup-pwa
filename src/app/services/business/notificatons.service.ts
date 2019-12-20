@@ -70,7 +70,16 @@ export class NotificationsService {
                 console.log('message', message);
             });
     }
-    // Listen for token refresh
+
+    sendMessage() {
+        const message = {
+
+        };
+        this.authenticateService.sendFCMMessage(message)
+        .subscribe(res => {
+            console.log(res);
+        });
+    }
    
 
     deleteSubscription() {

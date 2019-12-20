@@ -75,7 +75,7 @@ export class AppComponent implements OnInit, OnDestroy{
       });
     }
   }
- 
+
   getCurrentRoute() {
     const route = this.route.url;
     const profileRoute = route.slice(0, 8);

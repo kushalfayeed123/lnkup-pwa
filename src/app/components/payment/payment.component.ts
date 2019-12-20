@@ -169,7 +169,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
             .subscribe(res => {
               if (res) {
                 const paymentPayload = {
-                  PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
+                  PBFPubKey: environment.ravePubKey,
                   client: res.encryptionData,
                   alg: '3DES-24'
                 };
@@ -249,7 +249,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
             .subscribe(res => {
               if (res) {
                   const paymentPayload = {
-                  PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
+                  PBFPubKey: environment.ravePubKey,
                   client: res.encryptionData,
                   alg: '3DES-24'
                 };
@@ -304,7 +304,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
             .subscribe(res => {
               if (res) {
                 const paymentPayload = {
-                  PBFPubKey: 'FLWPUBK_TEST-de83d2331a09f1d56894a397f1aab8ec-X',
+                  PBFPubKey: environment.ravePubKey,
                   client: res.encryptionData,
                   alg: '3DES-24'
                 };
