@@ -102,10 +102,13 @@ import { NotificationComponent } from './components/notification/notification.co
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     AngularFireModule.initializeApp({
       apiKey: 'AIzaSyBmzd4YZ1GaJLImzKe2mJZTUOXMy0kdf-o',
+      authDomain: 'lnkup-d039c.firebaseapp.com',
+      databaseURL: 'https://lnkup-d039c.firebaseio.com',
       projectId: 'lnkup-d039c',
       storageBucket: 'lnkup-d039c.appspot.com',
       messagingSenderId: '528306024116',
-      appId: '1:528306024116:web:53edf7520bff2a8919b1e1'
+      appId: '1:528306024116:web:53edf7520bff2a8919b1e1',
+      measurementId: 'G-N2WZCDVJNC'
      }),
      AngularFireMessagingModule,
   ],
