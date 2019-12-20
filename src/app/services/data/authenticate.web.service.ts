@@ -70,6 +70,9 @@ export class AuthenticateWebService implements AuthenticateDataService {
   saveSubscription(sub: any) {
     return this.http.post(`${this.webUrl}/subscribe`, sub);
   }
+  sendFCMMessage(payload: any) {
+    return this.http.post(`${this.webUrl}/subscribe/send`, payload);
+  }
   update(user: any) {
     console.log('from the service', user);
     return this.http.put(`${this.webUrl}/user/${user.id}`, user);
