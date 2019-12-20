@@ -501,6 +501,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.cardDetailsForm.reset();
   }
 
+  sendMessage() {
+    this.notifyService.getReceiverObject(this.userId);
+  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

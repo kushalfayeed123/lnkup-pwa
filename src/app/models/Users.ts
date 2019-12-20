@@ -1,4 +1,5 @@
 import { UserPaymentToken } from './payment';
+import { PushNotificationTokens } from './pushNotificationTokens';
 
 export class Users{
     userId: string;
@@ -11,6 +12,7 @@ export class Users{
     token: string;
     userImage: UserImage;
     userPaymentData: UserPaymentToken[];
+    pushNotificationTokens: PushNotificationTokens[];
 }
 
 export class UserImage {

@@ -6,7 +6,11 @@
     <h1>Payment</h1>
   </nav>
   <main class="contain-box">
-    <form id="payment-form" [formGroup]="cardDetailsForm">
+
+    <!-- <button id="use-payment"  (click)="sendMessage()">Send
+      Message</button> -->
+
+      <form id="payment-form" [formGroup]="cardDetailsForm">
       <div class="cards-container">
         <div class="header-text" *ngIf="!isCash && !isCard"> Select your prefered payment method </div>
         <img src="./assets/Images/003-left-arrow.svg" *ngIf="isCash || isCard" class="left-arrow" alt=""

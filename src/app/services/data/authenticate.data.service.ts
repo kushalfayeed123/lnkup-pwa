@@ -19,6 +19,4 @@ export abstract class AuthenticateDataService {
     abstract getUserImage(id);
     abstract uploadUserImage(image);
     abstract updateUserImage(id, image);
-    abstract saveSubscription(sub);
-    abstract sendFCMMessage(payload);
 }

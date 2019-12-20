@@ -26,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy{
   showSideNav: boolean;
   readonly VAPID_PUBLIC_KEY = environment.vapidPublicKey;
   private unsubscribe$ = new Subject<void>();
+  message: any;
 
   // tslint:disable-next-line: variable-name
 
@@ -44,6 +45,8 @@ export class AppComponent implements OnInit, OnDestroy{
                 setTimeout(() => {
                   this.notifyService.deleteSubscription();
                 }, 3000);
+                this.message = this.notifyService.currentMessage;
+                console.log('current message', this.message);
               }
 
   // tslint:disable-next-line: use-lifecycle-interface
@@ -52,7 +55,8 @@ export class AppComponent implements OnInit, OnDestroy{
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
     this.reload();
-      }
+
+    }
 
   getLoggedInUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));

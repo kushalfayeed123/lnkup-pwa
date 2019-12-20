@@ -1,3 +1,4 @@
+import { PushNotificationWebService } from './services/data/push-notification/push-notification.web.service';
 import { AgmDirectionModule } from 'agm-direction';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -52,6 +53,7 @@ import { PaymentModalComponent } from './components/payment-modal/payment-modal.
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { NotificationComponent } from './components/notification/notification.component';
+import { PushNotificationDataService } from './services/data/push-notification/push-notification.data.service';
 
 
 
@@ -127,7 +129,8 @@ import { NotificationComponent } from './components/notification/notification.co
     {provide: ActiveTripDataService, useClass: ActiveTripWebService},
     {provide: DriverDataDataService, useClass: DriverDataWebService},
     {provide: AppReviewDataService, useClass: AppReviewWebService},
-    {provide: PaymentDataService, useClass: PaymentWebService}
+    {provide: PaymentDataService, useClass: PaymentWebService},
+    {provide: PushNotificationDataService, useClass: PushNotificationWebService}
   ],
   bootstrap: [AppComponent],
   entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent, PaymentModalComponent]

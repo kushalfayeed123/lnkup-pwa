@@ -1,3 +1,4 @@
+import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
@@ -6,7 +7,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import * as firebase from 'firebase';
-import { AuthenticateDataService } from '../data/authenticate.data.service';
+import { Notifications } from 'src/app/models/notifications';
+import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
 
 @Injectable()
 
@@ -24,11 +26,16 @@ export class NotificationsService {
     public declineAlert = new BehaviorSubject(null);
     reconnect: boolean;
 
+    public currentMessage = new BehaviorSubject(null);
+    message: Notifications;
+  receiver: import("c:/xampp/htdocs/lnkup-mobile/src/app/models/Users").Users;
+
 
 
     constructor(private router: Router, private toastService: ToastrService,
-        private angularFireMessaging: AngularFireMessaging,
-        private authenticateService: AuthenticateDataService
+                private angularFireMessaging: AngularFireMessaging,
+                private pushService: PushNotificationDataService,
+                private authService: AuthenticateDataService
     ) {
         this.webUrl = environment.openConnect;
         this.angularFireMessenger();
@@ -45,20 +52,26 @@ export class NotificationsService {
     }
 
 
-
+    getReceiverObject(userId) {
+      this.authService.getById(userId)
+      .toPromise()
+      .then(res => {
+        this.receiver = res;
+        this.sendMessage(res);
+        console.log('receiver', res);
+      });
+    }
     requestPermision() {
         this.angularFireMessaging.requestToken
             .subscribe(sub => {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
                 const userId = user.id;
-                localStorage.setItem('pushToken', sub);
                 const pushSubscription = {
                     token: sub,
                     userId
                 };
-                this.authenticateService.saveSubscription(pushSubscription)
+                this.pushService.saveSubscription(pushSubscription)
                     .subscribe(res => {
-                        console.log('saved notification sub', res);
                     });
             });
     }
@@ -67,20 +80,27 @@ export class NotificationsService {
         console.log('receive method called');
         this.angularFireMessaging.messages
             .subscribe(message => {
-                console.log('message', message);
+              console.log('message', message);
+              this.currentMessage.next(message);
             });
     }
 
-    sendMessage() {
+    sendMessage(user) {
+        const token = user.pushNotificationTokens[0].token;
         const message = {
-
+          notification: {
+            title: 'Test Message Title',
+            body: 'Test Message Body',
+            click_action: 'http://localhost:4200/',
+          },
+          to: `${token}`
         };
-        this.authenticateService.sendFCMMessage(message)
+        this.pushService.sendFCMMessage(message)
         .subscribe(res => {
             console.log(res);
         });
     }
-   
+
 
     deleteSubscription() {
         const token = localStorage.getItem('pushToken');
