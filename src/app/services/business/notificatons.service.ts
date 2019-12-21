@@ -9,6 +9,7 @@ import { AngularFireMessaging } from '@angular/fire/messaging';
 import * as firebase from 'firebase';
 import { Notifications } from 'src/app/models/notifications';
 import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
+import { Users } from 'src/app/models/Users';
 
 @Injectable()
 
@@ -28,7 +29,7 @@ export class NotificationsService {
 
     public currentMessage = new BehaviorSubject(null);
     message: Notifications;
-  receiver: import("c:/xampp/htdocs/lnkup-mobile/src/app/models/Users").Users;
+    receiver: Users;
 
 
 
@@ -81,6 +82,7 @@ export class NotificationsService {
         this.angularFireMessaging.messages
             .subscribe(message => {
               console.log('message', message);
+              alert(message);
               this.currentMessage.next(message);
             });
     }
@@ -91,7 +93,7 @@ export class NotificationsService {
           notification: {
             title: 'Test Message Title',
             body: 'Test Message Body',
-            click_action: 'http://localhost:4200/',
+            // click_action: 'http://localhost:4200/',
           },
           to: `${token}`
         };

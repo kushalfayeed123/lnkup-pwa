@@ -38,9 +38,7 @@ export class AppComponent implements OnInit, OnDestroy{
                 route.events.subscribe(url => {
                   this.getCurrentRoute();
                 });
-                // this.pushNotificationSub();
-                // this.getLoggedInUser();
-                // this.notificationService.intiateConnection();
+                this.reload();
                 this.notifyService.receiveMessage();
                 setTimeout(() => {
                   this.notifyService.deleteSubscription();
@@ -54,7 +52,6 @@ export class AppComponent implements OnInit, OnDestroy{
     window.scrollTo(0, 0);
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
-    this.reload();
 
     }
 
