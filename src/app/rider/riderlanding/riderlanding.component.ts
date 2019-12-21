@@ -86,8 +86,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private broadCastService: BroadcastService,
     private notificationService: NotificationsService
   ) {
-    // this.notificationService.intiateConnection();
     this.notificationService.requestPermision();
+   
   }
 
   ngOnInit() {

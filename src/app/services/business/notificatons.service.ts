@@ -34,9 +34,9 @@ export class NotificationsService {
 
 
     constructor(private router: Router, private toastService: ToastrService,
-                private angularFireMessaging: AngularFireMessaging,
-                private pushService: PushNotificationDataService,
-                private authService: AuthenticateDataService
+        private angularFireMessaging: AngularFireMessaging,
+        private pushService: PushNotificationDataService,
+        private authService: AuthenticateDataService
     ) {
         this.webUrl = environment.openConnect;
         this.angularFireMessenger();
@@ -54,13 +54,13 @@ export class NotificationsService {
 
 
     getReceiverObject(userId) {
-      this.authService.getById(userId)
-      .toPromise()
-      .then(res => {
-        this.receiver = res;
-        this.sendMessage(res);
-        console.log('receiver', res);
-      });
+        this.authService.getById(userId)
+            .toPromise()
+            .then(res => {
+                this.receiver = res;
+                this.sendMessage(res);
+                console.log('receiver', res);
+            });
     }
     requestPermision() {
         this.angularFireMessaging.requestToken
@@ -81,26 +81,24 @@ export class NotificationsService {
         console.log('receive method called');
         this.angularFireMessaging.messages
             .subscribe(message => {
-              console.log('message', message);
-              alert(message);
-              this.currentMessage.next(message);
+                console.log('message', message);
+                this.currentMessage.next(message);
             });
     }
 
     sendMessage(user) {
         const token = user.pushNotificationTokens[0].token;
         const message = {
-          notification: {
             title: 'Test Message Title',
             body: 'Test Message Body',
             // click_action: 'http://localhost:4200/',
-          },
-          to: `${token}`
+            receiverName: 'admin',
+            token
         };
         this.pushService.sendFCMMessage(message)
-        .subscribe(res => {
-            console.log(res);
-        });
+            .subscribe(res => {
+                console.log(res);
+            });
     }
 
 

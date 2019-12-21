@@ -11,7 +11,7 @@ export class PushNotificationWebService implements PushNotificationDataService {
   serverKey = 'AAAAewF-LrQ:APA91bFMHtngh62GqRlXRi8imAR5OimFkG10_whc1vGoGs5i-n6yi8cWbP2quHECvLBEkkrIsy8oitwnoocsNFwXsMoEZfDv1gm6GMGzemLSrm28anbmlhiHHNkzeTzAfzMKWFUc4tRE';
 
 
-  constructor( private http: HttpClient) {
+  constructor(private http: HttpClient) {
     this.webUrl = environment.webUrl;
   }
 
@@ -19,13 +19,7 @@ export class PushNotificationWebService implements PushNotificationDataService {
     return this.http.post(`${this.webUrl}/subscribe`, sub);
   }
   sendFCMMessage(payload: any) {
-    return this.http.post(`https://fcm.googleapis.com/fcm/send`, payload, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `key=${this.serverKey}`
-      })
-    });
+    return this.http.post(`${this.webUrl}/subscribe/Send`, payload);
   }
-
 
 }

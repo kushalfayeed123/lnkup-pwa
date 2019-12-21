@@ -40,11 +40,13 @@ export class AppComponent implements OnInit, OnDestroy{
                 });
                 this.reload();
                 this.notifyService.receiveMessage();
-                setTimeout(() => {
-                  this.notifyService.deleteSubscription();
-                }, 3000);
-                this.message = this.notifyService.currentMessage;
-                console.log('current message', this.message);
+                this.notifyService.currentMessage
+                .subscribe(res => {
+                  alert(res);
+                });
+                // setTimeout(() => {
+                //   this.notifyService.deleteSubscription();
+                // }, 3000);
               }
 
   // tslint:disable-next-line: use-lifecycle-interface
