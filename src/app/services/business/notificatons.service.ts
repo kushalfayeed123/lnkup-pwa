@@ -10,6 +10,7 @@ import * as firebase from 'firebase';
 import { Notifications } from 'src/app/models/notifications';
 import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
 import { Users } from 'src/app/models/Users';
+import { SwPush } from '@angular/service-worker';
 
 @Injectable()
 
@@ -34,9 +35,10 @@ export class NotificationsService {
 
 
     constructor(private router: Router, private toastService: ToastrService,
-        private angularFireMessaging: AngularFireMessaging,
-        private pushService: PushNotificationDataService,
-        private authService: AuthenticateDataService
+                private angularFireMessaging: AngularFireMessaging,
+                private pushService: PushNotificationDataService,
+                private authService: AuthenticateDataService,
+                private swPush: SwPush
     ) {
         this.webUrl = environment.openConnect;
         if (swPush.isEnabled) {
