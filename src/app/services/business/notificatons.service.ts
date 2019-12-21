@@ -39,6 +39,11 @@ export class NotificationsService {
         private authService: AuthenticateDataService
     ) {
         this.webUrl = environment.openConnect;
+        if (swPush.isEnabled) {
+            navigator.serviceWorker
+                .ready
+                .then((registration) => firebase.messaging().useServiceWorker(registration));
+        }
         this.angularFireMessenger();
     }
 

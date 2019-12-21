@@ -11,14 +11,7 @@ firebase.initializeApp({
   'messagingSenderId': '528306024116'
 });
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('../firebase-messaging-sw.js')
-    .then(function(registration) {
-      console.log('Registration successful, scope is:', registration.scope);
-    }).catch(function(err) {
-      console.log('Service worker registration failed, error:', err);
-    });
-  }
+
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
