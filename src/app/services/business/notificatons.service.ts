@@ -82,6 +82,7 @@ export class NotificationsService {
         this.angularFireMessaging.messages
             .subscribe(message => {
               console.log('message', message);
+              alert(message);
               this.currentMessage.next(message);
             });
     }
@@ -92,7 +93,7 @@ export class NotificationsService {
           notification: {
             title: 'Test Message Title',
             body: 'Test Message Body',
-            click_action: 'http://localhost:4200/',
+            // click_action: 'http://localhost:4200/',
           },
           to: `${token}`
         };

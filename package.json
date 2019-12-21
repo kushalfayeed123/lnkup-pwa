@@ -45,6 +45,7 @@
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
+    "ng-connection-service": "^1.0.4",
     "ng-sidebar": "^9.1.1",
     "ngx-material-timepicker": "^5.1.1",
     "ngx-toastr": "^11.1.0",
