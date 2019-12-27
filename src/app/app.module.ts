@@ -52,7 +52,6 @@ import { PaymentWebService } from './services/data/payment/payment.web.service';
 import { PaymentModalComponent } from './components/payment-modal/payment-modal.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
-import { NotificationComponent } from './components/notification/notification.component';
 import { PushNotificationDataService } from './services/data/push-notification/push-notification.data.service';
 
 
@@ -75,9 +74,7 @@ import { PushNotificationDataService } from './services/data/push-notification/p
     PaymentComponent,
     SpinnerComponent,
     SupportComponent,
-    PaymentModalComponent,
-    NotificationComponent,
-
+    PaymentModalComponent
   ],
   imports: [
     BrowserModule,
@@ -133,7 +130,9 @@ import { PushNotificationDataService } from './services/data/push-notification/p
     {provide: PushNotificationDataService, useClass: PushNotificationWebService}
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent, PaymentModalComponent]
+  entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent,
+    PaymentModalComponent]
 
 })
 export class AppModule { }
+

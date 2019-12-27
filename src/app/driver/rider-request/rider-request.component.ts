@@ -90,30 +90,34 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     console.log('active trip', this.allowedRiderCount);
   }
   acceptTripRequest(rider) {
-    console.log(rider);
+   
     const tripConnectionId = sessionStorage.getItem('clientConnectionId');
     const driverName = this.activeTrip.tripDriver.driver.userName;
     const pickup = this.activeTrip.tripPickup;
     const riderId = rider.activeRiderId;
+    const receiver = rider.user.userName;
     const receiverId = rider.user.userId;
     const pickupTime = this.activeTrip.tripStartDateTime;
     const bookedSeat = rider.bookedSeat;
     const riderConnectionId = rider.riderConnectId;
     const message = `Your request has been accepted, please lnkup with ${driverName}
     at ${pickup} on or before ${pickupTime}`;
+    const pushMessage = {
+      title: 'LnkuP Trip',
+      body: message,
+      click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?driverNav=true`,
+      receiverName: receiver
+    };
     if (this.allowedRiderCount <= 0) {
       this.newAllowedRiderCount = this.maxSeat - bookedSeat;
     } else {
       this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
     }
-    console.log('allowed rider count', this.newAllowedRiderCount);
     const activeRider = {
       tripStatus: '2',
       paymentStatus: '0',
       riderConnectId: riderConnectionId
     };
-
-
 
 
     this.riderService.update(riderId, activeRider)
@@ -142,8 +146,8 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         this.getActiveTrips();
         this.notifyService.sendAcceptMessage(receiverId, message);
+        this.notifyService.sendNotification(rider, pushMessage);
         if (this.activeTripStatus === 0) {
-          this.notifyService.sendAcceptMessage(receiverId, message);
           const user = JSON.parse(localStorage.getItem('currentUser'));
           const userId = user.id;
           this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
@@ -160,11 +164,19 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const riderId = rider.activeRiderId;
     const receiverId = rider.user.userId;
     const driverName = this.activeTrip.tripDriver.driver.userName;
-    const message = `Sorry, ${driverName} declined your request. We will you link you up with other drivers shortly.`;
+    const receiver = rider.user.userName;
+    const message = `Sorry, ${driverName} declined your request. Please search for another driver.`;
+    const pushMessage = {
+      title: 'LnkuP Trip',
+      body: message,
+      click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}`,
+      receiverName: receiver
+    };
     this.riderService.delete(riderId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         this.notifyService.rejectMessage(receiverId, message);
+        this.notifyService.sendNotification(receiverId, pushMessage);
         this.getActiveTrips();
       }, error => {
         console.log('An error occured');

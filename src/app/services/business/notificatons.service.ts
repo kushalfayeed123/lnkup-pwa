@@ -7,10 +7,10 @@ import { BehaviorSubject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import * as firebase from 'firebase';
-import { Notifications } from 'src/app/models/notifications';
-import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
 import { Users } from 'src/app/models/Users';
 import { SwPush } from '@angular/service-worker';
+import { BroadcastService } from './broadcastdata.service';
+import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
 
 @Injectable()
 
@@ -29,16 +29,22 @@ export class NotificationsService {
     reconnect: boolean;
 
     public currentMessage = new BehaviorSubject(null);
-    message: Notifications;
+    message: Notification;
     receiver: Users;
+    token: any;
+
+    pushSubscription: { token: string; userId: any; };
+    subscription: string;
+    pushSubscriptionToUpdate: { token: string; };
 
 
 
     constructor(private router: Router, private toastService: ToastrService,
-                private angularFireMessaging: AngularFireMessaging,
-                private pushService: PushNotificationDataService,
-                private authService: AuthenticateDataService,
-                private swPush: SwPush
+        private angularFireMessaging: AngularFireMessaging,
+        private pushService: PushNotificationDataService,
+        private authService: AuthenticateDataService,
+        private swPush: SwPush,
+        private broadCastService: BroadcastService
     ) {
         this.webUrl = environment.openConnect;
         this.angularFireMessenger();
@@ -55,49 +61,61 @@ export class NotificationsService {
     }
 
 
-    getReceiverObject(userId) {
+  
+    requestPermision() {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const userId = user.id;
+        this.angularFireMessaging.requestToken
+            .subscribe(sub => {
+                this.subscription = sub;
+                this.pushSubscription = {
+                    token: this.subscription,
+                    userId
+                };
+            });
+        this.pushService.getUserToken(userId)
+            .subscribe(token => {
+                this.token = token;
+            });
+        console.log('token', this.token);
+        if (!this.token) {
+            this.pushService.saveSubscription(this.pushSubscription)
+                .subscribe(res => {
+                }, error => {
+                    console.error(error);
+                });
+        } else {
+            this.pushSubscriptionToUpdate = {
+                token: this.subscription
+            };
+            this.pushService.updateFCMToken(userId, this.pushSubscriptionToUpdate)
+                .subscribe(res => {
+                }, error => {
+                    console.error(error);
+                });
+        }
+
+    }
+    sendNotification(userId, message) {
         this.authService.getById(userId)
             .toPromise()
             .then(res => {
                 this.receiver = res;
-                this.sendMessage(res);
+                this.sendMessage(res, message);
                 console.log('receiver', res);
             });
     }
-    requestPermision() {
-        this.angularFireMessaging.requestToken
-            .subscribe(sub => {
-                const user = JSON.parse(localStorage.getItem('currentUser'));
-                const userId = user.id;
-                const pushSubscription = {
-                    token: sub,
-                    userId
-                };
-                this.pushService.saveSubscription(pushSubscription)
-                    .subscribe(res => {
-                    });
-            });
-    }
-
     receiveMessage() {
-        console.log('receive method called');
         this.angularFireMessaging.messages
             .subscribe(message => {
-                console.log('message', message);
                 this.currentMessage.next(message);
             });
     }
 
-    sendMessage(user) {
+    sendMessage(user, message) {
         const token = user.pushNotificationTokens[0].token;
-        const message = {
-            title: 'Test Message Title',
-            body: 'Test Message Body',
-            // click_action: 'http://localhost:4200/',
-            receiverName: 'admin',
-            token
-        };
-        this.pushService.sendFCMMessage(message)
+        const pushMessage = {...message, token};
+        this.pushService.sendFCMMessage(pushMessage)
             .subscribe(res => {
                 console.log(res);
             });
@@ -190,37 +208,36 @@ export class NotificationsService {
     }
     alertDriverSuccess(message) {
         const alertDriver = true;
-        this._successAlert.next(alertDriver);
         this.showInfoMessage(message);
+        this._successAlert.next(alertDriver);
     }
 
     alertRiderSuccess(message) {
         const alertRider = true;
-        this._successAlert.next(alertRider);
         this.showSuccessMessage(message);
-
+        this._successAlert.next(alertRider);
     }
 
     alertDriverCancel(message) {
         const alertDriver = true;
-        this._declineAlert.next(alertDriver);
         this.showErrorMessage(message);
+        this._declineAlert.next(alertDriver);
     }
 
     alertRiderDecline(message) {
         const alertRider = true;
-        this._declineAlert.next(alertRider);
         this.showErrorMessage(message);
+        this._declineAlert.next(alertRider);
     }
 
     showSuccessMessage(message) {
-        this.toastService.success(message);
+        this.broadCastService.publishMessage(message);
     }
     showErrorMessage(message) {
-        this.toastService.error(message);
+        this.broadCastService.publishMessage(message);
     }
     showInfoMessage(message) {
-        this.toastService.info(message);
+        this.broadCastService.publishMessage(message);
     }
     // pushNotification(message) {
     //     const title = 'Hello';

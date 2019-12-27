@@ -63,8 +63,24 @@ Imports
   margin: 0 auto;
 }
 
+
 .mat-spinner{
   margin-left: 17% !important;
+}
+.mat-toolbar.mat-primary {
+  background: transparent !important;
+  color: #E040FB !important;
+  position: absolute !important;
+  z-index: 100 !important;
+  margin-top: 30px;
+}
+
+.mat-icon-button {
+  background: #121212 !important;
+  width: 50px !important;
+  height: 50px !important;
+  margin-top: 50px;
+  margin-left: 9px;
 }
 .destination {
   background: #121212;
@@ -486,8 +502,7 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
  .avd-container{
-    background: #eee;
-    height: 105%;
+    height: 107%;
   }
   .profile-info  {
     max-width: 64px;
@@ -573,3 +588,5 @@ section.auth-pages.security nav h1 {
 .dialog .mat-dialog-container {
   background-color: #121212;
 }
+
+

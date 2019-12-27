@@ -13,8 +13,8 @@ import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
 import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.component';
 import { RiderlinkComponent } from './riderlink/riderlink.component';
-import { SideNavComponent } from '../components/side-nav/side-nav.component';
 import { SidebarModule } from 'ng-sidebar';
+import { NotificationComponent } from '../components/notification/notification.component';
 
 
 @NgModule({
@@ -23,6 +23,7 @@ import { SidebarModule } from 'ng-sidebar';
                  DriverdetailsComponent,
                  BookseatrequestComponent,
                  RiderlinkComponent,
+                 
                  ],
   imports: [
     CommonModule,

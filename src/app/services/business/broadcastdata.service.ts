@@ -24,6 +24,9 @@ export class BroadcastService {
     private _paymentStatus = new BehaviorSubject(null);
     public paymentStatus = this._paymentStatus.asObservable();
 
+    private _notifMessage = new BehaviorSubject(null);
+    public notifMessage = this._notifMessage.asObservable();
+
 
 
     constructor() {
@@ -55,5 +58,9 @@ export class BroadcastService {
 
     publishUserPaymentStatus(paymentStatus) {
       this._paymentStatus.next(paymentStatus);
+    }
+
+    publishMessage(message) {
+        this._notifMessage.next(message);
     }
 }

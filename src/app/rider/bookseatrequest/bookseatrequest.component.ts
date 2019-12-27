@@ -32,6 +32,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   driverId: any;
   driverEmail: any;
   gettingDrivers: boolean;
+  driverName: any;
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
@@ -67,6 +68,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     const allowedRiderCount = tripDetails.allowedRiderCount;
     const maxSeats = tripDetails.maxRiderNumber;
     this.driverId = tripDetails.driverId;
+    this.driverName = tripDetails.user.userName;
     this.driverEmail = tripDetails.driverEmail;
     console.log('DRIVER ID', this.driverId);
     if (allowedRiderCount === 0) {
@@ -137,8 +139,14 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   sendNotification() {
     const message = 'You have a new LnkuP request';
     const userId =  this.driverId;
-    console.log('who to send to', userId);
+    const pushMessage = {
+      title: 'Lnkup Request',
+      body: message,
+      click_action: `https://lnkupmob.azureedge.net/driver/rider-request`,
+      receiverName: this.driverName
+    };
     this.notifyService.sendAcceptMessage(userId, message);
+    this.notifyService.sendNotification(userId, pushMessage);
   }
 
 

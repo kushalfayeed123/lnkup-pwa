@@ -85,6 +85,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.PBFPubKey);
     this.getCurrentUser();
     this.getUserPaymentStatus();
     this.cardDetailsForm = this.fb.group({
@@ -502,7 +503,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    this.notifyService.getReceiverObject(this.userId);
+    this.broadcastService.publishMessage('This is a very long test message');
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 <!-- <app-side-nav></app-side-nav> -->
-<form action="" id="search-form">
-    <input *ngIf="!riderLink" type="search" name="" id="" class="destination" placeholder="Enter Your Current Location"
+<form action="" id="search-form" *ngIf="showForm" >
+    <input *ngIf="!riderLink" type="search" name="" id="" class="destination" placeholder="Your current location"
         matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
 
 </form>
@@ -32,12 +32,12 @@
                   ></mat-spinner>
             </div>
 
-            <div *ngIf="showNoTripMessage">Sorry there are no trips at the moment. Please try again later.</div>
+            <p class="search" *ngIf="showNoTripMessage">Sorry there are no trips at the moment. Please try again later.</p>
 
 
             <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
                 <mat-form-field class="auth-full-width">
-                    <input type="text" matInput class="input-color" placeholder="Where are you going?" autocorrect="off"
+                    <input type="text" matInput class="input-color search" placeholder="Where are you going?" autocorrect="off"
                         autocapitalize="off" spellcheck="off" #search name="destinationAddress"
                         matGoogleMapsAutocomplete (onAutocompleteSelected)="onAutocompleteSelected($event)"
                         (onLocationSelected)="onLocationSelected($event)">
@@ -61,3 +61,5 @@
 
 
 <app-availabledrivers *ngIf="reachableDrivers"></app-availabledrivers>
+<app-notification></app-notification>
+

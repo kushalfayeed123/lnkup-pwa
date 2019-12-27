@@ -1,1 +1,5 @@
-<p>notification works!</p>
+<div *ngIf="showMessage" class="notif-container slide-in" id="slide" [ngClass]="{'slide-out': closeMessage}">
+    <div>
+    {{message}}
+    </div>
+</div>

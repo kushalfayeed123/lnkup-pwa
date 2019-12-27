@@ -73,6 +73,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   showNoTripMessage: boolean;
   userPaymentData: UserPaymentToken;
   userPayment: boolean;
+  showForm: boolean
 
   constructor(
     private route: ActivatedRoute,
@@ -91,8 +92,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.showForm = true;
     this.getCurrentime();
-    // this.clearLocalStorage();
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
@@ -108,10 +109,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.getUserById(userId);
     });
     this.searchControl = new FormControl();
-    // this.getDirection();
     this.getCurrentLocation();
     this.zoom = 17;
-    // this.location.marker.draggable = true;
     this.notificationService.intiateConnection();
   }
   getUserById(userId) {
@@ -214,6 +213,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.getDestinationCordinates();
       this.passDirection();
       this.gettingDrivers = true;
+      this.showForm = false;
       this.loading = true;
       this.createTripRequest();
     } else {
@@ -271,6 +271,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         const allActiveTrips = data;
         if (data.length === 0) {
           this.showNoTripMessage = true;
+          this.showForm = false;
           setTimeout(() => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             this.router.onSameUrlNavigation = 'reload';

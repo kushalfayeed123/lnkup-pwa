@@ -27,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy{
   readonly VAPID_PUBLIC_KEY = environment.vapidPublicKey;
   private unsubscribe$ = new Subject<void>();
   message: any;
+  showMessage: boolean;
 
   // tslint:disable-next-line: variable-name
 
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy{
                 this.notifyService.receiveMessage();
                 this.notifyService.currentMessage
                 .subscribe(res => {
-                  alert(res);
+                  // alert(res);
                 });
                 // setTimeout(() => {
                 //   this.notifyService.deleteSubscription();
@@ -98,6 +99,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this.broadCastService.publishSideNavValue(showSideNav);
     }
   }
+
 
   ngOnDestroy() {
     this.unsubscribe$.next();

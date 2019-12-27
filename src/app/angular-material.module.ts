@@ -27,6 +27,7 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
    imports: [
@@ -57,6 +58,7 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
       MatCarouselModule,
       MatDialogModule
    ],
+   declarations: [NotificationComponent],
    exports: [
       MatButtonModule,
       MatToolbarModule,
@@ -81,7 +83,8 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
       MatSnackBarModule,
       MatTabsModule,
       MatCarouselModule,
-      MatDialogModule
+      MatDialogModule,
+      NotificationComponent
       ],
    providers: [
       MatDatepickerModule,
