@@ -385,8 +385,13 @@ body.map-body .avd li:first-of-type::before {
     top: 2.6%;
   }
 }
+@media only screen and (min-height: 823px ){
+  #search-form {
+    top: 13%;
+  }
+}
 
-@media only screen and (min-height: 812px) {
+@media only screen and (min-height: 812px) and (max-height: 822px) {
  #search-form {
    top: 11.3%;
  }
