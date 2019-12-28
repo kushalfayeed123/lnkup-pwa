@@ -149,9 +149,9 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     console.log(tripFare);
   }
   getTimeValues() {
-    const dateNow = new Date().getTime();
-    this.dateNow = formatDate(dateNow, ' hh:mm a', 'en-US');
-    // console.log(dateNow);
+    const date = new Date().getTime();
+    this.dateNow = formatDate(date, ' hh:mm a', 'en-US').toLowerCase();
+    console.log(this.dateNow);
   }
   broadCastTrip() {
     this.loader = true;

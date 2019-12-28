@@ -28,9 +28,9 @@
             </mat-form-field>
 
             <mat-form-field class="auth-full-width form-bottom">
-                <input [ngxTimepicker]="picker"  type="text" matInput class="input-color" placeholder="What time will this trip begin?"
-                formControlName="tripStartDateTime">
-                <ngx-material-timepicker #picker></ngx-material-timepicker>
+                <input [ngxTimepicker]="min" [min]="'7:00 am'" type="text" matInput class="input-color" placeholder="What time will this trip begin?"
+                formControlName="tripStartDateTime" readonly>
+                <ngx-material-timepicker #min></ngx-material-timepicker>
             </mat-form-field>
 
 

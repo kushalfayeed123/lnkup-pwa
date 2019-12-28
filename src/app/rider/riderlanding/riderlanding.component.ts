@@ -87,11 +87,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private broadCastService: BroadcastService,
     private notificationService: NotificationsService
   ) {
-    this.notificationService.requestPermision();
    
   }
 
   ngOnInit() {
+    this.notificationService.requestPermision();
     this.showForm = true;
     this.getCurrentime();
     this.route.queryParams
