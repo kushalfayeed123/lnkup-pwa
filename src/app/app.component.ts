@@ -20,7 +20,7 @@ import { takeUntil } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None
 
 })
-export class AppComponent implements OnInit, OnDestroy{
+export class AppComponent implements OnInit, OnDestroy {
   title = 'lnkup';
   newVersion: boolean;
   showSideNav: boolean;
@@ -92,6 +92,12 @@ export class AppComponent implements OnInit, OnDestroy{
       const showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
     } else if (profileRoute === '/profile') {
+      const showSideNav = true;
+      this.broadCastService.publishSideNavValue(showSideNav);
+    } else if (profileRoute === '/payment') {
+      const showSideNav = true;
+      this.broadCastService.publishSideNavValue(showSideNav);
+    } else if (profileRoute === '/support') {
       const showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
     } else {

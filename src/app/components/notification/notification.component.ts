@@ -43,6 +43,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
         return;
       }
     });
+
+    this.showMessage = false;
   }
 
   ngOnDestroy() {

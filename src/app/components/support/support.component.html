@@ -1,13 +1,13 @@
 <section class="chat-pages">
     <nav>
-      <a (click)="navToHome()">
+      <!-- <a (click)="navToHome()">
           <img class="flaticon-back" src="./assets/Images/back-arrow.svg" alt="">
-      </a>
+      </a> -->
       <div class="driver-details">
         <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
         <div class="name-container">
-          <h2 class="name">LnkuP Support</h2>
-          <span class="stats">Help Center</span>
+          <h2 class="name"></h2>
+          <span class="stats"></span>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         <div id="anchor"></div>
       </div> -->
       <div class="chat-box" *ngIf="!showReview">
-          <div>Hi, we would love to have your feedback, please enter your comments below. Thank you for riding with us!
+          <div>Hi, we would love to get your feedback, please enter your comments below. Thank you for riding with us!
               </div>
             <div class="receive message"  *ngFor="let newMessge of allMessages; let i=index">
               <div *ngIf="message">
@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="send message" *ngIf="showResponse">
-                Thank you for your feedback, our customer service representative will get back as soon as possible.
+                Thank you for your feedback, our customer service representative will get back to you as soon as possible.
                  <!-- To send us a direct message please tap on 'Report an issue'. -->
             </div>
       </div>
