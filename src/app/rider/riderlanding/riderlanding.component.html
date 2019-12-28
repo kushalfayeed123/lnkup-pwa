@@ -1,9 +1,5 @@
 <!-- <app-side-nav></app-side-nav> -->
-<form action="" id="search-form" *ngIf="showForm" >
-    <input *ngIf="!riderLink" type="search" name="" id="" class="destination" placeholder="Your current location"
-        matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
 
-</form>
 
 <div class="avd-container">
 
@@ -22,7 +18,11 @@
         <agm-direction [origin]="origin" [destination]="destination" [renderOptions]="renderOptions"></agm-direction>
 
     </agm-map>
-
+    <form action="" id="search-form" *ngIf="showForm" >
+        <input *ngIf="!riderLink" type="search" name="" id="" class="destination" placeholder="Your current location"
+            matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
+    
+    </form>
     <form class="destination-container" *ngIf="!reachableDrivers ">
         <mat-card *ngIf="!riderLink ">
             <div *ngIf="gettingDrivers && !showNoTripMessage">
