@@ -40,11 +40,11 @@ export class NotificationsService {
 
 
     constructor(private router: Router, private toastService: ToastrService,
-        private angularFireMessaging: AngularFireMessaging,
-        private pushService: PushNotificationDataService,
-        private authService: AuthenticateDataService,
-        private swPush: SwPush,
-        private broadCastService: BroadcastService
+                private angularFireMessaging: AngularFireMessaging,
+                private pushService: PushNotificationDataService,
+                private authService: AuthenticateDataService,
+                private swPush: SwPush,
+                private broadCastService: BroadcastService
     ) {
         this.webUrl = environment.openConnect;
         this.angularFireMessenger();
@@ -60,41 +60,51 @@ export class NotificationsService {
 
     }
 
-
-  
-    requestPermision() {
+    getuserToken(sub) {
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const userId = user.id;
-        this.angularFireMessaging.requestToken
-            .subscribe(sub => {
-                this.subscription = sub;
-                this.pushSubscription = {
-                    token: this.subscription,
-                    userId
-                };
-            });
         this.pushService.getUserToken(userId)
             .subscribe(token => {
                 this.token = token;
+                console.log('token', this.token);
             });
-        console.log('token', this.token);
-        if (!this.token) {
-            this.pushService.saveSubscription(this.pushSubscription)
-                .subscribe(res => {
-                }, error => {
-                    console.error(error);
-                });
+        if (this.token !== undefined) {
+            this.updateToken(userId, sub);
+            return;
         } else {
-            this.pushSubscriptionToUpdate = {
-                token: this.subscription
-            };
-            this.pushService.updateFCMToken(userId, this.pushSubscriptionToUpdate)
-                .subscribe(res => {
-                }, error => {
-                    console.error(error);
-                });
+            this.saveToken(userId, sub);
         }
+    }
 
+    updateToken(userId, sub) {
+        this.pushSubscriptionToUpdate = {
+            token: sub
+        };
+        this.pushService.updateFCMToken(userId, this.pushSubscriptionToUpdate)
+            .subscribe(res => {
+            }, error => {
+                console.error(error);
+            });
+    }
+    saveToken(userId, sub) {
+        this.pushSubscription = {
+            token: sub,
+            userId
+        };
+        this.pushService.saveSubscription(this.pushSubscription)
+            .subscribe(res => {
+            }, error => {
+                console.error(error);
+            });
+    }
+
+    requestPermision() {
+        this.angularFireMessaging.requestToken
+            .subscribe(sub => {
+                this.subscription = sub;
+                console.log('sub', this.subscription);
+                this.getuserToken(sub);
+            });
     }
     sendNotification(userId, message) {
         this.authService.getById(userId)
@@ -114,7 +124,7 @@ export class NotificationsService {
 
     sendMessage(user, message) {
         const token = user.pushNotificationTokens[0].token;
-        const pushMessage = {...message, token};
+        const pushMessage = { ...message, token };
         this.pushService.sendFCMMessage(pushMessage)
             .subscribe(res => {
                 console.log(res);
