@@ -11,6 +11,7 @@ import { Users } from 'src/app/models/Users';
 import { SwPush } from '@angular/service-worker';
 import { BroadcastService } from './broadcastdata.service';
 import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
+import { PushNotificationTokens } from 'src/app/models/pushNotificationTokens';
 
 @Injectable()
 
@@ -31,11 +32,12 @@ export class NotificationsService {
     public currentMessage = new BehaviorSubject(null);
     message: Notification;
     receiver: Users;
-    token: any;
+    token: PushNotificationTokens[];
 
     pushSubscription: { token: string; userId: any; };
     subscription: string;
     pushSubscriptionToUpdate: { token: string; };
+    userId: any;
 
 
 
@@ -43,7 +45,6 @@ export class NotificationsService {
                 private angularFireMessaging: AngularFireMessaging,
                 private pushService: PushNotificationDataService,
                 private authService: AuthenticateDataService,
-                private swPush: SwPush,
                 private broadCastService: BroadcastService
     ) {
         this.webUrl = environment.openConnect;
@@ -56,23 +57,20 @@ export class NotificationsService {
                 messagingContext.onMessage = messagingContext.onMessage.bind(messagingContext);
                 messagingContext.onTokenRefresh = messagingContext.onTokenRefresh.bind(messagingContext);
             });
-
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        this.userId = user.id;
     }
 
     getuserToken(sub) {
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        const userId = user.id;
-        this.pushService.getUserToken(userId)
+        this.authService.getById(this.userId)
             .subscribe(token => {
-                this.token = token;
-                console.log('token', this.token);
+                this.token = token.pushNotificationTokens;
+                if (this.token.length > 0) {
+                    this.updateToken(this.userId, sub);
+                } else {
+                    this.saveToken(this.userId, sub);
+                }
             });
-        if (this.token !== undefined) {
-            this.updateToken(userId, sub);
-            return;
-        } else {
-            this.saveToken(userId, sub);
-        }
     }
 
     updateToken(userId, sub) {
@@ -101,7 +99,18 @@ export class NotificationsService {
         this.angularFireMessaging.requestToken
             .subscribe(sub => {
                 this.subscription = sub;
-                console.log('sub', this.subscription);
+                this.getuserToken(sub);
+            });
+    }
+
+    tokenRefresh() {
+        this.angularFireMessaging.tokenChanges
+            .subscribe(sub => {
+                if (sub) {
+                    this.updateToken(this.userId, sub);
+                } else {
+                    return;
+                }
             });
     }
     sendNotification(userId, message) {
@@ -131,7 +140,7 @@ export class NotificationsService {
 
 
     deleteSubscription() {
-        this.angularFireMessaging.deleteToken(this.token)
+        this.angularFireMessaging.deleteToken(this.token[0].token)
             .subscribe(res => {
                 console.log(res);
             });

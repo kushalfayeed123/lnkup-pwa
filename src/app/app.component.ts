@@ -48,6 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 .subscribe(res => {
                   // alert(res);
                 });
+                this.notifyService.tokenRefresh();
               }
 
   // tslint:disable-next-line: use-lifecycle-interface

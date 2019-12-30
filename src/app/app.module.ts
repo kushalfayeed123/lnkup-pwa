@@ -35,11 +35,11 @@ import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { MetaService } from './services/business/metaService.service';
 import { APP_BASE_HREF } from '@angular/common';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { DriverDataDataService } from './services/data/driver-data/driver-data.data.service';
 import { DriverDataWebService } from './services/data/driver-data/driver-data.web.service';
 import { NotificationsService } from './services/business/notificatons.service';
-import {ToastrModule} from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { PaymentComponent } from './components/payment/payment.component';
@@ -100,16 +100,16 @@ import { PushNotificationDataService } from './services/data/push-notification/p
 
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     AngularFireModule.initializeApp({
-      apiKey: 'AIzaSyBmzd4YZ1GaJLImzKe2mJZTUOXMy0kdf-o',
-      authDomain: 'lnkup-d039c.firebaseapp.com',
-      databaseURL: 'https://lnkup-d039c.firebaseio.com',
-      projectId: 'lnkup-d039c',
-      storageBucket: 'lnkup-d039c.appspot.com',
-      messagingSenderId: '528306024116',
-      appId: '1:528306024116:web:53edf7520bff2a8919b1e1',
-      measurementId: 'G-N2WZCDVJNC'
-     }),
-     AngularFireMessagingModule,
+      apiKey: 'AIzaSyAlDm5IdqHlVG8uDXz6faxEwE-l35JQEtQ',
+      authDomain: 'lnkup-5ddec.firebaseapp.com',
+      databaseURL: 'https://lnkup-5ddec.firebaseio.com',
+      projectId: 'lnkup-5ddec',
+      storageBucket: 'lnkup-5ddec.appspot.com',
+      messagingSenderId: '986206457990',
+      appId: '1:986206457990:web:404eba7da3a744396f4107',
+      measurementId: 'G-35QM2LZ7S4'
+    }),
+    AngularFireMessagingModule,
   ],
 
   providers: [
@@ -118,16 +118,16 @@ import { PushNotificationDataService } from './services/data/push-notification/p
     MapBroadcastService,
     GoogleMapsAPIWrapper,
     NotificationsService,
-    {provide: APP_BASE_HREF, useValue: '/'},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    {provide: AuthenticateDataService, useClass: AuthenticateWebService},
-    {provide: ActiveRiderDataService, useClass: ActiveRiderWebService},
-    {provide: ActiveTripDataService, useClass: ActiveTripWebService},
-    {provide: DriverDataDataService, useClass: DriverDataWebService},
-    {provide: AppReviewDataService, useClass: AppReviewWebService},
-    {provide: PaymentDataService, useClass: PaymentWebService},
-    {provide: PushNotificationDataService, useClass: PushNotificationWebService}
+    { provide: APP_BASE_HREF, useValue: '/' },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: AuthenticateDataService, useClass: AuthenticateWebService },
+    { provide: ActiveRiderDataService, useClass: ActiveRiderWebService },
+    { provide: ActiveTripDataService, useClass: ActiveTripWebService },
+    { provide: DriverDataDataService, useClass: DriverDataWebService },
+    { provide: AppReviewDataService, useClass: AppReviewWebService },
+    { provide: PaymentDataService, useClass: PaymentWebService },
+    { provide: PushNotificationDataService, useClass: PushNotificationWebService }
   ],
   bootstrap: [AppComponent],
   entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent,
