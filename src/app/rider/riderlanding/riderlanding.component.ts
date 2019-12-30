@@ -91,7 +91,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.notificationService.requestPermision();
     this.showForm = true;
     this.getCurrentime();
     this.route.queryParams

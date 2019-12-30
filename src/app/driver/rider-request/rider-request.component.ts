@@ -146,7 +146,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         this.getActiveTrips();
         this.notifyService.sendAcceptMessage(receiverId, message);
-        this.notifyService.sendNotification(rider, pushMessage);
+        this.notifyService.sendNotification(receiverId, pushMessage);
         if (this.activeTripStatus === 0) {
           const user = JSON.parse(localStorage.getItem('currentUser'));
           const userId = user.id;

@@ -40,14 +40,14 @@ export class AppComponent implements OnInit, OnDestroy {
                   this.getCurrentRoute();
                 });
                 this.reload();
+                this.notifyService.angularFireMessenger();
+                // this.notifyService.deleteSubscription();
+                this.notifyService.requestPermision();
                 this.notifyService.receiveMessage();
                 this.notifyService.currentMessage
                 .subscribe(res => {
                   // alert(res);
                 });
-                // setTimeout(() => {
-                //   this.notifyService.deleteSubscription();
-                // }, 3000);
               }
 
   // tslint:disable-next-line: use-lifecycle-interface
@@ -73,8 +73,8 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe(next => {
         if (confirm('A new version is available. Do you want to load it?')) {
-          this.authenticateService.logout();
           window.location.reload();
+          this.authenticateService.logout();
         }
       });
     }

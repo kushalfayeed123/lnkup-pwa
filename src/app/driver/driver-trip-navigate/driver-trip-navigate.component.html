@@ -6,7 +6,7 @@
     <div class="container-grid" *ngIf="activeTrip">
         <div class="riders">
             <div class="radius" >
-      <swiper [config]="config" >
+      <swiper [config]="config" class="swiper">
         <div class="swiper-wrapper">
           <main class="contain-box  swiper-slide" *ngFor="let rider of tripRiders; let i = index;">
            
@@ -16,8 +16,8 @@
                     *ngIf="rider.user.userImage !== null" />
                   <div class="passengers">{{rider.user.userName}}</div>
                   <div id="contact">
-                   <a href="tel:{{rider.user.phoneNumber}}"> <img src="../../../assets/Images/phone.svg" alt="" class="phone-img"></a>>
-                    <img src="../../../assets/Images/chat.svg" alt="" class="phone-img">
+                   <a href="tel:{{rider.user.phoneNumber}}"> <img src="../../../assets/Images/phone.svg" alt="" class="phone-img"></a>
+                    <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
                   </div>
                 </div>
              

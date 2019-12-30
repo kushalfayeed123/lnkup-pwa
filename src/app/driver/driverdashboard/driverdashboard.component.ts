@@ -71,7 +71,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
                }
 
   ngOnInit() {
-    this.notificationService.requestPermision();
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(param => {

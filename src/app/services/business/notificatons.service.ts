@@ -47,7 +47,6 @@ export class NotificationsService {
                 private broadCastService: BroadcastService
     ) {
         this.webUrl = environment.openConnect;
-        this.angularFireMessenger();
     }
 
 
@@ -103,7 +102,6 @@ export class NotificationsService {
             .subscribe(sub => {
                 this.subscription = sub;
                 console.log('sub', this.subscription);
-                this.getuserToken(sub);
             });
     }
     sendNotification(userId, message) {
@@ -133,8 +131,7 @@ export class NotificationsService {
 
 
     deleteSubscription() {
-        const token = localStorage.getItem('pushToken');
-        this.angularFireMessaging.deleteToken(token)
+        this.angularFireMessaging.deleteToken(this.token)
             .subscribe(res => {
                 console.log(res);
             });

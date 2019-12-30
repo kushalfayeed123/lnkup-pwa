@@ -14,7 +14,7 @@ export class PushNotificationWebService implements PushNotificationDataService {
   saveSubscription(sub: any) {
     let header = new HttpHeaders();
     header = header.append('content-type', 'application/json');
-    return this.http.post(`${this.webUrl}/notification`, sub , {headers : header});
+    return this.http.post(`${this.webUrl}/notification`, sub );
   }
   sendFCMMessage(payload: any) {
     return this.http.post(`${this.webUrl}/notification/send`, payload);
@@ -23,7 +23,7 @@ export class PushNotificationWebService implements PushNotificationDataService {
   updateFCMToken(id: string, token: string) {
     let header = new HttpHeaders();
     header = header.append('content-type', 'application/json');
-    return this.http.put(`${this.webUrl}/notification/${id}`, token, {headers: header});
+    return this.http.put(`${this.webUrl}/notification/${id}`, token);
   }
 
   getUserToken(id: string) {

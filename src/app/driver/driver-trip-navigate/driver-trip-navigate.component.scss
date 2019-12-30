@@ -12,7 +12,7 @@
   }
   .swiper-wrapper {
     right: 12%;
-    bottom: 43px;
+    bottom: 125px;
   }
 
   #search-form input {
@@ -50,6 +50,9 @@
     background: #eee;
     height: inherit;
   }
+  .swiper{
+    height: 173px;
+  }
   #contact {
     display: flex;
     position: relative;
@@ -82,7 +85,7 @@
     margin-left: 7px;
     margin-right: 7px;
     position: absolute;
-    bottom: 0;
+    bottom: -33px;
     width: -webkit-fill-available;
   }
   .blink_me {
