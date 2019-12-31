@@ -40,15 +40,6 @@ export class AppComponent implements OnInit, OnDestroy {
                   this.getCurrentRoute();
                 });
                 this.reload();
-                this.notifyService.angularFireMessenger();
-                // this.notifyService.deleteSubscription();
-                this.notifyService.requestPermision();
-                this.notifyService.receiveMessage();
-                this.notifyService.currentMessage
-                .subscribe(res => {
-                  // alert(res);
-                });
-                this.notifyService.tokenRefresh();
               }
 
   // tslint:disable-next-line: use-lifecycle-interface

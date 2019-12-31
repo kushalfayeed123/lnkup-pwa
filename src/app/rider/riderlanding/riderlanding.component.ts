@@ -87,7 +87,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private broadCastService: BroadcastService,
     private notificationService: NotificationsService
   ) {
-   
+    this.notificationService.angularFireMessenger();
+    // this.notificationService.deleteSubscription();
+    this.notificationService.requestPermision();
+    this.notificationService.receiveMessage();
+    this.notificationService.currentMessage
+      .subscribe(res => {
+        // alert(res);
+      });
+    this.notificationService.tokenRefresh();
+
   }
 
   ngOnInit() {

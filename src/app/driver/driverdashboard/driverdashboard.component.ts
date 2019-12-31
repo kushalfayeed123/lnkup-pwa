@@ -38,8 +38,10 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   showDestination: boolean;
   showPickup: boolean;
   pickupName: any;
-  locationObject: { destination: string,
-                    pickup: string };
+  locationObject: {
+    destination: string,
+    pickup: string
+  };
   showLanding: boolean;
   pickupFull: any;
   destinationFull: any;
@@ -67,18 +69,27 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
               private driverDataService: DriverDataDataService,
               private notificationService: NotificationsService,
               private broadCastService: BroadcastService) {
-                this.startTrip();
-               }
+    this.notificationService.angularFireMessenger();
+    // this.notificationService.deleteSubscription();
+    this.notificationService.requestPermision();
+    this.notificationService.receiveMessage();
+    this.notificationService.currentMessage
+      .subscribe(res => {
+        // alert(res);
+      });
+    this.notificationService.tokenRefresh();
+    this.startTrip();
+  }
 
   ngOnInit() {
     this.route.queryParams
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(param => {
-      window.scrollTo(0, 0);
-      this.driverNavigate = param.driverNav;
-      this.clearLocations();
-      this.getDriverData();
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(param => {
+        window.scrollTo(0, 0);
+        this.driverNavigate = param.driverNav;
+        this.clearLocations();
+        this.getDriverData();
+      });
     this.showLanding = true;
     this.showDestination = true;
     this.getCurrentLocation();
@@ -94,11 +105,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
 
   startTrip() {
     this.broadCastService.startTrip
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(trip => {
-      this.startTrip = trip;
-      this.getUserDirection();
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(trip => {
+        this.startTrip = trip;
+        this.getUserDirection();
+      });
   }
   getUserById(userId) {
     this.loading = true;
@@ -122,43 +133,43 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
     this.driverDataService.getDriverByDriverId(userId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      this.driverDataId = data.driverDataId;
-      this.plateNumber = data.carDocument2.toUpperCase();
-      this.driverStatus = data.driverStatus;
-      const driverData = {driverDataId: this.driverDataId, driverStatus: this.driverStatus};
-      localStorage.setItem('driverData', JSON.stringify(driverData));
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.driverDataId = data.driverDataId;
+        this.plateNumber = data.carDocument2.toUpperCase();
+        this.driverStatus = data.driverStatus;
+        const driverData = { driverDataId: this.driverDataId, driverStatus: this.driverStatus };
+        localStorage.setItem('driverData', JSON.stringify(driverData));
+      });
     // this.updateDriverConnect();
   }
-   getUserProfileImage(userId) {
-     this.authService.getUserImage(userId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(img => {
-      if (img == null) {
-        return;
-      } else {
-        this.driverImage = 'data:image/png;base64,' + img.image;
-      }
-    });
+  getUserProfileImage(userId) {
+    this.authService.getUserImage(userId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(img => {
+        if (img == null) {
+          return;
+        } else {
+          this.driverImage = 'data:image/png;base64,' + img.image;
+        }
+      });
   }
   getCurrentLocation() {
     this.mapService.getCurrentLocation();
     this.mapService.locationObject.subscribe(loc => {
-        this.latitude = loc.lat;
-        this.longitude  = loc.lng;
-        this.currentLocation = {lat: loc.lat, lng: loc.lng};
-      });
+      this.latitude = loc.lat;
+      this.longitude = loc.lng;
+      this.currentLocation = { lat: loc.lat, lng: loc.lng };
+    });
   }
   getActiveTripById() {
     const activeTrip = JSON.parse(localStorage.getItem('activeTripId'));
     const activeTripId = activeTrip.dataDriverId;
     this.activeTripService.getTripsById(activeTripId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(response => {
-      this.activeTrip = response;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
+        this.activeTrip = response;
+      });
   }
 
   AcceptRiderRequest() {
@@ -182,19 +193,19 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     };
 
     this.activeTripService.updateTrip(newActiveTrip, activeTripId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(response => {
-      this.getActiveTripById();
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
+        this.getActiveTripById();
+      });
   }
   updateDriverConnect() {
     const connectionId = sessionStorage.getItem('clientConnectionId');
-    const driverId =  localStorage.getItem('driverDataId');
+    const driverId = localStorage.getItem('driverDataId');
     this.driverDataService.updateDriverData(driverId, connectionId.toString())
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      console.log('connect id was updated');
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        console.log('connect id was updated');
+      });
   }
   openErrorMessage() {
     this._snackBar.openFromComponent(ErrorMessageComponent, {
@@ -204,19 +215,19 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
 
   storeUserDestinationLocation(location) {
-    this.destinationLocation =  location;
+    this.destinationLocation = location;
     this.destinationName = location.name;
     this.destinationFull = location.formatted_address;
   }
 
   storeUserPickupLocation(location) {
-    this.pickupLocation =  location;
+    this.pickupLocation = location;
     this.pickupName = location.name;
     this.pickupFull = location.formatted_address;
   }
   getUserDirection() {
     const origin = JSON.parse(localStorage.getItem('origin'));
-    const  destination = JSON.parse(localStorage.getItem('destination'));
+    const destination = JSON.parse(localStorage.getItem('destination'));
     if (origin && destination) {
       this.getDirection(origin, destination);
     } else {
@@ -228,11 +239,15 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       const cl = origin;
       this.origin = { lat: cl.lat, lng: cl.lng };
       this.destination = { lat: destination.lat, lng: destination.lng };
-      this.renderOptions = { polylineOptions: { strokeColor: '#d54ab6',
-                                              geodesic : true,
-                                              strokeOpacity: 0.6,
-                                              strokeWeight: 5,
-                                              editable: false, } };
+      this.renderOptions = {
+        polylineOptions: {
+          strokeColor: '#d54ab6',
+          geodesic: true,
+          strokeOpacity: 0.6,
+          strokeWeight: 5,
+          editable: false,
+        }
+      };
       this.latitude = cl.lat;
       this.longitude = cl.lng;
     }, 2000);
