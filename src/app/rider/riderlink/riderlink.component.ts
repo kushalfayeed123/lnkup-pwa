@@ -39,6 +39,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   paymentId: any;
   userPaymentData: any;
   driverAccountId: any;
+  driverNumber: string;
 
   constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
@@ -79,7 +80,9 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
       this.driverData = res;
-      console.log('driver', res);
+      const driverNumber = res.phoneNumber;
+      this.driverNumber = driverNumber.substring(4);
+      console.log('driver', this.driverNumber);
     });
   }
 
