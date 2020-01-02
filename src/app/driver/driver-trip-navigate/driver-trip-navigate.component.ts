@@ -73,6 +73,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   }
 
   endActiveTrip() {
+  
     const tripFee = this.activeTrip.aggregrateTripFee;
     const newTripFee = (20 / 100) * tripFee;
     const driverFee = tripFee - newTripFee;
@@ -82,7 +83,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       panelClass: 'dialog',
       data: {name: this.name, price: driverFee}
     });
-
+    this.updatetripStatus();
     dialogRef.afterClosed().subscribe(result => {
       this.endTrip = false;
       localStorage.removeItem('activeTrip');
@@ -97,6 +98,23 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       const recieverId = element.userId;
       const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
       this.notifyService.sendAcceptMessage(recieverId, message);
+      this.notifyService.sendNotification(recieverId, message);
+    });
+  }
+
+  updatetripStatus() {
+    const tripConnectionId = sessionStorage.getItem('clientConnectionId');
+    const activeTrip = {
+      driverTripStatus: 0,
+      allowedRiderCount: 0,
+      tripConnectionId
+    };
+    this.tripService.updateTrip(this.activeTripId, activeTrip)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(response => {
+    }, error => {
+      console.log(error);
+      this.updatetripStatus();
     });
   }
   ngOnDestroy() {

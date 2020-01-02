@@ -32,32 +32,32 @@ export class AppComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line: variable-name
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
-              private broadCastService: BroadcastService,
-              private authenticateService: AuthenticateDataService,
-              private route: Router,
-              private notifyService: NotificationsService) {
-                route.events.subscribe(url => {
-                  this.getCurrentRoute();
-                });
-                this.reload();
-              }
+    private broadCastService: BroadcastService,
+    private authenticateService: AuthenticateDataService,
+    private route: Router,
+    private notifyService: NotificationsService) {
+    route.events.subscribe(url => {
+      this.getCurrentRoute();
+    });
+    this.reload();
+    this.getLoggedInUser();
+
+  }
 
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
     window.scrollTo(0, 0);
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
-
-    }
+  }
 
   getLoggedInUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     if (user) {
-      let role = user.role;
-      role = role.toLowerCase();
-      this.route.navigate([`${role}/home/${user.id}`]);
+      const currentRoute = localStorage.getItem('currentRoute');
+      this.route.navigate([currentRoute]);
     } else {
-      this.route.navigate(['/']);
+      this.route.navigate(['/onboarding']);
     }
   }
 
@@ -71,29 +71,37 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     }
   }
+  saveCurrentRoute(route) {
+    JSON.stringify(localStorage.setItem('currentRoute', route));
 
+  }
   getCurrentRoute() {
+    let showSideNav = true;
     const route = this.route.url;
     const profileRoute = route.slice(0, 8);
     const riderRoute = route.slice(0, 6);
     const driverRoute = route.slice(0, 7);
     if (riderRoute === '/rider') {
-      const showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
     } else if (driverRoute === '/driver') {
-      const showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+
     } else if (profileRoute === '/profile') {
-      const showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+
     } else if (profileRoute === '/payment') {
-      const showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+
     } else if (profileRoute === '/support') {
-      const showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+
     } else {
-      const showSideNav = false;
+      showSideNav = false;
       this.broadCastService.publishSideNavValue(showSideNav);
     }
   }

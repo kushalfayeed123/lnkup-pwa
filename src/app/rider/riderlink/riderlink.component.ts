@@ -40,6 +40,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   userPaymentData: any;
   driverAccountId: any;
   driverNumber: string;
+  showPaymentButton: boolean;
 
   constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
@@ -48,7 +49,15 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private notifyService: NotificationsService,
               private paymentService: PaymentDataService,
-              private router: Router) { }
+              private router: Router) {
+                this.notifyService.endTrip
+                .pipe(takeUntil(this.unsubscribe$))
+                .subscribe(res => {
+                  if (res) {
+                    this.showPaymentMessage();
+                  }
+                });
+               }
 
   ngOnInit() {
     this.getUserdata();
@@ -69,6 +78,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   getUserdata() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.email = user.email;
+    const request = JSON.parse(localStorage.getItem('riderRequest'));
+    this.tripFee = request.tripFee;
   }
 
   getDriverData() {
@@ -98,7 +109,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
 
   makePayment() {
     this.generateReference();
-    this.showPaymentMessage();
+    const message = 'We are currently processing your payment please hold on.';
+    this.notifyService.showInfoMessage(message);
     const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
     const userId = loggedInUser.id;
     this.authService.getById(userId)
@@ -107,13 +119,12 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       this.userPaymentData = token.userPaymentData;
       this.userPaymentData.forEach(element => {
         this.paymentId = element.paymentId;
-        if (this.userPaymentData.length > 1) {
-          this.token = element[0].paymentToken;
-        } else {
-          this.token = element.paymentToken;
-        }
+        this.token = element.paymentToken;
       });
       this.confirmPayment();
+    }, error => {
+      this.notifyService.showErrorMessage('Sorry, we could not fetch your payment data, Please try again.');
+      this.showPaymentButton = true;
     });
   }
 
@@ -146,11 +157,13 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
             this.paymentService.updatePayment(this.paymentId, newToken)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(token => {
+              this.router.navigate(['rider/home', this.userId]);
             }, error => {
               console.error('could not update payment');
             });
-            this.router.navigate(['rider/home', this.userId]);
           } else {
+            this.notifyService.showErrorMessage('Sorry, we could not complete your payment please try again.');
+            this.showPaymentButton = true;
             return;
           }
         });
@@ -196,9 +209,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   }
 
   showPaymentMessage() {
-    const request = JSON.parse(localStorage.getItem('riderRequest'));
-    this.tripFee = request.tripFee;
-    this.name = 'Your fare for this trip';
+    this.name = 'Please Confirm Payment. Your fare for this trip is';
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
@@ -206,7 +217,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // this.router.navigate(['rider/home', this.userId]);
+      this.makePayment();
     });
   }
 

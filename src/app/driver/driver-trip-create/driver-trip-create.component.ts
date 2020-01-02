@@ -150,7 +150,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
   getTimeValues() {
     const date = new Date().getTime();
-    this.dateNow = formatDate(date, ' hh:mm a', 'en-US').toLowerCase();
+    this.dateNow = formatDate(date, ' h:mm a', 'en-US').toLowerCase().substring(1);
     console.log(this.dateNow);
   }
   broadCastTrip() {

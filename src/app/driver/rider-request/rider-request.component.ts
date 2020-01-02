@@ -123,13 +123,12 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     this.riderService.update(riderId, activeRider)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
-        console.log(data);
       }, error => {
         console.log(error);
       });
 
     if (this.newAllowedRiderCount <= 0) {
-      this.activeTripStatus = 0;
+      this.activeTripStatus = 2;
     } else {
       this.activeTripStatus = 1;
     }
@@ -147,7 +146,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
         this.getActiveTrips();
         this.notifyService.sendAcceptMessage(receiverId, message);
         this.notifyService.sendNotification(receiverId, pushMessage);
-        if (this.activeTripStatus === 0) {
+        if (this.activeTripStatus === 2) {
           const user = JSON.parse(localStorage.getItem('currentUser'));
           const userId = user.id;
           this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });

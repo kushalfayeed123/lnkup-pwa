@@ -12,6 +12,7 @@ import { SwPush } from '@angular/service-worker';
 import { BroadcastService } from './broadcastdata.service';
 import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
 import { PushNotificationTokens } from 'src/app/models/pushNotificationTokens';
+import { ActiveTripDataService } from '../data/active-trip/active-trip.data.service';
 
 @Injectable()
 
@@ -26,7 +27,10 @@ export class NotificationsService {
     public successAlert = this._successAlert.asObservable();
 
     private _declineAlert = new BehaviorSubject(null);
-    public declineAlert = new BehaviorSubject(null);
+    public declineAlert = this._declineAlert.asObservable();
+
+    private _endTrip = new BehaviorSubject(null);
+    public endTrip = this._endTrip.asObservable();
     reconnect: boolean;
 
     public currentMessage = new BehaviorSubject(null);
@@ -45,7 +49,8 @@ export class NotificationsService {
                 private angularFireMessaging: AngularFireMessaging,
                 private pushService: PushNotificationDataService,
                 private authService: AuthenticateDataService,
-                private broadCastService: BroadcastService
+                private broadCastService: BroadcastService,
+                private tripService: ActiveTripDataService
     ) {
         this.webUrl = environment.openConnect;
     }
@@ -230,8 +235,21 @@ export class NotificationsService {
 
     alertRiderSuccess(message) {
         const alertRider = true;
+        const trip = JSON.parse(localStorage.getItem('riderRequest'));
         this.showSuccessMessage(message);
         this._successAlert.next(alertRider);
+        if (trip) {
+            const tripId = trip.tripId;
+            this.tripService.getTripsById(tripId)
+            .subscribe(res => {
+                if (res.driverTripStatus === 0) {
+                    const endTrip = true;
+                    this._endTrip.next(endTrip);
+                } else {
+                    return;
+                }
+            });
+        }
     }
 
     alertDriverCancel(message) {

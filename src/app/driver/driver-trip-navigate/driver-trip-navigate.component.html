@@ -14,11 +14,12 @@
                   <img src="assets/Images/default-user.png" alt="" class="avi" *ngIf="rider.user.userImage === null" />
                   <img src="data:image/png;base64,{{rider.user.userImage}}" alt="" class="avi avi-blinker"
                     *ngIf="rider.user.userImage !== null" />
+                    <div id="contact "  class="passengers">
+                      <a href="tel:{{rider.user.phoneNumber}}"> <img src="../../../assets/Images/phone.svg" alt="" class="phone-img"></a>
+                       <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
+                     </div>
                   <div class="passengers">{{rider.user.userName}}</div>
-                  <div id="contact">
-                   <a href="tel:{{rider.user.phoneNumber}}"> <img src="../../../assets/Images/phone.svg" alt="" class="phone-img"></a>
-                    <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
-                  </div>
+                 
                 </div>
              
           </main>
