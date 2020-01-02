@@ -92,8 +92,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       this.driverData = res;
       const driverNumber = res.phoneNumber;
-      this.driverNumber = driverNumber.substring(4);
-      console.log('driver', this.driverNumber);
+      this.driverNumber = driverNumber.slice(0, 4) + driverNumber.slice(5);
     });
   }
 

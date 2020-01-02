@@ -27,8 +27,7 @@ section.auth-pages.security nav {
   height: 24px;
   position: relative;
   top: 32px;
-  /* float: left; */
-  margin-left: 9px;
+
 }
 .card-number {
   width: 100%;
@@ -103,6 +102,13 @@ section.auth-pages.security#payment-page .cards-container {
   padding-top: 50px;
 }
 
+.loader{
+    position: relative;
+    height: 50px;
+    width: 40%;
+    left: 28%;
+    top: 79px;
+  }
 section.auth-pages.security#payment-page .card-entry {
   background: rgba(213, 74, 182, 0.25);
   border-radius: 4px;

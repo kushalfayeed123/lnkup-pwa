@@ -35,11 +35,12 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   maxSeat: number;
   riderRequestLength: number;
   newAllowedRiderCount: number;
+  riderNumber: string[] = [];
 
   constructor(private tripService: ActiveTripDataService,
-    private notifyService: NotificationsService,
-    private riderService: ActiveRiderDataService,
-    private router: Router) {
+              private notifyService: NotificationsService,
+              private riderService: ActiveRiderDataService,
+              private router: Router) {
     this.getDriverSuccessAlert();
   }
 
@@ -86,11 +87,15 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
         const allowedRiderCount = activeTrip.allowedRiderCount;
         this.allowedRiderCount = allowedRiderCount;
         this.maxSeat = activeTrip.maxRiderNumber;
+        this.riderRequest.forEach(tel => {
+          let riderNumber = tel.user.phoneNumber;
+          riderNumber = riderNumber.slice(0, 4) + riderNumber.slice(5);
+          this.riderNumber.push(riderNumber);
+        });
       });
-    console.log('active trip', this.allowedRiderCount);
   }
   acceptTripRequest(rider) {
-   
+
     const tripConnectionId = sessionStorage.getItem('clientConnectionId');
     const driverName = this.activeTrip.tripDriver.driver.userName;
     const pickup = this.activeTrip.tripPickup;

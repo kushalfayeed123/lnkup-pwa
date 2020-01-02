@@ -1,3 +1,5 @@
+import { User } from 'firebase';
+
 export class ActiveRiders {
     riderId: string;
     tripId: string;
@@ -9,4 +11,5 @@ export class ActiveRiders {
     currentLocationLatitude: number;
     destinationLongitude: number;
     destinationLatitude: number;
+    user: User;
 }

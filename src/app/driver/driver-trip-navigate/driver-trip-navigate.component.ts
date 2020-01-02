@@ -24,7 +24,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     },
 
     spaceBetween: 10
-};
+  };
   activeTripId: string;
   private unsubscribe$ = new Subject<void>();
   activeTrip: ActiveTrips;
@@ -34,6 +34,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   name: any;
   animal: any;
   userId: any;
+  riderNumber: string[] = [];
 
 
 
@@ -59,12 +60,16 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
 
   getTripRequest(tripId) {
     this.tripService.getTripsById(tripId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(activeTrip => {
-      this.activeTrip = activeTrip;
-      this.tripRiders = activeTrip.activeRiders.filter(x => x.tripStatus === '2');
-      console.log('active trip', this.activeTrip);
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(activeTrip => {
+        this.activeTrip = activeTrip;
+        this.tripRiders = activeTrip.activeRiders.filter(x => x.tripStatus === '2');
+        activeTrip.activeRiders.forEach(tel => {
+          let riderNumber = tel.user.phoneNumber;
+          riderNumber = riderNumber.slice(0, 4) + riderNumber.slice(5);
+          this.riderNumber.push(riderNumber);
+        });
+      });
   }
   startActiveTrip() {
     this.startTrip = true;
@@ -73,7 +78,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   }
 
   endActiveTrip() {
-  
+
     const tripFee = this.activeTrip.aggregrateTripFee;
     const newTripFee = (20 / 100) * tripFee;
     const driverFee = tripFee - newTripFee;
@@ -81,7 +86,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: {name: this.name, price: driverFee}
+      data: { name: this.name, price: driverFee }
     });
     this.updatetripStatus();
     dialogRef.afterClosed().subscribe(result => {
@@ -110,12 +115,12 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       tripConnectionId
     };
     this.tripService.updateTrip(this.activeTripId, activeTrip)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(response => {
-    }, error => {
-      console.log(error);
-      this.updatetripStatus();
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
+      }, error => {
+        console.log(error);
+        this.updatetripStatus();
+      });
   }
   ngOnDestroy() {
     this.unsubscribe$.next();

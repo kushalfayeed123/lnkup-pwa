@@ -11,7 +11,7 @@
     <!-- <button id="use-payment"  (click)="sendMessage()">Send
       Message</button> -->
 
-      <form id="payment-form" [formGroup]="cardDetailsForm">
+    <form id="payment-form" [formGroup]="cardDetailsForm">
       <div class="cards-container">
         <div class="header-text" *ngIf="!isCash && !isCard"> Select your prefered payment method </div>
         <img src="./assets/Images/003-left-arrow.svg" *ngIf="isCash || isCard" class="left-arrow" alt=""
@@ -116,8 +116,8 @@
         You have a card saved already. Do you want to add another card?
       </span>
       <div class="btn-container">
-          <button id="use-payment" class="confirm-btn" (click)="onYesClick()">Yes</button>
-          <button id="use-payment" class="confirm-btn no-btn" (click)="onNoClick()">No</button>
+        <button id="use-payment" class="confirm-btn" (click)="onYesClick()">Yes</button>
+        <button id="use-payment" class="confirm-btn no-btn" (click)="onNoClick()">No</button>
       </div>
 
 
@@ -134,5 +134,7 @@
                 Cash
             </div>
         </div> -->
+    <mat-spinner *ngIf="loading" [diameter]="30" class="loader"></mat-spinner>
   </main>
 </section>
+<app-notification></app-notification>

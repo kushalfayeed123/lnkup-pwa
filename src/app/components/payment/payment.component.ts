@@ -67,6 +67,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   name: any;
   paymentStatus: any;
   addCard: boolean;
+  loading: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -122,11 +123,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
   getUserPaymentStatus() {
     this.broadcastService.paymentStatus
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.paymentStatus = res;
-      console.log('user has added card', this.paymentStatus);
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.paymentStatus = res;
+        console.log('user has added card', this.paymentStatus);
+      });
   }
 
   getCurrentUser() {
@@ -141,6 +142,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   initiatePayment() {
+    this.notifyService.showInfoMessage('We are currently processing your card payment, please hold on.');
+    this.loading = true;
     this.stringifyCardDetails();
     this.paymentDataService
       .getEncryptKey()
@@ -180,7 +183,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
                   .subscribe(payment => {
                     if (payment) {
                       this.paymentAuthCheck(payment);
+                      this.loading = false;
                     }
+                  }, err => {
+                    this.loading = false;
+                    this.notifyService.showErrorMessage(err);
                   });
               }
             });
@@ -189,7 +196,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         }
       });
 
-    console.log('payload', this.encryptedData);
   }
 
   stringifyCardDetails() {
@@ -205,6 +211,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   initiateAvsAuth() {
+    this.loading = true;
     const billingZip = this.cardDetailsForm.value.billingzip;
     const billingaddress = this.cardDetailsForm.value.billingaddress;
     const billingcity = this.cardDetailsForm.value.billingcity;
@@ -249,16 +256,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(res => {
               if (res) {
-                  const paymentPayload = {
+                const paymentPayload = {
                   PBFPubKey: environment.ravePubKey,
                   client: res.encryptionData,
                   alg: '3DES-24'
                 };
-                  this.paymentDataService
+                this.paymentDataService
                   .makePayment(paymentPayload)
                   .pipe(takeUntil(this.unsubscribe$))
                   .subscribe(payment => {
                     if (payment) {
+                      this.loading = false;
                       const url = payment.data.authurl;
                       this.loadIFrame(url);
                     }
@@ -272,9 +280,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   initiatePinAuth() {
+    this.loading = true;
     const pin = this.cardDetailsForm.value.pin;
     this.pin = JSON.stringify(pin);
-
     this.cardDetailsForm.patchValue({
       PBFPubKey: this.PBFPubKey,
       currency: this.currency,
@@ -314,10 +322,15 @@ export class PaymentComponent implements OnInit, OnDestroy {
                   .pipe(takeUntil(this.unsubscribe$))
                   .subscribe(payment => {
                     if (payment) {
+                      this.loading = false;
+                      this.notifyService.showInfoMessage('Please enter the OTP that was sent to you.');
                       this.transaction_ref = payment.data.flwRef;
                       this.isOtp = true;
                       this.isPin = false;
                     }
+                  }, err => {
+                    this.loading = false;
+                    this.notifyService.showErrorMessage(err);
                   });
               }
             });
@@ -328,9 +341,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   validatePayment() {
+    this.loading = true;
     const otp = this.cardDetailsForm.value.OTP;
     this.OTP = JSON.stringify(otp);
-
     const authPayLoad = {
       PBFPubKey: this.PBFPubKey,
       transaction_reference: this.transaction_ref,
@@ -346,7 +359,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this.clearCardDetailsForm();
           const paymentToken = data.data.tx.chargeToken.embed_token;
           this.saveCardToken(paymentToken);
+          this.loading = false;
         }
+      }, err => {
+        this.loading = false;
+        this.notifyService.showErrorMessage(err);
       });
   }
   loadIFrame(authurl) {
@@ -363,7 +380,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(PaymentModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: {name: this.name, url: urlMessage}
+      data: { name: this.name, url: urlMessage }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -398,6 +415,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
        *2. Re-encrypt the payload
        *3. Call the charge endpoint once again with this updated encrypted payload
        */
+      this.notifyService.showInfoMessage('Please enter your pin');
       this.isOtp = false;
       this.isAvs = false;
       this.isPin = true;
@@ -411,6 +429,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
        *1. Collect OTP from user
        *2. Call Rave Validate endpoint
        */
+      this.notifyService.showInfoMessage('Please enter the OTP that was sent to you.');
       this.isAvs = false;
       this.isPin = false;
       this.isOtp = true;
@@ -427,26 +446,26 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   saveCardToken(token) {
     this.authService.getById(this.userId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(user => {
-      const paymentData: any = user.userPaymentData;
-      if (paymentData.length === 0) {
-        const cardDetails = {
-          userId: this.userId,
-          paymentToken: token
-        };
-        this.paymentDataService
-          .create(cardDetails)
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(res => {
-            this.notifyService.showSuccessMessage(
-              'Your Payment details has been saved in a secure vault.'
-            );
-          });
-      } else {
-        this.updateCardToken(token);
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(user => {
+        const paymentData: any = user.userPaymentData;
+        if (paymentData.length === 0) {
+          const cardDetails = {
+            userId: this.userId,
+            paymentToken: token
+          };
+          this.paymentDataService
+            .create(cardDetails)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(res => {
+              this.notifyService.showSuccessMessage(
+                'Your Payment details has been saved in a secure vault.'
+              );
+            });
+        } else {
+          this.updateCardToken(token);
+        }
+      });
   }
 
   updateCardToken(token) {
