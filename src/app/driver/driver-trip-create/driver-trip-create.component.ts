@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { formatDate } from '@angular/common';
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 
 @Component({
   selector: 'app-driver-trip-create',
@@ -35,11 +36,13 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   approvedStatus: any;
   driverStatus: any;
   loader: boolean;
+  driverCardStatus: any;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
     private activeTripService: ActiveTripDataService,
     private router: Router,
-    private notifyService: NotificationsService) {
+    private notifyService: NotificationsService,
+    private broadcastService: BroadcastService) {
 
   }
 
@@ -73,9 +76,21 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     this.driverStatus = driverData.driverStatus;
     const connectionId = sessionStorage.getItem('clientConnectionId');
     this.connectionId = connectionId;
+    this.getDriverPaymentDetails();
   }
 
-
+  getDriverPaymentDetails() {
+    this.broadcastService.paymentStatus
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(status => {
+      this.driverCardStatus = status;
+      if (!status) {
+        setTimeout(() => {
+          this.notifyService.showErrorMessage('Please add your card details to continue.');
+        }, 10000);
+      }
+    });
+  }
   getLocationCoordinates() {
     this.loading = true;
     const tripStartLatLng = JSON.parse(localStorage.getItem('origin'));
@@ -161,7 +176,14 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       this.loader = false;
       return;
 
-    } else if (this.driverStatus < 1) {
+    }
+    //  else if (!this.driverCardStatus) {
+    //   const message = 'Please add your card details to continue.';
+    //   this.notifyService.showErrorMessage(message);
+    //   this.loader = false;
+    //   return;
+    // }
+     else if (this.driverStatus < 1) {
       const message = 'Your document is currently under review for approval. We will get back to you as soon as we complete our background checks.';
       this.notifyService.showErrorMessage(message);
       this.loader = false;

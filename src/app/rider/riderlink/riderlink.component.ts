@@ -41,15 +41,17 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   driverAccountId: any;
   driverNumber: string;
   showPaymentButton: boolean;
+  activeRiderId: string;
+  riderConnectId: string;
 
   constructor(private driverDataService: DriverDataDataService,
-    private riderService: ActiveRiderDataService,
-    private tripService: ActiveTripDataService,
-    private authService: AuthenticateDataService,
-    public dialog: MatDialog,
-    private notifyService: NotificationsService,
-    private paymentService: PaymentDataService,
-    private router: Router) {
+              private riderService: ActiveRiderDataService,
+              private tripService: ActiveTripDataService,
+              private authService: AuthenticateDataService,
+              public dialog: MatDialog,
+              private notifyService: NotificationsService,
+              private paymentService: PaymentDataService,
+              private router: Router) {
     this.notifyService.endTrip
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
@@ -80,6 +82,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     this.email = user.email;
     const request = JSON.parse(localStorage.getItem('riderRequest'));
     this.tripFee = request.tripFee;
+    this.getActiveRiderData();
   }
 
   getDriverData() {
@@ -131,21 +134,26 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
         });
     } else {
       this.notifyService.showInfoMessage(`Please pay ₦${this.tripFee} to your driver.`);
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-      this.router.onSameUrlNavigation = 'reload';
-      this.router.navigate([`rider/home/${this.userId}`]);
-
+      this.updateActiveRider();
     }
 
   }
 
+  getActiveRiderData() {
+    const trip = JSON.parse(localStorage.getItem('riderRequest'));
+    const tripId = trip.tripId;
+    this.tripService.getTripsById(tripId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      const activeRiders = res.activeRiders;
+      activeRiders.filter(a => a.userId === this.userId);
+      this.activeRiderId = activeRiders[0].activeRiderId;
+      this.riderConnectId = activeRiders[0].riderConnectId;
+    });
+  }
+
   confirmPayment() {
-    const riderConnectionId = sessionStorage.getItem('clientConnectionId');
-    const activeRider = {
-      tripStatus: '2',
-      paymentStatus: '',
-      riderConnectId: riderConnectionId
-    };
+  
     this.paymentService.getSecKey()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(key => {
@@ -172,16 +180,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
                 this.paymentService.updatePayment(this.paymentId, newToken)
                   .pipe(takeUntil(this.unsubscribe$))
                   .subscribe(token => {
-                    // this.riderService.update(riderId, activeRider)
-                    //   .pipe(takeUntil(this.unsubscribe$))
-                    //   .subscribe(data => {
-                    //     this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
-                    //   }, error => {
-                    //     console.log(error);
-                    //   });
-                    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-                    this.router.onSameUrlNavigation = 'reload';
-                    this.router.navigate([`rider/home/${this.userId}`]);
+                   this.updateActiveRider();
                   }, error => {
                     console.error('could not update payment');
                   });
@@ -195,6 +194,24 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
           return;
         }
       });
+  }
+
+  updateActiveRider() {
+    const activeRider = {
+      tripStatus: '2',
+      paymentStatus: '1',
+      riderConnectId: this.riderConnectId
+    };
+    this.riderService.update(this.activeRiderId, activeRider)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(data => {
+      this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.onSameUrlNavigation = 'reload';
+      this.router.navigate([`rider/home/${this.userId}`]);
+    }, error => {
+      console.log(error);
+    });
   }
 
   generateReference() {

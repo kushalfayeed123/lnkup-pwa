@@ -1,7 +1,7 @@
-import { User } from 'firebase';
+import { Users } from './Users';
 
 export class ActiveRiders {
-    riderId: string;
+    activeRiderId: string;
     tripId: string;
     userId: string;
     tripFee: number;
@@ -11,6 +11,7 @@ export class ActiveRiders {
     currentLocationLatitude: number;
     destinationLongitude: number;
     destinationLatitude: number;
-    user: User;
+    user: Users;
     paymentType: string;
+    riderConnectId: string;
 }
