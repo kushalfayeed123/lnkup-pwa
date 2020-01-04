@@ -6,7 +6,8 @@ import { ActiveRiderDataService } from 'src/app/services/data/active-rider/activ
 import { Router } from '@angular/router';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
-import {  ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
+import { PaymentMethod } from 'src/app/models/payment';
 
 @Component({
   selector: 'app-bookseatrequest',
@@ -33,34 +34,61 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   driverEmail: any;
   gettingDrivers: boolean;
   driverName: any;
+  selectedPaymentMethod: string;
+  paymentMethod = [
+    { name: 'Cash' },
+    { name: 'Card' }
+  ];
+  userPaymentStatus: any;
+  canCreateTrip: boolean;
   constructor(private activeTrip: ActiveTripDataService,
               private activeRiderService: ActiveRiderDataService,
               private router: Router,
               private broadcastService: BroadcastService,
               private toastrService: ToastrService,
               private notifyService: NotificationsService) {
-                this.getRiderSuccessAlert();
-                this.getRiderDeclineAlert();
-               }
+    this.getRiderSuccessAlert();
+    this.getRiderDeclineAlert();
+  }
 
   ngOnInit() {
     this.dropoff = localStorage.getItem('storedAddress');
     this.getTripDetails();
     this.getRiderRequest();
     this.notifyService.intiateConnection();
-
     // this.notifyService.sendAcceptMessage();
 
   }
+
+
   computeTripFare(value) {
     const tripFare = value * this.fare;
     if (value > this.availableSeats) {
-      console.log(`this trip has ${this.availableSeats} seat(s) left.`);
       this.inValidSeat = true;
     } else {
       this.inValidSeat = false;
       this.seatCount = value;
       this.newFare = tripFare;
+    }
+  }
+  setPaymentMethod(value) {
+    localStorage.setItem('paymentType', value);
+    if (value === 'Card') {
+      this.broadcastService.paymentStatus
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(status => {
+        if (!status) {
+          this.canCreateTrip = false;
+          this.notifyService.showInfoMessage('Please add a card to continue or change your payment method.');
+          return;
+        } else {
+          this.canCreateTrip = true;
+          this.selectedPaymentMethod = value;
+        }
+      });
+    } else {
+      this.canCreateTrip = true;
+      this.selectedPaymentMethod = value;
     }
   }
   getTripDetails() {
@@ -74,71 +102,76 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     if (allowedRiderCount === 0) {
       this.availableSeats = maxSeats;
     } else {
-      this.availableSeats =  allowedRiderCount;
+      this.availableSeats = allowedRiderCount;
     }
   }
   getRiderRequest() {
-        const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
-        this.request = JSON.parse(localStorage.getItem('riderRequest'));
-        const connectionId = sessionStorage.getItem('clientConnectionId');
-        if (activeRequest != null && this.request != null) {
-          this.fare = this.request.tripFee;
-          this.request.tripFee = this.newFare;
-          this.request.paymentType = 'card';
-          this.request.paymentStatus = 'Pending';
-          this.request.bookedSeat  =  this.seatCount;
-          this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
-          this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
-          this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
-          this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
-          this.request.userId = activeRequest.userId;
-          this.request.tripStatus = activeRequest.tripStatus;
-          this.request.riderConnectId = connectionId;
-          this.tripConnectionId = this.request.tripConnectionId;
-          localStorage.setItem('riderRequest', JSON.stringify(this.request));
-        } else {
-          setTimeout(() => {
-            this.fare = this.request.tripFee;
-            this.request.tripFee = this.newFare;
-            this.request.paymentType = 'card';
-            this.request.paymentStatus = 'Pending';
-            this.request.bookedSeat  =  this.seatCount;
-            this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
-            this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
-            this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
-            this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
-            this.request.userId = activeRequest.userId;
-            this.request.tripStatus = activeRequest.tripStatus;
-            this.request.riderConnectId = connectionId;
-            this.tripConnectionId = this.request.tripConnectionId;
-            localStorage.setItem('riderRequest', JSON.stringify(this.request));
-          }, 5000);
-        }
-       
+    const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
+    this.request = JSON.parse(localStorage.getItem('riderRequest'));
+    const connectionId = sessionStorage.getItem('clientConnectionId');
+    if (activeRequest != null && this.request != null) {
+      this.fare = this.request.tripFee;
+      this.request.tripFee = this.newFare;
+      this.request.paymentType = this.selectedPaymentMethod;
+      this.request.paymentStatus = '0';
+      this.request.bookedSeat = this.seatCount;
+      this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
+      this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
+      this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
+      this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
+      this.request.userId = activeRequest.userId;
+      this.request.tripStatus = activeRequest.tripStatus;
+      this.request.riderConnectId = connectionId;
+      this.tripConnectionId = this.request.tripConnectionId;
+      localStorage.setItem('riderRequest', JSON.stringify(this.request));
+    } else {
+      setTimeout(() => {
+        this.fare = this.request.tripFee;
+        this.request.tripFee = this.newFare;
+        this.request.paymentType = this.selectedPaymentMethod;
+        this.request.paymentStatus = '0';
+        this.request.bookedSeat = this.seatCount;
+        this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
+        this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
+        this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
+        this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
+        this.request.userId = activeRequest.userId;
+        this.request.tripStatus = activeRequest.tripStatus;
+        this.request.riderConnectId = connectionId;
+        this.tripConnectionId = this.request.tripConnectionId;
+        localStorage.setItem('riderRequest', JSON.stringify(this.request));
+      }, 5000);
+    }
+
   }
 
   createRiderRequest() {
-    this.loading = true;
-    this.getRiderRequest();
-    this.activeRiderService.create(this.request)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      this.sendNotification();
-      const message = 'Your trip request has been sent. Your driver will respond soon.';
-      this.notifyService.showInfoMessage(message);
-      this.requestData = data;
+    if (this.canCreateTrip) {
+      this.loading = true;
+      this.getRiderRequest();
+      this.activeRiderService.create(this.request)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(data => {
+          this.sendNotification();
+          const message = 'Your trip request has been sent. Your driver will respond soon.';
+          this.notifyService.showInfoMessage(message);
+          this.requestData = data;
+          this.loading = false;
+          this.gettingDrivers = true;
+        }, error => {
+          const message = 'We could not send your request, please try again.';
+          this.notifyService.showErrorMessage(message);
+          this.loading = false;
+        });
+    } else {
       this.loading = false;
-      this.gettingDrivers = true;
-    }, error => {
-      const message = 'We could not send your request, please try again.';
-      this.notifyService.showErrorMessage(message);
-      this.loading = false;
-    });
+      this.notifyService.showInfoMessage('Please add a card to continue or change your payment method.');
+    }
   }
 
   sendNotification() {
     const message = 'You have a new LnkuP request';
-    const userId =  this.driverId;
+    const userId = this.driverId;
     const pushMessage = {
       title: 'Lnkup Request',
       body: message,
@@ -150,29 +183,31 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   }
 
 
- async getRiderSuccessAlert() {
+  async getRiderSuccessAlert() {
     await this.notifyService.successAlert
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(alert => {
-      if (alert) {
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        const userId = user.id;
-        this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(alert => {
+        if (alert) {
+          const user = JSON.parse(localStorage.getItem('currentUser'));
+          const userId = user.id;
+          this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
+        }
+      });
   }
 
   async getRiderDeclineAlert() {
     await this.notifyService.declineAlert
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(alert => {
-      if (alert) {
-        console.log('alert', alert);
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        const userId = user.id;
-        this.router.navigate([`rider/home/${userId}`]);
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(alert => {
+        if (alert) {
+          console.log('alert', alert);
+          const user = JSON.parse(localStorage.getItem('currentUser'));
+          const userId = user.id;
+          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+          this.router.onSameUrlNavigation = 'reload';
+          this.router.navigate([`rider/home/${userId}`]);
+        }
+      });
   }
 
   ngOnDestroy() {

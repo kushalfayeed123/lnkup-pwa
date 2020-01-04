@@ -43,21 +43,21 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   showPaymentButton: boolean;
 
   constructor(private driverDataService: DriverDataDataService,
-              private riderService: ActiveRiderDataService,
-              private tripService: ActiveTripDataService,
-              private authService: AuthenticateDataService,
-              public dialog: MatDialog,
-              private notifyService: NotificationsService,
-              private paymentService: PaymentDataService,
-              private router: Router) {
-                this.notifyService.endTrip
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe(res => {
-                  if (res) {
-                    this.showPaymentMessage();
-                  }
-                });
-               }
+    private riderService: ActiveRiderDataService,
+    private tripService: ActiveTripDataService,
+    private authService: AuthenticateDataService,
+    public dialog: MatDialog,
+    private notifyService: NotificationsService,
+    private paymentService: PaymentDataService,
+    private router: Router) {
+    this.notifyService.endTrip
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        if (res) {
+          this.showPaymentMessage();
+        }
+      });
+  }
 
   ngOnInit() {
     this.getUserdata();
@@ -88,88 +88,113 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     this.plateNumber = driverData.plateNumber;
     this.driverAccountId = driverData.driverAccountId;
     this.authService.getById(driverUserId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.driverData = res;
-      const driverNumber = res.phoneNumber;
-      this.driverNumber = driverNumber.slice(0, 4) + driverNumber.slice(5);
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.driverData = res;
+        const driverNumber = res.phoneNumber;
+        this.driverNumber = driverNumber.slice(0, 4) + driverNumber.slice(5);
+      });
   }
 
   getLoggedInUserPaymentData() {
     const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
     const userId = loggedInUser.id;
     this.authService.getById(userId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(token => {
-      this.userPaymentData = token.userPaymentData;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(token => {
+        this.userPaymentData = token.userPaymentData;
+      });
   }
 
   makePayment() {
-    this.generateReference();
-    const message = 'We are currently processing your payment please hold on.';
-    this.notifyService.showInfoMessage(message);
-    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = loggedInUser.id;
-    this.authService.getById(userId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(token => {
-      this.userPaymentData = token.userPaymentData;
-      this.userPaymentData.forEach(element => {
-        this.paymentId = element.paymentId;
-        this.token = element.paymentToken;
-      });
-      this.confirmPayment();
-    }, error => {
-      this.notifyService.showErrorMessage('Sorry, we could not fetch your payment data, Please try again.');
-      this.showPaymentButton = true;
-    });
+    const paymentMethod = localStorage.getItem('paymentType');
+    if (paymentMethod === 'Card') {
+      this.generateReference();
+      const message = 'We are currently processing your payment please hold on.';
+      this.notifyService.showInfoMessage(message);
+      const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
+      const userId = loggedInUser.id;
+      this.authService.getById(userId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(token => {
+          this.userPaymentData = token.userPaymentData;
+          this.userPaymentData.forEach(element => {
+            this.paymentId = element.paymentId;
+            this.token = element.paymentToken;
+          }, err => {
+            this.notifyService.showErrorMessage(err);
+          });
+          this.confirmPayment();
+        }, error => {
+          this.notifyService.showErrorMessage('Sorry, we could not fetch your payment data, Please try again.');
+          this.showPaymentButton = true;
+        });
+    } else {
+      this.notifyService.showInfoMessage(`Please pay ₦${this.tripFee} to your driver.`);
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.onSameUrlNavigation = 'reload';
+      this.router.navigate([`rider/home/${this.userId}`]);
+
+    }
+
   }
 
   confirmPayment() {
+    const riderConnectionId = sessionStorage.getItem('clientConnectionId');
+    const activeRider = {
+      tripStatus: '2',
+      paymentStatus: '',
+      riderConnectId: riderConnectionId
+    };
     this.paymentService.getSecKey()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(key => {
-      if (key) {
-        const payLoad = {
-          SECKEY: key.encryptionKey,
-          token: this.token,
-          amount: this.tripFee,
-          email: this.email,
-          txRef: this.tfx,
-          currency: 'NGN',
-          subaccounts: [{
-            id: this.driverAccountId
-          }]
-        };
-        // console.log('payment payload', payLoad);
-        this.paymentService.tokenizedPayment(payLoad)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(res => {
-          if (res.status === 'success') {
-            this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
-            const newToken = {
-              paymentToken: res.data.chargeToken.embed_token
-            };
-            console.log('res', res);
-            this.paymentService.updatePayment(this.paymentId, newToken)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(key => {
+        if (key) {
+          const payLoad = {
+            SECKEY: key.encryptionKey,
+            token: this.token,
+            amount: this.tripFee,
+            email: this.email,
+            txRef: this.tfx,
+            currency: 'NGN',
+            subaccounts: [{
+              id: this.driverAccountId
+            }]
+          };
+          // console.log('payment payload', payLoad);
+          this.paymentService.tokenizedPayment(payLoad)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(token => {
-              this.router.navigate(['rider/home', this.userId]);
-            }, error => {
-              console.error('could not update payment');
+            .subscribe(res => {
+              if (res.status === 'success') {
+                const newToken = {
+                  paymentToken: res.data.chargeToken.embed_token
+                };
+                this.paymentService.updatePayment(this.paymentId, newToken)
+                  .pipe(takeUntil(this.unsubscribe$))
+                  .subscribe(token => {
+                    // this.riderService.update(riderId, activeRider)
+                    //   .pipe(takeUntil(this.unsubscribe$))
+                    //   .subscribe(data => {
+                    //     this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
+                    //   }, error => {
+                    //     console.log(error);
+                    //   });
+                    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+                    this.router.onSameUrlNavigation = 'reload';
+                    this.router.navigate([`rider/home/${this.userId}`]);
+                  }, error => {
+                    console.error('could not update payment');
+                  });
+              } else {
+                this.notifyService.showErrorMessage('Sorry, we could not complete your payment please try again.');
+                this.showPaymentButton = true;
+                return;
+              }
             });
-          } else {
-            this.notifyService.showErrorMessage('Sorry, we could not complete your payment please try again.');
-            this.showPaymentButton = true;
-            return;
-          }
-        });
-      } else {
-        return;
-      }
-    });
+        } else {
+          return;
+        }
+      });
   }
 
   generateReference() {
@@ -195,16 +220,18 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     const riderName = trip.activeRiders[0].user.userName;
     const message = `Sorry, ${riderName} has just canceled this trip.`;
     this.riderService.delete(activerRiderId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      this.tripService.sendDeclineNotification(tripConnectionId, message)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
-        const alertMessage = 'Your trip request has been canceled.';
-        alert(alertMessage);
-        this.router.navigate(['/rider/home', this.userId]);
+        this.tripService.sendDeclineNotification(tripConnectionId, message)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(data => {
+            const alertMessage = 'Your trip request has been canceled.';
+            alert(alertMessage);
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            this.router.onSameUrlNavigation = 'reload';
+            this.router.navigate([`rider/home/${this.userId}`]);
+          });
       });
-    });
   }
 
   showPaymentMessage() {
@@ -212,7 +239,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: {name: this.name, price: this.tripFee}
+      data: { name: this.name, price: this.tripFee }
     });
 
     dialogRef.afterClosed().subscribe(result => {

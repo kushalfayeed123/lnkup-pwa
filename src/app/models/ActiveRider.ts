@@ -12,4 +12,5 @@ export class ActiveRiders {
     destinationLongitude: number;
     destinationLatitude: number;
     user: User;
+    paymentType: string;
 }

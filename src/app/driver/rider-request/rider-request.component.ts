@@ -81,6 +81,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(activeTrip => {
         this.activeTrip = activeTrip;
+        console.log('active trip', this.activeTrip);
         this.riderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '1');
         this.riderRequestLength = this.riderRequest.length;
         this.feePerSeat = activeTrip.aggregrateTripFee / activeTrip.maxRiderNumber;
@@ -95,7 +96,6 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       });
   }
   acceptTripRequest(rider) {
-
     const tripConnectionId = sessionStorage.getItem('clientConnectionId');
     const driverName = this.activeTrip.tripDriver.driver.userName;
     const pickup = this.activeTrip.tripPickup;
@@ -108,7 +108,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const message = `Your request has been accepted, please lnkup with ${driverName}
     at ${pickup} on or before ${pickupTime}`;
     const pushMessage = {
-      title: 'LnkuP Trip',
+      title: 'LnkuP',
       body: message,
       click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?driverNav=true`,
       receiverName: receiver

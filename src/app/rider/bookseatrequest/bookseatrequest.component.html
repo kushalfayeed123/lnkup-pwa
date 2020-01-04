@@ -32,17 +32,16 @@
             [ngModel]=seatCount (keyup)="computeTripFare(seatNumber.value)"/>
         </mat-form-field>
 
-        <!-- <div class="payment-options">
+        <div class="payment-options">
             <div class="c-card">
             </div>
             <mat-form-field class="auth-full-width">
-              <mat-label>Choose your payment method</mat-label>
-              <mat-select >
-                  <mat-option value="Card">Card</mat-option>
-                  <mat-option value="Wallet">Wallet</mat-option>
+              <mat-label>Your prefered mode of payment</mat-label>
+              <mat-select>
+                  <mat-option  *ngFor="let payment of paymentMethod" [value]="payment.name" (click)="setPaymentMethod(payment.name)">{{payment.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div> -->
+          </div>
         <div class="input-group fare-group">
           <div class="f-total">
             <label for="">Fare Total</label>

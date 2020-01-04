@@ -30,14 +30,18 @@
               </div>
             </div>
             <div class="item-details dest">
-              <div class="destination">
+              <div class="">
                 <h6 class="title-heading">Destination</h6>
                 <p class="details">{{activeTrip.tripDestination}}</p>
+              </div>
+              <div class="payment-method">
+                <h6 class="title-heading">Payment Method</h6>
+                <p class="details">{{request.paymentType}}</p>
               </div>
             </div>
             <div class="item-details srt">
               <div class="seats">
-                <h6 class="title-heading">Seats</h6>
+                <h6 class="title-heading">{{request.bookedSeat > 1 ? 'Seats' : 'Seat'}}</h6>
                 <p class="details">{{request.bookedSeat}}</p>
               </div>
               <div class="ride-fee">
@@ -49,13 +53,16 @@
                 <p class="details">&#8358; {{request.tripFee}}</p>
               </div>
             </div>
-      
+            <div class="title-heading">Swipe left to view more riders</div>
+
             <div class="button-group">
               <button id="accept" mat-raised-button color="accent" class="auth-full-width"
                (click)="acceptTripRequest(riderRequest[i])">Accept</button>
               <button id="reject" mat-raised-button color="accent" class="auth-full-width"
               (click)="declineTripRequest(riderRequest[i])">Reject</button>
             </div>
+
+            
           </main>
           </div>
         </swiper>

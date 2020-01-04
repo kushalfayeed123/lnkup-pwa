@@ -8,6 +8,10 @@ ride-details variant
 .ride section.auth-pages.security#ride-confirmation .item-details.dd {
   display: block;
 }
+.payment-method {
+  margin-left: 8%;
+  text-align: right;
+}
 
 .ride section.auth-pages.security#ride-confirmation .item-details.dest, .ride.request section.auth-pages.security#ride-confirmation .item-details.dd,
 .ride section.auth-pages.security#ride-confirmation .item-details.srt {
@@ -61,8 +65,8 @@ ride-request variant
 }
 
 .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
-  -ms-grid-columns: 1fr 1fr 1fr;
-      grid-template-columns: 1fr 1fr 1fr;
+  -ms-grid-columns: 1fr 2fr 0fr;
+  grid-template-columns: 1fr 2fr 0fr;
   -webkit-column-gap: 40px;
           column-gap: 40px;
   margin-bottom: 82%;
@@ -183,6 +187,9 @@ section.auth-pages.security#ride-confirmation button {
 
 section.auth-pages.security#ride-confirmation button:focus, section.auth-pages.security#ride-confirmation button:active, section.auth-pages.security#ride-confirmation button:hover {
   outline: none;
+}
+#contact {
+  text-align: right;
 }
 
 section.auth-pages.security#ride-confirmation .card-details {

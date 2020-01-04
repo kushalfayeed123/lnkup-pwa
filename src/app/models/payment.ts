@@ -44,3 +44,7 @@ export class TokenizedPayment {
     txRef: string;
     status: string;
 }
+
+export class PaymentMethod {
+    payment: string;
+}

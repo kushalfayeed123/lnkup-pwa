@@ -3,7 +3,26 @@
   <mat-card-content>
     <div class="blink_me" *ngIf="endTrip"></div>
     <mat-spinner *ngIf="!activeTrip" [diameter]="30" class="loader"></mat-spinner>
-    <div class="container-grid" *ngIf="activeTrip">
+    <div *ngIf="isCashPayment">
+      <div>
+        The following riders will pay cash
+      </div>
+      <div class="passengers passenger-width">
+        <div class="title-head cash-username">Rider</div>
+        <div class="title-head cash-fee">Trip fee</div>
+      </div>
+
+      <div class="passengers-details" *ngFor="let cash of cashRiders">
+        <div class="cash-username">{{cash.user.userName}}</div>
+        <div class="cash-fee">&#8358;{{cash.tripFee}}</div>
+      </div>
+
+      <div class="total-fee">
+        Total cash fee is &#8358;{{totalTripFee}}, a commision of &#8358;{{feeToCharge}} will be charged on your card.
+      </div>
+    </div>
+
+    <div class="container-grid" *ngIf="isActive || !isCashPayment">
         <div class="riders">
             <div class="radius" >
       <swiper [config]="config" class="swiper">
@@ -19,9 +38,10 @@
                        <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
                      </div>
                   <div class="passengers">{{rider.user.userName}}</div>
-                 
+                  <div class="title-heading">Swipe left to view more riders</div>
                 </div>
-             
+
+               
           </main>
         </div>
       </swiper>
@@ -34,8 +54,7 @@
                                     <div>Share</div>
                                   </div> -->
 
-
-      <div class="destination-details">
+      <div class="destination-details"  *ngIf="activeTrip">
         <div class="time-line-container">
           <ul class="tl">
             <li class="destination">
@@ -49,7 +68,7 @@
           </ul>
         </div>
       </div>
-      <button mat-raised-button color="accent" *ngIf="!endTrip" class="auth-full-width login-text"
+      <button mat-raised-button color="accent" *ngIf="!endTrip || activeTrip" class="auth-full-width login-text"
         (click)="startActiveTrip()">
         Start Trip
         <i class="material-icons right"></i>

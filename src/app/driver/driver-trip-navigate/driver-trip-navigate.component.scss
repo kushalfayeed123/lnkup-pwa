@@ -12,7 +12,11 @@
   }
   .swiper-wrapper {
     right: 12%;
-    bottom: 125px;
+    bottom: 139px;
+  }
+  .contain-box {
+    width: 140px !important;
+
   }
 
   #search-form input {
@@ -45,6 +49,24 @@
     display: inline-flex;
     width: 47%;
   }
+  .passenger-width {
+    width: 78% !important;
+  }
+  .passengers-details {
+    padding-top: 10px;
+    display: inline-flex;
+    width: 78%;
+    height: 53px;
+    overflow-x: auto;
+  }
+  .cash-container {
+
+  }
+  .title-head {
+    font-size: 14px;
+    font-weight: 500;
+    color: #d54ab6;
+  }
   .avd-container{
     background: #eee;
     height: inherit;
@@ -56,6 +78,24 @@
     display: flex;
     position: relative;
     right: 29px;
+  }
+  .total-fee {
+    margin-top: 23px;
+  }
+  .cash-username {
+    width: 70%;
+  }
+  .cash-fee {
+    width: 30%;
+  }
+  .title-heading {
+    font-size: 12px;
+    font-weight: 500;
+    color: #d54ab6;
+    position: absolute;
+    width: 99%;
+    top: 252px;
+    left: 16px;
   }
   .loader{
     position: relative;

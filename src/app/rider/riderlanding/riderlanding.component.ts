@@ -215,18 +215,20 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
   getDrivers() {
-    if (this.userPayment) {
-      this.loadMarker = false;
-      this.getCurrentLocation();
-      this.getDestinationCordinates();
-      this.passDirection();
-      this.gettingDrivers = true;
-      this.showForm = false;
-      this.loading = true;
-      this.createTripRequest();
+    if (!this.userPayment) {
+      // this.notificationService.showInfoMessage('Please pay cash to your driver when this trip ends.');
+      localStorage.setItem('paymentType', 'cash');
     } else {
-      this.notificationService.showInfoMessage('Please add your payment details to lnkup');
+      localStorage.setItem('paymentType', 'card');
     }
+    this.loadMarker = false;
+    this.getCurrentLocation();
+    this.getDestinationCordinates();
+    this.passDirection();
+    this.gettingDrivers = true;
+    this.showForm = false;
+    this.loading = true;
+    this.createTripRequest();
 
   }
   onAutocompleteSelected(result: PlaceResult) {
@@ -253,7 +255,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         userId: UserId.id,
         tripStatus: '1'
       };
-      console.log(request);
       localStorage.setItem('activeRiderRequest', JSON.stringify(request));
     }, 2000);
   }
@@ -314,16 +315,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             travelMode: google.maps.TravelMode.DRIVING
           }, (results: any) => {
             this.pickupDistance = (results.rows[0].elements[0].distance.value / 1000);
-            console.log('pickup distance', results);
             const timeToPickup = (results.rows[0].elements[0].duration.text);
             this.timeToPickup = timeToPickup;
             element.timeToPickup = this.timeToPickup;
             element.pickupDistance = this.pickupDistance;
-            console.log('distances', this.pickupDistance, this.destinationDistanceInKm);
             this.reachableDrivers = allActiveTrips;
             this.mapService.publishAvailableTrips(this.reachableDrivers);
             this.gettingDrivers = false;
-            console.log('reachable drivers', this.reachableDrivers);
           });
         });
       });
