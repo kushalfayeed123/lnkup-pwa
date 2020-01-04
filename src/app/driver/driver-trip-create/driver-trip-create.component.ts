@@ -176,14 +176,13 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       this.loader = false;
       return;
 
-    }
-    //  else if (!this.driverCardStatus) {
-    //   const message = 'Please add your card details to continue.';
-    //   this.notifyService.showErrorMessage(message);
-    //   this.loader = false;
-    //   return;
-    // }
-     else if (this.driverStatus < 1) {
+    } else if (!this.driverCardStatus) {
+      const message = 'Please add your card details to continue.';
+      this.notifyService.showErrorMessage(message);
+      this.loader = false;
+      return;
+    } else if (this.driverStatus < 1) {
+      // tslint:disable-next-line: max-line-length
       const message = 'Your document is currently under review for approval. We will get back to you as soon as we complete our background checks.';
       this.notifyService.showErrorMessage(message);
       this.loader = false;
