@@ -354,12 +354,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         if (data.status === 'success') {
+          const statusMessage = data.data.responsemessage;
+          if (statusMessage === 'Invalid Card Type') {
+            this.notifyService.showInfoMessage(statusMessage);
+            return;
+          }
           this.isCard = false;
           this.isCash = false;
+          this.loading = false;
           this.clearCardDetailsForm();
           const paymentToken = data.data.tx.chargeToken.embed_token;
           this.saveCardToken(paymentToken);
-          this.loading = false;
         }
       }, err => {
         this.loading = false;

@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { formatDate } from '@angular/common';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import * as moment from 'moment';
+import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
+
 
 @Component({
   selector: 'app-driver-trip-create',
@@ -19,6 +22,20 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   @Input() destination;
   @Input() pickup;
+  @Input() darkTheme: NgxMaterialTimepickerTheme = {
+    container: {
+        bodyBackgroundColor: '#424242',
+        buttonColor: '#fff'
+    },
+    dial: {
+        dialBackgroundColor: '#555',
+    },
+    clockFace: {
+        clockFaceBackgroundColor: '#555',
+        clockHandColor: '#9fbd90',
+        clockFaceTimeInactiveColor: '#fff'
+    }
+};
   fare: number;
   tripForm: FormGroup;
   driverDataId: string;
@@ -37,12 +54,13 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   driverStatus: any;
   loader: boolean;
   driverCardStatus: any;
+  currentDateTime: any;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
-    private activeTripService: ActiveTripDataService,
-    private router: Router,
-    private notifyService: NotificationsService,
-    private broadcastService: BroadcastService) {
+              private activeTripService: ActiveTripDataService,
+              private router: Router,
+              private notifyService: NotificationsService,
+              private broadcastService: BroadcastService) {
 
   }
 
@@ -65,7 +83,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       aggregrateTripFee: [this.fare, [Validators.required]],
       tripType: ['Regular', [Validators.required]],
       allowedRiderCount: [0, [Validators.required]],
-      tripConnectionId: [this.connectionId, [Validators.required]]
+      tripConnectionId: [this.connectionId, [Validators.required]],
+      actualTripStartDateTime: [this.currentDateTime, [Validators.required]]
     });
   }
 
@@ -166,12 +185,17 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   getTimeValues() {
     const date = new Date().getTime();
     this.dateNow = formatDate(date, ' h:mm a', 'en-US').toLowerCase().substring(1);
-    console.log(this.dateNow);
+    this.currentDateTime = new Date().toString();
+    console.log(this.currentDateTime);
+  }
+
+  formatActualDateTime() {
+
   }
   broadCastTrip() {
     this.loader = true;
     if (!this.driverDataId) {
-      const message = 'Your profile is incomplete. Please complete your driver registration to start sharing a ride.';
+      const message = 'Your profile is incomplete. Please complete your driver registration to start sharing your ride.';
       this.notifyService.showErrorMessage(message);
       this.loader = false;
       return;
@@ -181,12 +205,14 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       this.notifyService.showErrorMessage(message);
       this.loader = false;
       return;
+
     } else if (this.driverStatus < 1) {
       // tslint:disable-next-line: max-line-length
-      const message = 'Your document is currently under review for approval. We will get back to you as soon as we complete our background checks.';
+      const message = 'Your document is currently under review for approval. We will contact you as soon as we complete our background checks. Thank you for riding with us.';
       this.notifyService.showErrorMessage(message);
       this.loader = false;
       return;
+
     } else {
       const seatCapacity = 4;
       const maxRiderNumber = this.tripForm.value.maxRiderNumber;
@@ -196,6 +222,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           tripPickup: this.pickup,
           tripDestination: this.destination
         });
+        console.log('trip data', this.tripForm.value);
 
         this.activeTripService.createTrip(this.tripForm.getRawValue())
           .pipe(takeUntil(this.unsubscribe$))
@@ -203,7 +230,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
             this.loader = false;
             this.activeTrip = trip;
             localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
-            const message = 'Your trip has been created and is currently being broadcasted';
+            const message = 'You are now broadcasting your trip.';
             this.notifyService.showSuccessMessage(message);
             this.router.navigate(['driver/rider-request']);
           }, error => {

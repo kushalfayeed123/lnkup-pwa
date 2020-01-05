@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-driver-trip-navigate',
@@ -48,16 +49,20 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   token: string;
   email: any;
   tfx: any;
+  currentDate: string;
+  message: string;
+  dateNow: any;
+  activeTripObject: any;
 
 
 
   constructor(private tripService: ActiveTripDataService,
-    private broadCastService: BroadcastService,
-    public dialog: MatDialog,
-    private router: Router,
-    private notifyService: NotificationsService,
-    private authService: AuthenticateDataService,
-    private paymentService: PaymentDataService) { }
+              private broadCastService: BroadcastService,
+              public dialog: MatDialog,
+              private router: Router,
+              private notifyService: NotificationsService,
+              private authService: AuthenticateDataService,
+              private paymentService: PaymentDataService) { }
 
   ngOnInit() {
     this.getUser();
@@ -177,13 +182,26 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     }
   }
 
+  getCurrentDateTime() {
+    this.currentDate = new Date().toString();
+    this.dateNow = formatDate(this.currentDate, ' h:mm a', 'en-US').toLowerCase().substring(1);
+  }
+
   startActiveTrip() {
+    this.getCurrentDateTime();
+    const tripStartTime =  {actual: this.currentDate, time: this.dateNow};
+    localStorage.setItem('tripStartDateTime', JSON.stringify(tripStartTime));
     this.startTrip = true;
     this.endTrip = true;
     this.broadCastService.publishStartTrip(this.startTrip);
+    const status = 'start';
+    this.updateTripStatus(status);
+    this.sendTripMessage(status);
   }
 
   endActiveTrip() {
+    this.getCurrentDateTime();
+    const status = 'end';
     const tripFee = this.activeTrip.aggregrateTripFee;
     const newTripFee = (20 / 100) * tripFee;
     const driverFee = tripFee - newTripFee;
@@ -197,13 +215,12 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       this.isCashPayment = true;
       this.isActive = false;
     }
-    this.updatetripStatus();
+    this.updateTripStatus(status);
     dialogRef.afterClosed().subscribe(result => {
       this.endTrip = false;
       localStorage.removeItem('activeTrip');
       localStorage.removeItem('origin');
       localStorage.removeItem('destination');
-      this.sendTripEndMessage();
       if (this.isCashPayment) {
         this.makePayment();
       }
@@ -214,28 +231,56 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       }, 5000);
     });
   }
-  sendTripEndMessage() {
+  sendTripMessage(status: string) {
     this.tripRiders.forEach(element => {
       const recieverId = element.userId;
-      const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
-      this.notifyService.sendAcceptMessage(recieverId, message);
-      this.notifyService.sendNotification(recieverId, message);
+      if (status === 'end') {
+        const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
+        this.notifyService.sendAcceptMessage(recieverId, message);
+        this.notifyService.sendNotification(recieverId, message);
+        console.log(status);
+      } else {
+        const message = 'Your trip has started.';
+        this.notifyService.sendAcceptMessage(recieverId, message);
+        this.notifyService.sendNotification(recieverId, message);
+        console.log(status);
+
+      }
+  
     });
   }
 
-  updatetripStatus() {
+  updateTripStatus(status?: string) {
     const tripConnectionId = sessionStorage.getItem('clientConnectionId');
-    const activeTrip = {
-      driverTripStatus: 0,
-      allowedRiderCount: 0,
-      tripConnectionId
-    };
-    this.tripService.updateTrip(this.activeTripId, activeTrip)
+    if (status === 'end') {
+      const tripStartTimes = JSON.parse(localStorage.getItem('tripStartDateTime'));
+      this.activeTripObject = {
+        driverTripStatus: 0,
+        allowedRiderCount: 0,
+        tripConnectionId,
+        actualTripEndDateTime: this.currentDate,
+        tripEndDateTime: this.dateNow,
+        actualTripStartDateTime: tripStartTimes.actual,
+        tripStartDateTime: tripStartTimes.time,
+      };
+    } else {
+      this.activeTripObject = {
+        driverTripStatus: 3,
+        allowedRiderCount: 0,
+        tripConnectionId,
+        actualTripStartDateTime: this.currentDate,
+        tripStartDateTime: this.dateNow,
+        actualTripEndDateTime: 'null',
+        tripEndDateTime: 'null'
+      };
+    }
+    this.tripService.updateTrip(this.activeTripId, this.activeTripObject)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
+        this.sendTripMessage(status);
       }, error => {
         console.log(error);
-        this.updatetripStatus();
+        this.updateTripStatus();
       });
   }
   ngOnDestroy() {

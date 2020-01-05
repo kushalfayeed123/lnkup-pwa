@@ -7,7 +7,9 @@
         [zoomControl]="false">
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
         </agm-marker>
-
+        <agm-marker *ngFor="let trips of allActiveTrips; let i = index;" [(latitude)]="allTripsDestinationLat[i]"
+         [(longitude)]="allTripsDestinationLong[i]" [markerDraggable]="false" >
+        </agm-marker>
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"
             [animation]="userLocationMarkerAnimation" *ngIf="gettingDrivers"></agm-marker>
 

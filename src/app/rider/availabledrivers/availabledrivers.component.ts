@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-availabledrivers',
@@ -29,19 +30,27 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   pickUp = [];
   pickupAddress: any;
   showTripDetails: boolean;
+  currentDate: Date;
+  dateNow: any;
 
 
   constructor(private mapService: MapBroadcastService,
-    private broadcastService: BroadcastService,
-    private router: Router) { }
+              private broadcastService: BroadcastService,
+              private router: Router) { }
 
   ngOnInit() {
     this.broadcastService.showTripDetails
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         this.showTripDetails = data;
+        this.getCurrentDateTime();
       });
     this.getAvailableTrips();
+  }
+  getCurrentDateTime() {
+    this.currentDate = new Date();
+    const currentDate = new Date().getTime();
+    this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US').toLowerCase().substring(1);
   }
 
   getAvailableTrips() {
@@ -54,10 +63,9 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
           return;
         }
         this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
-          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0);
+          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0 );
         if (this.availableTrips.length === 0) {
           this.emptyTrip = true;
-          console.log('there are no trips headed in your direction');
         } else {
           this.availableTrips.forEach(element => {
             const userName = element.tripDriver;
@@ -72,17 +80,13 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
             if (allowedRiderCount === 0) {
               const availableSeat = maxSeats;
               this.availableSeats.push(availableSeat);
-              console.log('available seats', this.availableSeats);
 
             } else {
               const availableSeat = allowedRiderCount;
               this.availableSeats.push(availableSeat);
-              console.log('available seats', this.availableSeats);
             }
           });
         }
-        console.log('available trips', this.availableTrips);
-
       });
   }
 

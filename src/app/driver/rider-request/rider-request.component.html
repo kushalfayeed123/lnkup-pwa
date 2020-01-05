@@ -8,7 +8,9 @@
         </nav> -->
 
         <div *ngIf="riderRequestLength === 0" class="emptyRiders">
-          <span>You do not have any LnkuP request currently. You will be alerted once there is a request.</span>
+          <span>Broadcasting Trip.</span>
+          <mat-spinner [diameter]="30" class="loader"></mat-spinner>
+
         </div>
         <swiper [config]="config" *ngIf="riderRequestLength > 0">
             <div class="swiper-wrapper" >

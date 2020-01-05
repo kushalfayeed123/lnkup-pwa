@@ -27,12 +27,19 @@
                 formControlName="tripPickup"  />
             </mat-form-field>
 
+            <!-- <mat-form-field class="auth-full-width form-bottom">
+                <input matInput [matDatepicker]="picker" placeholder="When will this trip begin?"
+                formControlName="actualTripStartDateTime" class="input-color">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field> -->
+
             <mat-form-field class="auth-full-width form-bottom">
                 <input [ngxTimepicker]="min" [min]="dateNow" type="text" matInput class="input-color" placeholder="What time will this trip begin?"
                 formControlName="tripStartDateTime" readonly>
-                <ngx-material-timepicker #min></ngx-material-timepicker>
+                <ngx-material-timepicker #min ></ngx-material-timepicker>
             </mat-form-field>
-
+         
 
             <mat-form-field class="auth-full-width form-bottom">
                 <input type="number" #ridersNumber matInput class="input-color" placeholder="How many riders will be joining this trip?"
@@ -65,3 +72,4 @@
         </form>
     </main>
 </section>
+<app-notification></app-notification>

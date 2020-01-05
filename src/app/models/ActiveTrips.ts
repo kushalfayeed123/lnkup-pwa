@@ -23,5 +23,7 @@ export class ActiveTrips {
   userDriverDestinationDistance: number;
   tripDestination: string;
   aggregrateTripFee: number;
+  actualTripStartDateTime: string;
+  actualTripEndDateTime: string;
   activeRiders: ActiveRiders[];
 }

@@ -23,6 +23,7 @@ import PlaceResult = google.maps.places.PlaceResult;
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { UserPaymentToken } from 'src/app/models/payment';
+import { ActiveTrips } from 'src/app/models/ActiveTrips';
 
 
 @Component({
@@ -73,7 +74,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   showNoTripMessage: boolean;
   userPaymentData: UserPaymentToken;
   userPayment: boolean;
-  showForm: boolean
+  showForm: boolean;
+  allActiveTrips: ActiveTrips[];
+  allTripsDestinationLat: any[] = [];
+  allTripsDestinationLong: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -96,6 +100,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         // alert(res);
       });
     this.notificationService.tokenRefresh();
+    this.getActiveTripsCordinates();
 
   }
 
@@ -120,6 +125,19 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getCurrentLocation();
     this.zoom = 17;
     this.notificationService.intiateConnection();
+  }
+  getActiveTripsCordinates() {
+    this.activeTrip.getAllActiveTrips()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      this.allActiveTrips = res.filter(x => x.driverTripStatus === 1);
+      this.allActiveTrips.forEach(element => {
+        const tripDestinationLat = Number(element.driverStartLatitude);
+        const tripDestinationLong = Number(element.driverStartLongitude);
+        this.allTripsDestinationLat = [...this.allTripsDestinationLat, tripDestinationLat];
+        this.allTripsDestinationLong = [...this.allTripsDestinationLong, tripDestinationLong];
+      });
+    });
   }
   getUserById(userId) {
     this.authService

@@ -68,7 +68,7 @@
           </ul>
         </div>
       </div>
-      <button mat-raised-button color="accent" *ngIf="!endTrip || activeTrip" class="auth-full-width login-text"
+      <button mat-raised-button color="accent" *ngIf="!endTrip && activeTrip" class="auth-full-width login-text"
         (click)="startActiveTrip()">
         Start Trip
         <i class="material-icons right"></i>
@@ -84,3 +84,5 @@
   </mat-card-content>
 
 </mat-card>
+
+<app-notification></app-notification>

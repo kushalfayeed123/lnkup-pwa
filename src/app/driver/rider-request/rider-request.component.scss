@@ -191,6 +191,19 @@ section.auth-pages.security#ride-confirmation button:focus, section.auth-pages.s
 #contact {
   text-align: right;
 }
+.contain-box {
+  padding: 114px 31px !important;
+}
+.swiper-slide {
+  height: 100vh !important;
+}
+.loader {
+  position: relative;
+  height: 50px;
+  width: 40%;
+  left: 28%;
+  top: 79px;
+}
 
 section.auth-pages.security#ride-confirmation .card-details {
   display: -webkit-box;

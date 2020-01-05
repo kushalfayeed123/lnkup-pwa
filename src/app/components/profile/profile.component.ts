@@ -279,7 +279,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       business_mobile: this.userPhone,
       seckey: this.secKey,
       split_type: 'percentage',
-      split_value: '0.80',
+      split_value: '0.20',
       country: 'NG'
     };
     console.log(accountPayload);
@@ -292,6 +292,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       } else {
         return;
       }
+    }, err => {
+      this.notifyService.showErrorMessage(err);
     });
   }
 

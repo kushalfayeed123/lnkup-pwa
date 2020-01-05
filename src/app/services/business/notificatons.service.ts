@@ -238,6 +238,7 @@ export class NotificationsService {
         const trip = JSON.parse(localStorage.getItem('riderRequest'));
         this.showSuccessMessage(message);
         this._successAlert.next(alertRider);
+        console.log(trip);
         if (trip) {
             const tripId = trip.tripId;
             this.tripService.getTripsById(tripId)

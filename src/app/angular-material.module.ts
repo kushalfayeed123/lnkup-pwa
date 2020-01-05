@@ -13,7 +13,6 @@ import {
    MatInputModule,
    MatSelectModule,
    MatRadioModule,
-   MatDatepickerModule,
    MatNativeDateModule,
    MatChipsModule,
    MatTooltipModule,
@@ -22,6 +21,7 @@ import {
    MatCardModule,
    MatDialogModule,
 } from '@angular/material';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatSnackBarModule} from '@angular/material/snack-bar';

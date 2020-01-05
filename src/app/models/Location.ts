@@ -14,3 +14,11 @@ export class Location {
     address_state?: string;
     marker?: Marker;
   }
+
+export class UserLocation {
+    pickupId: string;
+    userId: string;
+    pickupLongitude: string;
+    pickupLatitude: string;
+    userRole: string;
+  }
