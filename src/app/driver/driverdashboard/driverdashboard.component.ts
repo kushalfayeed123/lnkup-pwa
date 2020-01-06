@@ -13,11 +13,16 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-data.data.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { LocationDataService } from 'src/app/services/data/location/location.data.service';
+import { interval } from 'rxjs';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './driverdashboard.component.html',
-  styleUrls: ['./driverdashboard.component.scss']
+  styleUrls: ['./driverdashboard.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class DriverdashboardComponent implements OnInit, OnDestroy {
 
@@ -58,6 +63,9 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   plateNumber: any;
   driverStatus: any;
   userPayment: boolean;
+  riderLocation: any;
+  riderLocationsLat: any[] = [];
+  riderLocationsLong: any[] = []; 
 
   constructor(private router: Router,
               private activeTripService: ActiveTripDataService,
@@ -68,7 +76,8 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
               private mapService: MapBroadcastService,
               private driverDataService: DriverDataDataService,
               private notificationService: NotificationsService,
-              private broadCastService: BroadcastService) {
+              private broadCastService: BroadcastService,
+              private locationService: LocationDataService) {
     this.notificationService.angularFireMessenger();
     // this.notificationService.deleteSubscription();
     this.notificationService.requestPermision();
@@ -79,6 +88,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       });
     this.notificationService.tokenRefresh();
     this.startTrip();
+    this.setIntervalCall();
   }
 
   ngOnInit() {
@@ -154,6 +164,33 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
         }
       });
   }
+  setIntervalCall() {
+    interval(30000)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(x => {
+      this.getCurrentLocation();
+      setTimeout(() => {
+        this.broadCastCurrentLocation();
+        this.getAllRidersLocations();
+      }, 10000);
+    });
+
+  }
+
+  getAllRidersLocations() {
+    this.locationService.getAllLocations()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(loc => {
+      this.riderLocation = loc.filter(r => r.userRole === 'Rider');
+      this.riderLocation.forEach(element => {
+        const long = Number(element.pickupLongitude);
+        const lat = Number(element.pickupLatitude);
+        this.riderLocationsLong = [...this.riderLocationsLong, long];
+        this.riderLocationsLat = [...this.riderLocationsLat, lat];
+      });
+      console.log('rider locations', this.riderLocation);
+    });
+  }
   getCurrentLocation() {
     this.mapService.getCurrentLocation();
     this.mapService.locationObject.subscribe(loc => {
@@ -162,6 +199,44 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.currentLocation = { lat: loc.lat, lng: loc.lng };
     });
   }
+  broadCastCurrentLocation() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.locationService.getLocationsByUserId(user.id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.updateUserLocation(user.id);
+      }, err => {
+        this.createUserLocation();
+      });
+  }
+
+  createUserLocation() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const locationPayload = {
+      userId: user.id,
+      pickupLongitude: this.longitude,
+      pickupLatitude: this.latitude,
+      userRole: user.role
+    };
+    this.locationService.create(locationPayload)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+      });
+  }
+  updateUserLocation(id) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const locationPayload = {
+      userId: user.id,
+      pickupLongitude: this.longitude,
+      pickupLatitude: this.latitude,
+      userRole: user.role
+    };
+    this.locationService.update(id, locationPayload)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+      });
+  }
+
   getActiveTripById() {
     const activeTrip = JSON.parse(localStorage.getItem('activeTripId'));
     const activeTripId = activeTrip.dataDriverId;

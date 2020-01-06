@@ -15,11 +15,14 @@ import { Users } from 'src/app/models/Users';
 import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { UserPaymentToken } from 'src/app/models/payment';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-riderlink',
   templateUrl: './riderlink.component.html',
-  styleUrls: ['./riderlink.component.scss']
+  styleUrls: ['./riderlink.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class RiderlinkComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
@@ -189,6 +192,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
                 this.showPaymentButton = true;
                 return;
               }
+            }, err => {
+              this.notifyService.showErrorMessage(err);
             });
         } else {
           return;
@@ -252,16 +257,19 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   }
 
   showPaymentMessage() {
-    this.name = 'Please Confirm Payment. Your fare for this trip is';
-    const dialogRef = this.dialog.open(ModalComponent, {
-      width: '90%',
-      panelClass: 'dialog',
-      data: { name: this.name, price: this.tripFee }
-    });
+    // this.name = 'Please Confirm Payment. Your fare for this trip is';
+    // const dialogRef = this.dialog.open(ModalComponent, {
+    //   width: '90%',
+    //   panelClass: 'dialog',
+    //   data: { name: this.name, price: this.tripFee }
+    // });
 
-    dialogRef.afterClosed().subscribe(result => {
+    // dialogRef.afterClosed().subscribe(result => {
+    // });
+    this.notifyService.showSuccessMessage(`Your trip has ended. A fee of ₦ ${this.tripFee} will be charged on your card.`);
+    setTimeout(() => {
       this.makePayment();
-    });
+    }, 7000);
   }
 
 

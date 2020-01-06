@@ -13,10 +13,22 @@ import { SupportComponent } from './components/support/support.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/onboarding', pathMatch: 'full' },
-  { path: 'onboarding', component: OnboardingComponent },
-  { path: 'verify', component: VerifycodeComponent },
-  { path: 'login', component: AuthenticateUserComponent },
-  { path: 'register', component: RegisterUserComponent },
+  {
+    path: 'onboarding', component: OnboardingComponent,
+    data: { animation: 'onboarding' }
+  },
+  {
+    path: 'verify', component: VerifycodeComponent,
+    data: { animation: 'verify' }
+  },
+  {
+    path: 'login', component: AuthenticateUserComponent,
+    data: { animation: 'login' }
+  },
+  {
+    path: 'register', component: RegisterUserComponent,
+    data: { animation: 'register' }
+  },
   { path: 'payment/:id', component: PaymentComponent },
   { path: 'profile/:id', component: ProfileComponent },
   { path: 'support/:id', component: SupportComponent },
@@ -34,8 +46,10 @@ const routes: Routes = [
     path: 'driver',
     loadChildren: './driver/driver.module#DriverModule'
   },
-  { path: '**',
-  component: PagenotfoundComponent },
+  {
+    path: '**',
+    component: PagenotfoundComponent
+  },
 ];
 
 @NgModule({
@@ -45,4 +59,4 @@ const routes: Routes = [
 
 export class AppRoutingModule {
 
- }
+}

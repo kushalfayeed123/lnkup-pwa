@@ -2,6 +2,9 @@
 
   <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false">
     <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker>
+    <agm-marker *ngFor="let loc of riderLocation; let i = index;" [(latitude)]="riderLocationsLat[i]"
+    [(longitude)]="riderLocationsLong[i]" [markerDraggable]="true" >
+   </agm-marker>
     <agm-direction *ngIf="startTrip" [origin]="origin" [destination]="destination" [renderOptions]="renderOptions">
     </agm-direction>
 

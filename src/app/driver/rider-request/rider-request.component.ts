@@ -8,11 +8,14 @@ import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { Router } from '@angular/router';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-rider-request',
   templateUrl: './rider-request.component.html',
-  styleUrls: ['./rider-request.component.scss']
+  styleUrls: ['./rider-request.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class RiderRequestComponent implements OnInit, OnDestroy {
 

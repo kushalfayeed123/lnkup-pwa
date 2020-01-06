@@ -1,24 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
-import { takeUntil } from 'rxjs/operators';
-import { fadeInAnimation } from 'src/app/services/misc/animation';
+
+import { slideInAnimation } from 'src/app/services/misc/animation';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessMessageComponent } from '../success-message/success-message.component';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
-import { ToastrService } from 'ngx-toastr';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-verifycode',
   templateUrl: './verifycode.component.html',
   styleUrls: ['./verifycode.component.scss'],
-  animations: [fadeInAnimation],
-  host: { '[@fadeInAnimation]': '' }
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class VerifycodeComponent implements OnInit, OnDestroy {
   public verifyForm: FormGroup;

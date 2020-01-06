@@ -53,6 +53,8 @@ import { PaymentModalComponent } from './components/payment-modal/payment-modal.
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { PushNotificationDataService } from './services/data/push-notification/push-notification.data.service';
+import { LocationWebService } from './services/data/location/location.web.service';
+import { LocationDataService } from './services/data/location/location.data.service';
 
 
 
@@ -127,7 +129,9 @@ import { PushNotificationDataService } from './services/data/push-notification/p
     { provide: DriverDataDataService, useClass: DriverDataWebService },
     { provide: AppReviewDataService, useClass: AppReviewWebService },
     { provide: PaymentDataService, useClass: PaymentWebService },
-    { provide: PushNotificationDataService, useClass: PushNotificationWebService }
+    { provide: PushNotificationDataService, useClass: PushNotificationWebService },
+    { provide: LocationDataService, useClass: LocationWebService }
+
   ],
   bootstrap: [AppComponent],
   entryComponents: [SuccessMessageComponent, ErrorMessageComponent, ModalComponent,

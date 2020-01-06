@@ -5,11 +5,14 @@ import { takeUntil } from 'rxjs/operators';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-availabledrivers',
   templateUrl: './availabledrivers.component.html',
-  styleUrls: ['./availabledrivers.component.scss']
+  styleUrls: ['./availabledrivers.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class AvailabledriversComponent implements OnInit, OnDestroy {
 

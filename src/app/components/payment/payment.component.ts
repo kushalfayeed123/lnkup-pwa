@@ -19,11 +19,14 @@ import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { PaymentModalComponent } from '../payment-modal/payment-modal.component';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.scss']
+  styleUrls: ['./payment.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   paymentInstance: PaymentInstance;

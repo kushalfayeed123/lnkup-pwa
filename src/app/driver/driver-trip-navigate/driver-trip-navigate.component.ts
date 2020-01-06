@@ -13,11 +13,14 @@ import { NotificationsService } from 'src/app/services/business/notificatons.ser
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
 import { formatDate } from '@angular/common';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-driver-trip-navigate',
   templateUrl: './driver-trip-navigate.component.html',
-  styleUrls: ['./driver-trip-navigate.component.scss']
+  styleUrls: ['./driver-trip-navigate.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   public config: any = {
@@ -223,12 +226,14 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       localStorage.removeItem('destination');
       if (this.isCashPayment) {
         this.makePayment();
+      } else {
+        setTimeout(() => {
+          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+          this.router.onSameUrlNavigation = 'reload';
+          this.router.navigate([`driver/home/${this.userId}`]);
+        }, 5000);
       }
-      setTimeout(() => {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.onSameUrlNavigation = 'reload';
-        this.router.navigate([`driver/home/${this.userId}`]);
-      }, 5000);
+    
     });
   }
   sendTripMessage(status: string) {
@@ -238,7 +243,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
         const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
         this.notifyService.sendAcceptMessage(recieverId, message);
         this.notifyService.sendNotification(recieverId, message);
-        console.log(status);
+        console.log(recieverId);
       } else {
         const message = 'Your trip has started.';
         this.notifyService.sendAcceptMessage(recieverId, message);

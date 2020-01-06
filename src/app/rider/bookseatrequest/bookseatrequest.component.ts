@@ -8,11 +8,14 @@ import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { ToastrService } from 'ngx-toastr';
 import { PaymentMethod } from 'src/app/models/payment';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-bookseatrequest',
   templateUrl: './bookseatrequest.component.html',
-  styleUrls: ['./bookseatrequest.component.scss']
+  styleUrls: ['./bookseatrequest.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class BookseatrequestComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();

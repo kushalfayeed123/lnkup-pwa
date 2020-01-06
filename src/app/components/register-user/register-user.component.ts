@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
-import { fadeInAnimation } from 'src/app/services/misc/animation';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { format } from 'url';
@@ -15,8 +15,8 @@ import { formatDate } from '@angular/common';
   selector: 'app-register-user',
   templateUrl: './register-user.component.html',
   styleUrls: ['./register-user.component.scss'],
-  animations: [fadeInAnimation],
-  host: { '[@fadeInAnimation]': '' }
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class RegisterUserComponent implements OnInit, OnDestroy {
 

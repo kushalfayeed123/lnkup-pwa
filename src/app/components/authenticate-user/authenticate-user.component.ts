@@ -5,7 +5,7 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
-import { fadeInAnimation } from 'src/app/services/misc/animation';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 import { MatSnackBar } from '@angular/material';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { ToastrService } from 'ngx-toastr';
@@ -16,9 +16,9 @@ import { UserPaymentToken } from 'src/app/models/payment';
   selector: 'app-authenticate-user',
   templateUrl: './authenticate-user.component.html',
   styleUrls: ['./authenticate-user.component.scss'],
-  animations: [fadeInAnimation],
+  animations: [slideInAnimation],
   // tslint:disable-next-line: no-host-metadata-property
-  host: { '[@fadeInAnimation]': '' }
+  host: { '[@slideInAnimation]': '' }
 })
 export class AuthenticateUserComponent implements OnInit, OnDestroy {
 

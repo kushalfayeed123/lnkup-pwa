@@ -6,11 +6,14 @@ import { AppReviewDataService } from 'src/app/services/data/app-review/app-revie
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-support',
   templateUrl: './support.component.html',
-  styleUrls: ['./support.component.scss']
+  styleUrls: ['./support.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class SupportComponent implements OnInit, OnDestroy {
   userName: any;

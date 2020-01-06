@@ -6,11 +6,14 @@ import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-
 import { Subject } from 'rxjs';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-driverdetails',
   templateUrl: './driverdetails.component.html',
-  styleUrls: ['./driverdetails.component.scss']
+  styleUrls: ['./driverdetails.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class DriverdetailsComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();

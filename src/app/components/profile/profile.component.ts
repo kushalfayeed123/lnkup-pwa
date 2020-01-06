@@ -8,11 +8,14 @@ import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { Bank } from 'src/app/models/Bank';
 import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   image = '';

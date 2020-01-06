@@ -5,11 +5,14 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 @Component({
   selector: 'app-side-nav',
   templateUrl: './side-nav.component.html',
-  styleUrls: ['./side-nav.component.scss']
+  styleUrls: ['./side-nav.component.scss'],
+  animations: [ slideInAnimation ]
+
 })
 export class SideNavComponent implements OnDestroy {
     private unsubscribe$ = new Subject<void>();

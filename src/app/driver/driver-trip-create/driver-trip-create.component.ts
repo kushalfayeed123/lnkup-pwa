@@ -10,12 +10,15 @@ import { formatDate } from '@angular/common';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import * as moment from 'moment';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 
 @Component({
   selector: 'app-driver-trip-create',
   templateUrl: './driver-trip-create.component.html',
-  styleUrls: ['./driver-trip-create.component.scss']
+  styleUrls: ['./driver-trip-create.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class DriverTripCreateComponent implements OnInit, OnDestroy {
 

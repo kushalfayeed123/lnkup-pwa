@@ -10,7 +10,7 @@ import {
 import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
-import { Subject } from 'rxjs';
+import { Subject, interval } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
@@ -24,12 +24,16 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { UserPaymentToken } from 'src/app/models/payment';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
+import { LocationDataService } from 'src/app/services/data/location/location.data.service';
+import { slideInAnimation } from 'src/app/services/misc/animation';
 
 
 @Component({
   selector: 'app-riderlanding',
   templateUrl: './riderlanding.component.html',
-  styleUrls: ['./riderlanding.component.scss']
+  styleUrls: ['./riderlanding.component.scss'],
+  animations: [slideInAnimation],
+  host: { '[@slideInAnimation]': '' }
 })
 export class RiderlandingComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
@@ -78,6 +82,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   allActiveTrips: ActiveTrips[];
   allTripsDestinationLat: any[] = [];
   allTripsDestinationLong: any[] = [];
+  driverLocation: any;
+  location: any;
+  driverLocationsLong: any[] = [];
+  driverLocationsLat: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -89,7 +97,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private activeRider: ActiveRiderDataService,
     private activeTrip: ActiveTripDataService,
     private broadCastService: BroadcastService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
+    private locationService: LocationDataService
   ) {
     this.notificationService.angularFireMessenger();
     // this.notificationService.deleteSubscription();
@@ -100,8 +109,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         // alert(res);
       });
     this.notificationService.tokenRefresh();
-    this.getActiveTripsCordinates();
-
+    this.setIntervalCall();
   }
 
   ngOnInit() {
@@ -122,23 +130,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.getUserById(userId);
     });
     this.searchControl = new FormControl();
-    this.getCurrentLocation();
+    // this.getCurrentLocation();
     this.zoom = 17;
     this.notificationService.intiateConnection();
+    this.getCurrentLocation();
+    this.getAllDriversLocations();
   }
-  getActiveTripsCordinates() {
-    this.activeTrip.getAllActiveTrips()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.allActiveTrips = res.filter(x => x.driverTripStatus === 1);
-      this.allActiveTrips.forEach(element => {
-        const tripDestinationLat = Number(element.driverStartLatitude);
-        const tripDestinationLong = Number(element.driverStartLongitude);
-        this.allTripsDestinationLat = [...this.allTripsDestinationLat, tripDestinationLat];
-        this.allTripsDestinationLong = [...this.allTripsDestinationLong, tripDestinationLong];
-      });
-    });
-  }
+
   getUserById(userId) {
     this.authService
       .getById(userId)
@@ -157,27 +155,96 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
 
+  setIntervalCall() {
+    interval(30000)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(x => {
+      this.getCurrentLocation();
+      setTimeout(() => {
+        this.getActiveTripsCordinates();
+        this.broadCastCurrentLocation();
+        this.getAllDriversLocations();
+      }, 10000);
+    });
 
+  }
+
+  getAllDriversLocations() {
+    this.locationService.getAllLocations()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(loc => {
+      this.driverLocation = loc.filter(r => r.userRole === 'Driver');
+      this.driverLocation.forEach(element => {
+        const long = Number(element.pickupLongitude);
+        const lat = Number(element.pickupLatitude);
+        this.driverLocationsLong = [...this.driverLocationsLong, long];
+        this.driverLocationsLat = [...this.driverLocationsLat, lat];
+      });
+      console.log('driver locations', this.driverLocation);
+    });
+  }
 
   getCurrentLocation() {
     window.scrollTo(0, 0);
     this.mapService.getCurrentLocation();
-    const userLocation = localStorage.getItem('userLocation');
-    if (userLocation !== null || !' ') {
-      this.mapService.storeOrigin(userLocation);
-      const userLoc = JSON.parse(localStorage.getItem('origin'));
-      this.latitude = userLoc.lat;
-      this.longitude = userLoc.lng;
-      console.log('user location', this.latitude, this.longitude);
-    } else {
-      this.mapService.locationObject.subscribe(loc => {
-        this.latitude = loc.lat;
-        this.longitude = loc.lng;
-        const currentLocation = { lat: loc.lat, lng: loc.lng };
-        localStorage.setItem('origin', JSON.stringify(currentLocation));
-      });
-    }
+    this.mapService.locationObject.subscribe(loc => {
+      this.latitude = loc.lat;
+      this.longitude = loc.lng;
+      const currentLocation = { lat: loc.lat, lng: loc.lng };
+      localStorage.setItem('origin', JSON.stringify(currentLocation));
+    });
   }
+  getActiveTripsCordinates() {
+    this.activeTrip.getAllActiveTrips()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.allActiveTrips = res.filter(x => x.driverTripStatus === 1);
+        this.allActiveTrips.forEach(element => {
+          const tripDestinationLat = Number(element.driverStartLatitude);
+          const tripDestinationLong = Number(element.driverStartLongitude);
+          this.allTripsDestinationLat = [...this.allTripsDestinationLat, tripDestinationLat];
+          this.allTripsDestinationLong = [...this.allTripsDestinationLong, tripDestinationLong];
+        });
+      });
+  }
+  broadCastCurrentLocation() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.locationService.getLocationsByUserId(user.id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.updateUserLocation(user.id);
+      }, err => {
+        this.createUserLocation();
+      });
+  }
+
+  createUserLocation() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const locationPayload = {
+      userId: user.id,
+      pickupLongitude: this.longitude,
+      pickupLatitude: this.latitude,
+      userRole: user.role
+    };
+    this.locationService.create(locationPayload)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+      });
+  }
+  updateUserLocation(id) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const locationPayload = {
+      userId: user.id,
+      pickupLongitude: this.longitude,
+      pickupLatitude: this.latitude,
+      userRole: user.role
+    };
+    this.locationService.update(id, locationPayload)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+      });
+  }
+
   storeLocation() {
     this.mapService.storeLocation(this.originAddress, this.destinationAddress);
     setTimeout(() => {
@@ -385,3 +452,5 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 }
+
+
