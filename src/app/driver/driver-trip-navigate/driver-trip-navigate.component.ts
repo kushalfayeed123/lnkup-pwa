@@ -168,6 +168,9 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
                 this.notifyService.showErrorMessage('Sorry, we could not complete your payment please try again.');
                 return;
               }
+            }, err => {
+              this.notifyService.showErrorMessage(err);
+              this.makePayment();
             });
         } else {
           return;
@@ -218,6 +221,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       this.isCashPayment = true;
       this.isActive = false;
     }
+    
     this.updateTripStatus(status);
     dialogRef.afterClosed().subscribe(result => {
       this.endTrip = false;
@@ -231,10 +235,17 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
           this.router.routeReuseStrategy.shouldReuseRoute = () => false;
           this.router.onSameUrlNavigation = 'reload';
           this.router.navigate([`driver/home/${this.userId}`]);
+          this.clearLocations();
+
         }, 5000);
       }
-    
     });
+  }
+
+  clearLocations() {
+    localStorage.removeItem('currentLocation');
+    localStorage.removeItem('destination');
+
   }
   sendTripMessage(status: string) {
     this.tripRiders.forEach(element => {

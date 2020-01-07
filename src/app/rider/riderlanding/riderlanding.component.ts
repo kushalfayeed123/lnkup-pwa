@@ -111,6 +111,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         // alert(res);
       });
     this.notificationService.tokenRefresh();
+    this.getCurrentLocation();
     this.setIntervalCall();
 
   }
@@ -118,7 +119,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.showForm = true;
     this.getCurrentime();
-    localStorage.removeItem('currentLocation');
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
@@ -135,7 +135,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.searchControl = new FormControl();
     this.zoom = 17;
     this.notificationService.intiateConnection();
-    this.getCurrentLocation();
     this.getAllDriversLocations();
   }
 
@@ -183,7 +182,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   getCurrentLocation() {
     window.scrollTo(0, 0);
     const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
-    console.log(userLocation);
     if (userLocation !== null) {
       this.latitude = userLocation.lat;
       this.longitude = userLocation.lng;
@@ -279,7 +277,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         this.getDirection(cl, destination);
 
       }
-      this.getDirection(cl, destination);
     }, 1000);
   }
 
@@ -310,7 +307,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   getPickupDirection() {
-    const origin = JSON.parse(localStorage.getItem('origin'));
+    const origin = JSON.parse(localStorage.getItem('currentLocation'));
     const pickupArray = JSON.parse(localStorage.getItem('pickup'));
     pickupArray.forEach(element => {
       const destination = element;
@@ -442,7 +439,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.mapService.findOrigin(userLocation);
     setTimeout(() => {
       this.getCurrentLocation();
-    }, 5000);
+    }, 3000);
 
   }
 

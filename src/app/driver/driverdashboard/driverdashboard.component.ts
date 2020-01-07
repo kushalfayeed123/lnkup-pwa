@@ -88,6 +88,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       });
     this.notificationService.tokenRefresh();
     this.startTrip();
+    this.getCurrentLocation();
     this.setIntervalCall();
   }
 
@@ -97,12 +98,10 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       .subscribe(param => {
         window.scrollTo(0, 0);
         this.driverNavigate = param.driverNav;
-        this.clearLocations();
         this.getDriverData();
       });
     this.showLanding = true;
     this.showDestination = true;
-    this.getCurrentLocation();
     this.zoom = 15;
     this.route.params.subscribe(p => {
       const userId = p.id;
@@ -343,11 +342,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     }
 
   }
-  clearLocations() {
-    localStorage.removeItem('currentLocation');
-    localStorage.removeItem('destination');
 
-  }
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

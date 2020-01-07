@@ -210,6 +210,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     this.riderService.update(this.activeRiderId, activeRider)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(data => {
+      localStorage.removeItem('currentLocation');
       this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
       this.router.onSameUrlNavigation = 'reload';
