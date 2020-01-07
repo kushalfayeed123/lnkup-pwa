@@ -183,7 +183,7 @@ public google: any;
               lng: this.location.lng,
               lat: this.location.lat
             };
-            localStorage.setItem('origin', JSON.stringify(origin));
+            localStorage.setItem('currentLocation', JSON.stringify(origin));
           }
 
           // this.map.triggerResize();

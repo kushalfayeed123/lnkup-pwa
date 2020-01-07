@@ -86,6 +86,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   location: any;
   driverLocationsLong: any[] = [];
   driverLocationsLat: any[] = [];
+  currentLongitude: any;
+  currentLatitude: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -110,11 +112,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       });
     this.notificationService.tokenRefresh();
     this.setIntervalCall();
+
   }
 
   ngOnInit() {
     this.showForm = true;
     this.getCurrentime();
+    localStorage.removeItem('currentLocation');
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
@@ -123,14 +127,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           this.getPickupDirection();
         }
       });
-    localStorage.removeItem('userLocation');
     this.loadMarker = true;
     this.route.params.subscribe(p => {
       const userId = p.id;
       this.getUserById(userId);
     });
     this.searchControl = new FormControl();
-    // this.getCurrentLocation();
     this.zoom = 17;
     this.notificationService.intiateConnection();
     this.getCurrentLocation();
@@ -159,14 +161,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     interval(30000)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(x => {
-      this.getCurrentLocation();
-      setTimeout(() => {
-        this.getActiveTripsCordinates();
         this.broadCastCurrentLocation();
         this.getAllDriversLocations();
-      }, 10000);
     });
-
   }
 
   getAllDriversLocations() {
@@ -180,19 +177,25 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         this.driverLocationsLong = [...this.driverLocationsLong, long];
         this.driverLocationsLat = [...this.driverLocationsLat, lat];
       });
-      console.log('driver locations', this.driverLocation);
     });
   }
 
   getCurrentLocation() {
     window.scrollTo(0, 0);
-    this.mapService.getCurrentLocation();
-    this.mapService.locationObject.subscribe(loc => {
-      this.latitude = loc.lat;
-      this.longitude = loc.lng;
-      const currentLocation = { lat: loc.lat, lng: loc.lng };
-      localStorage.setItem('origin', JSON.stringify(currentLocation));
-    });
+    const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
+    console.log(userLocation);
+    if (userLocation !== null) {
+      this.latitude = userLocation.lat;
+      this.longitude = userLocation.lng;
+    } else {
+      this.mapService.getCurrentLocation();
+      this.mapService.locationObject.subscribe(loc => {
+        this.latitude = loc.lat;
+        this.longitude = loc.lng;
+        const currentLocation = { lat: loc.lat, lng: loc.lng };
+        localStorage.setItem('origin', JSON.stringify(currentLocation));
+      });
+    }
   }
   getActiveTripsCordinates() {
     this.activeTrip.getAllActiveTrips()
@@ -209,6 +212,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
   broadCastCurrentLocation() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
+    if (!userLocation) {
+      this.mapService.getCurrentLocation();
+      this.mapService.locationObject.subscribe(loc => {
+        this.currentLatitude = loc.lat;
+        this.currentLongitude = loc.lng;
+      });
+    } else {
+      return;
+    }
     this.locationService.getLocationsByUserId(user.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
@@ -222,8 +235,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const locationPayload = {
       userId: user.id,
-      pickupLongitude: this.longitude,
-      pickupLatitude: this.latitude,
+      pickupLongitude: this.currentLongitude,
+      pickupLatitude: this.currentLatitude,
       userRole: user.role
     };
     this.locationService.create(locationPayload)
@@ -235,8 +248,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const locationPayload = {
       userId: user.id,
-      pickupLongitude: this.longitude,
-      pickupLatitude: this.latitude,
+      pickupLongitude: this.currentLongitude,
+      pickupLatitude: this.currentLatitude,
       userRole: user.role
     };
     this.locationService.update(id, locationPayload)
@@ -258,8 +271,14 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   passDirection() {
     setTimeout(() => {
       const cl = JSON.parse(localStorage.getItem('origin'));
-      console.log('cl', cl);
+      const origin = JSON.parse(localStorage.getItem('currentLocation'));
       const destination = JSON.parse(localStorage.getItem('destination'));
+      if (origin !== null) {
+        this.getDirection(origin, destination);
+      } else {
+        this.getDirection(cl, destination);
+
+      }
       this.getDirection(cl, destination);
     }, 1000);
   }
@@ -390,8 +409,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           });
           const pickupLat = Number(element.driverStartLatitude);
           const pickupLng = Number(element.driverStartLongitude);
-
-          this.start = JSON.parse(localStorage.getItem('origin'));
+          const origin = JSON.parse(localStorage.getItem('origin'));
+          const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
+          if (userLocation !== null) {
+            this.start = userLocation;
+          } else {
+            this.start = origin;
+          }
           const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
           const pickupLocation = new google.maps.LatLng(pickupLat, pickupLng);
           localStorage.setItem('pickup', JSON.stringify(pickupLocation));
@@ -414,7 +438,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   storeUserCurrentLocation(result: PlaceResult) {
     const userLocation = result.formatted_address;
-    localStorage.setItem('userLocation', userLocation);
+    this.originAddress = userLocation;
+    this.mapService.findOrigin(userLocation);
+    setTimeout(() => {
+      this.getCurrentLocation();
+    }, 5000);
+
   }
 
   computeDistance(origin, destination) {

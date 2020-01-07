@@ -293,15 +293,17 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.destinationLocation = location;
     this.destinationName = location.name;
     this.destinationFull = location.formatted_address;
+    this.mapService.findDestination(this.destinationFull);
   }
 
   storeUserPickupLocation(location) {
     this.pickupLocation = location;
     this.pickupName = location.name;
     this.pickupFull = location.formatted_address;
+    this.mapService.findOrigin(this.pickupFull);
   }
   getUserDirection() {
-    const origin = JSON.parse(localStorage.getItem('origin'));
+    const origin = JSON.parse(localStorage.getItem('currentLocation'));
     const destination = JSON.parse(localStorage.getItem('destination'));
     if (origin && destination) {
       this.getDirection(origin, destination);
@@ -330,7 +332,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   setDestination() {
     this.showDestination = false;
     this.showPickup = true;
-    this.mapService.findDestination(this.destinationFull);
   }
   setPickup() {
     this.showDestination = true;
@@ -339,12 +340,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.notificationService.showErrorMessage('Sorry you can not create a trip at the moment. Please complete your vehicle registration')
     } else {
       this.showLanding = false;
-      this.mapService.findOrigin(this.pickupFull);
     }
 
   }
   clearLocations() {
-    localStorage.removeItem('origin');
+    localStorage.removeItem('currentLocation');
     localStorage.removeItem('destination');
 
   }

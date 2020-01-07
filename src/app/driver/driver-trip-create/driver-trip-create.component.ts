@@ -115,7 +115,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
   getLocationCoordinates() {
     this.loading = true;
-    const tripStartLatLng = JSON.parse(localStorage.getItem('origin'));
+    const tripStartLatLng = JSON.parse(localStorage.getItem('currentLocation'));
     const tripEndLatLng = JSON.parse(localStorage.getItem('destination'));
     if (tripEndLatLng !== null && tripStartLatLng !== null) {
       this.tripStartLat = tripStartLatLng.lat.toString();
