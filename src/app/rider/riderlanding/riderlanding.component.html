@@ -28,7 +28,7 @@
             matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
     
     </form>
-    <form class="destination-container" *ngIf="!reachableDrivers ">
+    <form class="destination-container " *ngIf="!reachableDrivers ">
         <mat-card *ngIf="!riderLink ">
             <div *ngIf="gettingDrivers && !showNoTripMessage">
                     <p class="search">Please hold on while we search for drivers near you</p>

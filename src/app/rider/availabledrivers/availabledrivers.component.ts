@@ -54,6 +54,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.currentDate = new Date();
     const currentDate = new Date().getTime();
     this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US').toLowerCase().substring(1);
+    console.log('current date', this.currentDate);
   }
 
   getAvailableTrips() {
@@ -66,7 +67,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
           return;
         }
         this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
-          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0 );
+          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0 && new Date(d.actualTripStartDateTime) >= this.currentDate);
           console.log('available trips', this.availableTrips);
         if (this.availableTrips.length === 0) {
           this.emptyTrip = true;

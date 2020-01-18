@@ -37,11 +37,11 @@ cursor: pointer;
 }
 .flaticon-left-arrow {
  
-  color: #E040FB
+  color: #d54ab6
 }
 
 .st0{
-  border-color: #E040FB;
+  border-color: #d54ab6;
 }
 
 /* 
@@ -69,7 +69,7 @@ Imports
 }
 .mat-toolbar.mat-primary {
   background: transparent !important;
-  color: #E040FB !important;
+  color: #d54ab6 !important;
   position: absolute !important;
   z-index: 100 !important;
   margin-top: 30px;
@@ -553,14 +553,14 @@ Region Toastr
  .successMessage {
   position: relative;
   top: 40px;
-  background-color: #E040FB;
+  background-color: #d54ab6;
   color: #eeeeee;
 } 
 
  .infoMessage {
   position: relative;
   top: 60px;
-  background-color: #E040FB;
+  background-color: #d54ab6;
   color: #eeeeee;
 
 } 
@@ -571,7 +571,7 @@ End Region
 */
 
 section.auth-pages .page-heading h1 {
-  color: #E040FB;
+  color: #d54ab6;
   font-weight: bold;
   font-size: 32px;
   font-family: "Poppins";
@@ -587,6 +587,35 @@ section.auth-pages.security nav h1 {
 }
 .dialog .mat-dialog-container {
   background-color: #121212;
+}
+
+@-webkit-keyframes fadeOutLeft {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes fadeOutLeft {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.fadeOutLeft {
+  -webkit-animation-name: fadeOutLeft;
+  animation-name: fadeOutLeft;
 }
 
 

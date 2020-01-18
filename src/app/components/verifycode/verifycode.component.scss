@@ -44,10 +44,10 @@ section.auth-pages a:hover, section.auth-pages a:active, section.auth-pages a:fo
   text-decoration: none;
   -webkit-transition: all ease-out 300ms;
   transition: all ease-out 300ms;
-  color: #E040FB;
+  color: #d54ab6;
 }
 ::ng-deep .dark-snackbar{
-  background: #E040FB !important;
+  background: #d54ab6 !important;
 }
 ::ng-deep .dark-snackbar-error{
   background: #ff1744 !important;
@@ -63,7 +63,7 @@ section.auth-pages .page-heading {
 }
 
 section.auth-pages .page-heading h1 {
-  color: #E040FB;
+  color: #d54ab6;
   font-weight: bold;
   font-size: 32px;
   font-family: "Poppins";
@@ -179,7 +179,7 @@ section.auth-pages .input-group input[type='submit'] {
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
-  background-color: #E040FB;
+  background-color: #d54ab6;
   border: 0;
   text-align: center;
   font-weight: bold;
@@ -243,5 +243,5 @@ section.auth-pages.login-page #sign-up-form p {
 }
 
 section.auth-pages.login-page #sign-up-form p a {
-  color: #E040FB;
+  color: #d54ab6;
 }

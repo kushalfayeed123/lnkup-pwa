@@ -1,5 +1,5 @@
 
-<div class="destination-container" *ngIf="!showTripDetails">
+<div class="destination-container fadeInLeft" *ngIf="!showTripDetails">
         <swiper [config]="config">
                 <div class="swiper-wrapper">
                 <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">

@@ -1,76 +1,92 @@
 <div class="ride request">
-    <section class="settings-page auth-pages security" id="ride-confirmation">
-        <!-- <nav>
+  <div class="refresh-container" *ngIf="riderRequestLength < 1" (click)="getActiveTrips()">
+    Refresh
+    <img src="./assets/icons/refresh.svg" alt="" class="refresh-btn">
+  </div>
+  <section class="settings-page auth-pages security" id="ride-confirmation">
+    <!-- <nav>
           <a href="">
             <i class="flaticon-left-arrow"></i>
           </a>
           <h1>Request</h1>
         </nav> -->
 
-        <div *ngIf="riderRequestLength === 0" class="emptyRiders">
-          <span>Broadcasting Trip.</span>
-          <mat-spinner [diameter]="30" class="loader"></mat-spinner>
-
-        </div>
-        <swiper [config]="config" *ngIf="riderRequestLength > 0">
-            <div class="swiper-wrapper" >
-          <main class="contain-box  swiper-slide" *ngFor="let request of riderRequest; let i = index;">
-            <div class="item-details dd">
-              <div class="driver-name">
-                <h6 class="title-heading">Rider name</h6>
-                <p class="details">{{request.user.userName}}</p>
-              </div>
-              <div id="contact">
-                <a href="tel:{{riderNumber[i]}}"> <img src="../../../assets/Images/phone.svg" alt="" class="phone-img"></a>
-                 <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
-               </div>
+    <div *ngIf="loading" class="emptyRiders">
+      <span>Fetching requests</span>
+      <mat-spinner [diameter]="30" class="loader"></mat-spinner>
+    </div>
+    <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0" class="emptyRiders fadeOutLeft">
+      <span>You do not currently have any lnkup requests, You will be alerted once there is a request.</span>
+    </div>
+    <div *ngIf="riderRequestLength < 1 && !loading && allRiderRequest > 0" class="emptyRiders fadeOutLeft">
+      <span>{{allRiderRequest}} {{allRiderRequest > 1 ? 'riders' : 'rider' }} has been added to this trip</span>
+    </div>
+    <swiper [config]="config" *ngIf="riderRequestLength > 0 && !loading">
+      <div class="swiper-wrapper">
+        <main class="contain-box  swiper-slide" *ngFor="let request of riderRequest; let i = index;">
+          <div class="item-details dd">
+            <div class="driver-name">
+              <h6 class="title-heading">Rider name</h6>
+              <p class="details">{{request.user.userName}}</p>
             </div>
-            <div class="item-details">
-              <div class="pick-spot">
-                <h6 class="title-heading">Pickup Spot</h6>
-                <p class="details">{{activeTrip.tripPickup}}</p>
-              </div>
+            <div id="contact">
+              <a href="tel:{{riderNumber[i]}}"> <img src="./assets/Images/phone.svg" alt="" class="phone-img"></a>
+              <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
             </div>
-            <div class="item-details dest">
-              <div class="">
-                <h6 class="title-heading">Destination</h6>
-                <p class="details">{{activeTrip.tripDestination}}</p>
-              </div>
-              <div class="payment-method">
-                <h6 class="title-heading">Payment Method</h6>
-                <p class="details">{{request.paymentType}}</p>
-              </div>
-            </div>
-            <div class="item-details srt">
-              <div class="seats">
-                <h6 class="title-heading">{{request.bookedSeat > 1 ? 'Seats' : 'Seat'}}</h6>
-                <p class="details">{{request.bookedSeat}}</p>
-              </div>
-              <div class="ride-fee">
-                <h6 class="title-heading">Ride Fee</h6>
-                <p class="details">&#8358; {{feePerSeat}} / seat</p>
-              </div>
-              <div class="fee-total">
-                <h6 class="title-heading">Total</h6>
-                <p class="details">&#8358; {{request.tripFee}}</p>
-              </div>
-            </div>
-            <div class="title-heading">Swipe left to view more riders</div>
-
-            <div class="button-group">
-              <button id="accept" mat-raised-button color="accent" class="auth-full-width"
-               (click)="acceptTripRequest(riderRequest[i])">Accept</button>
-              <button id="reject" mat-raised-button color="accent" class="auth-full-width"
-              (click)="declineTripRequest(riderRequest[i])">Reject</button>
-            </div>
-
-            
-          </main>
           </div>
-        </swiper>
-      </section>
+          <div class="item-details">
+            <div class="pick-spot">
+              <h6 class="title-heading">Pickup Spot</h6>
+              <p class="details">{{activeTrip.tripPickup}}</p>
+            </div>
+          </div>
+          <div class="item-details dest">
+            <div class="">
+              <h6 class="title-heading">Destination</h6>
+              <p class="details">{{activeTrip.tripDestination}}</p>
+            </div>
+            <div class="payment-method">
+              <h6 class="title-heading">Payment Method</h6>
+              <p class="details">{{request.paymentType}}</p>
+            </div>
+          </div>
+          <div class="item-details srt">
+            <div class="seats">
+              <h6 class="title-heading">{{request.bookedSeat > 1 ? 'Seats' : 'Seat'}}</h6>
+              <p class="details">{{request.bookedSeat}}</p>
+            </div>
+            <div class="ride-fee">
+              <h6 class="title-heading">Ride Fee</h6>
+              <p class="details">&#8358; {{feePerSeat}} / seat</p>
+            </div>
+            <div class="fee-total">
+              <h6 class="title-heading">Total</h6>
+              <p class="details">&#8358; {{request.tripFee}}</p>
+            </div>
+          </div>
+          <div class="title-heading">Swipe left to view more riders</div>
+
+          <div class="button-group">
+            <button id="accept" mat-raised-button color="accent" class="auth-full-width"
+              (click)="acceptTripRequest(riderRequest[i])">Accept</button>
+            <button id="reject" mat-raised-button color="accent" class="auth-full-width"
+              (click)="declineTripRequest(riderRequest[i])">Reject</button>
+          </div>
+
+
+        </main>
+      </div>
+    </swiper>
+  </section>
+
+  <div class="trip-control">
+    <button id="accept" mat-raised-button color="accent" class="auth-full-width btn-round start"
+      *ngIf="allRiderRequest > 0 && riderRequestLength === 0 && !loading" (click)="startTrip()">Start
+      trip</button>
+    <button *ngIf="riderRequestLength === 0 && !loading" id="accept" mat-raised-button color="accent"
+     [ngClass]="{'end-button-center': allRiderRequest < 1 && riderRequestLength < 1 || loading}"
+      class="auth-full-width btn-round" (click)="cancelActiveTrip()">Cancel trip</button>
+  </div>
 </div>
 
 <app-notification></app-notification>
-
-

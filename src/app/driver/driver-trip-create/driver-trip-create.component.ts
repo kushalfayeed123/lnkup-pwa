@@ -87,7 +87,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       tripType: ['Regular', [Validators.required]],
       allowedRiderCount: [0, [Validators.required]],
       tripConnectionId: [this.connectionId, [Validators.required]],
-      actualTripStartDateTime: [this.currentDateTime, [Validators.required]]
+      actualTripStartDateTime: ['']
     });
   }
 
@@ -193,9 +193,22 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
 
   formatActualDateTime() {
-
+    const tripStartTime =  this.tripForm.value.tripStartDateTime;
+    const splitTime = tripStartTime.split(':');
+    const hr = Number(splitTime[0]);
+    const minAmPm = splitTime[1];
+    const minFirst = minAmPm.split('')[0];
+    const minSecond = minAmPm.split('')[1];
+    const min = Number(`${minFirst}${minSecond}`);
+    console.log('trip start time', hr, min);
+    let today = new Date();
+    today = new Date(today.setHours( hr));
+    today = new Date(today.setMinutes( min));
+    console.log('real start time', today);
+    this.tripForm.patchValue({actualTripStartDateTime: today.toString()});
   }
   broadCastTrip() {
+    this.formatActualDateTime();
     this.loader = true;
     if (!this.driverDataId) {
       const message = 'Your profile is incomplete. Please complete your driver registration to start sharing your ride.';
@@ -247,8 +260,6 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         this.notifyService.showErrorMessage(message);
       }
     }
-    // const newDate = new Date(this.tripForm.value.tripStartDateTime)
-    // console.log(newDate);
   }
 
   ngOnDestroy() {

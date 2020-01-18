@@ -25,6 +25,3 @@ export const slideInAnimation =
             style({ transform: 'translateX(-100%)' }))
         ]),
     ]);
-
-
-    

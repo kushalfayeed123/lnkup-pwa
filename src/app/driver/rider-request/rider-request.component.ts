@@ -39,6 +39,8 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   riderRequestLength: number;
   newAllowedRiderCount: number;
   riderNumber: string[] = [];
+  loading: boolean;
+  allRiderRequest: number;
 
   constructor(private tripService: ActiveTripDataService,
               private notifyService: NotificationsService,
@@ -51,6 +53,11 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     this.getActiveTrips();
     this.notifyService.intiateConnection();
 
+  }
+
+  getTripData() {
+    this.getActiveTrips();
+    console.log('get trip');
   }
 
   async getDriverSuccessAlert() {
@@ -80,11 +87,15 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   }
 
   getTripRequest(tripId) {
+    this.loading = true;
     this.tripService.getTripsById(tripId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(activeTrip => {
         this.activeTrip = activeTrip;
+        this.loading = false;
         console.log('active trip', this.activeTrip);
+        const allRiderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '2');
+        this.allRiderRequest = allRiderRequest.length;
         this.riderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '1');
         this.riderRequestLength = this.riderRequest.length;
         this.feePerSeat = activeTrip.aggregrateTripFee / activeTrip.maxRiderNumber;
@@ -159,6 +170,35 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
           const userId = user.id;
           this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
         }
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  startTrip() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
+    this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
+  }
+  cancelActiveTrip() {
+    const tripConnectionId = sessionStorage.getItem('clientConnectionId');
+
+    const activeTrip = {
+      driverTripStatus: 2,
+      allowedRiderCount: this.newAllowedRiderCount,
+      tripConnectionId
+    };
+
+
+    this.tripService.updateTrip(this.activeTripId, activeTrip)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
+        this.getActiveTrips();
+        // this.notifyService.sendAcceptMessage(receiverId, message);
+        // this.notifyService.sendNotification(receiverId, pushMessage);
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const userId = user.id;
+        this.router.navigate(['driver/home', userId]);
       }, error => {
         console.log(error);
       });

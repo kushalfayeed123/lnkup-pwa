@@ -227,6 +227,48 @@ section.auth-pages.security#ride-confirmation .card-details img {
   margin-right: 15px;
 }
 
+.refresh-btn {
+  width: 20px;
+  height: 31px;
+  padding: 2px;
+  margin-bottom: 6px;
+  margin-left: 4px;
+}
+.refresh-container {
+  position: absolute;
+  padding: 20px;
+  top: 19px;
+  width: 33%;
+  z-index: 100;
+  left: 67%;
+}
+.end-button-center {
+  margin-left: 34.5% !important;
+}
+.trip-control {
+  position: absolute;
+  bottom: 0;
+  padding: 20px;
+  width: 100%;
+
+}
+
+.btn-round {
+  height: 100px !important;
+  width: 31%;
+  border-radius: 100%;
+  border: 2px solid #d54ab6 !important;
+  position: relative;
+  left: 3%;
+  margin-left: 33px;
+  background-color: #121212 !important;
+  color: #d54ab6;
+}
+.start {
+  background-color: #d54ab6 !important;
+  color: #ffffff;
+
+}
 /* 
 ================
 Security-theme
@@ -274,7 +316,7 @@ section.auth-pages.security .setting-group, section.auth-pages.security#ride-his
 .emptyRiders{
   color: #eeeeee;
   position: relative;
-  top: 100px;
+  top: 241px;
   padding-left: 22px;
   text-align: center;
   padding-right: 20px;
@@ -290,5 +332,24 @@ section.auth-pages.security .setting-group, section.auth-pages.security#ride-his
 @media only screen and (min-height: 812px) {
   .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
     margin-bottom: 121%;
+  }
+}
+
+@media only screen and (max-width: 736px) and (min-width: 666px) {
+  .btn-round {
+    width: 27%;
+    left: 9%;
+  }
+}
+
+  @media only screen and (max-width: 360px) {       
+  .btn-round {
+    height: 78px !important;
+    width: 28%;
+    padding: 1px;
+  }
+  .refresh-container{
+    width: 40%;
+    left: 60%;
   }
 }

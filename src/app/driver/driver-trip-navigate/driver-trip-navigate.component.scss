@@ -160,7 +160,7 @@
     padding-bottom: 13px;
   }
   ::ng-deep .dark-snackbar-search{
-    background: #E040FB !important;
+    background: #d54ab6 !important;
   }
   .snackbar-container{
     margin-bottom: 100px;
@@ -170,7 +170,7 @@
     font-size: 15px !important;
   }
   .location{
-    color: #E040FB;
+    color: #d54ab6;
     font-size: 12px;
   }
   .login-text{
@@ -450,4 +450,10 @@ body.map-body .avd .driver-item {
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
   -o-border-radius: 50%;
+}
+
+@media only screen and (max-width: 360px) {       
+ .contain-box {
+   right: 20px;
+ }
 }
