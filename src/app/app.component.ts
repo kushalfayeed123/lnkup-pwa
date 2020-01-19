@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.getCurrentRoute();
     });
     this.reload();
-    // this.getLoggedInUser();
+    this.getLoggedInUser();
 
   }
 
@@ -53,7 +53,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getLoggedInUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user) {
+    if (user !== null) {
+      console.log(user);
       const currentRoute = localStorage.getItem('currentRoute');
       this.route.navigate([currentRoute]);
     } else {

@@ -61,6 +61,8 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.mapService.availableTrips
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trips => {
+        console.log('all trips', trips);
+
         const availableTrips = trips;
         if (!trips) {
           this.emptyTrip = true;
