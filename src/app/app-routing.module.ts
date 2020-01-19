@@ -9,6 +9,7 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
 import { ProfileComponent } from './components/profile/profile.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { SupportComponent } from './components/support/support.component';
+import { TripsHistoryComponent } from './components/trips-history/trips-history.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,7 @@ const routes: Routes = [
     data: { animation: 'register' }
   },
   { path: 'payment/:id', component: PaymentComponent },
+  { path: 'trips/:id', component: TripsHistoryComponent },
   { path: 'profile/:id', component: ProfileComponent },
   { path: 'support/:id', component: SupportComponent },
 

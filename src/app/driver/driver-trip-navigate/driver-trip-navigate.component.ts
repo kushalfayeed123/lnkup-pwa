@@ -206,12 +206,13 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   }
 
   endActiveTrip() {
-    this.getCurrentDateTime();
     const status = 'end';
     const tripFee = this.activeTrip.aggregrateTripFee;
     const newTripFee = (20 / 100) * tripFee;
     const driverFee = tripFee - newTripFee;
     this.name = 'Your total balance for this trip is';
+    this.getCurrentDateTime();
+    this.sendTripMessage(status);
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
@@ -252,17 +253,15 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       const recieverId = element.userId;
       if (status === 'end') {
         const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
-        this.notifyService.sendAcceptMessage(recieverId, message);
         this.notifyService.sendNotification(recieverId, message);
+        this.notifyService.sendAcceptMessage(recieverId, message);
         console.log(recieverId);
       } else {
         const message = 'Your trip has started.';
-        this.notifyService.sendAcceptMessage(recieverId, message);
         this.notifyService.sendNotification(recieverId, message);
+        this.notifyService.sendAcceptMessage(recieverId, message);
         console.log(status);
-
       }
-  
     });
   }
 
@@ -293,7 +292,6 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     this.tripService.updateTrip(this.activeTripId, this.activeTripObject)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
-        this.sendTripMessage(status);
       }, error => {
         console.log(error);
         this.updateTripStatus();

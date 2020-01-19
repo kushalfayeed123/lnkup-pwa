@@ -55,6 +55,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { PushNotificationDataService } from './services/data/push-notification/push-notification.data.service';
 import { LocationWebService } from './services/data/location/location.web.service';
 import { LocationDataService } from './services/data/location/location.data.service';
+import { TripsHistoryComponent } from './components/trips-history/trips-history.component';
 
 
 
@@ -76,7 +77,8 @@ import { LocationDataService } from './services/data/location/location.data.serv
     PaymentComponent,
     SpinnerComponent,
     SupportComponent,
-    PaymentModalComponent
+    PaymentModalComponent,
+    TripsHistoryComponent
   ],
   imports: [
     BrowserModule,

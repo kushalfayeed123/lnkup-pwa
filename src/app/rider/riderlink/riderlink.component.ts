@@ -136,7 +136,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
           this.showPaymentButton = true;
         });
     } else {
-      this.notifyService.showInfoMessage(`Please pay ₦${this.tripFee} to your driver.`);
+      // this.notifyService.showInfoMessage(`Please pay ₦${this.tripFee} to your driver.`);
       this.updateActiveRider();
     }
 

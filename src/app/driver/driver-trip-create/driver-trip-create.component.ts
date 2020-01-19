@@ -27,18 +27,18 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   @Input() pickup;
   @Input() darkTheme: NgxMaterialTimepickerTheme = {
     container: {
-        bodyBackgroundColor: '#424242',
-        buttonColor: '#fff'
+      bodyBackgroundColor: '#424242',
+      buttonColor: '#fff'
     },
     dial: {
-        dialBackgroundColor: '#555',
+      dialBackgroundColor: '#555',
     },
     clockFace: {
-        clockFaceBackgroundColor: '#555',
-        clockHandColor: '#9fbd90',
-        clockFaceTimeInactiveColor: '#fff'
+      clockFaceBackgroundColor: '#555',
+      clockHandColor: '#9fbd90',
+      clockFaceTimeInactiveColor: '#fff'
     }
-};
+  };
   fare: number;
   tripForm: FormGroup;
   driverDataId: string;
@@ -60,10 +60,10 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   currentDateTime: any;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
-              private activeTripService: ActiveTripDataService,
-              private router: Router,
-              private notifyService: NotificationsService,
-              private broadcastService: BroadcastService) {
+    private activeTripService: ActiveTripDataService,
+    private router: Router,
+    private notifyService: NotificationsService,
+    private broadcastService: BroadcastService) {
 
   }
 
@@ -103,15 +103,15 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
 
   getDriverPaymentDetails() {
     this.broadcastService.paymentStatus
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(status => {
-      this.driverCardStatus = status;
-      if (!status) {
-        setTimeout(() => {
-          this.notifyService.showErrorMessage('Please add your card details to continue.');
-        }, 10000);
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(status => {
+        this.driverCardStatus = status;
+        if (!status) {
+          setTimeout(() => {
+            this.notifyService.showErrorMessage('Please add your card details to continue.');
+          }, 10000);
+        }
+      });
   }
   getLocationCoordinates() {
     this.loading = true;
@@ -193,19 +193,26 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
 
   formatActualDateTime() {
-    const tripStartTime =  this.tripForm.value.tripStartDateTime;
+    const tripStartTime = this.tripForm.value.tripStartDateTime;
     const splitTime = tripStartTime.split(':');
     const hr = Number(splitTime[0]);
     const minAmPm = splitTime[1];
     const minFirst = minAmPm.split('')[0];
     const minSecond = minAmPm.split('')[1];
+    const minP = minAmPm.split('')[3];
+    const minM = minAmPm.split('')[4];
     const min = Number(`${minFirst}${minSecond}`);
-    console.log('trip start time', hr, min);
+    const pm = `${minP}${minM}`;
     let today = new Date();
-    today = new Date(today.setHours( hr));
-    today = new Date(today.setMinutes( min));
-    console.log('real start time', today);
-    this.tripForm.patchValue({actualTripStartDateTime: today.toString()});
+    if (pm === 'PM') {
+      today = new Date(today.setHours(hr + 12));
+      today = new Date(today.setMinutes(min));
+
+    } else {
+      today = new Date(today.setHours(hr));
+      today = new Date(today.setMinutes(min));
+    }
+    this.tripForm.patchValue({ actualTripStartDateTime: today.toString() });
   }
   broadCastTrip() {
     this.formatActualDateTime();
@@ -238,8 +245,6 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           tripPickup: this.pickup,
           tripDestination: this.destination
         });
-        console.log('trip data', this.tripForm.value);
-
         this.activeTripService.createTrip(this.tripForm.getRawValue())
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(trip => {
