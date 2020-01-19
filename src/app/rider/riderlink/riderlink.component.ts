@@ -98,6 +98,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.driverData = res;
         const driverNumber = res.phoneNumber;
+        this.driverName = res.userName;
         this.driverNumber = driverNumber.slice(0, 4) + driverNumber.slice(5);
       });
   }
@@ -136,7 +137,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
           this.showPaymentButton = true;
         });
     } else {
-      // this.notifyService.showInfoMessage(`Please pay ₦${this.tripFee} to your driver.`);
+      this.notifyService.showInfoMessage(`Please pay ₦${this.tripFee} to your driver.`);
       this.updateActiveRider();
     }
 
@@ -267,10 +268,15 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
 
     // dialogRef.afterClosed().subscribe(result => {
     // });
-    this.notifyService.showSuccessMessage(`Your trip has ended. A fee of ₦ ${this.tripFee} will be charged on your card.`);
-    setTimeout(() => {
-      this.makePayment();
-    }, 7000);
+    const paymentMethod = localStorage.getItem('paymentType');
+    if (paymentMethod === 'Card') {
+      this.notifyService.showSuccessMessage(`Your trip has ended. A fee of ₦ ${this.tripFee} will be charged on your card. Thank you for riding with lnkup.`);
+      setTimeout(() => {
+        this.makePayment();
+      }, 7000);
+    } else {
+      this.notifyService.showSuccessMessage(`Your trip has ended. Please pay ${this.driverName} a sum of ₦ ${this.tripFee} cash. Thank you for riding with lnkup.`);
+    }
   }
 
 
