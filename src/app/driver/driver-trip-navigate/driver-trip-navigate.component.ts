@@ -170,7 +170,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
               }
             }, err => {
               this.notifyService.showErrorMessage(err);
-              this.makePayment();
+              this.showPaymentErrorModal();
             });
         } else {
           return;
@@ -222,7 +222,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       this.isCashPayment = true;
       this.isActive = false;
     }
-    
+
     this.updateTripStatus(status);
     dialogRef.afterClosed().subscribe(result => {
       this.endTrip = false;
@@ -241,6 +241,19 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
         }, 5000);
       }
     });
+  }
+
+
+  showPaymentErrorModal() {
+    this.name = 'We could not process payment on your card, Please try again';
+    const dialogRef = this.dialog.open(ModalComponent, {
+      width: '90%',
+      panelClass: 'dialog',
+      data: { name: this.name }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+        this.makePayment();
+  });
   }
 
   clearLocations() {

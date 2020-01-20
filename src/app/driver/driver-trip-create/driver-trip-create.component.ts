@@ -212,6 +212,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       today = new Date(today.setHours(hr));
       today = new Date(today.setMinutes(min));
     }
+    localStorage.setItem('startTime', JSON.stringify(today));
     this.tripForm.patchValue({ actualTripStartDateTime: today.toString() });
   }
   broadCastTrip() {

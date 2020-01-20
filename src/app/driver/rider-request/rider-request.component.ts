@@ -124,7 +124,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     const pushMessage = {
       title: 'LnkuP',
       body: message,
-      click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?driverNav=true`,
+      click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
       receiverName: receiver
     };
     if (this.allowedRiderCount <= 0) {
@@ -132,10 +132,11 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     } else {
       this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
     }
+    const startTime = localStorage.getItem('startTime');
     const activeRider = {
       tripStatus: '2',
       paymentStatus: '0',
-      riderConnectId: riderConnectionId
+      riderConnectId: riderConnectionId,
     };
 
 
@@ -151,11 +152,14 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     } else {
       this.activeTripStatus = 1;
     }
-
     const activeTrip = {
       driverTripStatus: this.activeTripStatus,
       allowedRiderCount: this.newAllowedRiderCount,
-      tripConnectionId
+      tripConnectionId,
+      actualTripEndDateTime: '',
+      tripEndDateTime: '',
+      actualTripStartDateTime: startTime,
+      tripStartDateTime: pickupTime,
     };
 
 
