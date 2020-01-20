@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "build-prod": "ng build --prod",
+    "build": "ng build && gzipper --verbose ./dist",
+    "build-prod": "ng build --prod && gzipper --verbose ./dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -71,6 +71,7 @@
     "@types/jwt-decode": "^2.2.1",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
+    "gzipper": "^3.4.2",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",

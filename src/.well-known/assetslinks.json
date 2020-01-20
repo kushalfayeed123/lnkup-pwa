@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android-app",
+      "package_name":"com.lnkupapp.lnkup",
+      "sha256_cert_fingerprints": [
+        "SHA256: B1:DB:5B:90:07:E5:11:59:6B:74:D7:57:09:C7:CD:55:E6:A1:D4:DE:3F:9A:24:C8:6D:F6:77:7D:87:02:51:9D"
+      ]
+    }
+  }
+]
