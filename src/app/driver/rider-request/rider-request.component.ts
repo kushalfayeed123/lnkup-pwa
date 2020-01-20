@@ -132,7 +132,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     } else {
       this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
     }
-    const startTime = localStorage.getItem('startTime');
+    const startTime = JSON.parse(localStorage.getItem('startTime'));
     const activeRider = {
       tripStatus: '2',
       paymentStatus: '0',
