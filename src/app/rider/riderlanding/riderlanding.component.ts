@@ -267,6 +267,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   driverLocationsLat: any[] = [];
   currentLongitude: any;
   currentLatitude: any;
+  currentLocation: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -374,9 +375,19 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           this.longitude = loc.lng;
           const currentLocation = { lat: loc.lat, lng: loc.lng };
           localStorage.setItem('origin', JSON.stringify(currentLocation));
+          let geocoder = new google.maps.Geocoder;
+          geocoder.geocode({'location': currentLocation}, (result) => {
+            if(result[0]) {
+              this.currentLocation = result[0].formatted_address;
+              this.originAddress = result[0].formatted_address;
+            } else {
+              console.log('no results found');
+            }
+          });
         });
+        
       }
-
+     
   }
   getActiveTripsCordinates() {
     this.activeTrip.getAllActiveTrips()
@@ -442,7 +453,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   storeLocation() {
     this.mapService.storeLocation(this.originAddress, this.destinationAddress);
     setTimeout(() => {
-      this.passDirection();
     }, 2000);
   }
   getDestinationCordinates() {
@@ -509,7 +519,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.loadMarker = false;
     this.getCurrentLocation();
     this.getDestinationCordinates();
-    this.passDirection();
     this.gettingDrivers = true;
     this.showForm = false;
     this.loading = true;
@@ -517,12 +526,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   }
   onAutocompleteSelected(result: PlaceResult) {
-    console.log('onAutocompleteSelected: ', result.formatted_address);
     this.destinationAddress = result.formatted_address;
   }
 
   onLocationSelected(location: Location) {
-    console.log('onLocationSelected: ', location);
     this.destinationlatitude = location.latitude;
     this.destinationlongitude = location.longitude;
   }
@@ -559,6 +566,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
   getAllActiveTrips(status?) {
+    const userId = JSON.parse(localStorage.getItem('currentUser'));
     this.activeTrip.getAllActiveTrips()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
@@ -569,11 +577,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             this.router.onSameUrlNavigation = 'reload';
-            this.router.navigate([`rider/home/${this.userId}`]);
+            this.router.navigate([`rider/home/${userId.id}`]);
           }, 5000);
-
+        } else {
+          this.passDirection();
         }
-
         allActiveTrips.forEach(element => {
           const tripDestinationLat = Number(element.driverEndLatitude);
           const tripDestinationLong = Number(element.driverEndLongitude);

@@ -7,13 +7,13 @@
         [zoomControl]="false">
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
         </agm-marker>
-        <agm-marker *ngFor="let trips of allActiveTrips; let i = index;" [(latitude)]="allTripsDestinationLat[i]"
+        <!-- <agm-marker *ngFor="let trips of allActiveTrips; let i = index;" [(latitude)]="allTripsDestinationLat[i]"
          [(longitude)]="allTripsDestinationLong[i]" [markerDraggable]="false" >
-        </agm-marker>
+        </agm-marker> -->
         <agm-marker *ngFor="let loc of driverLocation; let i = index;" [(latitude)]="driverLocationsLat[i]"
-        [(longitude)]="driverLocationsLong[i]" [markerDraggable]="true" >
+        [(longitude)]="driverLocationsLong[i]" [markerDraggable]="false" >
        </agm-marker>
-        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"
+        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="false"
             [animation]="userLocationMarkerAnimation" *ngIf="gettingDrivers"></agm-marker>
 
         <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
@@ -23,9 +23,10 @@
         <agm-direction [origin]="origin" [destination]="destination" [renderOptions]="renderOptions"></agm-direction>
 
     </agm-map>
-    <form action="" id="search-form" *ngIf="showForm" >
-        <input *ngIf="!riderLink" type="search" name="" id="" class="destination" placeholder="Your current location"
-            matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
+    <form id="search-form" *ngIf="showForm" >
+        <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?" 
+            matGoogleMapsAutocomplete   (onAutocompleteSelected)="onAutocompleteSelected($event)"
+            (onLocationSelected)="onLocationSelected($event)"/>
 
     </form>
     <form class="destination-container " *ngIf="!reachableDrivers ">
@@ -42,10 +43,9 @@
 
             <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
                 <mat-form-field class="auth-full-width">
-                    <input type="text" matInput class="input-color search" placeholder="Where are you going?" autocorrect="off"
-                        autocapitalize="off" spellcheck="off" #search name="destinationAddress"
-                        matGoogleMapsAutocomplete (onAutocompleteSelected)="onAutocompleteSelected($event)"
-                        (onLocationSelected)="onLocationSelected($event)">
+                    <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off"
+                        autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]="currentLocation"
+                        matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
 
                 </mat-form-field>
                 <!-- <p><a href="">Forgot password?</a></p> -->
