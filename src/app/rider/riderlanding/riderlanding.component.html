@@ -3,7 +3,7 @@
 
 <div class="avd-container">
 
-    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()"
+    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style"
         [zoomControl]="false">
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
         </agm-marker>
@@ -26,7 +26,7 @@
     <form action="" id="search-form" *ngIf="showForm" >
         <input *ngIf="!riderLink" type="search" name="" id="" class="destination" placeholder="Your current location"
             matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)" />
-    
+
     </form>
     <form class="destination-container " *ngIf="!reachableDrivers ">
         <mat-card *ngIf="!riderLink ">

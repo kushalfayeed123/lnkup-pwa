@@ -26,6 +26,7 @@ import { UserPaymentToken } from 'src/app/models/payment';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { LocationDataService } from 'src/app/services/data/location/location.data.service';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { GoogleMapsScriptProtocol } from '@agm/core';
 
 
 @Component({
@@ -43,6 +44,184 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   private heatmap: google.maps.visualization.HeatmapLayer = null;
 
   @ViewChild('search', { static: true }) public searchElement: ElementRef;
+  style = [
+    {
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#212121'
+        }
+      ]
+    },
+    {
+      elementType: 'labels.icon',
+      stylers: [
+        {
+          visibility: 'off'
+        }
+      ]
+    },
+    {
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#757575'
+        }
+      ]
+    },
+    {
+      elementType: 'labels.text.stroke',
+      stylers: [
+        {
+          color: '#212121'
+        }
+      ]
+    },
+    {
+      featureType: 'administrative',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#757575'
+        }
+      ]
+    },
+    {
+      featureType: 'administrative.country',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#9e9e9e'
+        }
+      ]
+    },
+    {
+      featureType: 'administrative.locality',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#bdbdbd'
+        }
+      ]
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#757575'
+        }
+      ]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#181818'
+        }
+      ]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#616161'
+        }
+      ]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.stroke',
+      stylers: [
+        {
+          color: '#1b1b1b'
+        }
+      ]
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.fill',
+      stylers: [
+        {
+          color: '#2c2c2c'
+        }
+      ]
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#8a8a8a'
+        }
+      ]
+    },
+    {
+      featureType: 'road.arterial',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#373737'
+        }
+      ]
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#3c3c3c'
+        }
+      ]
+    },
+    {
+      featureType: 'road.highway.controlled_access',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#4e4e4e'
+        }
+      ]
+    },
+    {
+      featureType: 'road.local',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#616161'
+        }
+      ]
+    },
+    {
+      featureType: 'transit',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#757575'
+        }
+      ]
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [
+        {
+          color: '#000000'
+        }
+      ]
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [
+        {
+          color: '#3d3d3d'
+        }
+      ]
+    }
+  ];
 
   searchControl: FormControl;
   durationInSeconds = 10;
@@ -111,12 +290,15 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         // alert(res);
       });
     this.notificationService.tokenRefresh();
-    this.getCurrentLocation();
     this.setIntervalCall();
 
   }
 
   ngOnInit() {
+    localStorage.removeItem('currentLocation');
+    setTimeout(() => {
+      this.getCurrentLocation();
+    }, 3000);
     this.showForm = true;
     this.getCurrentime();
     this.route.queryParams
@@ -133,7 +315,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.getUserById(userId);
     });
     this.searchControl = new FormControl();
-    this.zoom = 17;
+    this.zoom = 15;
     this.notificationService.intiateConnection();
     this.getAllDriversLocations();
   }
@@ -183,17 +365,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
     if (userLocation !== null) {
-      this.latitude = userLocation.lat;
-      this.longitude = userLocation.lng;
-    } else {
-      this.mapService.getCurrentLocation();
-      this.mapService.locationObject.subscribe(loc => {
-        this.latitude = loc.lat;
-        this.longitude = loc.lng;
-        const currentLocation = { lat: loc.lat, lng: loc.lng };
-        localStorage.setItem('origin', JSON.stringify(currentLocation));
-      });
-    }
+        this.latitude = userLocation.lat;
+        this.longitude = userLocation.lng;
+      } else {
+        this.mapService.getCurrentLocation();
+        this.mapService.locationObject.subscribe(loc => {
+          this.latitude = loc.lat;
+          this.longitude = loc.lng;
+          const currentLocation = { lat: loc.lat, lng: loc.lng };
+          localStorage.setItem('origin', JSON.stringify(currentLocation));
+        });
+      }
+
   }
   getActiveTripsCordinates() {
     this.activeTrip.getAllActiveTrips()
@@ -304,6 +487,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     //    {location: { lat: 39.0921167, lng: -94.8559005 }},
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}
     // ]
+
   }
 
   getPickupDirection() {
@@ -415,7 +599,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           }
           const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
           const pickupLocation = new google.maps.LatLng(pickupLat, pickupLng);
+          const request = {
+            origin: pickupLocation,
+            destination: tripEndLocation,
+          };
           localStorage.setItem('pickup', JSON.stringify(pickupLocation));
+          this.getRoutePoints(request);
           new google.maps.DistanceMatrixService().getDistanceMatrix({
             origins: [currentLocation], destinations: [pickupLocation],
             travelMode: google.maps.TravelMode.DRIVING
@@ -431,6 +620,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           });
         });
       });
+
+  }
+
+  getRoutePoints(request: {}) {
+    new google.maps.DirectionsService().route(request, (results) => {
+      console.log('route points', results);
+    });
   }
 
   storeUserCurrentLocation(result: PlaceResult) {
