@@ -334,7 +334,7 @@ margin-top: 0;
   margin-top: 20px;
 }
 .option-card {
-  height: 125px;
+  height: 116px;
   border-radius: 56px !important;
   display: flex;
 }
@@ -343,7 +343,7 @@ margin-top: 0;
 }
 
 .drive {
-  height: 125px;
+  height: 116px;
   width: 80%;
   position: relative;
   bottom: 10px;
@@ -355,7 +355,7 @@ margin-top: 0;
 
 }
 .ride {
-  height: 125px;
+  height: 116px;
   width: 88%;
   position: relative;
   bottom: 10px;
@@ -522,4 +522,10 @@ margin-top: 0;
   margin-top: 12px;
   display: inline-block;
   font-weight: 500;
+}
+
+@media screen and (min-width: 800) {
+  .contain-box {
+    padding: 88px 32px!important;
+  }
 }
