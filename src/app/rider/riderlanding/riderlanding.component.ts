@@ -301,7 +301,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.getCurrentLocation();
     }, 3000);
     this.showForm = true;
-    this.getCurrentime();
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
@@ -385,9 +384,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             }
           });
         });
-        
+
       }
-     
+
   }
   getActiveTripsCordinates() {
     this.activeTrip.getAllActiveTrips()
@@ -667,16 +666,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     localStorage.removeItem('destination');
   }
 
-  getCurrentime() {
-    this.todaysDataTime = formatDate(this.today, 'dd-MM-yyyy hh:mm:ss a', 'en-US');
-    if (this.today.getHours() < 12) {
-      this.greeting = 'Good Morning';
-    } else if (this.today.getHours() >= 12 && this.today.getHours() <= 17) {
-      this.greeting = 'Good Afternoon';
-    } else {
-      this.greeting = 'Good Evening';
-    }
-  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

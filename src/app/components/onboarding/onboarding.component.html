@@ -1,6 +1,6 @@
-<section class="onboarding-page">
+<section class="onboarding-page settings-page auth-pages security user-profiles">
         <main class="contain-box">
-          <div
+          <!-- <div
             id="onboardingCarousel"
             class="carousel slide carousel-fade"
             data-ride="carousel"
@@ -36,6 +36,33 @@
                 <a href="" [routerLink]="['/register']" mat-raised-button color="accent" class="onboarding-btn">Sign Up</a>
               </div>
             </div>
+          </div> -->
+          <div class="register"></div>
+          <div class="greetings">
+            <div class="greeting-text">{{greeting}} {{userName ? ',': ''}} {{userName}}.</div>
+            <div class="comments">
+              <div class="comment-icon"></div>
+              <div class="day-comment">It's a lovely day.. </div>
+            </div>
+          </div>
+
+          <div class="option-cards" >
+            <div class="option-card user-details" (click)="driverNavToHome()">
+              <div class="option-left drive"></div>
+              <div class="option-right">
+                <div class="comment-head">Drive</div>
+                <div class="drive-text">Earn up to 50000 per month while making new friends</div>
+              </div>
+            </div>
+            <div class="option-card user-details" (click)="riderNavToHome()">
+              <div class="option-left ride"></div>
+              <div class="option-right">
+                <div class="comment-head">Join a ride</div>
+                <div class="join-text">Save up to 20000 per month while enjoying comfortable rides</div>
+              </div>
+            </div>
           </div>
         </main>
       </section>
+      <app-notification></app-notification>
+

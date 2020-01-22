@@ -3,7 +3,7 @@
   "short_name": "lnkup",
   "theme_color": "#121212",
   "background_color": "#121212",
-  "display": "standalone",
+  "display": "fullscreen",
   "scope": "/",
   "start_url": "/",
   "messagingSenderId": "103953800507",
