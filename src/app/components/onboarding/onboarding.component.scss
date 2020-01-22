@@ -524,8 +524,8 @@ margin-top: 0;
   font-weight: 500;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (max-width: 450px)  and (min-width: 321px){
   .contain-box {
-    padding: 88px 32px !important;
+    padding: 87px 32px !important;
   }
 }
