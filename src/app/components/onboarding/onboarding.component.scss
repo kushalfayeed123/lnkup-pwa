@@ -238,10 +238,7 @@ color:  #ffffff !important;
 .left-arrow {
 padding-right: 30%;
 }
-.mat-spinner {
-margin-left: 40% !important;
-top: 25px;
-}
+
 .profile {
 padding-right:  37%;
 }
@@ -330,7 +327,7 @@ margin-top: 0;
   -o-border-radius: 5px;
   padding: 10px 10px 25px 10px;
   font-size: 16px;
-  margin-bottom: 15px;
+  margin-bottom: 42px;
   margin-top: 20px;
 }
 .option-card {
@@ -351,10 +348,9 @@ margin-top: 0;
   border-top-left-radius: 56px;
   border-bottom-left-radius: 56px;
   background-color: #d54ab6;
-  opacity: 0.5;
 
 }
-.ride {
+.rider {
   height: 116px;
   width: 88%;
   position: relative;
@@ -362,9 +358,13 @@ margin-top: 0;
   right: 10px;
   border-top-left-radius: 56px;
   border-bottom-left-radius: 56px;
-  background-color: #98FABF;
-  opacity: 0.5;
+  background-color: #f2ceea;
 
+}
+.car-img {
+  height: 95px;
+  margin-left: 17px;
+  margin-top: 11px;
 }
 
 .auth-pages.security.user-profiles .profile-info {
@@ -524,8 +524,16 @@ margin-top: 0;
   font-weight: 500;
 }
 
-@media screen and (max-width: 450px)  and (min-width: 321px){
+@media screen and (max-width: 450px)  and (min-width: 376px){
   .contain-box {
     padding: 87px 32px !important;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .car-img {
+    height: 70px;
+    margin-left: 11px;
+    margin-top: 21px;
   }
 }

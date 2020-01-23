@@ -53,9 +53,8 @@
     margin-left: 7px;
     margin-right: 7px;
     position: absolute;
-    bottom: 0;
+    bottom: -53px;
     width: -webkit-fill-available;
-    margin-bottom: 5%;
   }
   li{
     position: relative;
@@ -347,4 +346,11 @@ body.map-body .avd li:first-of-type::before {
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
   -o-border-radius: 50%;
+}
+
+@media screen and (max-width: 320px) {
+  .destination-container {
+    bottom: -37px;
+
+  }
 }

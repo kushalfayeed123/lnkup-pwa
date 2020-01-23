@@ -55,9 +55,8 @@
     margin-left: 7px;
     margin-right: 7px;
     position: absolute;
-    bottom: 0;
+    bottom: -53px;
     width: -webkit-fill-available;
-    margin-bottom: 5%;
   }
   li{
     position: relative;
@@ -386,5 +385,12 @@ body.map-body .avd li:first-of-type::before {
 .fadeInLeft {
   -webkit-animation-name: fadeInLeft;
   animation-name: fadeInLeft;
+}
+
+@media screen and (max-width: 320px) {
+  .destination-container {
+    bottom: -37px;
+
+  }
 }
 

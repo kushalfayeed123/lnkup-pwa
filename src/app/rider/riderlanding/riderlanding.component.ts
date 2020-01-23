@@ -268,6 +268,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   currentLongitude: any;
   currentLatitude: any;
   currentLocation: string;
+  availableTrips: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -340,52 +341,52 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   setIntervalCall() {
     interval(30000)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(x => {
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(x => {
         this.broadCastCurrentLocation();
         this.getAllDriversLocations();
-    });
+      });
   }
 
   getAllDriversLocations() {
     this.locationService.getAllLocations()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(loc => {
-      this.driverLocation = loc.filter(r => r.userRole === 'Driver');
-      this.driverLocation.forEach(element => {
-        const long = Number(element.pickupLongitude);
-        const lat = Number(element.pickupLatitude);
-        this.driverLocationsLong = [...this.driverLocationsLong, long];
-        this.driverLocationsLat = [...this.driverLocationsLat, lat];
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(loc => {
+        this.driverLocation = loc.filter(r => r.userRole === 'Driver');
+        this.driverLocation.forEach(element => {
+          const long = Number(element.pickupLongitude);
+          const lat = Number(element.pickupLatitude);
+          this.driverLocationsLong = [...this.driverLocationsLong, long];
+          this.driverLocationsLat = [...this.driverLocationsLat, lat];
+        });
       });
-    });
   }
 
   getCurrentLocation() {
     window.scrollTo(0, 0);
     const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
     if (userLocation !== null) {
-        this.latitude = userLocation.lat;
-        this.longitude = userLocation.lng;
-      } else {
-        this.mapService.getCurrentLocation();
-        this.mapService.locationObject.subscribe(loc => {
-          this.latitude = loc.lat;
-          this.longitude = loc.lng;
-          const currentLocation = { lat: loc.lat, lng: loc.lng };
-          localStorage.setItem('origin', JSON.stringify(currentLocation));
-          let geocoder = new google.maps.Geocoder;
-          geocoder.geocode({'location': currentLocation}, (result) => {
-            if(result[0]) {
-              this.currentLocation = result[0].formatted_address;
-              this.originAddress = result[0].formatted_address;
-            } else {
-              console.log('no results found');
-            }
-          });
+      this.latitude = userLocation.lat;
+      this.longitude = userLocation.lng;
+    } else {
+      this.mapService.getCurrentLocation();
+      this.mapService.locationObject.subscribe(loc => {
+        this.latitude = loc.lat;
+        this.longitude = loc.lng;
+        const currentLocation = { lat: loc.lat, lng: loc.lng };
+        localStorage.setItem('origin', JSON.stringify(currentLocation));
+        let geocoder = new google.maps.Geocoder;
+        geocoder.geocode({ 'location': currentLocation }, (result) => {
+          if (result[0]) {
+            this.currentLocation = result[0].formatted_address;
+            this.originAddress = result[0].formatted_address;
+          } else {
+            console.log('no results found');
+          }
         });
+      });
 
-      }
+    }
 
   }
   getActiveTripsCordinates() {
@@ -571,12 +572,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .subscribe(data => {
         const allActiveTrips = data;
         if (data.length === 0) {
+          this.notificationService.showInfoMessage('Sorry there are no trips at the moment. Please try again later.');
           this.showNoTripMessage = true;
           this.showForm = false;
           setTimeout(() => {
-            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-            this.router.onSameUrlNavigation = 'reload';
-            this.router.navigate([`rider/home/${userId.id}`]);
+            this.showNoTripMessage = false;
+            this.showForm = true;
+            this.gettingDrivers = false;
           }, 5000);
         } else {
           this.passDirection();
@@ -621,9 +623,14 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.timeToPickup = timeToPickup;
             element.timeToPickup = this.timeToPickup;
             element.pickupDistance = this.pickupDistance;
-            this.reachableDrivers = allActiveTrips;
-            this.mapService.publishAvailableTrips(this.reachableDrivers);
-            this.gettingDrivers = false;
+            if (!allActiveTrips) {
+              return;
+            } else {
+              this.reachableDrivers = allActiveTrips;
+              this.availableTrips = true;
+              this.mapService.publishAvailableTrips(this.reachableDrivers);
+              this.gettingDrivers = false;
+            }
           });
         });
       });
