@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.getCurrentRoute();
     });
     this.reload();
-    // this.getLoggedInUser();
+    this.getLoggedInUser();
 
   }
 
