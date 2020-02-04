@@ -173,7 +173,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   }
 
   sendNotification() {
-    const message = 'You have a new LnkuP request';
+    const message = 'A new rider has joined your trip.';
     const userId = this.driverId;
     const pushMessage = {
       title: 'Lnkup Request',

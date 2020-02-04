@@ -18,10 +18,10 @@
     <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0" class="emptyRiders fadeOutLeft">
       <span>You do not currently have any lnkup requests, You will be alerted once there is a request.</span>
     </div>
-    <div *ngIf="riderRequestLength < 1 && !loading && allRiderRequest > 0" class="emptyRiders fadeOutLeft">
+    <!-- <div *ngIf="riderRequestLength < 1 && !loading && allRiderRequest > 0" class="emptyRiders fadeOutLeft">
       <span>{{allRiderRequest}} {{allRiderRequest > 1 ? 'riders' : 'rider' }} has been added to this trip</span>
-    </div>
-    <swiper [config]="config" *ngIf="riderRequestLength > 0 && !loading">
+    </div> -->
+    <swiper [config]="config" *ngIf="!loading">
       <div class="swiper-wrapper">
         <main class="contain-box  swiper-slide" *ngFor="let request of riderRequest; let i = index;">
           <div class="item-details dd">
@@ -67,10 +67,10 @@
           <div class="title-heading">Swipe left to view more riders</div>
 
           <div class="button-group">
-            <button id="accept" mat-raised-button color="accent" class="auth-full-width"
+            <!-- <button id="accept" mat-raised-button color="accent" class="auth-full-width"
               (click)="acceptTripRequest(riderRequest[i])">Accept</button>
             <button id="reject" mat-raised-button color="accent" class="auth-full-width"
-              (click)="declineTripRequest(riderRequest[i])">Reject</button>
+              (click)="declineTripRequest(riderRequest[i])">Reject</button> -->
           </div>
 
 
@@ -81,10 +81,11 @@
 
   <div class="trip-control">
     <button id="accept" mat-raised-button color="accent" class="auth-full-width btn-round start"
-      *ngIf="allRiderRequest > 0 && riderRequestLength === 0 && !loading" (click)="startTrip()">Start
+    [ngClass]="{'end-button-center': riderRequestLength > 0 && !loading}"
+      *ngIf="riderRequestLength > 0 && !loading" (click)="startTrip()">Start
       trip</button>
-    <button *ngIf="riderRequestLength === 0 && !loading" id="accept" mat-raised-button color="accent"
-     [ngClass]="{'end-button-center': allRiderRequest < 1 && riderRequestLength < 1 || loading}"
+    <button  *ngIf="riderRequestLength < 0 && !loading" id="accept" mat-raised-button color="accent"
+     [ngClass]="{'end-button-center': riderRequestLength < 0 || !loading}"
       class="auth-full-width btn-round" (click)="cancelActiveTrip()">Cancel trip</button>
   </div>
 </div>

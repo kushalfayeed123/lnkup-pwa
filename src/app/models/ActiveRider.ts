@@ -14,4 +14,5 @@ export class ActiveRiders {
     user: Users;
     paymentType: string;
     riderConnectId: string;
+    bookedSeat: any;
 }

@@ -1,6 +1,6 @@
-/* 
+/*
 =============================
-ride-details variant   
+ride-details variant
 =============================
 */
 
@@ -54,9 +54,9 @@ ride-details variant
 }
 
 
-/* 
+/*
 =============================
-ride-request variant   
+ride-request variant
 =============================
 */
 .ride.request section.auth-pages.security#ride-confirmation .item-details.dd button {
@@ -69,8 +69,8 @@ ride-request variant
   grid-template-columns: 1fr 2fr 0fr;
   -webkit-column-gap: 40px;
           column-gap: 40px;
-  margin-bottom: 82%;
-}
+          margin-bottom: 18%;
+        }
 
 .ride.request section.auth-pages.security#ride-confirmation .button-group {
   display: grid;
@@ -89,9 +89,9 @@ ride-request variant
 
 
 
-/* 
+/*
 =============================
-ride-confirmation variant 
+ride-confirmation variant
 =============================
 */
 section.auth-pages.security#ride-confirmation .item-details {
@@ -132,7 +132,7 @@ section.auth-pages.security#ride-confirmation .item-details.rsd {
 section.auth-pages.security#ride-confirmation .title-heading {
   font-size: 12px;
   font-weight: 500;
-  color: #d54ab6;
+  color: #e040fb;
   margin-bottom: 3px;
 }
 
@@ -158,7 +158,7 @@ section.auth-pages.security#ride-confirmation .flaticon-star.active:before {
 }
 
 .flaticon-left-arrow {
-  color: #f3f3f3; 
+  color: #f3f3f3;
 }
 .phone-img {
   padding-top: 8px;
@@ -178,7 +178,7 @@ section.auth-pages.security#ride-confirmation button {
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
-  background-color: #d54ab6;
+  background-color: #e040fb;
   border: 0;
   text-align: center;
   font-weight: bold;
@@ -257,19 +257,19 @@ section.auth-pages.security#ride-confirmation .card-details img {
   height: 100px !important;
   width: 31%;
   border-radius: 100%;
-  border: 2px solid #d54ab6 !important;
+  border: 2px solid #e040fb !important;
   position: relative;
   left: 3%;
   margin-left: 33px;
   background-color: #121212 !important;
-  color: #d54ab6;
+  color: #e040fb;
 }
 .start {
-  background-color: #d54ab6 !important;
-  color: #ffffff;
+  background-color: #e040fb !important;
+  color: #121212;
 
 }
-/* 
+/*
 ================
 Security-theme
 ================
@@ -287,7 +287,7 @@ section.auth-pages.security nav {
       -ms-flex-align: center;
           align-items: center;
   color: #ffffff;
-  background-color: #d54ab6;
+  background-color: #e040fb;
   margin-top: 0;
 }
 
@@ -324,14 +324,14 @@ section.auth-pages.security .setting-group, section.auth-pages.security#ride-his
 
 @media only screen and (max-height: 568px) {
   .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
-    margin-bottom: 48%;
+    margin-bottom: 18%;
   }
 }
 
 
 @media only screen and (min-height: 812px) {
   .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
-    margin-bottom: 121%;
+    margin-bottom: 18%;
   }
 }
 
@@ -342,7 +342,7 @@ section.auth-pages.security .setting-group, section.auth-pages.security#ride-his
   }
 }
 
-  @media only screen and (max-width: 360px) {       
+  @media only screen and (max-width: 360px) {
   .btn-round {
     height: 78px !important;
     width: 28%;

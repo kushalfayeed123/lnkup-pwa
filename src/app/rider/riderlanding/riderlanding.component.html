@@ -3,7 +3,7 @@
 
 <div class="avd-container">
 
-    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style"
+    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style" [usePanning]="true"
         [zoomControl]="false">
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
         </agm-marker>
@@ -24,7 +24,7 @@
 
     </agm-map>
     <form id="search-form" *ngIf="showForm" >
-        <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?" 
+        <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?"
             matGoogleMapsAutocomplete   (onAutocompleteSelected)="onAutocompleteSelected($event)"
             (onLocationSelected)="onLocationSelected($event)"/>
 

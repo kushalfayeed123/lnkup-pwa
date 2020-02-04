@@ -362,21 +362,23 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       });
   }
 
-  getCurrentLocation() {
+ async getCurrentLocation() {
     window.scrollTo(0, 0);
     const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
     if (userLocation !== null) {
+      console.log('origin being used', userLocation);
       this.latitude = userLocation.lat;
       this.longitude = userLocation.lng;
     } else {
       this.mapService.getCurrentLocation();
       this.mapService.locationObject.subscribe(loc => {
+        console.log('origin being used', loc);
         this.latitude = loc.lat;
         this.longitude = loc.lng;
         const currentLocation = { lat: loc.lat, lng: loc.lng };
         localStorage.setItem('origin', JSON.stringify(currentLocation));
-        let geocoder = new google.maps.Geocoder;
-        geocoder.geocode({ 'location': currentLocation }, (result) => {
+        const geocoder = new google.maps.Geocoder;
+        geocoder.geocode({ location: currentLocation }, (result) => {
           if (result[0]) {
             this.currentLocation = result[0].formatted_address;
             this.originAddress = result[0].formatted_address;
@@ -480,7 +482,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.destination = { lat: destination.lat, lng: destination.lng };
       this.renderOptions = {
         polylineOptions: {
-          strokeColor: '#d54ab6',
+          strokeColor: '#e040fb',
           geodesic: true,
           strokeOpacity: 0.6,
           strokeWeight: 5,

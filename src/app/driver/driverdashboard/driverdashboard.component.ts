@@ -495,7 +495,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.destination = { lat: destination.lat, lng: destination.lng };
       this.renderOptions = {
         polylineOptions: {
-          strokeColor: '#d54ab6',
+          strokeColor: '#e040fb',
           geodesic: true,
           strokeOpacity: 0.6,
           strokeWeight: 5,

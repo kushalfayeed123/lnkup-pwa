@@ -157,7 +157,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   }
 
   confirmPayment() {
-  
+
     this.paymentService.getSecKey()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(key => {
@@ -277,6 +277,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     } else {
       this.notifyService.showSuccessMessage(`Your trip has ended. Please pay ${this.driverName} a sum of ₦ ${this.tripFee} cash. Thank you for riding with lnkup.`);
     }
+    this.router.navigate([`rider/home/${this.userId}`]);
   }
 
 
