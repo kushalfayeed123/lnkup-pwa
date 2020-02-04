@@ -419,9 +419,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.locationService.getLocationsByUserId(user.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
-        this.updateUserLocation(user.id);
-      }, err => {
-        this.createUserLocation();
+        if (res) {
+          this.updateUserLocation(user.id);
+        } else {
+          this.createUserLocation();
+        }
       });
   }
 
