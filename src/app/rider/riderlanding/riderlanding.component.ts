@@ -580,7 +580,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
   async getAllActiveTrips(status?) {
     const userId = JSON.parse(localStorage.getItem('currentUser'));
-    await this.broadCastService.allTrips
+    this.activeTrip.getAllActiveTrips()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         const allActiveTrips = data;

@@ -27,12 +27,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   allTrips: boolean;
   message: string;
 
-
-  constructor(private route: Router, private notify: NotificationsService,
-              private activeTrip: ActiveTripDataService,
-              private broadcastService: BroadcastService) {
-                this.getAllTrips();
-              }
+  constructor(
+    private route: Router,
+    private notify: NotificationsService,
+    private activeTrip: ActiveTripDataService,
+    private broadcastService: BroadcastService
+  ) {
+    // this.getAllTrips();
+  }
 
   ngOnInit() {
     this.getCurrentime();
@@ -59,64 +61,54 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   getAllTrips() {
     this.loading = true;
-    this.activeTrip.getAllActiveTrips()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      if (!data) {
-        this.allTrips = false;
-        return;
-      } else {
-        this.broadcastService.publishALlTrips(data);
-        this.allTrips = true;
-      }
-      this.loading = false;
-    });
+    this.activeTrip
+      .getAllActiveTrips()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        if (!data) {
+          this.allTrips = false;
+          return;
+        } else {
+          this.broadcastService.publishALlTrips(data);
+          this.allTrips = true;
+        }
+        this.loading = false;
+      });
   }
 
   driverNavToHome() {
-    if (!this.allTrips) {
-      this.notify.showInfoMessage('currently running setup, please hold on.');
-      return;
-    } else {
-      if (this.user !== null) {
-        if (this.user.role !== 'Driver') {
-          this.notify.showErrorMessage(
-            'You are logged in as a rider, please login with your driver account to continue.'
-          );
-          setTimeout(() => {
-            this.route.navigate(['/login']);
-          }, 3000);
-        } else {
-          this.route.navigate([`driver/home/${this.user.id}`]);
-        }
+    if (this.user !== null) {
+      if (this.user.role !== 'Driver') {
+        this.notify.showErrorMessage(
+          'You are logged in as a rider, please login with your driver account to continue.'
+        );
+        setTimeout(() => {
+          this.route.navigate(['/login']);
+        }, 3000);
       } else {
-        this.route.navigate(['/login']);
+        this.route.navigate([`driver/home/${this.user.id}`]);
       }
+    } else {
+      this.route.navigate(['/login']);
     }
   }
 
   riderNavToHome() {
-    if (!this.allTrips) {
-      this.notify.showInfoMessage('We are fetching nearby trips, please hold on.');
-      return;
-    } else {
-      if (this.user !== null) {
-        if (this.user.role !== 'Rider') {
-          this.notify.showErrorMessage(
-            'You are logged in as a driver, please login with your rider account to continue.'
-          );
-          setTimeout(() => {
-            this.route.navigate(['/login']);
-          }, 3000);
-        } else {
-          this.route.navigate([`rider/home/${this.user.id}`]);
-        }
+    if (this.user !== null) {
+      if (this.user.role !== 'Rider') {
+        this.notify.showErrorMessage(
+          'You are logged in as a driver, please login with your rider account to continue.'
+        );
+        setTimeout(() => {
+          this.route.navigate(['/login']);
+        }, 3000);
       } else {
-        this.route.navigate(['/login']);
+        this.route.navigate([`rider/home/${this.user.id}`]);
       }
+    } else {
+      this.route.navigate(['/login']);
     }
-    }
-
+  }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
