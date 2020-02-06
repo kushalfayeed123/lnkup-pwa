@@ -6,10 +6,15 @@ import { AuthGuard } from '../_gaurd/auth.guard';
 import { RiderlandingComponent } from './riderlanding/riderlanding.component';
 import { RiderlinkComponent } from './riderlink/riderlink.component';
 import { DriverdetailsComponent } from './driverdetails/driverdetails.component';
+import { OnboardingComponent } from '../components/onboarding/onboarding.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
+  {
+    path: 'onboarding', component: OnboardingComponent,
+    data: { animation: 'onboarding' }
+  },
   {
     path: 'home/:id',
     component: RiderlandingComponent,

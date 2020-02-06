@@ -54,7 +54,12 @@ export class AppComponent implements OnInit, OnDestroy {
   getLoggedInUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     if (user) {
-      this.route.navigate(['/onboarding']);
+      if (user.role === 'Rider') {
+        this.route.navigate(['rider/onboarding']);
+
+      } else {
+        this.route.navigate(['driver/onboarding']);
+      }
     } else {
       this.route.navigate(['/login']);
     }

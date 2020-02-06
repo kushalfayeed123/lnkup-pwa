@@ -283,6 +283,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     private notificationService: NotificationsService,
     private locationService: LocationDataService
   ) {
+    // this.getAllTrips();
     this.notificationService.angularFireMessenger();
     // this.notificationService.deleteSubscription();
     this.notificationService.requestPermision();
@@ -321,6 +322,14 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getAllDriversLocations();
   }
 
+
+  // getAllTrips() {
+  //   this.activeTrip.getAllActiveTrips()
+  //   .pipe(takeUntil(this.unsubscribe$))
+  //   .subscribe(data => {
+  //     this.broadCastService.publishALlTrips(data);
+  //   });
+  // }
   getUserById(userId) {
     this.authService
       .getById(userId)
@@ -569,9 +578,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       panelClass: ['dark-snackbar-search']
     });
   }
-  getAllActiveTrips(status?) {
+  async getAllActiveTrips(status?) {
     const userId = JSON.parse(localStorage.getItem('currentUser'));
-    this.activeTrip.getAllActiveTrips()
+    await this.broadCastService.allTrips
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         const allActiveTrips = data;

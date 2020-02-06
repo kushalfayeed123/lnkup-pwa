@@ -13,11 +13,7 @@ import { TripsHistoryComponent } from './components/trips-history/trips-history.
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/onboarding', pathMatch: 'full' },
-  {
-    path: 'onboarding', component: OnboardingComponent,
-    data: { animation: 'onboarding' }
-  },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
     path: 'verify', component: VerifycodeComponent,
     data: { animation: 'verify' }

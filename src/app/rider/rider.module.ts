@@ -15,6 +15,7 @@ import { BookseatrequestComponent } from './bookseatrequest/bookseatrequest.comp
 import { RiderlinkComponent } from './riderlink/riderlink.component';
 import { SidebarModule } from 'ng-sidebar';
 import { NotificationComponent } from '../components/notification/notification.component';
+import { OnboardingComponent } from '../components/onboarding/onboarding.component';
 
 
 @NgModule({
@@ -23,7 +24,9 @@ import { NotificationComponent } from '../components/notification/notification.c
                  DriverdetailsComponent,
                  BookseatrequestComponent,
                  RiderlinkComponent,
-                 
+                 OnboardingComponent,
+
+
                  ],
   imports: [
     CommonModule,

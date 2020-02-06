@@ -45,6 +45,9 @@
         <div class="day-comment">It's a lovely day.. </div>
       </div>
     </div>
+    <div class="spinner-container">
+      <mat-spinner [diameter]="30" *ngIf="loading" class="loader"></mat-spinner>
+    </div>
 
     <div class="option-cards">
       <div class="option-card user-details" (click)="driverNavToHome()">

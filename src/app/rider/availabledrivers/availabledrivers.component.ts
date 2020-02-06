@@ -15,7 +15,6 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   host: { '[@slideInAnimation]': '' }
 })
 export class AvailabledriversComponent implements OnInit, OnDestroy {
-
   private unsubscribe$ = new Subject<void>();
   public config: any = {
     navigation: {
@@ -36,10 +35,11 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   currentDate: Date;
   dateNow: any;
 
-
-  constructor(private mapService: MapBroadcastService,
-              private broadcastService: BroadcastService,
-              private router: Router) { }
+  constructor(
+    private mapService: MapBroadcastService,
+    private broadcastService: BroadcastService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.broadcastService.showTripDetails
@@ -53,7 +53,9 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   getCurrentDateTime() {
     this.currentDate = new Date();
     const currentDate = new Date().getTime();
-    this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US').toLowerCase().substring(1);
+    this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US')
+      .toLowerCase()
+      .substring(1);
     console.log('current date', this.currentDate);
   }
 
@@ -64,21 +66,27 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
         console.log('all trips', trips);
 
         const availableTrips = trips;
-        if (!trips) {
-          this.emptyTrip = true;
-          return;
-        }
-        this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
-          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0 && new Date(d.actualTripStartDateTime) >= this.currentDate);
-          console.log('available trips', this.availableTrips);
-        if (this.availableTrips.length === 0) {
+        // if (!trips) {
+        //   this.emptyTrip = true;
+        //   return;
+        // } else {
+
+        // }
+        this.availableTrips = availableTrips.filter(
+          d =>
+            d.pickupDistance < 8 &&
+            d.userDriverDestinationDistance < 8 &&
+            d.allowedRiderCount >= 0 &&
+            new Date(d.actualTripStartDateTime) >= this.currentDate
+        );
+        console.log('available trips', this.availableTrips);
+        if (this.availableTrips.length < 1) {
           this.emptyTrip = true;
         } else {
           this.availableTrips.forEach(element => {
             const userName = element.tripDriver;
             if (userName) {
               this.driverUserName.push(userName.driver.userName);
-              console.log(userName.driver.userName);
             } else {
               return;
             }
@@ -87,7 +95,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
             if (allowedRiderCount === 0) {
               const availableSeat = maxSeats;
               this.availableSeats.push(availableSeat);
-
             } else {
               const availableSeat = allowedRiderCount;
               this.availableSeats.push(availableSeat);
@@ -113,5 +120,4 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
 }
