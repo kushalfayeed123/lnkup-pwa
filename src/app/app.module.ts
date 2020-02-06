@@ -64,6 +64,7 @@ import { TripsHistoryComponent } from './components/trips-history/trips-history.
     AppComponent,
     SplashScreenComponent,
     SideNavComponent,
+    OnboardingComponent,
     RegisterUserComponent,
     AuthenticateUserComponent,
     VerifycodeComponent,

@@ -8,7 +8,7 @@ import { OnboardingComponent } from '../components/onboarding/onboarding.compone
 
 const routes: Routes = [
   { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
-  { path: 'onboarding', component: OnboardingComponent},
+  // { path: 'onboarding', component: OnboardingComponent},
   {
     path: 'home/:id',
     component: DriverdashboardComponent,

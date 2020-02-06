@@ -24,7 +24,7 @@ import { OnboardingComponent } from '../components/onboarding/onboarding.compone
                  DriverdetailsComponent,
                  BookseatrequestComponent,
                  RiderlinkComponent,
-                 OnboardingComponent,
+                //  OnboardingComponent,
 
 
                  ],

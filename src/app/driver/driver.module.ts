@@ -22,7 +22,8 @@ import { OnboardingComponent } from '../components/onboarding/onboarding.compone
                  DriverTripCreateComponent,
                  RiderRequestComponent,
                  DriverTripNavigateComponent,
-                OnboardingComponent],
+                // OnboardingComponent
+              ],
   imports: [
     CommonModule,
     DriverRoutingModule,

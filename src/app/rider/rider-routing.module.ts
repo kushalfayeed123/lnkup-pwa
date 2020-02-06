@@ -11,10 +11,10 @@ import { OnboardingComponent } from '../components/onboarding/onboarding.compone
 
 const routes: Routes = [
   { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
-  {
-    path: 'onboarding', component: OnboardingComponent,
-    data: { animation: 'onboarding' }
-  },
+  // {
+  //   path: 'onboarding', component: OnboardingComponent,
+  //   data: { animation: 'onboarding' }
+  // },
   {
     path: 'home/:id',
     component: RiderlandingComponent,

@@ -11,26 +11,32 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { SupportComponent } from './components/support/support.component';
 import { TripsHistoryComponent } from './components/trips-history/trips-history.component';
 
-
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
-    path: 'verify', component: VerifycodeComponent,
+    path: 'onboarding',
+    component: OnboardingComponent,
+    data: { animation: 'onboarding' }
+  },
+  {
+    path: 'verify',
+    component: VerifycodeComponent,
     data: { animation: 'verify' }
   },
   {
-    path: 'login', component: AuthenticateUserComponent,
+    path: 'login',
+    component: AuthenticateUserComponent,
     data: { animation: 'login' }
   },
   {
-    path: 'register', component: RegisterUserComponent,
+    path: 'register',
+    component: RegisterUserComponent,
     data: { animation: 'register' }
   },
   { path: 'payment/:id', component: PaymentComponent },
   { path: 'trips/:id', component: TripsHistoryComponent },
   { path: 'profile/:id', component: ProfileComponent },
   { path: 'support/:id', component: SupportComponent },
-
 
   {
     path: 'admin',
@@ -47,14 +53,11 @@ const routes: Routes = [
   {
     path: '**',
     component: PagenotfoundComponent
-  },
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-
-export class AppRoutingModule {
-
-}
+export class AppRoutingModule {}
