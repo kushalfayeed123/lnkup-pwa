@@ -269,6 +269,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   currentLatitude: any;
   currentLocation: string;
   availableTrips: boolean;
+  showInput: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -684,6 +685,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     localStorage.removeItem('pickup');
     localStorage.removeItem('activeRiderRequest');
     localStorage.removeItem('destination');
+  }
+
+  toggleInput() {
+    this.showInput = !this.showInput;
   }
 
 
