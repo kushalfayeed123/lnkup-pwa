@@ -30,19 +30,17 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   constructor(private route: Router, private notify: NotificationsService,
               private activeTrip: ActiveTripDataService,
-              private broadcastService: BroadcastService) {}
+              private broadcastService: BroadcastService) {
+                this.getAllTrips();
+              }
 
   ngOnInit() {
     this.getCurrentime();
   }
-
-
-
   getCurrentime() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.user = user;
     if (user !== null) {
-      this.getAllTrips();
       this.userName = user.userName;
     }
     this.todaysDataTime = formatDate(
