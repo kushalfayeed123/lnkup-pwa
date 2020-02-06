@@ -76,25 +76,30 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   }
 
   driverNavToHome() {
-    if (this.user !== null) {
-      if (this.user.role !== 'Driver') {
-        this.notify.showErrorMessage(
-          'You are logged in as a rider, please login with your driver account to continue.'
-        );
-        setTimeout(() => {
-          this.route.navigate(['/login']);
-        }, 3000);
-      } else {
-        this.route.navigate([`driver/home/${this.user.id}`]);
-      }
+    if (!this.allTrips) {
+      this.notify.showInfoMessage('currently running setup, please hold on.');
+      return;
     } else {
-      this.route.navigate(['/login']);
+      if (this.user !== null) {
+        if (this.user.role !== 'Driver') {
+          this.notify.showErrorMessage(
+            'You are logged in as a rider, please login with your driver account to continue.'
+          );
+          setTimeout(() => {
+            this.route.navigate(['/login']);
+          }, 3000);
+        } else {
+          this.route.navigate([`driver/home/${this.user.id}`]);
+        }
+      } else {
+        this.route.navigate(['/login']);
+      }
     }
   }
 
   riderNavToHome() {
     if (!this.allTrips) {
-      this.notify.showInfoMessage(this.message);
+      this.notify.showInfoMessage('We are fetching nearby trips, please hold on.');
       return;
     } else {
       if (this.user !== null) {

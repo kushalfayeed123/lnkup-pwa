@@ -248,9 +248,12 @@ padding-right: 10px;
 
 .spinner-container {
   position: relative;
-  top: 24px;
   left: 33%;
-  width: 77%;
+  width: 58%;
+  bottom: 190px;
+}
+.contain-box {
+  height: 94vh;
 }
 
 .auth-pages.security nav {
