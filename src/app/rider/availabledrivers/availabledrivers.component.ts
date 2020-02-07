@@ -74,9 +74,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
             new Date(d.actualTripStartDateTime) >= this.currentDate
         );
         console.log('available trips', this.availableTrips);
-        if (this.availableTrips.length < 1) {
-          this.emptyTrip = true;
-        } else {
+        if (this.availableTrips.length > 0) {
           this.emptyTrip = false;
           this.availableTrips.forEach(element => {
             const userName = element.tripDriver;
@@ -95,6 +93,8 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
               this.availableSeats.push(availableSeat);
             }
           });
+        } else {
+          this.emptyTrip = true;
         }
       });
   }
