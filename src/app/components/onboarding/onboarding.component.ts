@@ -42,7 +42,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   }
   clearLocalStorage() {
     localStorage.removeItem('tripDetails');
-    localStorage.removeItem('origin');
     localStorage.removeItem('storedAddress');
     localStorage.removeItem('riderRequest');
     localStorage.removeItem('pickup');

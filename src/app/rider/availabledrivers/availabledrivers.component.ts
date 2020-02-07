@@ -109,7 +109,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   }
 
   clearLocalStorage() {
-    localStorage.removeItem('origin');
     localStorage.removeItem('paymentType');
     localStorage.removeItem('pickup');
     localStorage.removeItem('activeRiderRequest');
