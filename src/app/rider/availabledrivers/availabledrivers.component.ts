@@ -66,12 +66,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
         console.log('all trips', trips);
 
         const availableTrips = trips;
-        // if (!trips) {
-        //   this.emptyTrip = true;
-        //   return;
-        // } else {
-
-        // }
         this.availableTrips = availableTrips.filter(
           d =>
             d.pickupDistance < 8 &&
@@ -83,6 +77,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
         if (this.availableTrips.length < 1) {
           this.emptyTrip = true;
         } else {
+          this.emptyTrip = false;
           this.availableTrips.forEach(element => {
             const userName = element.tripDriver;
             if (userName) {

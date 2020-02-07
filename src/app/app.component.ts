@@ -2,7 +2,7 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 import { MetaService } from './services/business/metaService.service';
 import { SwUpdate, SwPush } from '@angular/service-worker';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
 import { BroadcastService } from './services/business/broadcastdata.service';
@@ -53,15 +53,19 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getLoggedInUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user) {
-      if (user.role === 'Rider') {
-        this.route.navigate(['/onboarding']);
-
-      } else {
-        this.route.navigate(['/onboarding']);
-      }
+    const currentRoute = decodeURI(localStorage.getItem('currentRoute'));
+    if (!currentRoute) {
+      this.route.navigate(['/onboarding']);
     } else {
-      this.route.navigate(['/login']);
+      const navigationExtras: NavigationExtras = {
+        queryParamsHandling: 'preserve',
+        preserveFragment: true
+      };
+      if (user) {
+          this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
+      } else {
+        this.route.navigate(['/login']);
+      }
     }
   }
 
