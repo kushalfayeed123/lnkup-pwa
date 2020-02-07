@@ -375,7 +375,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   getCurrentLocation() {
     const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
-    if (userLocation !== null) {
+    if (userLocation ) {
       this.latitude = userLocation.lat;
       this.longitude = userLocation.lng;
     } else {
@@ -595,7 +595,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.showNoTripMessage = false;
             this.showForm = true;
             this.gettingDrivers = false;
-          }, 5000);
+          }, 10000);
         } else {
           this.passDirection();
           allActiveTrips.forEach(element => {
