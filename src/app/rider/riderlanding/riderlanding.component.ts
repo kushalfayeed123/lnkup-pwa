@@ -480,15 +480,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       const cl = JSON.parse(localStorage.getItem('origin'));
       const origin = JSON.parse(localStorage.getItem('currentLocation'));
       const destination = JSON.parse(localStorage.getItem('destination'));
-      console.log('origin', origin);
-
-      if (origin !== null) {
+      if (!origin) {
         this.getDirection(origin, destination);
       } else {
         this.getDirection(cl, destination);
-
       }
-    }, 1000);
+      console.log('origin', origin);
+    }, 5000);
   }
 
   getDirection(origin, destination) {
@@ -583,7 +581,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       panelClass: ['dark-snackbar-search']
     });
   }
-  async getAllActiveTrips(status?) {
+ getAllActiveTrips(status?) {
     const userId = JSON.parse(localStorage.getItem('currentUser'));
     this.activeTrip.getAllActiveTrips()
       .pipe(takeUntil(this.unsubscribe$))

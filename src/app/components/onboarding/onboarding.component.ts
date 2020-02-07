@@ -38,7 +38,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCurrentime();
-    this.clearLocalStorage();
   }
   clearLocalStorage() {
     localStorage.removeItem('tripDetails');
