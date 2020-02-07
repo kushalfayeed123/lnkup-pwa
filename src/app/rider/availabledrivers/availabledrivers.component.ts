@@ -56,15 +56,12 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US')
       .toLowerCase()
       .substring(1);
-    console.log('current date', this.currentDate);
   }
 
   getAvailableTrips() {
     this.mapService.availableTrips
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trips => {
-        console.log('all trips', trips);
-
         const availableTrips = trips;
         this.availableTrips = availableTrips.filter(
           d =>
@@ -73,7 +70,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
             d.allowedRiderCount >= 0 &&
             new Date(d.actualTripStartDateTime) >= this.currentDate
         );
-        console.log('available trips', this.availableTrips);
         if (this.availableTrips.length > 0) {
           this.emptyTrip = false;
           this.availableTrips.forEach(element => {
@@ -102,15 +98,24 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   passTripDetails(userTripId) {
     this.mapService.publishTripDetails(userTripId);
     this.showTripDetails = true;
-    console.log(this.showTripDetails);
-  }
+   }
   navToTripSearch() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
+    this.clearLocalStorage();
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['rider/home', userId]);
   }
+
+  clearLocalStorage() {
+    localStorage.removeItem('origin');
+    localStorage.removeItem('paymentType');
+    localStorage.removeItem('pickup');
+    localStorage.removeItem('activeRiderRequest');
+    localStorage.removeItem('destination');
+  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

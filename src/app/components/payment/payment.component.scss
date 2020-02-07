@@ -38,7 +38,6 @@ section.auth-pages.security nav {
 .right-arrow {
   position: relative;
   left: 77%;
-  bottom: 7px;
   height: 24px;
 }
 section.auth-pages.security nav a {
@@ -256,4 +255,11 @@ section.auth-pages.security#payment-page #use-payment:hover {
 .zip-details {
   width: 30% !important;
   padding-right: 0px !important;
+}
+
+
+@media (max-width: 320px) {
+  .right-arrow {
+    left: 71%;
+  }
 }

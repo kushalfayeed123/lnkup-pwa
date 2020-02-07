@@ -38,6 +38,18 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCurrentime();
+    this.clearLocalStorage();
+  }
+  clearLocalStorage() {
+    localStorage.removeItem('tripDetails');
+    localStorage.removeItem('origin');
+    localStorage.removeItem('storedAddress');
+    localStorage.removeItem('riderRequest');
+    localStorage.removeItem('pickup');
+    localStorage.removeItem('activeRiderRequest');
+    localStorage.removeItem('destination');
+    localStorage.removeItem('driverData');
+
   }
   getCurrentime() {
     const user = JSON.parse(localStorage.getItem('currentUser'));

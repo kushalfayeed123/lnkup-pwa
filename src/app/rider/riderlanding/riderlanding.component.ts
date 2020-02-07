@@ -328,6 +328,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   //   this.activeTrip.getAllActiveTrips()
   //   .pipe(takeUntil(this.unsubscribe$))
   //   .subscribe(data => {
+  //     console.log('data', data);
   //     this.broadCastService.publishALlTrips(data);
   //   });
   // }
@@ -681,15 +682,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
 
-  clearLocalStorage() {
-    localStorage.removeItem('tripDetails');
-    localStorage.removeItem('origin');
-    localStorage.removeItem('storedAddress');
-    localStorage.removeItem('riderRequest');
-    localStorage.removeItem('pickup');
-    localStorage.removeItem('activeRiderRequest');
-    localStorage.removeItem('destination');
-  }
+
 
   toggleInput() {
     this.showInput = !this.showInput;
