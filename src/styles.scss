@@ -1,7 +1,7 @@
 
-/* 
+/*
 =================
-Font imports 
+Font imports
 =================
 */
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap");
@@ -36,21 +36,21 @@ Font imports
 cursor: pointer;
 }
 .flaticon-left-arrow {
- 
-  color: #d54ab6
+
+  color: #e040fb
 }
 
 .st0{
-  border-color: #d54ab6;
+  border-color: #e040fb;
 }
 
-/* 
+/*
 =================
-Imports 
+Imports
 =================
 */
 /* =================
-    Positioning 
+    Positioning
    ================= */
 /*  ================
     Queries layout
@@ -62,14 +62,16 @@ Imports
   max-width: 992px;
   margin: 0 auto;
 }
-
+.settings-page {
+  margin-top: 50px !important;
+}
 
 .mat-spinner{
   margin-left: 17% !important;
 }
 .mat-toolbar.mat-primary {
   background: transparent !important;
-  color: #d54ab6 !important;
+  color: #e040fb !important;
   position: absolute !important;
   z-index: 100 !important;
   margin-top: 30px;
@@ -85,7 +87,7 @@ Imports
 .destination {
   background: #101010;
   color: #ffffff;
-  padding: 0 5px; 
+  padding: 0 5px;
 }
 
 
@@ -487,14 +489,14 @@ template {
   display: none !important;
 }
 
-/* 
+/*
 =================
 End of Reset
 =================
 */
-/* 
+/*
 =================
-Defaults 
+Defaults
 =================
 */
 body {
@@ -546,7 +548,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 
-/* 
+/*
 =================
 Region Toastr
 =================
@@ -554,25 +556,25 @@ Region Toastr
  .successMessage {
   position: relative;
   top: 40px;
-  background-color: #d54ab6;
+  background-color: #e040fb;
   color: #eeeeee;
-} 
+}
 
  .infoMessage {
   position: relative;
   top: 60px;
-  background-color: #d54ab6;
+  background-color: #e040fb;
   color: #eeeeee;
 
-} 
-/* 
+}
+/*
 =================
 End Region
 =================
 */
 
 section.auth-pages .page-heading h1 {
-  color: #d54ab6;
+  color: #e040fb;
   font-weight: bold;
   font-size: 32px;
   font-family: "Poppins";

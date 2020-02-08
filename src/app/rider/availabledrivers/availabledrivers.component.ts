@@ -15,7 +15,6 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   host: { '[@slideInAnimation]': '' }
 })
 export class AvailabledriversComponent implements OnInit, OnDestroy {
-
   private unsubscribe$ = new Subject<void>();
   public config: any = {
     navigation: {
@@ -36,10 +35,11 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   currentDate: Date;
   dateNow: any;
 
-
-  constructor(private mapService: MapBroadcastService,
-              private broadcastService: BroadcastService,
-              private router: Router) { }
+  constructor(
+    private mapService: MapBroadcastService,
+    private broadcastService: BroadcastService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.broadcastService.showTripDetails
@@ -53,32 +53,29 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   getCurrentDateTime() {
     this.currentDate = new Date();
     const currentDate = new Date().getTime();
-    this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US').toLowerCase().substring(1);
-    console.log('current date', this.currentDate);
+    this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US')
+      .toLowerCase()
+      .substring(1);
   }
 
   getAvailableTrips() {
     this.mapService.availableTrips
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trips => {
-        console.log('all trips', trips);
-
         const availableTrips = trips;
-        if (!trips) {
-          this.emptyTrip = true;
-          return;
-        }
-        this.availableTrips = availableTrips.filter(d => d.pickupDistance < 8
-          && d.userDriverDestinationDistance < 8 && d.allowedRiderCount >= 0 && new Date(d.actualTripStartDateTime) >= this.currentDate);
-          console.log('available trips', this.availableTrips);
-        if (this.availableTrips.length === 0) {
-          this.emptyTrip = true;
-        } else {
+        this.availableTrips = availableTrips.filter(
+          d =>
+            d.pickupDistance < 8 &&
+            d.userDriverDestinationDistance < 8 &&
+            d.allowedRiderCount >= 0 &&
+            new Date(d.actualTripStartDateTime) >= this.currentDate
+        );
+        if (this.availableTrips.length > 0) {
+          this.emptyTrip = false;
           this.availableTrips.forEach(element => {
             const userName = element.tripDriver;
             if (userName) {
               this.driverUserName.push(userName.driver.userName);
-              console.log(userName.driver.userName);
             } else {
               return;
             }
@@ -87,12 +84,13 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
             if (allowedRiderCount === 0) {
               const availableSeat = maxSeats;
               this.availableSeats.push(availableSeat);
-
             } else {
               const availableSeat = allowedRiderCount;
               this.availableSeats.push(availableSeat);
             }
           });
+        } else {
+          this.emptyTrip = true;
         }
       });
   }
@@ -100,18 +98,25 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   passTripDetails(userTripId) {
     this.mapService.publishTripDetails(userTripId);
     this.showTripDetails = true;
-    console.log(this.showTripDetails);
-  }
+   }
   navToTripSearch() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
+    this.clearLocalStorage();
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['rider/home', userId]);
   }
+
+  clearLocalStorage() {
+    localStorage.removeItem('paymentType');
+    localStorage.removeItem('pickup');
+    localStorage.removeItem('activeRiderRequest');
+    localStorage.removeItem('destination');
+  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
 }

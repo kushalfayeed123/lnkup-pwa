@@ -1,13 +1,13 @@
 .notif-container {
     border: 0.5px solid #121212;
-    //border-bottom: 0.5px solid #d54ab6;
+    //border-bottom: 0.5px solid #e040fb;
     width: 92%;
     margin-left: 31px;
     height: auto;
     border-right: 0px;
-    // border-left: 4px solid #d54ab6;
+    // border-left: 4px solid #e040fb;
     padding: 10px;
-    background-color: #d54ab6;
+    background-color: #e040fb;
     border-radius: 2px;
     top: 32px;
     position: relative;
@@ -22,7 +22,7 @@
 }
 
 .message {
-    color: #eeeeee;
+    color: #121212;
     font-size: 16px;
     font-family: "Circular";
 }
@@ -46,7 +46,7 @@
     animation: slide-out 0.5s backwards;
     -webkit-animation: slide-out 0.5s backwards;
 }
-    
+
 @keyframes slide-in {
     100% { transform: translateX(0%); }
 }
@@ -54,7 +54,7 @@
 @-webkit-keyframes slide-in {
     100% { -webkit-transform: translateX(0%); }
 }
-    
+
 @keyframes slide-out {
     0% { transform: translateX(0%); }
     100% { transform: translateX(-100%); }

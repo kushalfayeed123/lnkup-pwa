@@ -381,9 +381,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.locationService.getLocationsByUserId(user.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
-        this.updateUserLocation(user.id);
-      }, err => {
-        this.createUserLocation();
+        if (res) {
+          this.updateUserLocation(user.id);
+        } else {
+          this.createUserLocation();
+        }
       });
   }
 
@@ -495,7 +497,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.destination = { lat: destination.lat, lng: destination.lng };
       this.renderOptions = {
         polylineOptions: {
-          strokeColor: '#d54ab6',
+          strokeColor: '#e040fb',
           geodesic: true,
           strokeOpacity: 0.6,
           strokeWeight: 5,

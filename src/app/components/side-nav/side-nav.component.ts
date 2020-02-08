@@ -51,7 +51,7 @@ export class SideNavComponent implements OnDestroy {
   navToHome() {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.onSameUrlNavigation = 'reload';
-    this._router.navigate([`${this.userRole}/home/${this.userId}`]);
+    this._router.navigate([`/onboarding`]);
   }
   navToProfile() {
     this._router.navigate([`profile/${this.userId}`]);

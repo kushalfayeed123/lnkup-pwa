@@ -1,6 +1,6 @@
 <div class="avd-container" *ngIf="showLanding">
 
-  <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false" [styles]="style">
+  <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false" [styles]="style" [usePanning]="true">
     <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker>
     <agm-marker *ngFor="let loc of riderLocation; let i = index;" [(latitude)]="riderLocationsLat[i]"
     [(longitude)]="riderLocationsLong[i]" [markerDraggable]="true" >

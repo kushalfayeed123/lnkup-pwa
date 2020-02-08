@@ -46,6 +46,7 @@
       </div>
     </div>
 
+
     <div class="option-cards">
       <div class="option-card user-details" (click)="driverNavToHome()">
         <div class="option-left drive">
@@ -54,7 +55,7 @@
         </div>
         <div class="option-right">
           <div class="comment-head">Drive</div>
-          <div class="drive-text">Earn up to 50000 per month while making new friends</div>
+          <div class="drive-text">Earn loads of money driving at your convenience.</div>
         </div>
       </div>
       <div class="option-card user-details" (click)="riderNavToHome()">
@@ -63,10 +64,13 @@
         </div>
         <div class="option-right">
           <div class="comment-head">Join a ride</div>
-          <div class="join-text">Save up to 20000 per month while enjoying comfortable rides</div>
+          <div class="join-text">Enjoy a comfortable ride, save 75% off your fare.</div>
         </div>
       </div>
     </div>
   </main>
+  <div class="spinner-container">
+    <mat-spinner [diameter]="30" *ngIf="loading" class="loader"></mat-spinner>
+  </div>
 </section>
 <app-notification></app-notification>

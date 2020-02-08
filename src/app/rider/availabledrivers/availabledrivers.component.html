@@ -1,5 +1,5 @@
 
-<div class="destination-container fadeInLeft" *ngIf="!showTripDetails">
+<div class="destination-container fadeInLeft" *ngIf="!showTripDetails" >
         <swiper [config]="config">
                 <div class="swiper-wrapper">
                 <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">
@@ -10,11 +10,11 @@
                               <div class="driver-track">
                                 <div class="driver-item">
                                   <div class="container-grid">
-                                    <div class="avi-info" (deferLoad)="trips.tripDriver.driver.userImage.image != null">
-                                        <img src="data:image/png;base64,{{trips.tripDriver.driver.userImage.image}}" alt=""
+                                    <div class="avi-info">
+                                        <!-- <img src="data:image/png;base64,{{trips.tripDriver.driver.userImage.image}}" alt=""
                                          class="profile-info" *ngIf="trips.tripDriver.driver.userImage.image">
                                         <img src="./assets/Images/default-user.png"
-                                         class="profile-info" alt="" *ngIf="!trips.tripDriver.driver.userImage.image">
+                                         class="profile-info" alt="" *ngIf="!trips.tripDriver.driver.userImage.image"> -->
                                       <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
                                       <h3 class="driver-name">{{driverUserName[i]}}</h3>
                                       <!-- <span class="driver-stats">Trip Time: {{trips.tripStartDateTime}}</span> -->
@@ -46,7 +46,7 @@
                     <!-- <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div> -->
 
-                    <mat-card *ngIf="emptyTrip">
+                    <mat-card *ngIf="emptyTrip" >
                       <mat-card-content>
                         <div class="search">Sorry, there are no drivers headed in your direction at this time. Please try again shortly.</div>
                         <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn" (click)="navToTripSearch()">Back</button>

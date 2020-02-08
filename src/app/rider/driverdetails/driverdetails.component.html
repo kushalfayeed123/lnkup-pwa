@@ -1,5 +1,5 @@
 
-<div class="destination-container" >
+<div class="destination-container" @slideInAnimation>
   <swiper [config]="">
           <div class="swiper-wrapper">
           <mat-card class="available-drivers-card swiper-slide" >
@@ -10,7 +10,7 @@
                 class="loader"
               ></mat-spinner>
             </div>
-             
+
                     <div class="avd" *ngIf="isTrips">
                       <!-- <h2 class="heading">Available Drivers</h2> -->
                       <div class="driver-container">

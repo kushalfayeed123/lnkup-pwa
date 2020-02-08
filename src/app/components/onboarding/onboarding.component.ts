@@ -1,8 +1,12 @@
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { takeUntil } from 'rxjs/operators';
+import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { NotificationsService } from './../../services/business/notificatons.service';
 import { Router } from '@angular/router';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { formatDate } from '@angular/common';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-onboarding',
@@ -12,19 +16,39 @@ import { formatDate } from '@angular/common';
   animations: [slideInAnimation],
   host: { '[@slideInAnimation]': '' }
 })
-export class OnboardingComponent implements OnInit {
+export class OnboardingComponent implements OnInit, OnDestroy {
   todaysDataTime: any;
   today = new Date();
   greeting: string;
   userName: any;
   user: any;
+  private unsubscribe$ = new Subject<void>();
+  loading: boolean;
+  allTrips: boolean;
+  message: string;
 
-  constructor(private route: Router, private notify: NotificationsService) {}
+  constructor(
+    private route: Router,
+    private notify: NotificationsService,
+    private activeTrip: ActiveTripDataService,
+    private broadcastService: BroadcastService
+  ) {
+    // this.getAllTrips();
+  }
 
   ngOnInit() {
     this.getCurrentime();
   }
+  clearLocalStorage() {
+    localStorage.removeItem('tripDetails');
+    localStorage.removeItem('storedAddress');
+    localStorage.removeItem('riderRequest');
+    localStorage.removeItem('pickup');
+    localStorage.removeItem('activeRiderRequest');
+    localStorage.removeItem('destination');
+    localStorage.removeItem('driverData');
 
+  }
   getCurrentime() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.user = user;
@@ -43,6 +67,23 @@ export class OnboardingComponent implements OnInit {
     } else {
       this.greeting = 'Good Evening';
     }
+  }
+
+  getAllTrips() {
+    this.loading = true;
+    this.activeTrip
+      .getAllActiveTrips()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        if (!data) {
+          this.allTrips = false;
+          return;
+        } else {
+          this.broadcastService.publishALlTrips(data);
+          this.allTrips = true;
+        }
+        this.loading = false;
+      });
   }
 
   driverNavToHome() {
@@ -77,5 +118,10 @@ export class OnboardingComponent implements OnInit {
     } else {
       this.route.navigate(['/login']);
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

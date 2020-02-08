@@ -13,6 +13,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { RiderRequestComponent } from './rider-request/rider-request.component';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverTripNavigateComponent } from './driver-trip-navigate/driver-trip-navigate.component';
+import { OnboardingComponent } from '../components/onboarding/onboarding.component';
 
 
 
@@ -20,7 +21,9 @@ import { DriverTripNavigateComponent } from './driver-trip-navigate/driver-trip-
   declarations: [DriverdashboardComponent,
                  DriverTripCreateComponent,
                  RiderRequestComponent,
-                 DriverTripNavigateComponent],
+                 DriverTripNavigateComponent,
+                // OnboardingComponent
+              ],
   imports: [
     CommonModule,
     DriverRoutingModule,

@@ -96,7 +96,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
         console.log('active trip', this.activeTrip);
         const allRiderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '2');
         this.allRiderRequest = allRiderRequest.length;
-        this.riderRequest = activeTrip.activeRiders.filter(x => x.tripStatus === '1');
+        this.riderRequest = activeTrip.activeRiders;
         this.riderRequestLength = this.riderRequest.length;
         this.feePerSeat = activeTrip.aggregrateTripFee / activeTrip.maxRiderNumber;
         const allowedRiderCount = activeTrip.allowedRiderCount;
@@ -107,52 +107,55 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
           riderNumber = riderNumber.slice(0, 4) + riderNumber.slice(5);
           this.riderNumber.push(riderNumber);
         });
+        this.acceptTripRequest(this.riderRequest);
       });
   }
-  acceptTripRequest(rider) {
-    const tripConnectionId = sessionStorage.getItem('clientConnectionId');
-    const driverName = this.activeTrip.tripDriver.driver.userName;
-    const pickup = this.activeTrip.tripPickup;
-    const riderId = rider.activeRiderId;
-    const receiver = rider.user.userName;
-    const receiverId = rider.user.userId;
-    const pickupTime = this.activeTrip.tripStartDateTime;
-    const bookedSeat = rider.bookedSeat;
-    const riderConnectionId = rider.riderConnectId;
-    const message = `Your request has been accepted, please lnkup with ${driverName}
+  acceptTripRequest(request) {
+    const newRequest = request.filter(x => x.tripStatus === '1');
+    newRequest.forEach(rider => {
+      const tripConnectionId = sessionStorage.getItem('clientConnectionId');
+      const driverName = this.activeTrip.tripDriver.driver.userName;
+      const pickup = this.activeTrip.tripPickup;
+      const riderId = rider.activeRiderId;
+      const receiver = rider.user.userName;
+      const receiverId = rider.user.userId;
+      const pickupTime = this.activeTrip.tripStartDateTime;
+      const bookedSeat = rider.bookedSeat;
+      const riderConnectionId = rider.riderConnectId;
+      const message = `Linkup with ${driverName}
     at ${pickup} on or before ${pickupTime}`;
-    const pushMessage = {
+      const pushMessage = {
       title: 'LnkuP',
       body: message,
       click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
       receiverName: receiver
     };
-    if (this.allowedRiderCount <= 0) {
+      if (this.allowedRiderCount <= 0) {
       this.newAllowedRiderCount = this.maxSeat - bookedSeat;
     } else {
       this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
     }
-    const startTime = localStorage.getItem('startTime');
-    const activeRider = {
+      const startTime = localStorage.getItem('startTime');
+      const activeRider = {
       tripStatus: '2',
       paymentStatus: '0',
       riderConnectId: riderConnectionId,
     };
 
 
-    this.riderService.update(riderId, activeRider)
+      this.riderService.update(riderId, activeRider)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
       }, error => {
         console.log(error);
       });
 
-    if (this.newAllowedRiderCount <= 0) {
+      if (this.newAllowedRiderCount <= 0) {
       this.activeTripStatus = 2;
     } else {
       this.activeTripStatus = 1;
     }
-    const activeTrip = {
+      const activeTrip = {
       driverTripStatus: this.activeTripStatus,
       allowedRiderCount: this.newAllowedRiderCount,
       tripConnectionId,
@@ -163,7 +166,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     };
 
 
-    this.tripService.updateTrip(this.activeTripId, activeTrip)
+      this.tripService.updateTrip(this.activeTripId, activeTrip)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
         this.getActiveTrips();
@@ -177,6 +180,8 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
       }, error => {
         console.log(error);
       });
+    });
+
   }
 
   startTrip() {

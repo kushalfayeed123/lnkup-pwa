@@ -3,7 +3,7 @@
 
 <div class="avd-container">
 
-    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style"
+    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style" [usePanning]="true"
         [zoomControl]="false">
         <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
         </agm-marker>
@@ -24,7 +24,7 @@
 
     </agm-map>
     <form id="search-form" *ngIf="showForm" >
-        <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?" 
+        <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?"
             matGoogleMapsAutocomplete   (onAutocompleteSelected)="onAutocompleteSelected($event)"
             (onLocationSelected)="onLocationSelected($event)"/>
 
@@ -39,12 +39,20 @@
             </div>
 
             <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
-                <mat-form-field class="auth-full-width">
+                <mat-form-field class="auth-full-width" (click)="toggleInput()" *ngIf="!showInput">
                     <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off"
-                        autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]="currentLocation"
+                        autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]="currentLocation" disabled
                         matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
 
                 </mat-form-field>
+
+                <mat-form-field class="auth-full-width" *ngIf="showInput">
+                  <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off" autofocus
+                      autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]=""
+                      matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
+
+              </mat-form-field>
+
                 <!-- <p><a href="">Forgot password?</a></p> -->
                 <button (click)='getDrivers()' mat-raised-button color="accent"
                     class="auth-full-width login-text">Search
