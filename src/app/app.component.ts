@@ -32,10 +32,10 @@ export class AppComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line: variable-name
 
   constructor(private metaService: MetaService, private swUpdate: SwUpdate,
-    private broadCastService: BroadcastService,
-    private authenticateService: AuthenticateDataService,
-    private route: Router,
-    private notifyService: NotificationsService) {
+              private broadCastService: BroadcastService,
+              private authenticateService: AuthenticateDataService,
+              private route: Router,
+              private notifyService: NotificationsService) {
     route.events.subscribe(url => {
       this.getCurrentRoute();
     });
