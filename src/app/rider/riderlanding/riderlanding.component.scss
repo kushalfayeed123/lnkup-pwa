@@ -10,6 +10,14 @@
   width: 100%;
   bottom: 51px;
 }
+.driver-message-card {
+  position: relative;
+  bottom: 33%;
+  padding: 9px;
+}
+.message-card-body {
+  height: 114px !important;
+}
 #search-form input {
   border: 0;
   width: 96.5%;
@@ -52,6 +60,12 @@ input::placeholder {
 .example-card {
   max-width: 400px;
   height: 157px !important;
+}
+.cancel-btn {
+  width: 40%;
+  position: relative;
+  left: 27%;
+  bottom: 9px;
 }
 .mat-form-field {
   width: 100% !important ;
@@ -377,6 +391,10 @@ body.map-body .avd li:first-of-type::before {
   .example-card {
     height: 191px !important;
   }
+
+  .loader {
+    bottom: 35px;
+  }
 }
 // @media only screen and (min-height: 532px) and (max-height: 550px) {
 //   #search-form {
@@ -406,4 +424,3 @@ body.map-body .avd li:first-of-type::before {
 //     top: 84.8%;
 //   }
 // }
-

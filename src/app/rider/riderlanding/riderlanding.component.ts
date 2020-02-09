@@ -270,6 +270,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   currentLocation: string;
   availableTrips: boolean;
   showInput: any;
+  message: string;
+  currentDate: Date;
+  dateNow: string;
+  emptyTrip: boolean;
+  allAvailableTrips: ActiveTrips[];
 
   constructor(
     private route: ActivatedRoute,
@@ -299,6 +304,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getCurrentDateTime();
     localStorage.removeItem('currentLocation');
     setTimeout(() => {
       this.getCurrentLocation();
@@ -321,17 +327,15 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.zoom = 15;
     this.notificationService.intiateConnection();
     this.getAllDriversLocations();
+    this.getEmptyTrips();
   }
-
-
-  // getAllTrips() {
-  //   this.activeTrip.getAllActiveTrips()
-  //   .pipe(takeUntil(this.unsubscribe$))
-  //   .subscribe(data => {
-  //     console.log('data', data);
-  //     this.broadCastService.publishALlTrips(data);
-  //   });
-  // }
+  getEmptyTrips() {
+    this.broadCastService.allTrips
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      this.emptyTrip = res;
+    });
+  }
   getUserById(userId) {
     this.authService
       .getById(userId)
@@ -375,7 +379,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   getCurrentLocation() {
     const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
-    if (userLocation ) {
+    if (userLocation) {
       this.latitude = userLocation.lat;
       this.longitude = userLocation.lng;
     } else {
@@ -387,11 +391,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         localStorage.setItem('origin', JSON.stringify(currentLocation));
         const geocoder = new google.maps.Geocoder;
         geocoder.geocode({ location: currentLocation }, (result) => {
-          if (result[0]) {
+          if (!result) {
+            return;
+          } else {
             this.currentLocation = result[0].formatted_address;
             this.originAddress = result[0].formatted_address;
-          } else {
-            console.log('no results found');
           }
         });
       });
@@ -468,8 +472,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   storeLocation() {
     this.mapService.storeLocation(this.originAddress, this.destinationAddress);
-    setTimeout(() => {
-    }, 2000);
   }
   getDestinationCordinates() {
     this.mapService.findDestination(this.destinationAddress);
@@ -481,18 +483,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       const origin = JSON.parse(localStorage.getItem('currentLocation'));
       const destination = JSON.parse(localStorage.getItem('destination'));
       if (!origin) {
-        this.getDirection(origin, destination);
-      } else {
         this.getDirection(cl, destination);
+      } else {
+        this.getDirection(origin, destination);
       }
-      console.log('origin', origin);
     }, 5000);
   }
 
   getDirection(origin, destination) {
     setTimeout(() => {
-      const cl = origin;
-      this.origin = { lat: cl.lat, lng: cl.lng };
+      this.origin = { lat: origin.lat, lng: origin.lng };
       this.destination = { lat: destination.lat, lng: destination.lng };
       this.renderOptions = {
         polylineOptions: {
@@ -503,8 +503,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           editable: false,
         }
       };
-      this.latitude = cl.lat;
-      this.longitude = cl.lng;
+      this.latitude = origin.lat;
+      this.longitude = origin.lng;
     }, 2000);
     //   this.heatmap = new google.maps.visualization.HeatmapLayer({
     //     data: [this.origin, this.destination]
@@ -527,7 +527,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
   getDrivers() {
     if (!this.userPayment) {
-      // this.notificationService.showInfoMessage('Please pay cash to your driver when this trip ends.');
       localStorage.setItem('paymentType', 'cash');
     } else {
       localStorage.setItem('paymentType', 'card');
@@ -553,18 +552,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     const UserId = JSON.parse(localStorage.getItem('currentUser'));
     const status = 1;
     this.getAllActiveTrips(status);
-    setTimeout(() => {
-      const destination = JSON.parse(localStorage.getItem('destination'));
-      const request = {
-        currentLocationLongitude: this.longitude.toString(),
-        currentLocationLatitude: this.latitude.toString(),
-        riderDestinationLatitude: destination.lat.toString(),
-        riderDestinationLongitude: destination.lng.toString(),
-        userId: UserId.id,
-        tripStatus: '1'
-      };
-      localStorage.setItem('activeRiderRequest', JSON.stringify(request));
-    }, 2000);
+    const destination = JSON.parse(localStorage.getItem('destination'));
+    const request = {
+      currentLocationLongitude: this.longitude.toString(),
+      currentLocationLatitude: this.latitude.toString(),
+      riderDestinationLatitude: destination.lat.toString(),
+      riderDestinationLongitude: destination.lng.toString(),
+      userId: UserId.id,
+      tripStatus: '1'
+    };
+    localStorage.setItem('activeRiderRequest', JSON.stringify(request));
   }
   markerDragEnd(m: any, $event: any) {
   }
@@ -581,7 +578,14 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       panelClass: ['dark-snackbar-search']
     });
   }
- getAllActiveTrips(status?) {
+  getCurrentDateTime() {
+    this.currentDate = new Date();
+    const currentDate = new Date().getTime();
+    this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US')
+      .toLowerCase()
+      .substring(1);
+  }
+  getAllActiveTrips(status?) {
     const userId = JSON.parse(localStorage.getItem('currentUser'));
     this.activeTrip.getAllActiveTrips()
       .pipe(takeUntil(this.unsubscribe$))
@@ -598,60 +602,74 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           }, 10000);
         } else {
           this.passDirection();
-          allActiveTrips.forEach(element => {
-            const tripDestinationLat = Number(element.driverEndLatitude);
-            const tripDestinationLong = Number(element.driverEndLongitude);
-            const userDestination = JSON.parse(localStorage.getItem('destination'));
-            const tripEndLocation = new google.maps.LatLng(tripDestinationLat, tripDestinationLong);
-            const riderEndLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
-            new google.maps.DistanceMatrixService().getDistanceMatrix({
-              origins: [tripEndLocation], destinations: [riderEndLocation],
-              travelMode: google.maps.TravelMode.DRIVING
-            }, (results: any) => {
-              this.destinationDistanceInKm = (results.rows[0].elements[0].distance.value / 1000);
-              element.userDriverDestinationDistance = this.destinationDistanceInKm;
-              // this.destinationDistanceInKm.push(destinationDistanceInKm);
-            });
-            const pickupLat = Number(element.driverStartLatitude);
-            const pickupLng = Number(element.driverStartLongitude);
-            const origin = JSON.parse(localStorage.getItem('origin'));
-            const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
-            if (userLocation !== null) {
-              this.start = userLocation;
-            } else {
-              this.start = origin;
-            }
-            const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
-            const pickupLocation = new google.maps.LatLng(pickupLat, pickupLng);
-            const request = {
-              origin: pickupLocation,
-              destination: tripEndLocation,
-            };
-            localStorage.setItem('pickup', JSON.stringify(pickupLocation));
-            this.getRoutePoints(request);
-            new google.maps.DistanceMatrixService().getDistanceMatrix({
-              origins: [currentLocation], destinations: [pickupLocation],
-              travelMode: google.maps.TravelMode.DRIVING
-            }, (results: any) => {
-              this.pickupDistance = (results.rows[0].elements[0].distance.value / 1000);
-              const timeToPickup = (results.rows[0].elements[0].duration.text);
-              this.timeToPickup = timeToPickup;
-              element.timeToPickup = this.timeToPickup;
-              element.pickupDistance = this.pickupDistance;
-              if (!allActiveTrips) {
-                return;
+          setTimeout(() => {
+            allActiveTrips.forEach(element => {
+              const tripDestinationLat = Number(element.driverEndLatitude);
+              const tripDestinationLong = Number(element.driverEndLongitude);
+              const pickupLat = Number(element.driverStartLatitude);
+              const pickupLng = Number(element.driverStartLongitude);
+              const origin = JSON.parse(localStorage.getItem('origin'));
+              const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
+              const userDestination = JSON.parse(localStorage.getItem('destination'));
+              const tripEndLocation = new google.maps.LatLng(tripDestinationLat, tripDestinationLong);
+              const riderEndLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
+              new google.maps.DistanceMatrixService().getDistanceMatrix({
+                origins: [tripEndLocation], destinations: [riderEndLocation],
+                travelMode: google.maps.TravelMode.DRIVING
+              }, (results: any) => {
+                this.destinationDistanceInKm = (results.rows[0].elements[0].distance.value / 1000);
+                element.userDriverDestinationDistance = this.destinationDistanceInKm;
+                // this.destinationDistanceInKm.push(destinationDistanceInKm);
+              });
+
+              if (userLocation !== null) {
+                this.start = userLocation;
               } else {
-                this.reachableDrivers = allActiveTrips;
-                this.availableTrips = true;
-                this.mapService.publishAvailableTrips(this.reachableDrivers);
-                this.gettingDrivers = false;
+                this.start = origin;
               }
+              const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
+              const pickupLocation = new google.maps.LatLng(pickupLat, pickupLng);
+              const request = {
+                origin: pickupLocation,
+                destination: tripEndLocation,
+              };
+              localStorage.setItem('pickup', JSON.stringify(pickupLocation));
+              this.getRoutePoints(request);
+              new google.maps.DistanceMatrixService().getDistanceMatrix({
+                origins: [currentLocation], destinations: [pickupLocation],
+                travelMode: google.maps.TravelMode.DRIVING
+              }, (results: any) => {
+                this.pickupDistance = (results.rows[0].elements[0].distance.value / 1000);
+                const timeToPickup = (results.rows[0].elements[0].duration.text);
+                this.timeToPickup = timeToPickup;
+                element.timeToPickup = this.timeToPickup;
+                element.pickupDistance = this.pickupDistance;
+                if (!allActiveTrips) {
+                  return;
+                } else {
+                  this.mapService.publishAvailableTrips(allActiveTrips);
+                  this.availableTrips = true;
+                  this.gettingDrivers = false;
+                }
+              });
             });
-          });
+          }, 5000);
         }
-
       });
+  }
 
+  navToTripSearch() {
+    this.reachableDrivers = false;
+    this.emptyTrip = false;
+    this.showForm = true;
+    this.gettingDrivers = false;
+    this.showNoTripMessage = false;
+    this.availableTrips = false;
+    // this.origin = {lat: null, lng: null};
+    // this.destination = {lat: null, lng: null};
+    this.getCurrentLocation();
+
+    console.log(this.emptyTrip);
   }
 
   getRoutePoints(request: {}) {

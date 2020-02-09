@@ -3,14 +3,6 @@
     <div class="page-heading">
       <h1>Signup</h1>
     </div>
-    <!-- <div class="alt-sisgn-up">
-        <button class="alt-button " id="facebook">
-          <img src="./assets/svg/001-facebook.svg" alt="" width="15px" />
-        </button>
-        <button class="alt-button " id="google">
-          <img src="./assets/svg/002-search.svg" alt="" width="15px" />
-        </button>
-      </div> -->
       <mat-spinner *ngIf="loading" [diameter]="30"
       class="loader"
     ></mat-spinner>
@@ -45,3 +37,5 @@
     </form>
   </main>
 </section>
+
+<app-notification></app-notification>

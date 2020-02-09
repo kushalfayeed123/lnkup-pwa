@@ -31,6 +31,7 @@ export class BroadcastService {
   private _allTrips = new BehaviorSubject(null);
   public allTrips = this._allTrips.asObservable();
 
+
   constructor(private activeTrip: ActiveTripDataService) {}
 
   shareCurrentUser(user) {
@@ -64,7 +65,8 @@ export class BroadcastService {
     this._notifMessage.next(message);
   }
 
-  publishALlTrips(allTrips) {
+  publishAllTrips(allTrips) {
     this._allTrips.next(allTrips);
   }
+
 }

@@ -124,7 +124,7 @@ section.auth-pages .alt-sisgn-up button:first-of-type {
 
 section.auth-pages .input-group {
   text-align: left;
-  margin: 0 0 30px 0;
+  margin: 0 0 7px 0;
 }
 
 section.auth-pages .input-group label {
@@ -267,6 +267,10 @@ section.auth-pages.auth-page #sign-up-form p {
 section.auth-pages.auth-page #sign-up-form p a {
   color: #e040fb;
 }
+.contain-box {
+  padding: 19px 31px;
+}
+
 .select-container{
   margin-left: 19px;
   width: 68%;

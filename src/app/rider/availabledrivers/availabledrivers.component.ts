@@ -50,6 +50,8 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
       });
     this.getAvailableTrips();
   }
+
+
   getCurrentDateTime() {
     this.currentDate = new Date();
     const currentDate = new Date().getTime();
@@ -62,15 +64,18 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.mapService.availableTrips
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trips => {
-        const availableTrips = trips;
-        this.availableTrips = availableTrips.filter(
+        this.availableTrips = trips;
+        this.availableTrips = trips.filter(
           d =>
             d.pickupDistance < 8 &&
             d.userDriverDestinationDistance < 8 &&
             d.allowedRiderCount >= 0 &&
             new Date(d.actualTripStartDateTime) >= this.currentDate
         );
-        if (this.availableTrips.length > 0) {
+        if (this.availableTrips.length < 1) {
+            this.emptyTrip = true;
+            this.broadcastService.publishAllTrips(this.emptyTrip);
+        } else {
           this.emptyTrip = false;
           this.availableTrips.forEach(element => {
             const userName = element.tripDriver;
@@ -89,10 +94,11 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
               this.availableSeats.push(availableSeat);
             }
           });
-        } else {
-          this.emptyTrip = true;
         }
+     
       });
+
+
   }
 
   passTripDetails(userTripId) {
@@ -100,19 +106,19 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.showTripDetails = true;
    }
   navToTripSearch() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
-    this.clearLocalStorage();
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate(['rider/home', userId]);
+    // const user = JSON.parse(localStorage.getItem('currentUser'));
+    // const userId = user.id;
+    // this.clearLocalStorage();
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    // this.router.onSameUrlNavigation = 'reload';
+    // this.router.navigate(['rider/home', userId]);
+    this.showTripDetails = true;
   }
 
   clearLocalStorage() {
     localStorage.removeItem('paymentType');
     localStorage.removeItem('pickup');
     localStorage.removeItem('activeRiderRequest');
-    localStorage.removeItem('destination');
   }
 
   ngOnDestroy() {

@@ -79,7 +79,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
           this.allTrips = false;
           return;
         } else {
-          this.broadcastService.publishALlTrips(data);
+          this.broadcastService.publishAllTrips(data);
           this.allTrips = true;
         }
         this.loading = false;

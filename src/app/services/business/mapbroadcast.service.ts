@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MapsAPILoader, AgmMap } from '@agm/core';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
 import { Location } from '../../models/Location';
+import { ActiveTrips } from 'src/app/models/ActiveTrips';
 
 @Injectable()
 export class MapBroadcastService {
@@ -304,7 +305,7 @@ public google: any;
     localStorage.setItem('storedAddress', this.location.address_level_1);
   }
 
-  publishAvailableTrips(availableTrips: []) {
+  publishAvailableTrips(availableTrips: ActiveTrips[]) {
     this._availableTrips.next(availableTrips);
   }
   publishTripDetails(tripId) {

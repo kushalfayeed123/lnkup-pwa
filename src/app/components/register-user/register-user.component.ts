@@ -10,6 +10,7 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { format } from 'url';
 import { formatDate } from '@angular/common';
+import { NotificationsService } from 'src/app/services/business/notificatons.service';
 
 @Component({
   selector: 'app-register-user',
@@ -32,6 +33,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
                private authService: AuthenticateDataService,
                private route: Router,
                private _snackBar: MatSnackBar,
+               private notifyService: NotificationsService
      ) { }
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
       lastName: ['', Validators.required],
       password: ['', Validators.required],
       role: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       verificationCode : ['', Validators.required],
       phoneNumber: ['', Validators.required],
       termsAgree: ['', Validators.required],
@@ -60,7 +62,7 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
   registerUser() {
     this.loading = true;
     const countryCode = '+234';
-    const userPhone = countryCode + this.registerForm.value.phoneNumber ;
+    let userPhone = '' ;
     const username = this.registerForm.value.userName.toLowerCase();
     const lastname = this.registerForm.value.lastName.toLowerCase();
 
@@ -69,6 +71,11 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     const validateCode = randomCode.slice(0, 6);
     localStorage.setItem('userVerification', validateCode);
 
+    if (this.registerForm.value.phoneNumber.substring(0, 4) === countryCode) {
+      userPhone = this.registerForm.value.phoneNumber;
+    } else {
+      userPhone = countryCode + this.registerForm.value.phoneNumber;
+    }
     this.registerForm.patchValue({verificationCode: validateCode, phoneNumber: userPhone,
        userName: username, lastName: lastname, signupDate: this.currentDate, signupTime: this.currentTime });
 
@@ -79,17 +86,21 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
        localStorage.setItem('registeredUser', JSON.stringify(registerValues));
        this.route.navigate(['verify']);
        this.loading = false;
+       this.registerForm.reset();
     },
     error => {
       this.loading = false;
-      this.openErrorMessage();
+      this.openErrorMessage(error);
     });
   }
-  openErrorMessage() {
-    this._snackBar.openFromComponent(ErrorMessageComponent, {
-      duration: this.durationInSeconds * 1000,
-      panelClass: ['dark-snackbar-error']
-    });
+  openErrorMessage(errorMessage) {
+    // this._snackBar.openFromComponent(ErrorMessageComponent, {
+    //   duration: this.durationInSeconds * 1000,
+    //   panelClass: ['dark-snackbar-error'],
+    //   data: errorMessage
+    // });
+
+    this.notifyService.showErrorMessage(errorMessage);
   }
 
   ngOnDestroy() {
