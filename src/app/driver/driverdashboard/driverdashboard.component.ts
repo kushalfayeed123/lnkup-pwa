@@ -264,7 +264,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         // alert(res);
       });
-    this.notificationService.tokenRefresh();
+    // this.notificationService.tokenRefresh();
     this.startTrip();
     this.getCurrentLocation();
     this.setIntervalCall();

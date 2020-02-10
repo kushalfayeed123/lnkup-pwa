@@ -70,6 +70,7 @@ export class NotificationsService {
         this.authService.getById(this.userId)
             .subscribe(token => {
                 this.token = token.pushNotificationTokens;
+                console.log(token);
                 if (this.token.length > 0) {
                     this.updateToken(this.userId, sub);
                 } else {
@@ -108,16 +109,16 @@ export class NotificationsService {
             });
     }
 
-    tokenRefresh() {
-        this.angularFireMessaging.tokenChanges
-            .subscribe(sub => {
-                if (sub) {
-                    this.updateToken(this.userId, sub);
-                } else {
-                    return;
-                }
-            });
-    }
+    // tokenRefresh() {
+    //     this.angularFireMessaging.tokenChanges
+    //         .subscribe(sub => {
+    //             if (sub) {
+    //                 this.updateToken(this.userId, sub);
+    //             } else {
+    //                 return;
+    //             }
+    //         });
+    // }
     sendNotification(userId, message) {
         this.authService.getById(userId)
             .toPromise()
@@ -135,11 +136,14 @@ export class NotificationsService {
     }
 
     sendMessage(user, message) {
-        const token = user.pushNotificationTokens[0].token;
-        const pushMessage = { ...message, token };
-        this.pushService.sendFCMMessage(pushMessage)
-            .subscribe(res => {
-                console.log(res);
+        const token = user.pushNotificationTokens;
+        token.forEach(element => {
+            const newToken = element.token;
+            const pushMessage = { ...message, newToken };
+            this.pushService.sendFCMMessage(pushMessage)
+                .subscribe(res => {
+                    console.log(res);
+                });
             });
     }
 
