@@ -29,7 +29,6 @@
               "src/manifest.webmanifest",
               "src/firebase-messaging-sw.js",
               "src/.well-known/assetlinks.json"
-
             ],
             "styles": [
               "src/styles.scss",
@@ -139,6 +138,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "lnkup-mobile"
+    }
+  },
+  "defaultProject": "lnkup-mobile",
+  "cli": {
+    "analytics": false
+  }
 }
