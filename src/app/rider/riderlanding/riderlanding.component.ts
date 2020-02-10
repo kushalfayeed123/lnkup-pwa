@@ -296,9 +296,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.notificationService.receiveMessage();
     this.notificationService.currentMessage
       .subscribe(res => {
-        // alert(res);
+        console.log(res);
       });
-    this.notificationService.tokenRefresh();
+    // this.notificationService.tokenRefresh();
     this.setIntervalCall();
 
   }
