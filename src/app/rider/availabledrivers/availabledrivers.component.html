@@ -1,5 +1,5 @@
 
-<div class="destination-container fadeInLeft" *ngIf="!showTripDetails">
+<div class="destination-container " *ngIf="!showTripDetails" [@bounce]="bounce">
         <swiper [config]="config">
                 <div class="swiper-wrapper">
                   <ng-container *ngIf="!emptyTrip">
@@ -45,11 +45,11 @@
                       </mat-card-content>
                   </mat-card>
                   </ng-container>
-                
+
                     <!-- <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div> -->
 
-                  
+
         </div>
         </swiper>
       </div>

@@ -7,15 +7,20 @@ import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 
+import { trigger, transition, useAnimation } from '@angular/animations';
+import { bounce } from 'ng-animate';
+
 @Component({
   selector: 'app-availabledrivers',
   templateUrl: './availabledrivers.component.html',
   styleUrls: ['./availabledrivers.component.scss'],
-  animations: [slideInAnimation],
+  animations: [trigger('bounce', [transition('* => *', useAnimation(bounce))]), slideInAnimation],
   host: { '[@slideInAnimation]': '' }
 })
 export class AvailabledriversComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
+  bounce: any;
+
   public config: any = {
     navigation: {
       nextEl: '.swiper-button-next',
@@ -95,7 +100,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
             }
           });
         }
-     
+
       });
 
 
