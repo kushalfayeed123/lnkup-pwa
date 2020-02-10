@@ -5,7 +5,7 @@
                   <ng-container *ngIf="!emptyTrip">
                     <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">
                       <mat-card-content>
-                        <div class="avd">
+                        <div class="avd" [@bounce]="bounce">
                           <!-- <h2 class="heading">Available Drivers</h2> -->
                           <div class="driver-container">
                             <div class="driver-track">

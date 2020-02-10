@@ -27,13 +27,14 @@ import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { LocationDataService } from 'src/app/services/data/location/location.data.service';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { GoogleMapsScriptProtocol } from '@agm/core';
-
+import { trigger, transition, useAnimation } from '@angular/animations';
+import { bounce } from 'ng-animate';
 
 @Component({
   selector: 'app-riderlanding',
   templateUrl: './riderlanding.component.html',
   styleUrls: ['./riderlanding.component.scss'],
-  animations: [slideInAnimation],
+  animations: [[trigger('bounce', [transition('* => *', useAnimation(bounce))]), slideInAnimation]],
   host: { '[@slideInAnimation]': '' }
 })
 export class RiderlandingComponent implements OnInit, OnDestroy {

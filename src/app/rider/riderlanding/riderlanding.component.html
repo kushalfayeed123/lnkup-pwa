@@ -28,32 +28,32 @@
             <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?"
                 matGoogleMapsAutocomplete   (onAutocompleteSelected)="onAutocompleteSelected($event)"
                 (onLocationSelected)="onLocationSelected($event)"/>
-    
+
         </form>
         <form class="destination-container " *ngIf="!reachableDrivers ">
             <mat-card *ngIf="!riderLink ">
-                <div *ngIf="gettingDrivers ">
+                <div *ngIf="gettingDrivers " [@bounce]="bounce" >
                         <p class="search" >Please hold on while we search for drivers near you</p>
                         <mat-spinner   [diameter]="30"
                         class="loader"
                       ></mat-spinner>
                 </div>
-    
+
                 <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
                     <mat-form-field class="auth-full-width" (click)="toggleInput()" *ngIf="!showInput">
                         <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off"
                             autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]="currentLocation" disabled
                             matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
-    
+
                     </mat-form-field>
-    
+
                     <mat-form-field class="auth-full-width" *ngIf="showInput">
                       <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off" autofocus
                           autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]=""
                           matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
-    
+
                   </mat-form-field>
-    
+
                     <!-- <p><a href="">Forgot password?</a></p> -->
                     <button (click)='getDrivers()' mat-raised-button color="accent"
                         class="auth-full-width login-text">Search
@@ -68,13 +68,13 @@
                     </mat-card>
         </form>
     </ng-container>
-       
+
 </div>
 
 <div *ngIf="emptyTrip" class="driver-message-card">
     <mat-card class="message-card-body">
         <mat-card-content>
-          <div class="search">Sorry, there are no drivers headed in your direction at this time. Please try again shortly.</div>
+          <div class="search" [@bounce]="bounce">Sorry, there are no drivers headed in your direction at this time. Please try again shortly.</div>
           <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn" (click)="navToTripSearch()">Back</button>
         </mat-card-content>
       </mat-card>
