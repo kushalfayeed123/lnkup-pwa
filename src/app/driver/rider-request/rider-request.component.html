@@ -12,11 +12,11 @@
         </nav> -->
 
     <div *ngIf="loading" class="emptyRiders">
-      <span>Fetching requests</span>
+      <span>Broadcasting your trip</span>
       <mat-spinner [diameter]="30" class="loader"></mat-spinner>
     </div>
     <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0" class="emptyRiders fadeOutLeft">
-      <span>You do not currently have any lnkup requests, You will be alerted once there is a request.</span>
+      <span>No rider has joined your trip yet, please hold on..</span>
     </div>
     <!-- <div *ngIf="riderRequestLength < 1 && !loading && allRiderRequest > 0" class="emptyRiders fadeOutLeft">
       <span>{{allRiderRequest}} {{allRiderRequest > 1 ? 'riders' : 'rider' }} has been added to this trip</span>

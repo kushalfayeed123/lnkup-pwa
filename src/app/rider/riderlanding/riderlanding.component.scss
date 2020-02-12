@@ -65,7 +65,7 @@ input::placeholder {
   width: 40%;
   position: relative;
   left: 27%;
-  bottom: 9px;
+  top: 11px;
 }
 .mat-form-field {
   width: 100% !important ;
@@ -388,6 +388,9 @@ body.map-body .avd li:first-of-type::before {
     left: 65.6%;
   }
 
+  .cancel-btn {
+    bottom: 11px;
+  }
   .example-card {
     height: 191px !important;
   }
