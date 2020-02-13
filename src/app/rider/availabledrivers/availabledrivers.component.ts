@@ -69,7 +69,6 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     this.mapService.availableTrips
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(trips => {
-        this.availableTrips = trips;
         this.availableTrips = trips.filter(
           d =>
             d.pickupDistance < 8 &&

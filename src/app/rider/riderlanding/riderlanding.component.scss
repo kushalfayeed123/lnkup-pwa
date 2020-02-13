@@ -12,7 +12,7 @@
 }
 .driver-message-card {
   position: relative;
-  bottom: 33%;
+  bottom: 23%;
   padding: 9px;
 }
 .message-card-body {
@@ -65,7 +65,7 @@ input::placeholder {
   width: 40%;
   position: relative;
   left: 27%;
-  bottom: 9px;
+  top: 10px;
 }
 .mat-form-field {
   width: 100% !important ;
@@ -394,6 +394,13 @@ body.map-body .avd li:first-of-type::before {
 
   .loader {
     bottom: 35px;
+  }
+  .driver-message-card {
+    bottom: 35%;
+  }
+  .cancel-btn {
+    top: -9px;
+
   }
 }
 // @media only screen and (min-height: 532px) and (max-height: 550px) {
