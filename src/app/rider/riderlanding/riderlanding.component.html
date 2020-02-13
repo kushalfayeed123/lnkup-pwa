@@ -32,7 +32,7 @@
         </form>
         <form class="destination-container " *ngIf="!reachableDrivers ">
             <mat-card *ngIf="!riderLink ">
-                <div *ngIf="gettingDrivers " [@bounce]="bounce" >
+                <div *ngIf="gettingDrivers "  >
                         <p class="search" >Please hold on while we search for drivers near you</p>
                         <mat-spinner   [diameter]="30"
                         class="loader"
@@ -74,7 +74,7 @@
 <div *ngIf="emptyTrip" class="driver-message-card">
     <mat-card class="message-card-body">
         <mat-card-content>
-          <div class="search" [@bounce]="bounce">Sorry, there are no drivers headed in your direction at this time. Please try again shortly.</div>
+          <div class="search" >Sorry, there are no drivers headed in your direction at this time. Please try again shortly.</div>
           <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn" (click)="navToTripSearch()">Back</button>
         </mat-card-content>
       </mat-card>

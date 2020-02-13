@@ -156,13 +156,12 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
           this.sendNotification();
-          const message = 'Your trip request has been sent. Your driver will respond soon.';
-          this.notifyService.showInfoMessage(message);
+         
           this.requestData = data;
           this.loading = false;
           this.gettingDrivers = true;
         }, error => {
-          const message = 'We could not send your request, please try again.';
+          const message = 'A network error occured, please try again.';
           this.notifyService.showErrorMessage(message);
           this.loading = false;
         });
@@ -176,7 +175,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     const message = 'A new rider has joined your trip.';
     const userId = this.driverId;
     const pushMessage = {
-      title: 'Lnkup Request',
+      title: 'LnkuP Request',
       body: message,
       click_action: `https://lnkupmob.azureedge.net/driver/rider-request`,
       receiverName: this.driverEmail

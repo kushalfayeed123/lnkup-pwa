@@ -47,6 +47,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.emptyTrip = false;
     this.broadcastService.showTripDetails
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
@@ -99,10 +100,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
             }
           });
         }
-
       });
-
-
   }
 
   passTripDetails(userTripId) {
