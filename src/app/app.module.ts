@@ -1,6 +1,5 @@
 import { PushNotificationWebService } from './services/data/push-notification/push-notification.web.service';
 import { AgmDirectionModule } from 'agm-direction';
-import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -56,6 +55,7 @@ import { PushNotificationDataService } from './services/data/push-notification/p
 import { LocationWebService } from './services/data/location/location.web.service';
 import { LocationDataService } from './services/data/location/location.data.service';
 import { TripsHistoryComponent } from './components/trips-history/trips-history.component';
+import { GoogleMapsAPIWrapper, AgmCoreModule } from '@agm/core';
 
 
 
