@@ -331,7 +331,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getEmptyTrips();
   }
   getEmptyTrips() {
-    this.broadCastService.allTrips
+    this.broadCastService.emptyTrips
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
       this.emptyTrip = res;

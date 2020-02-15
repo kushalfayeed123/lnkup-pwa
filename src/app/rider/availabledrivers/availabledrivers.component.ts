@@ -79,7 +79,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
         );
         if (this.availableTrips.length < 1) {
             this.emptyTrip = true;
-            this.broadcastService.publishAllTrips(this.emptyTrip);
+            this.broadcastService.publishEmptyTrips(this.emptyTrip);
         } else {
           this.emptyTrip = false;
           this.availableTrips.forEach(element => {

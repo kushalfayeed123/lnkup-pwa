@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getAllTrips() {
     this.activeTrip
-      .getAllActiveTrips()
+      .getAllTrips()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         if (!data) {

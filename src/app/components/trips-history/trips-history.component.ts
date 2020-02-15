@@ -12,6 +12,7 @@ export class TripsHistoryComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
   allTrips: any;
+  loading: boolean;
 
 
   constructor(private broadcastService: BroadcastService) { }
@@ -22,24 +23,23 @@ export class TripsHistoryComponent implements OnInit, OnDestroy {
 
 
   getAllTrips() {
+    this.loading = true;
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.broadcastService.allTrips
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         if (res) {
+          this.loading = false;
           if (user.role === 'Driver') {
             this.allTrips = res.filter(d => d.tripDriver.driverId === user.id);
-            console.log('all trips', this.allTrips);
-
           } else {
-            // this.allTrips = res.filter(d => d.activeRiders.filter(r => r.user.userId === user.id));
+            this.allTrips = res.filter(d => d.activeRiders.filter(r => r.user.userId === user.id));
+            console.log('all trips', this.allTrips);
           }
-
+        } else {
+          return;
         }
       });
-    // if (user.Role === 'Driver') {
-
-    // }
   }
 
   ngOnDestroy() {

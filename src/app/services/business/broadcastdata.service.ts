@@ -31,6 +31,9 @@ export class BroadcastService {
   private _allTrips = new BehaviorSubject(null);
   public allTrips = this._allTrips.asObservable();
 
+  private _emptyTrips = new BehaviorSubject(null);
+  public emptyTrips = this._emptyTrips.asObservable();
+
 
   constructor(private activeTrip: ActiveTripDataService) {}
 
@@ -67,6 +70,10 @@ export class BroadcastService {
 
   publishAllTrips(allTrips) {
     this._allTrips.next(allTrips);
+  }
+
+  publishEmptyTrips(trips) {
+    this._emptyTrips.next(trips);
   }
 
 }
