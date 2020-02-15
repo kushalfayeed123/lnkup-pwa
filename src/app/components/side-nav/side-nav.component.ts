@@ -62,6 +62,9 @@ export class SideNavComponent implements OnDestroy {
   navToPayment() {
     this._router.navigate([`payment/${this.userId}`]);
   }
+  navToTrips() {
+    this._router.navigate([`trips/${this.userId}`]);
+  }
   logout() {
     this.authService.logout();
     this.opened = false;
@@ -71,16 +74,12 @@ export class SideNavComponent implements OnDestroy {
    getCurrentUser() {
       const user =  JSON.parse(localStorage.getItem('currentUser'));
       if (user) {
-        this.userName = user.userName;
-        this.userId = user.id;
-        this.userRole = user.role.toLowerCase();
-      } else {
         setTimeout(() => {
-          const user =  JSON.parse(localStorage.getItem('currentUser'));
           this.userName = user.userName;
           this.userId = user.id;
           this.userRole = user.role.toLowerCase();
         }, 5000);
+      } else {
         return;
       }
   }

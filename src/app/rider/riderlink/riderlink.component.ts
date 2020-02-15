@@ -151,6 +151,10 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     .subscribe(res => {
       const activeRiders = res.activeRiders;
       activeRiders.filter(a => a.userId === this.userId);
+      if (activeRiders) {
+        const onGoingTrip = true;
+        localStorage.setItem('onGoingTrip', JSON.stringify(onGoingTrip));
+      }
       this.activeRiderId = activeRiders[0].activeRiderId;
       this.riderConnectId = activeRiders[0].riderConnectId;
     });

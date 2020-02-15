@@ -1,1 +1,40 @@
-<p>trips-history works!</p>
+<div class="settings-page auth-pages security user-profiles">
+    <main class="contain-box">
+
+        <div class="trips-card" *ngFor="let trip of allTrips; let i = index;">
+            <div class="trip-location trip-margin">
+                <div class="from-top"></div>
+                <div class="from-detail">
+                    <div class="text-color">{{trip.tripPickup}}.</div>
+                </div>
+                <div class="to-detail">
+                    <div class="text-color">{{trip.tripDestination}}.</div>
+                </div>
+
+                <div class="to-bottom"></div>
+
+
+                <!-- <div class="distance-line"></div> -->
+
+            </div>
+            <hr>
+            <div class="trip-margin">
+                <div class="time-detail">
+                    <div>Trip Start : </div>
+                    <div class="time-text text-color">{{trip.actualTripStartDateTime | date: 'medium'}}</div>
+                </div>
+                <div class="time-detail">
+                    <div>Trip End : </div>
+                    <div class="time-text text-color">{{trip.actualTripEndDateTime | date: 'medium'}}</div>
+                </div>
+                <div class="status-detail">
+                    <div> status :</div>
+                    <div class="status-text text-color">{{trip.driverTripStatus===1 ? 'Completed' : 'Pending'}}</div>
+                 </div>
+            </div>
+            
+        </div>
+
+    </main>
+</div>
+<app-notification></app-notification>

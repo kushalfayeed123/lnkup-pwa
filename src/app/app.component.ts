@@ -9,6 +9,7 @@ import { BroadcastService } from './services/business/broadcastdata.service';
 import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
 
 
 
@@ -35,10 +36,12 @@ export class AppComponent implements OnInit, OnDestroy {
               private broadCastService: BroadcastService,
               private authenticateService: AuthenticateDataService,
               private route: Router,
+              private activeTrip: ActiveTripDataService,
               private notifyService: NotificationsService) {
     route.events.subscribe(url => {
       this.getCurrentRoute();
     });
+    this.getAllTrips();
     this.reload();
     this.getLoggedInUser();
 
@@ -49,6 +52,19 @@ export class AppComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
+  }
+
+  getAllTrips() {
+    this.activeTrip
+      .getAllActiveTrips()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        if (!data) {
+          return;
+        } else {
+          this.broadCastService.publishAllTrips(data);
+        }
+      });
   }
 
   getLoggedInUser() {
@@ -62,7 +78,16 @@ export class AppComponent implements OnInit, OnDestroy {
         preserveFragment: true
       };
       if (user) {
+        const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
+        if (!onGoingTrip) {
           this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
+        } else {
+          if (user.Role === 'Driver') {
+            this.route.navigate([`driver/home/${user.id}?driverNav=true`]);
+          } else {
+            this.route.navigate([`rider/home/${user.id}?riderLink=true`]);
+          }
+        }
       } else {
         this.route.navigate(['/login']);
       }
@@ -89,6 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const profileRoute = route.slice(0, 8);
     const riderRoute = route.slice(0, 6);
     const driverRoute = route.slice(0, 7);
+    const tripsRoute = route.slice(0, 6);
     if (riderRoute === '/rider') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
@@ -108,6 +134,9 @@ export class AppComponent implements OnInit, OnDestroy {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
 
+    } else if (tripsRoute === '/trips') {
+      this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
     } else {
       showSideNav = false;
       this.broadCastService.publishSideNavValue(showSideNav);

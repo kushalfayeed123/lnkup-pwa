@@ -33,7 +33,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     private activeTrip: ActiveTripDataService,
     private broadcastService: BroadcastService
   ) {
-    // this.getAllTrips();
   }
 
   ngOnInit() {
@@ -69,22 +68,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAllTrips() {
-    this.loading = true;
-    this.activeTrip
-      .getAllActiveTrips()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        if (!data) {
-          this.allTrips = false;
-          return;
-        } else {
-          this.broadcastService.publishAllTrips(data);
-          this.allTrips = true;
-        }
-        this.loading = false;
-      });
-  }
+
 
   driverNavToHome() {
     if (this.user !== null) {
