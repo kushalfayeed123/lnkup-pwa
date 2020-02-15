@@ -12,7 +12,7 @@ export const slideInAnimation =
             style({ transform: 'translateX(100%)' }),
 
             // animation and styles at end of transition
-            animate('0.7s ease-in-out', 
+            animate('0.7s ease-in-out',
             style({ transform: 'translateX(0%)' }))
         ]),
         transition(':leave', [
@@ -21,7 +21,7 @@ export const slideInAnimation =
             style({ transform: 'translateX(0%)' }),
 
             // animation and styles at end of transition
-            animate('0.7s ease-in-out', 
+            animate('0.7s ease-in-out',
             style({ transform: 'translateX(-100%)' }))
         ]),
     ]);

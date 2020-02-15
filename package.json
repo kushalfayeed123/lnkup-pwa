@@ -39,6 +39,7 @@
     "agm-overlays": "^1.4.1",
     "angular-rave": "^2.0.1",
     "angular2-carousel": "^1.0.17",
+    "animate.css": "^3.7.2",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.0",
     "firebase": "^5.5.0",
