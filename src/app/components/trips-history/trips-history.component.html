@@ -35,7 +35,7 @@
                 </div>
                 <div class="status-detail">
                     <div> status :</div>
-                    <div class="status-text text-color">{{trip.driverTripStatus===0 ? 'Completed' : 'Pending'}}</div>
+                    <div class="status-text text-color" [ngClass]="{'pending' : trip.driverTripStatus!==0}">{{trip.driverTripStatus===0 ? 'Completed' : 'Pending'}}</div>
                  </div>
             </div>
             
