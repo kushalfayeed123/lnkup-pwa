@@ -35,7 +35,7 @@
     <div *ngIf="openDialogue">
       <div class="user-details" >
         <div style="padding-bottom: 20px;"> {{image? 'Change Profile Image' : 'Upload Profile Image'}}</div>
-        <mat-spinner *ngIf="loading" [diameter]="30" class="loader"></mat-spinner>
+        <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
         <div>
           <input type="file" style="padding-bottom: 20px;" (change)="uploadImage($event)" #PhotoInput hidden>
           <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
@@ -48,7 +48,7 @@
       <div class="user-details" *ngIf="isDriver">
         <div>
             <div style="padding-bottom: 20px;">Please enter your vehicle details</div>
-            <mat-spinner *ngIf="licenseLoad"  [diameter]="30"
+            <mat-spinner *ngIf="licenseLoad"  [diameter]="20"
                 class="loader"
               ></mat-spinner>
             <form action="" [formGroup]="registerCarDetails" (ngSubmit)="creatDriverAccount()">
@@ -86,7 +86,7 @@
         </div>
         <div class="user-details" *ngIf="isDriver">
             <div style="padding-bottom: 20px;"> Upload License </div>
-            <mat-spinner *ngIf="loading" [diameter]="30" class="loader"></mat-spinner>
+            <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
             <div>
                 <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
                 <button   mat-raised-button color="accent" class="auth-full-width login-text"

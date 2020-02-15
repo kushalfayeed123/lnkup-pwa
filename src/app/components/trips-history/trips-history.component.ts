@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
+import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 
 @Component({
   selector: 'app-trips-history',
@@ -15,7 +16,7 @@ export class TripsHistoryComponent implements OnInit, OnDestroy {
   loading: boolean;
 
 
-  constructor(private broadcastService: BroadcastService) { }
+  constructor(private activeTrip: ActiveTripDataService) { }
 
   ngOnInit() {
     this.getAllTrips();
@@ -25,7 +26,8 @@ export class TripsHistoryComponent implements OnInit, OnDestroy {
   getAllTrips() {
     this.loading = true;
     const user = JSON.parse(localStorage.getItem('currentUser'));
-    this.broadcastService.allTrips
+    this.activeTrip
+      .getAllTrips()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         if (res) {
@@ -33,8 +35,7 @@ export class TripsHistoryComponent implements OnInit, OnDestroy {
           if (user.role === 'Driver') {
             this.allTrips = res.filter(d => d.tripDriver.driverId === user.id);
           } else {
-            this.allTrips = res.filter(d => d.activeRiders.filter(r => r.user.userId === user.id));
-            console.log('all trips', this.allTrips);
+            this.allTrips = res.filter(d => d.activeRiders.some(r => r.user.userId === user.id));
           }
         } else {
           return;

@@ -297,7 +297,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.notificationService.receiveMessage();
     this.notificationService.currentMessage
       .subscribe(res => {
-        console.log(res);
       });
     // this.notificationService.tokenRefresh();
     this.setIntervalCall();
@@ -306,7 +305,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     localStorage.removeItem('currentLocation');
-    this.broadCastService.getAllTrips();
     this.getCurrentDateTime();
     setTimeout(() => {
       this.getCurrentLocation();

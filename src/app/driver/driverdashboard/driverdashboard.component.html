@@ -9,17 +9,17 @@
     </agm-direction>
 
   </agm-map>
-  <form action="" id="search-form" *ngIf="showLanding && !driverNavigate" class="animated zoomIn">
+  <form action="" id="search-form" *ngIf="showLanding && !driverNavigate" >
 
-    <input *ngIf="showDestination" type="search" name="" id="" class="destination" placeholder="Where are you going?"
+    <input *ngIf="showDestination && currentUser" type="search" name="" id="" class="destination animated zoomIn" placeholder="Where are you going?"
       matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserDestinationLocation($event)" />
 
-    <input *ngIf="showPickup" type="search" name="" id="" class="destination" placeholder=" Set your pickup spot"
+    <input *ngIf="showPickup" type="search" name="" id="" class="destination animated zoomIn" placeholder=" Set your pickup spot"
       matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserPickupLocation($event)" />
   </form>
   <form class="destination-container" *ngIf="!driverNavigate" >
     <mat-card class="example-card animated zoomIn">
-      <mat-spinner *ngIf="loading" [diameter]="30" class="loader"></mat-spinner>
+      <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
       <mat-card-content *ngIf="currentUser">
         <div class="destination-details animated zoomIn">
           <!-- <p class="move">

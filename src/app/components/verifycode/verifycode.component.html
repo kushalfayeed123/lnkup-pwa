@@ -10,7 +10,7 @@
           We just sent you a verification code (xxxxxx), Please enter the digits below, or tap on resend code to request a new code. Thanks!! <br />
         </p>
       </div>
-      <mat-spinner *ngIf="loading" [diameter]="30"
+      <mat-spinner *ngIf="loading" [diameter]="20"
       class="loader"
     ></mat-spinner>
       <form  id="auth-form" (ngSubmit)="verifyUser()" [formGroup]="verifyForm" >

@@ -1,22 +1,23 @@
 <div class="settings-page auth-pages security user-profiles">
     <main class="contain-box">
 
-        <div class="animated zoomIn" *ngIf="loading">
-            <mat-spinner  [diameter]="30" class="loader"></mat-spinner>
+        <div class="animated zoomIn loader" *ngIf="loading">
+            <mat-spinner  [diameter]="20" class="loader"></mat-spinner>
 
         </div>
 
         <div class="trips-card animated zoomIn" *ngFor="let trip of allTrips; let i = index;">
             <div class="trip-location trip-margin">
                 <div class="from-top"></div>
+                <div class="to-bottom"></div>
+
                 <div class="from-detail">
-                    <div class="text-color">{{trip.tripPickup}}.</div>
+                    <div class="text-color pickup-text">{{trip.tripPickup}}</div>
                 </div>
                 <div class="to-detail">
-                    <div class="text-color">{{trip.tripDestination}}.</div>
+                    <div class="text-color">{{trip.tripDestination}}</div>
                 </div>
 
-                <div class="to-bottom"></div>
 
 
                 <!-- <div class="distance-line"></div> -->

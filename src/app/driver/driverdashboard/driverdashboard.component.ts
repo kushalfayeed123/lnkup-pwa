@@ -271,7 +271,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.broadCastService.getAllTrips();
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
