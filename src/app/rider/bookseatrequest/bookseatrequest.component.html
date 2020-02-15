@@ -1,5 +1,5 @@
-<section class="auth-pages book-seat  filled-page settings-page auth-pages security" id="ride-confirmation">
-    <div *ngIf="gettingDrivers">
+<section class="auth-pages book-seat  filled-page settings-page auth-pages security animated zoomIn" id="ride-confirmation">
+    <div *ngIf="gettingDrivers" class="animated zoomIn">
         <p class="search">Adding you to the trip, please hold on.</p>
         <mat-spinner   [diameter]="30"
         class="loader"
@@ -45,7 +45,7 @@
         <div class="input-group fare-group">
           <div class="f-total">
             <label for="">Fare Total</label>
-            <span class="fare-price">&#8358; {{newFare}}</span>
+            <span class="fare-price animated zoomIn">&#8358; {{newFare}}</span>
           </div>
           <button type="submit"  id="book-ride" mat-raised-button color="accent"
           (click)="createRiderRequest()" class="auth-full-width" [disabled]="inValidSeat">Send Request</button>

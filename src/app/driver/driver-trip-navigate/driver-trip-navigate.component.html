@@ -1,4 +1,4 @@
-<mat-card class="example-card destination-container">
+<mat-card class="example-card destination-container animated zoomIn">
 
   <mat-card-content>
     <div class="blink_me" *ngIf="endTrip"></div>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="container-grid" *ngIf="isActive || !isCashPayment">
+    <div class="container-grid " *ngIf="isActive || !isCashPayment">
         <div class="riders">
             <div class="radius" >
       <swiper [config]="config" class="swiper">

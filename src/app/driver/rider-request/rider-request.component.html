@@ -1,4 +1,4 @@
-<div class="ride request">
+<div class="ride request animated zoomIn">
   <div class="refresh-container" *ngIf="riderRequestLength < 1" (click)="getActiveTrips()">
     Refresh
     <img src="./assets/icons/refresh.svg" alt="" class="refresh-btn">
@@ -15,14 +15,14 @@
       <span>Broadcasting your trip</span>
       <mat-spinner [diameter]="30" class="loader"></mat-spinner>
     </div>
-    <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0" class="emptyRiders fadeOutLeft">
+    <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0" class="emptyRiders animated zoomIn">
       <span>No rider has joined your trip yet, please hold on..</span>
     </div>
     <!-- <div *ngIf="riderRequestLength < 1 && !loading && allRiderRequest > 0" class="emptyRiders fadeOutLeft">
       <span>{{allRiderRequest}} {{allRiderRequest > 1 ? 'riders' : 'rider' }} has been added to this trip</span>
     </div> -->
     <swiper [config]="config" *ngIf="!loading">
-      <div class="swiper-wrapper">
+      <div class="swiper-wrapper animated zoomIn">
         <main class="contain-box  swiper-slide" *ngFor="let request of riderRequest; let i = index;">
           <div class="item-details dd">
             <div class="driver-name">

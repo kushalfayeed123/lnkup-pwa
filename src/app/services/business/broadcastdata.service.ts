@@ -76,4 +76,16 @@ export class BroadcastService {
     this._emptyTrips.next(trips);
   }
 
+  getAllTrips() {
+    this.activeTrip
+      .getAllTrips()
+      .subscribe(data => {
+        if (!data) {
+          return;
+        } else {
+          this.publishAllTrips(data);
+        }
+      });
+  }
+
 }

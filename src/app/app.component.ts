@@ -41,10 +41,8 @@ export class AppComponent implements OnInit, OnDestroy {
     route.events.subscribe(url => {
       this.getCurrentRoute();
     });
-    this.getAllTrips();
     this.reload();
     this.getLoggedInUser();
-
   }
 
   // tslint:disable-next-line: use-lifecycle-interface
@@ -54,44 +52,52 @@ export class AppComponent implements OnInit, OnDestroy {
     this.showSideNav = false;
   }
 
-  getAllTrips() {
-    this.activeTrip
-      .getAllTrips()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        if (!data) {
-          return;
-        } else {
-          this.broadCastService.publishAllTrips(data);
-        }
-      });
-  }
+
 
   getLoggedInUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const currentRoute = decodeURI(localStorage.getItem('currentRoute'));
-    if (!currentRoute) {
-      this.route.navigate(['/onboarding']);
+    const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
+    const navigationExtras: NavigationExtras = {
+      queryParamsHandling: 'preserve',
+      preserveFragment: true
+    };
+
+    if (!user) {
+      this.route.navigate(['/login']);
     } else {
-      const navigationExtras: NavigationExtras = {
-        queryParamsHandling: 'preserve',
-        preserveFragment: true
-      };
-      if (user) {
-        const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
-        if (!onGoingTrip) {
-          this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
+      if (!onGoingTrip ) {
+        if (!currentRoute) {
+          this.route.navigate(['/onboarding']);
         } else {
-          if (user.Role === 'Driver') {
-            this.route.navigate([`driver/home/${user.id}?driverNav=true`]);
-          } else {
-            this.route.navigate([`rider/home/${user.id}?riderLink=true`]);
-          }
+          this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
         }
       } else {
-        this.route.navigate(['/login']);
+        this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
       }
     }
+    // if (!currentRoute) {
+    //   this.route.navigate(['/onboarding']);
+    // } else {
+    //   const navigationExtras: NavigationExtras = {
+    //     queryParamsHandling: 'preserve',
+    //     preserveFragment: true
+    //   };
+    //   if (user) {
+    //     const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
+    //     if (!onGoingTrip) {
+    //       this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
+    //     } else {
+    //       if (user.Role === 'Driver') {
+    //         this.route.navigate([`driver/home/${user.id}?driverNav=true`]);
+    //       } else {
+    //         this.route.navigate([`rider/home/${user.id}?riderLink=true`]);
+    //       }
+    //     }
+    //   } else {
+    //     this.route.navigate(['/login']);
+    //   }
+    // }
   }
 
   reload() {

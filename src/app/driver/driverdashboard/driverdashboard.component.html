@@ -9,7 +9,7 @@
     </agm-direction>
 
   </agm-map>
-  <form action="" id="search-form" *ngIf="showLanding && !driverNavigate">
+  <form action="" id="search-form" *ngIf="showLanding && !driverNavigate" class="animated zoomIn">
 
     <input *ngIf="showDestination" type="search" name="" id="" class="destination" placeholder="Where are you going?"
       matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserDestinationLocation($event)" />
@@ -17,11 +17,11 @@
     <input *ngIf="showPickup" type="search" name="" id="" class="destination" placeholder=" Set your pickup spot"
       matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserPickupLocation($event)" />
   </form>
-  <form class="destination-container" *ngIf="!driverNavigate">
-    <mat-card class="example-card">
+  <form class="destination-container" *ngIf="!driverNavigate" >
+    <mat-card class="example-card animated zoomIn">
       <mat-spinner *ngIf="loading" [diameter]="30" class="loader"></mat-spinner>
       <mat-card-content *ngIf="currentUser">
-        <div class="destination-details">
+        <div class="destination-details animated zoomIn">
           <!-- <p class="move">
                     Move the marker to your destination or enter your destination above
                     another comment
@@ -38,12 +38,12 @@
 
             <div *ngIf="showDestination" class="destination-location">
               <div class="location" style="font-size: 16px;">Your Destination</div>
-              <span class="location">{{destinationName}}</span>
+              <span class="location animated zoomIn">{{destinationName}}</span>
             </div>
 
             <div *ngIf="showPickup" class="destination-location">
               <div class="location" style="font-size: 16px;">Your Pickup Spot</div>
-              <span class="location">{{pickupName}}</span>
+              <span class="location animated zoomIn">{{pickupName}}</span>
             </div>
           </div>
 

@@ -305,8 +305,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getCurrentDateTime();
     localStorage.removeItem('currentLocation');
+    this.broadCastService.getAllTrips();
+    this.getCurrentDateTime();
     setTimeout(() => {
       this.getCurrentLocation();
     }, 3000);
@@ -334,7 +335,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.broadCastService.emptyTrips
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
-      this.emptyTrip = res;
+      if (!res) {
+        setTimeout(() => {
+          this.emptyTrip = res;
+        }, 5000);
+      } else {
+        this.emptyTrip = res;
+      }
     });
   }
   getUserById(userId) {
