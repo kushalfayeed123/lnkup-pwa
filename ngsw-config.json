@@ -4,27 +4,15 @@
   "dataGroups": [{
     "name": "api-performance",
     "urls": [
-      "/assets/i18n/**",
-      "/api/**"
+      "/assets/i18n/**"
     ],
     "cacheConfig": {
       "strategy": "performance",
       "maxSize": 100,
       "maxAge": "3d"
     }
-  },
-  {
-    "name": "api-freshness",
-    "urls": [
-      "/api/ActiveTrip"
-    ],
-    "cacheConfig": {
-      "strategy": "freshness",
-      "maxSize": 100,
-      "maxAge": "3d",
-      "timeout": "10s"
-    }
   }
+
 ],
   "assetGroups": [
     {
