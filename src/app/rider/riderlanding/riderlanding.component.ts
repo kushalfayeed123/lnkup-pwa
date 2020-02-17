@@ -276,6 +276,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   dateNow: string;
   emptyTrip: boolean;
   allAvailableTrips: ActiveTrips[];
+  showCurrenLocationInput: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -316,6 +317,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .subscribe(param => {
         this.riderLink = param.riderLink;
         if (this.riderLink) {
+          this.emptyTrip = false;
           this.getPickupDirection();
         }
       });
@@ -334,12 +336,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   activeTripCheck() {
     const gettingDrivers = JSON.parse(localStorage.getItem('gettingDrivers'));
     const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
-    if (!gettingDrivers ) {
-      if (!onGoingTrip) {
-        return;
-      } else {
-        this.router.navigate([`rider/home/${this.userId}`], { queryParams: { riderLink: true } });
-      }
+    if (!gettingDrivers) {
+      return;
+    } else if (gettingDrivers === false) {
+      return;
     } else {
       this.router.navigate(['rider/bookSeat']);
     }
@@ -706,6 +706,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.originAddress = userLocation;
     this.mapService.findOrigin(userLocation);
     setTimeout(() => {
+      // this.showCurrenLocationInput = true;
       this.getCurrentLocation();
     }, 3000);
 

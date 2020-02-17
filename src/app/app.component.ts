@@ -2,7 +2,7 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 import { MetaService } from './services/business/metaService.service';
 import { SwUpdate, SwPush } from '@angular/service-worker';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
 import { BroadcastService } from './services/business/broadcastdata.service';
@@ -29,6 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   message: any;
   showMessage: boolean;
+  riderLink: boolean;
+  driverNav: boolean;
 
   // tslint:disable-next-line: variable-name
 
@@ -36,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private broadCastService: BroadcastService,
               private authenticateService: AuthenticateDataService,
               private route: Router,
+              private router: ActivatedRoute,
               private activeTrip: ActiveTripDataService,
               private notifyService: NotificationsService) {
     route.events.subscribe(url => {
@@ -122,12 +125,32 @@ export class AppComponent implements OnInit, OnDestroy {
     const driverRoute = route.slice(0, 7);
     const tripsRoute = route.slice(0, 6);
     const riderRequest = route.slice(0, 21);
-    if (riderRoute === '/rider') {
+    this.router.queryParams
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(param => {
+      if (param.riderLink) {
+        this.riderLink = true;
+      }
+      if (param.driverNav) {
+        this.driverNav = true;
+      }
+    });
+
+    if (this.riderLink) {
+      showSideNav = false;
+      this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+    } else if (this.driverNav) {
+      showSideNav = false;
+      this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+    } else if (riderRoute === '/rider') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
     } else if (riderRequest === '/driver/rider-request') {
       showSideNav = false;
       this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
     } else if (driverRoute === '/driver') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);

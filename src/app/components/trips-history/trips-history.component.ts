@@ -3,6 +3,7 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
+import { ActiveTrips } from 'src/app/models/ActiveTrips';
 
 @Component({
   selector: 'app-trips-history',
@@ -14,6 +15,7 @@ export class TripsHistoryComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   allTrips: any;
   loading: boolean;
+  tripFees: ActiveTrips[];
 
 
   constructor(private activeTrip: ActiveTripDataService) { }

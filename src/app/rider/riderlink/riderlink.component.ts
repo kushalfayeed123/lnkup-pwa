@@ -53,6 +53,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
               private tripService: ActiveTripDataService,
               private authService: AuthenticateDataService,
               public dialog: MatDialog,
+              private broadCastService: BroadcastService,
               private notifyService: NotificationsService,
               private paymentService: PaymentDataService,
               private router: Router) {
@@ -60,8 +61,6 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         if (res) {
-          this.onGoingTrip = false;
-          localStorage.setItem('onGoinTrip', JSON.stringify(this.onGoingTrip))
           this.showPaymentMessage();
         }
       });
