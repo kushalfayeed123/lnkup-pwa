@@ -27,6 +27,7 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
   image: any;
   userId: any;
   tripStartTime: string;
+  showNavBtn: boolean;
 
 
   constructor(private mapService: MapBroadcastService,
@@ -55,7 +56,6 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         this.image = trip.tripDriver.driver.userImage.image;
         this.broadcastService.publishDriverImage(trip);
         this.broadcastService.toggleAvailableTrips(trip);
-        console.log(trip);
         const max = trip.maxRiderNumber;
         const allowed = trip.allowedRiderCount;
         const driverId = trip.tripDriver.driverId;
@@ -85,7 +85,6 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
         this.driverName = trip.tripDriver.driver.userName;
         this.tripPricePerRider = trip.tripPricePerRider;
         this.tripStartTime = trip.tripStartDateTime;
-        this.isTrips = true;
 
         const tripDestination = new google.maps.LatLng(destinationLat, destinationLng);
         const pickupLocation = new google.maps.LatLng(pickupCoordinates.lat, pickupCoordinates.lng);
@@ -101,15 +100,15 @@ export class DriverdetailsComponent implements OnInit, OnDestroy {
                                    tripFee: this.tripPricePerRider,
                                    tripConnectionId,
                                   activeRider};
-            console.log('ride request', riderRequest);
+             this.showNavBtn = true;
              localStorage.setItem('riderRequest', JSON.stringify(riderRequest));
+             this.isTrips = true;
         });
         });
       });
   }
   getAllAvailableTrips() {
     this.broadcastService.toggleAvailableTrips(false);
-    console.log('click');
   }
 
   navigateToBookSeat() {

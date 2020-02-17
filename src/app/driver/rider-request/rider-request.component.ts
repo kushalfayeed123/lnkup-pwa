@@ -41,6 +41,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   riderNumber: string[] = [];
   loading: boolean;
   allRiderRequest: number;
+  cancelLoading: boolean;
 
   constructor(private tripService: ActiveTripDataService,
               private notifyService: NotificationsService,
@@ -81,13 +82,13 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   }
 
   getActiveTrips() {
+    this.loading = true;
     const activeTrip = JSON.parse(localStorage.getItem('activeTrip'));
     this.activeTripId = activeTrip.tripId;
     this.getTripRequest(this.activeTripId);
   }
 
   getTripRequest(tripId) {
-    this.loading = true;
     this.tripService.getTripsById(tripId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(activeTrip => {
@@ -190,6 +191,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
     this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
   }
   cancelActiveTrip() {
+    this.cancelLoading = true;
     const tripConnectionId = sessionStorage.getItem('clientConnectionId');
 
     const activeTrip = {
@@ -207,6 +209,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
         // this.notifyService.sendNotification(receiverId, pushMessage);
         const user = JSON.parse(localStorage.getItem('currentUser'));
         const userId = user.id;
+        this.cancelLoading = false;
         this.router.navigate(['driver/home', userId]);
       }, error => {
         console.log(error);

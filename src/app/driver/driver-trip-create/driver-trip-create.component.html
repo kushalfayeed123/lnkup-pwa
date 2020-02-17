@@ -1,5 +1,5 @@
-<section class="auth-pages book-seat filled-page">
-    <main class="contain-box animated zoomIn">
+<section class="auth-pages book-seat filled-page animated zoomIn">
+    <main class="contain-box">
         <!-- <nav>
             <a href="">
                 <i class="flaticon-left-arrow"></i>
@@ -13,7 +13,7 @@
               <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
               <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
           </div> -->
-        <form [formGroup]="tripForm" id="book-seat-filled-form" *ngIf="!loading">
+        <form [formGroup]="tripForm" id="book-seat-filled-form" *ngIf="!loading" class="animated zoomIn">
 
 
             <!-- <div><a href="">Pickup Spot</a></div> -->

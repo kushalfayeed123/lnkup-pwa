@@ -5,7 +5,7 @@ section.auth-pages.book-seat input {
     margin-bottom: 23px;
   }
   #ride-confirmation {
-    margin-top: 121px;
+    margin-top: 69px;
 
   }
 
@@ -122,6 +122,18 @@ section.auth-pages.book-seat input {
     margin-right: 10px;
   }
 
+  .wait-message {
+    position: relative;
+    top: 91px;
+  }
+
+  .cancel-btn {
+    width: 48%;
+    margin: auto;
+    position: relative;
+    margin-top: 90%;
+  }
+
   /*
   ================
   Security-theme
@@ -194,8 +206,7 @@ section.auth-pages a {
 
 }
 .loader{
-
-  left: 25%;
+  left: 30%;
   height: 50px;
   width: 40%;
 }
@@ -445,7 +456,7 @@ section.auth-pages.auth-page #sign-up-form p a {
   padding-bottom: 2px;
 }
 .contain-box {
-  padding: 100px 32px !important;
+  padding: 24px 32px !important;
 }
 
 
@@ -664,6 +675,3 @@ section.auth-pages.security#ride-confirmation .card-details img {
     font-size: 16px;
   }
 
-  .contain-box {
-    padding: 34px 32px !important;
-  }

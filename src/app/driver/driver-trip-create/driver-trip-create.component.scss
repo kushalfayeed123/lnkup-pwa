@@ -8,6 +8,10 @@ section.auth-pages.book-seat input {
     padding: 54px 32px;
   }
 
+  .timepicker-period__warning {
+    left: 40% !important;
+  }
+
   section.auth-pages.book-seat input:hover, section.auth-pages.book-seat input:focus, section.auth-pages.book-seat input:active {
     border-bottom: unset;
   }

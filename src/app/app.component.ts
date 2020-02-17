@@ -121,9 +121,13 @@ export class AppComponent implements OnInit, OnDestroy {
     const riderRoute = route.slice(0, 6);
     const driverRoute = route.slice(0, 7);
     const tripsRoute = route.slice(0, 6);
+    const riderRequest = route.slice(0, 21);
     if (riderRoute === '/rider') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
+    } else if (riderRequest === '/driver/rider-request') {
+      showSideNav = false;
+      this.broadCastService.publishSideNavValue(showSideNav);
     } else if (driverRoute === '/driver') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
@@ -139,7 +143,6 @@ export class AppComponent implements OnInit, OnDestroy {
     } else if (profileRoute === '/support') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
-
     } else if (tripsRoute === '/trips') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);

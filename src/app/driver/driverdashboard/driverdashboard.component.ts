@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs/internal/Subject';
@@ -271,6 +271,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // this.activeTripCheck();
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
@@ -288,6 +289,20 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
 
     });
     this.notificationService.intiateConnection();
+  }
+
+  activeTripCheck() {
+    const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
+    if (onGoingTrip === false) {
+      this.showLanding = true;
+    } else {
+      const currentRoute = JSON.parse(localStorage.getItem('currentRoute'));
+      const navigationExtras: NavigationExtras = {
+        queryParamsHandling: 'preserve',
+        preserveFragment: true
+      };
+      this.router.navigateByUrl(`${currentRoute}`, navigationExtras);
+    }
   }
 
   startTrip() {

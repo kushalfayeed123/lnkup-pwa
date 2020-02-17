@@ -55,8 +55,8 @@
                   </mat-form-field>
 
                     <!-- <p><a href="">Forgot password?</a></p> -->
-                    <button (click)='getDrivers()' mat-raised-button color="accent"
-                        class="auth-full-width login-text">Search
+                    <button (click)='getDrivers()' mat-raised-button color="accent" *ngIf="destinationAddress && originAddress"
+                        class="auth-full-width login-text animated fadeInRight">Search
                         <i class="material-icons right">send</i>
                     </button>
                     </mat-card-content>

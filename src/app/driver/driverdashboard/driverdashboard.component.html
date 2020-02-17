@@ -37,25 +37,25 @@
             <div class="platenumber">{{plateNumber}}</div>
 
             <div *ngIf="showDestination" class="destination-location">
-              <div class="location" style="font-size: 16px;">Your Destination</div>
-              <span class="location animated zoomIn">{{destinationName}}</span>
+              <div *ngIf="destinationName" class="location animated zoomIn" style="font-size: 16px;">Your Destination</div>
+              <div class="location animated zoomIn">{{destinationName}}</div>
             </div>
 
             <div *ngIf="showPickup" class="destination-location">
-              <div class="location" style="font-size: 16px;">Your Pickup Spot</div>
-              <span class="location animated zoomIn">{{pickupName}}</span>
+              <div *ngIf="pickupName" class="location animated zoomIn" style="font-size: 16px;">Your Pickup Spot</div>
+              <div class="location animated zoomIn">{{pickupName}}</div>
             </div>
           </div>
 
         </div>
-        <button (click)='setDestination()' mat-raised-button color="accent" *ngIf="showDestination"
-          class="auth-full-width login-text">
+        <button (click)='setDestination()' mat-raised-button color="accent" *ngIf="showDestination && destinationName"
+          class="auth-full-width login-text animated zoomIn">
           Set Destination
           <i class="material-icons right"></i>
         </button>
 
-        <button (click)='setPickup()' mat-raised-button color="accent" *ngIf="showPickup"
-          class="auth-full-width login-text">
+        <button (click)='setPickup()' mat-raised-button color="accent" *ngIf="showPickup && pickupName"
+          class="auth-full-width login-text animated zoomIn">
           Set Pickup
           <i class="material-icons right"></i>
         </button>

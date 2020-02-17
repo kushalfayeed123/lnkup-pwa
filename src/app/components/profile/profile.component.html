@@ -1,4 +1,4 @@
-<div class="settings-page auth-pages security user-profiles">
+<div class="settings-page auth-pages security user-profiles animated zoomIn">
   <main class="contain-box">
     <!-- <nav class="riderHeader">
                     <a (click)="navToHome()" class="left-arrow">
@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="openDialogue">
+    <div *ngIf="openDialogue" class="animated zoomIn">
       <div class="user-details" >
         <div style="padding-bottom: 20px;"> {{image? 'Change Profile Image' : 'Upload Profile Image'}}</div>
         <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div class="user-details" *ngIf="isDriver">
+      <div class="user-details animated zoomIn" *ngIf="isDriver" >
         <div>
             <div style="padding-bottom: 20px;">Please enter your vehicle details</div>
             <mat-spinner *ngIf="licenseLoad"  [diameter]="20"
@@ -84,14 +84,14 @@
               </div> -->
           </div>
         </div>
-        <div class="user-details" *ngIf="isDriver">
+        <div class="user-details animated slideInDown" *ngIf="isDriver">
             <div style="padding-bottom: 20px;"> Upload License </div>
             <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
             <div>
                 <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
                 <button   mat-raised-button color="accent" class="auth-full-width login-text"
                 (click)="licenseInput.click()">
-                Upload Drver License
+                Upload Driver License
               </button>
             </div>
           </div>

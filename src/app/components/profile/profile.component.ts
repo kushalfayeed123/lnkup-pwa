@@ -87,7 +87,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getUserData() {
-    console.log('is image', this.isImage);
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.user = user;
     this.userId = user.id;
@@ -108,8 +107,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.driverDataService.getDriverByDriverId(this.routeId)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
-      this.driverData = res;
-      this.driverDataId = res.driverDataId;
+      if (!res) {
+        return;
+      } else {
+        this.driverData = res;
+        this.driverDataId = res.driverDataId;
+      }
     }, error => {
       console.log(error);
     });
@@ -125,9 +128,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(img => {
       this.isImage = false;
-
-      if (img == null) {
+      if (!img) {
         this.isImage = false;
+        return;
       } else {
         this.image = 'data:image/png;base64,' + img.image;
         this.imageId = img.imageId;
@@ -139,7 +142,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   uploadImage(event) {
     this.loading = true;
     this.getUserProfileImage();
-    if (this.image  == null) {
+    if (!this.isImage) {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = async () => {
@@ -261,7 +264,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(bank => {
       this.banks = bank.data.Banks;
-      console.log('banks', this.banks);
     });
   }
 
@@ -285,7 +287,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       split_value: '0.20',
       country: 'NG'
     };
-    console.log(accountPayload);
     this.driverDataService.createDriverAccount(accountPayload)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(acc => {

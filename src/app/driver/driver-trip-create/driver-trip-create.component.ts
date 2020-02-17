@@ -58,6 +58,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   loader: boolean;
   driverCardStatus: any;
   currentDateTime: any;
+  onGoingTrip: boolean;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
     private activeTripService: ActiveTripDataService,
@@ -254,6 +255,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
             localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
             const message = 'You are now broadcasting your trip.';
             this.notifyService.showSuccessMessage(message);
+            this.onGoingTrip = true;
+            localStorage.setItem('onGoingTrip', JSON.stringify(this.onGoingTrip));
             this.router.navigate(['driver/rider-request']);
           }, error => {
             setTimeout(() => {

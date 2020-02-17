@@ -1,10 +1,5 @@
-<section class="auth-pages book-seat  filled-page settings-page auth-pages security animated zoomIn" id="ride-confirmation">
-    <div *ngIf="gettingDrivers" class="animated zoomIn">
-        <p class="search">Adding you to the trip, please hold on.</p>
-        <mat-spinner   [diameter]="20"
-        class="loader"
-      ></mat-spinner>
-</div>
+<section class="auth-pages book-seat  filled-page auth-pages security animated zoomIn" id="ride-confirmation">
+   
     <main class="contain-box " *ngIf="!gettingDrivers">
       <!-- <nav class="riderHeader">
         <a href="">
@@ -57,6 +52,18 @@
       </form>
     
     </main>
+
+    <div *ngIf="gettingDrivers" class="animated zoomIn wait-message">
+      <p class="search">Adding you to the trip, please hold on.</p>
+      <mat-spinner   [diameter]="20"
+      class="loader"
+    ></mat-spinner>
+
+    <div class="cancel-btn">
+      <button type="submit"  id="book-ride" mat-raised-button color="accent"
+      (click)="cancelRequest()" class="auth-full-width">Cancel Request</button>
+    </div>
+</div>
    
   </section>
 

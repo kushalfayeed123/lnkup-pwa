@@ -46,6 +46,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   showPaymentButton: boolean;
   activeRiderId: string;
   riderConnectId: string;
+  onGoingTrip: boolean;
 
   constructor(private driverDataService: DriverDataDataService,
               private riderService: ActiveRiderDataService,
@@ -59,6 +60,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         if (res) {
+          this.onGoingTrip = false;
+          localStorage.setItem('onGoinTrip', JSON.stringify(this.onGoingTrip))
           this.showPaymentMessage();
         }
       });

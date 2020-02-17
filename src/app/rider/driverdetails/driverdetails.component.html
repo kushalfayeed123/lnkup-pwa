@@ -38,7 +38,7 @@
                                     </li>
                                   </ul>
                                 </div>
-                                <button type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="navigateToBookSeat()">Book Seat</button>
+                                <button *ngIf="showNavBtn" type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="navigateToBookSeat()">Book Seat</button>
                               </div>
                             </div>
                           </div>

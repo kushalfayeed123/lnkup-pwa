@@ -60,10 +60,17 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.getRiderRequest();
     this.notifyService.intiateConnection();
     // this.notifyService.sendAcceptMessage();
-
+    this.gettingDriversCheck();
   }
 
-
+  gettingDriversCheck() {
+    const gettingDrivers = JSON.parse(localStorage.getItem('gettingDrivers'));
+    if (!gettingDrivers) {
+      this.gettingDrivers = false;
+    } else {
+      this.gettingDrivers = true;
+    }
+  }
   computeTripFare(value) {
     const tripFare = value * this.fare;
     if (value > this.availableSeats) {
@@ -78,17 +85,17 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     localStorage.setItem('paymentType', value);
     if (value === 'Card') {
       this.broadcastService.paymentStatus
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(status => {
-        if (!status) {
-          this.canCreateTrip = false;
-          this.notifyService.showInfoMessage('Please add a card to continue or change your payment method.');
-          return;
-        } else {
-          this.canCreateTrip = true;
-          this.selectedPaymentMethod = value;
-        }
-      });
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(status => {
+          if (!status) {
+            this.canCreateTrip = false;
+            this.notifyService.showInfoMessage('Please add a card to continue or change your payment method.');
+            return;
+          } else {
+            this.canCreateTrip = true;
+            this.selectedPaymentMethod = value;
+          }
+        });
     } else {
       this.canCreateTrip = true;
       this.selectedPaymentMethod = value;
@@ -101,7 +108,6 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.driverId = tripDetails.driverId;
     // this.driverName = tripDetails.user.userName;
     this.driverEmail = tripDetails.driverEmail;
-    console.log('DRIVER ID', this.driverId);
     if (allowedRiderCount === 0) {
       this.availableSeats = maxSeats;
     } else {
@@ -156,10 +162,10 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
           this.sendNotification();
-         
           this.requestData = data;
           this.loading = false;
           this.gettingDrivers = true;
+          localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
         }, error => {
           const message = 'A network error occured, please try again.';
           this.notifyService.showErrorMessage(message);
@@ -169,6 +175,17 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.notifyService.showInfoMessage('Please add a card to continue or change your payment method.');
     }
+  }
+
+  cancelRequest() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    this.activeRiderService.delete(user.id)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      this.gettingDrivers = false;
+      localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
+      this.router.navigate([`rider/home/${user.id}`]);
+    });
   }
 
   sendNotification() {
@@ -186,12 +203,14 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
 
 
   async getRiderSuccessAlert() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
     await this.notifyService.successAlert
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(alert => {
         if (alert) {
-          const user = JSON.parse(localStorage.getItem('currentUser'));
-          const userId = user.id;
+          this.gettingDrivers = false;
+          localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
           this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
         }
       });

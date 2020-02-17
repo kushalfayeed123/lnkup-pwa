@@ -1,5 +1,5 @@
 <div class="ride request animated zoomIn">
-  <div class="refresh-container" *ngIf="riderRequestLength < 1" (click)="getActiveTrips()">
+  <div class="refresh-container animated zoomIn" *ngIf="riderRequestLength < 1" (click)="getActiveTrips()">
     Refresh
     <img src="./assets/icons/refresh.svg" alt="" class="refresh-btn">
   </div>
@@ -15,7 +15,11 @@
       <span>Broadcasting your trip</span>
       <mat-spinner [diameter]="20" class="loader"></mat-spinner>
     </div>
-    <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0" class="emptyRiders animated zoomIn">
+    <div *ngIf="cancelLoading" class="emptyRiders">
+      <span>Canceling your trip</span>
+      <mat-spinner [diameter]="20" class="loader"></mat-spinner>
+    </div>
+    <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0 && !cancelLoading" class="emptyRiders animated zoomIn">
       <span>No rider has joined your trip yet, please hold on..</span>
     </div>
     <!-- <div *ngIf="riderRequestLength < 1 && !loading && allRiderRequest > 0" class="emptyRiders fadeOutLeft">
@@ -84,9 +88,9 @@
     [ngClass]="{'end-button-center': riderRequestLength > 0 && !loading}"
       *ngIf="riderRequestLength > 0 && !loading" (click)="startTrip()">Start
       trip</button>
-    <button  *ngIf="riderRequestLength < 0 && !loading" id="accept" mat-raised-button color="accent"
-     [ngClass]="{'end-button-center': riderRequestLength < 0 || !loading}"
-      class="auth-full-width btn-round" (click)="cancelActiveTrip()">Cancel trip</button>
+    <button  *ngIf="riderRequestLength < 1 && !loading" id="accept" mat-raised-button color="accent"
+     [ngClass]="{'end-button-center': riderRequestLength < 1 || !loading}"
+      class="auth-full-width btn-round animated zoomIn" (click)="cancelActiveTrip()">Cancel trip</button>
   </div>
 </div>
 

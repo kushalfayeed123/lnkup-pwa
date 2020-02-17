@@ -304,6 +304,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.activeTripCheck();
     localStorage.removeItem('currentLocation');
     this.getCurrentDateTime();
     setTimeout(() => {
@@ -329,10 +330,26 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getAllDriversLocations();
     this.getEmptyTrips();
   }
+
+  activeTripCheck() {
+    const gettingDrivers = JSON.parse(localStorage.getItem('gettingDrivers'));
+    const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
+    if (!gettingDrivers ) {
+      if (!onGoingTrip) {
+        return;
+      } else {
+        this.router.navigate([`rider/home/${this.userId}`], { queryParams: { riderLink: true } });
+      }
+    } else {
+      this.router.navigate(['rider/bookSeat']);
+    }
+  }
   getEmptyTrips() {
     this.broadCastService.emptyTrips
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(res => {
+      this.destinationAddress = '';
+      this.originAddress = '';
       if (!res) {
         setTimeout(() => {
           this.emptyTrip = res;
@@ -484,10 +501,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   passDirection() {
+    const cl = JSON.parse(localStorage.getItem('origin'));
+    const origin = JSON.parse(localStorage.getItem('currentLocation'));
+    const destination = JSON.parse(localStorage.getItem('destination'));
     setTimeout(() => {
-      const cl = JSON.parse(localStorage.getItem('origin'));
-      const origin = JSON.parse(localStorage.getItem('currentLocation'));
-      const destination = JSON.parse(localStorage.getItem('destination'));
       if (!origin) {
         this.getDirection(cl, destination);
       } else {
