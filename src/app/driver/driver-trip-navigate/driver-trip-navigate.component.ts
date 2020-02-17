@@ -265,15 +265,14 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     this.tripRiders.forEach(element => {
       const recieverId = element.userId;
       if (status === 'end') {
+        console.log('status', status, this.tripRiders);
         const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
         this.notifyService.sendNotification(recieverId, message);
         this.notifyService.sendAcceptMessage(recieverId, message);
-        console.log(recieverId);
       } else {
         const message = 'Your trip has started.';
         this.notifyService.sendNotification(recieverId, message);
         this.notifyService.sendAcceptMessage(recieverId, message);
-        console.log(status);
       }
     });
   }

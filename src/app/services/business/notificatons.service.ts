@@ -142,7 +142,7 @@ export class NotificationsService {
             const pushMessage = { ...message, newToken };
             this.pushService.sendFCMMessage(pushMessage)
                 .subscribe(res => {
-                    console.log(res);
+                    console.log('fcm response', res);
                 });
             });
     }

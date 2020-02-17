@@ -18,7 +18,10 @@ import { MatSnackBar } from '@angular/material';
 import { SearchMessageComponent } from 'src/app/components/search-message/search-message.component';
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
-import { Location, Appearance } from '@angular-material-extensions/google-maps-autocomplete';
+import {
+  Location,
+  Appearance
+} from '@angular-material-extensions/google-maps-autocomplete';
 import PlaceResult = google.maps.places.PlaceResult;
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
@@ -34,7 +37,12 @@ import { bounce } from 'ng-animate';
   selector: 'app-riderlanding',
   templateUrl: './riderlanding.component.html',
   styleUrls: ['./riderlanding.component.scss'],
-  animations: [[trigger('bounce', [transition('* => *', useAnimation(bounce))]), slideInAnimation]],
+  animations: [
+    [
+      trigger('bounce', [transition('* => *', useAnimation(bounce))]),
+      slideInAnimation
+    ]
+  ],
   host: { '[@slideInAnimation]': '' }
 })
 export class RiderlandingComponent implements OnInit, OnDestroy {
@@ -231,8 +239,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   zoom: number;
   originAddress: string;
   destinationAddress: string;
-  origin: { lat: any; lng: any; };
-  destination: { lat: any; lng: any; };
+  origin: { lat: any; lng: any };
+  destination: { lat: any; lng: any };
   renderOptions: any;
   gettingDrivers: boolean;
   loading: boolean;
@@ -296,12 +304,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     // this.notificationService.deleteSubscription();
     this.notificationService.requestPermision();
     this.notificationService.receiveMessage();
-    this.notificationService.currentMessage
-      .subscribe(res => {
-      });
+    this.notificationService.currentMessage.subscribe(res => {});
     // this.notificationService.tokenRefresh();
     this.setIntervalCall();
-
   }
 
   ngOnInit() {
@@ -321,6 +326,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           this.getPickupDirection();
         }
       });
+    this.sideNavCheck();
     this.loadMarker = true;
     this.route.params.subscribe(p => {
       const userId = p.id;
@@ -333,6 +339,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getEmptyTrips();
   }
 
+  sideNavCheck() {
+    if (!this.riderLink) {
+      this.broadCastService.publishSideNavValue(true);
+    } else {
+      return;
+    }
+  }
   activeTripCheck() {
     const gettingDrivers = JSON.parse(localStorage.getItem('gettingDrivers'));
     const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
@@ -346,18 +359,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
   getEmptyTrips() {
     this.broadCastService.emptyTrips
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.destinationAddress = '';
-      this.originAddress = '';
-      if (!res) {
-        setTimeout(() => {
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.destinationAddress = '';
+        this.originAddress = '';
+        if (!res) {
+          setTimeout(() => {
+            this.emptyTrip = res;
+          }, 5000);
+        } else {
           this.emptyTrip = res;
-        }, 5000);
-      } else {
-        this.emptyTrip = res;
-      }
-    });
+        }
+      });
   }
   getUserById(userId) {
     this.authService
@@ -387,7 +400,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   getAllDriversLocations() {
-    this.locationService.getAllLocations()
+    this.locationService
+      .getAllLocations()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(loc => {
         this.driverLocation = loc.filter(r => r.userRole === 'Driver');
@@ -412,8 +426,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         this.longitude = loc.lng;
         const currentLocation = { lat: loc.lat, lng: loc.lng };
         localStorage.setItem('origin', JSON.stringify(currentLocation));
-        const geocoder = new google.maps.Geocoder;
-        geocoder.geocode({ location: currentLocation }, (result) => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: currentLocation }, result => {
           if (!result) {
             return;
           } else {
@@ -422,20 +436,25 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           }
         });
       });
-
     }
-
   }
   getActiveTripsCordinates() {
-    this.activeTrip.getAllActiveTrips()
+    this.activeTrip
+      .getAllActiveTrips()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         this.allActiveTrips = res.filter(x => x.driverTripStatus === 1);
         this.allActiveTrips.forEach(element => {
           const tripDestinationLat = Number(element.driverStartLatitude);
           const tripDestinationLong = Number(element.driverStartLongitude);
-          this.allTripsDestinationLat = [...this.allTripsDestinationLat, tripDestinationLat];
-          this.allTripsDestinationLong = [...this.allTripsDestinationLong, tripDestinationLong];
+          this.allTripsDestinationLat = [
+            ...this.allTripsDestinationLat,
+            tripDestinationLat
+          ];
+          this.allTripsDestinationLong = [
+            ...this.allTripsDestinationLong,
+            tripDestinationLong
+          ];
         });
       });
   }
@@ -454,7 +473,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       } else {
         return;
       }
-      this.locationService.getLocationsByUserId(user.id)
+      this.locationService
+        .getLocationsByUserId(user.id)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
           if (res) {
@@ -474,10 +494,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       pickupLatitude: this.currentLatitude,
       userRole: user.role
     };
-    this.locationService.create(locationPayload)
+    this.locationService
+      .create(locationPayload)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-      });
+      .subscribe(res => {});
   }
   updateUserLocation(id) {
     const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -487,10 +507,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       pickupLatitude: this.currentLatitude,
       userRole: user.role
     };
-    this.locationService.update(id, locationPayload)
+    this.locationService
+      .update(id, locationPayload)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-      });
+      .subscribe(res => {});
   }
 
   storeLocation() {
@@ -523,7 +543,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           geodesic: true,
           strokeOpacity: 0.6,
           strokeWeight: 5,
-          editable: false,
+          editable: false
         }
       };
       this.latitude = origin.lat;
@@ -536,7 +556,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     //    {location: { lat: 39.0921167, lng: -94.8559005 }},
     //    {location: { lat: 41.8339037, lng: -87.8720468 }}
     // ]
-
   }
 
   getPickupDirection() {
@@ -561,7 +580,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.showForm = false;
     this.loading = true;
     this.createTripRequest();
-
   }
   onAutocompleteSelected(result: PlaceResult) {
     this.destinationAddress = result.formatted_address;
@@ -586,8 +604,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     };
     localStorage.setItem('activeRiderRequest', JSON.stringify(request));
   }
-  markerDragEnd(m: any, $event: any) {
-  }
+  markerDragEnd(m: any, $event: any) {}
   milesToRadius(value) {
     this.circleRadius = value / 0.00062137;
   }
@@ -610,12 +627,15 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
   getAllActiveTrips(status?) {
     const userId = JSON.parse(localStorage.getItem('currentUser'));
-    this.activeTrip.getAllActiveTrips()
+    this.activeTrip
+      .getAllActiveTrips()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         const allActiveTrips = data;
         if (data.length < 1) {
-          this.notificationService.showInfoMessage('Sorry there are no trips at the moment. Please try again later.');
+          this.notificationService.showInfoMessage(
+            'Sorry there are no trips at the moment. Please try again later.'
+          );
           this.showNoTripMessage = true;
           this.showForm = false;
           setTimeout(() => {
@@ -632,49 +652,76 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
               const pickupLat = Number(element.driverStartLatitude);
               const pickupLng = Number(element.driverStartLongitude);
               const origin = JSON.parse(localStorage.getItem('origin'));
-              const userLocation = JSON.parse(localStorage.getItem('currentLocation'));
-              const userDestination = JSON.parse(localStorage.getItem('destination'));
-              const tripEndLocation = new google.maps.LatLng(tripDestinationLat, tripDestinationLong);
-              const riderEndLocation = new google.maps.LatLng(userDestination.lat, userDestination.lng);
-              new google.maps.DistanceMatrixService().getDistanceMatrix({
-                origins: [tripEndLocation], destinations: [riderEndLocation],
-                travelMode: google.maps.TravelMode.DRIVING
-              }, (results: any) => {
-                this.destinationDistanceInKm = (results.rows[0].elements[0].distance.value / 1000);
-                element.userDriverDestinationDistance = this.destinationDistanceInKm;
-                // this.destinationDistanceInKm.push(destinationDistanceInKm);
-              });
+              const userLocation = JSON.parse(
+                localStorage.getItem('currentLocation')
+              );
+              const userDestination = JSON.parse(
+                localStorage.getItem('destination')
+              );
+              const tripEndLocation = new google.maps.LatLng(
+                tripDestinationLat,
+                tripDestinationLong
+              );
+              const riderEndLocation = new google.maps.LatLng(
+                userDestination.lat,
+                userDestination.lng
+              );
+              new google.maps.DistanceMatrixService().getDistanceMatrix(
+                {
+                  origins: [tripEndLocation],
+                  destinations: [riderEndLocation],
+                  travelMode: google.maps.TravelMode.DRIVING
+                },
+                (results: any) => {
+                  this.destinationDistanceInKm =
+                    results.rows[0].elements[0].distance.value / 1000;
+                  element.userDriverDestinationDistance = this.destinationDistanceInKm;
+                  // this.destinationDistanceInKm.push(destinationDistanceInKm);
+                }
+              );
 
               if (userLocation !== null) {
                 this.start = userLocation;
               } else {
                 this.start = origin;
               }
-              const currentLocation = new google.maps.LatLng(this.start.lat, this.start.lng);
-              const pickupLocation = new google.maps.LatLng(pickupLat, pickupLng);
+              const currentLocation = new google.maps.LatLng(
+                this.start.lat,
+                this.start.lng
+              );
+              const pickupLocation = new google.maps.LatLng(
+                pickupLat,
+                pickupLng
+              );
               const request = {
                 origin: pickupLocation,
-                destination: tripEndLocation,
+                destination: tripEndLocation
               };
               localStorage.setItem('pickup', JSON.stringify(pickupLocation));
               this.getRoutePoints(request);
-              new google.maps.DistanceMatrixService().getDistanceMatrix({
-                origins: [currentLocation], destinations: [pickupLocation],
-                travelMode: google.maps.TravelMode.DRIVING
-              }, (results: any) => {
-                this.pickupDistance = (results.rows[0].elements[0].distance.value / 1000);
-                const timeToPickup = (results.rows[0].elements[0].duration.text);
-                this.timeToPickup = timeToPickup;
-                element.timeToPickup = this.timeToPickup;
-                element.pickupDistance = this.pickupDistance;
-                if (!allActiveTrips) {
-                  return;
-                } else {
-                  this.mapService.publishAvailableTrips(allActiveTrips);
-                  this.availableTrips = true;
-                  this.gettingDrivers = false;
+              new google.maps.DistanceMatrixService().getDistanceMatrix(
+                {
+                  origins: [currentLocation],
+                  destinations: [pickupLocation],
+                  travelMode: google.maps.TravelMode.DRIVING
+                },
+                (results: any) => {
+                  this.pickupDistance =
+                    results.rows[0].elements[0].distance.value / 1000;
+                  const timeToPickup =
+                    results.rows[0].elements[0].duration.text;
+                  this.timeToPickup = timeToPickup;
+                  element.timeToPickup = this.timeToPickup;
+                  element.pickupDistance = this.pickupDistance;
+                  if (!allActiveTrips) {
+                    return;
+                  } else {
+                    this.mapService.publishAvailableTrips(allActiveTrips);
+                    this.availableTrips = true;
+                    this.gettingDrivers = false;
+                  }
                 }
-              });
+              );
             });
           }, 5000);
         }
@@ -696,7 +743,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   getRoutePoints(request: {}) {
-    new google.maps.DirectionsService().route(request, (results) => {
+    new google.maps.DirectionsService().route(request, results => {
       console.log('route points', results);
     });
   }
@@ -709,30 +756,29 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       // this.showCurrenLocationInput = true;
       this.getCurrentLocation();
     }, 3000);
-
   }
 
   computeDistance(origin, destination) {
-    new google.maps.DistanceMatrixService().getDistanceMatrix({
-      origins: [origin], destinations: [destination],
-      travelMode: google.maps.TravelMode.DRIVING
-    }, (results: any) => {
-      this.tripDistance = (results.rows[0].elements[0].distance.value / 1000) + 2;
-      return this.tripDistance;
-    });
+    new google.maps.DistanceMatrixService().getDistanceMatrix(
+      {
+        origins: [origin],
+        destinations: [destination],
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      (results: any) => {
+        this.tripDistance =
+          results.rows[0].elements[0].distance.value / 1000 + 2;
+        return this.tripDistance;
+      }
+    );
   }
-
-
 
   toggleInput() {
     this.showInput = !this.showInput;
   }
-
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 }
-
-
