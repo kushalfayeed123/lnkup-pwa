@@ -56,6 +56,7 @@ import { LocationWebService } from './services/data/location/location.web.servic
 import { LocationDataService } from './services/data/location/location.data.service';
 import { TripsHistoryComponent } from './components/trips-history/trips-history.component';
 import { GoogleMapsAPIWrapper, AgmCoreModule } from '@agm/core';
+import { AgmOverlays } from 'agm-overlays';
 
 
 
@@ -104,14 +105,14 @@ import { GoogleMapsAPIWrapper, AgmCoreModule } from '@agm/core';
 
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     AngularFireModule.initializeApp({
-      apiKey: 'AIzaSyAlDm5IdqHlVG8uDXz6faxEwE-l35JQEtQ',
-      authDomain: 'lnkup-5ddec.firebaseapp.com',
-      databaseURL: 'https://lnkup-5ddec.firebaseio.com',
-      projectId: 'lnkup-5ddec',
-      storageBucket: 'lnkup-5ddec.appspot.com',
-      messagingSenderId: '986206457990',
-      appId: '1:986206457990:web:404eba7da3a744396f4107',
-      measurementId: 'G-35QM2LZ7S4'
+      apiKey: "AIzaSyAlDm5IdqHlVG8uDXz6faxEwE-l35JQEtQ",
+      authDomain: "lnkup-5ddec.firebaseapp.com",
+      databaseURL: "https://lnkup-5ddec.firebaseio.com",
+      projectId: "lnkup-5ddec",
+      storageBucket: "lnkup-5ddec.appspot.com",
+      messagingSenderId: "986206457990",
+      appId: "1:986206457990:web:404eba7da3a744396f4107",
+      measurementId: "G-35QM2LZ7S4"
     }),
     AngularFireMessagingModule,
   ],

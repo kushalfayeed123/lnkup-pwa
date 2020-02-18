@@ -16,6 +16,7 @@ import { RiderlinkComponent } from './riderlink/riderlink.component';
 import { SidebarModule } from 'ng-sidebar';
 import { NotificationComponent } from '../components/notification/notification.component';
 import { OnboardingComponent } from '../components/onboarding/onboarding.component';
+import { AgmOverlays } from 'agm-overlays';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { OnboardingComponent } from '../components/onboarding/onboarding.compone
     FormsModule,
     ReactiveFormsModule,
     MatGoogleMapsAutocompleteModule,
+    AgmOverlays,
     AngularMaterialModule,
     SidebarModule.forRoot(),
   ]

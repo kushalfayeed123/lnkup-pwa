@@ -232,6 +232,26 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     }
   ];
 
+  public markerOptions = {
+    origin: {
+        icon: './assets/Images/direction.svg',
+        scaledSize: {
+          width: 20,
+          height: 20
+        }
+     
+    },
+    destination: {
+        icon: './assets/Images/direction.svg',
+        scaledSize: {
+          width: 20,
+          height: 20
+        }
+    
+    },
+}
+
+showDirection: boolean;
   searchControl: FormControl;
   durationInSeconds = 10;
   longitude: any;
@@ -311,6 +331,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activeTripCheck();
+    this.emptyTrip = false;
     localStorage.removeItem('currentLocation');
     this.getCurrentDateTime();
     setTimeout(() => {
@@ -322,12 +343,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .subscribe(param => {
         this.riderLink = param.riderLink;
         if (this.riderLink) {
-          this.emptyTrip = false;
           this.getPickupDirection();
         }
       });
     this.sideNavCheck();
-    this.loadMarker = true;
     this.route.params.subscribe(p => {
       const userId = p.id;
       this.getUserById(userId);
@@ -535,6 +554,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   getDirection(origin, destination) {
     setTimeout(() => {
+      this.loadMarker = false;
+      this.gettingDrivers = true;
+      this.showDirection = true;
       this.origin = { lat: origin.lat, lng: origin.lng };
       this.destination = { lat: destination.lat, lng: destination.lng };
       this.renderOptions = {
@@ -543,12 +565,15 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           geodesic: true,
           strokeOpacity: 0.6,
           strokeWeight: 5,
-          editable: false
-        }
+          editable: false,
+        },
+        suppressMarkers: true,
       };
       this.latitude = origin.lat;
       this.longitude = origin.lng;
     }, 2000);
+
+    
     //   this.heatmap = new google.maps.visualization.HeatmapLayer({
     //     data: [this.origin, this.destination]
     // });
@@ -568,12 +593,12 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
   getDrivers() {
+    this.loadMarker = true;
     if (!this.userPayment) {
       localStorage.setItem('paymentType', 'cash');
     } else {
       localStorage.setItem('paymentType', 'card');
     }
-    this.loadMarker = false;
     this.getCurrentLocation();
     this.getDestinationCordinates();
     this.gettingDrivers = true;
@@ -729,17 +754,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   navToTripSearch() {
+    this.loadMarker = false;
     this.reachableDrivers = false;
     this.emptyTrip = false;
     this.showForm = true;
     this.gettingDrivers = false;
     this.showNoTripMessage = false;
     this.availableTrips = false;
+    this.showDirection = false;
+    this.broadCastService.publishEmptyTrips(this.emptyTrip);
     // this.origin = {lat: null, lng: null};
     // this.destination = {lat: null, lng: null};
     this.getCurrentLocation();
-
-    console.log(this.emptyTrip);
   }
 
   getRoutePoints(request: {}) {
