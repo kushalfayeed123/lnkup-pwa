@@ -14,6 +14,8 @@ import { RiderRequestComponent } from './rider-request/rider-request.component';
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { DriverTripNavigateComponent } from './driver-trip-navigate/driver-trip-navigate.component';
 import { OnboardingComponent } from '../components/onboarding/onboarding.component';
+import { AgmOverlays } from 'agm-overlays';
+
 
 
 
@@ -33,6 +35,7 @@ import { OnboardingComponent } from '../components/onboarding/onboarding.compone
     ReactiveFormsModule,
     MatGoogleMapsAutocompleteModule,
     AngularMaterialModule,
+    AgmOverlays,
     NgxMaterialTimepickerModule,
     NgxUsefulSwiperModule,
   ]
