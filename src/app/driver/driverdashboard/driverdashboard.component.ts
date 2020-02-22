@@ -296,7 +296,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.getUserById(userId);
       this.getUserProfileImage(userId);
     });
-    this.notificationService.intiateConnection();
   }
 
   sideNavCheck() {

@@ -353,7 +353,6 @@ showDirection: boolean;
     });
     this.searchControl = new FormControl();
     this.zoom = 15;
-    this.notificationService.intiateConnection();
     this.getAllDriversLocations();
     this.getEmptyTrips();
   }
@@ -496,10 +495,11 @@ showDirection: boolean;
         .getLocationsByUserId(user.id)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
-          if (res) {
-            this.updateUserLocation(user.id);
-          } else {
+          if (!res) {
             this.createUserLocation();
+            return;
+          } else {
+            this.updateUserLocation(user.id);
           }
         });
     }

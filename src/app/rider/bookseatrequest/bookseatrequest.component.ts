@@ -58,7 +58,6 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.dropoff = localStorage.getItem('storedAddress');
     this.getTripDetails();
     this.getRiderRequest();
-    this.notifyService.intiateConnection();
     // this.notifyService.sendAcceptMessage();
     this.gettingDriversCheck();
   }

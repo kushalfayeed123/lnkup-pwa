@@ -8,19 +8,19 @@
     ></mat-spinner>
     <form [formGroup]="registerForm" (ngSubmit)="registerUser()" id="sign-up-form">
       <mat-form-field class="auth-full-width">
-        <input type="text" matInput class="input-color" placeholder="firstname" formControlName="userName" />
+        <input type="text" matInput class="input-color" placeholder="First Name" formControlName="userName" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
-        <input type="text" matInput class="input-color" placeholder="lastname" formControlName="lastName" />
+        <input type="text" matInput class="input-color" placeholder="Last Name" formControlName="lastName" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
-        <input type="text" matInput class="input-color" placeholder="email" formControlName="email" />
+        <input type="text" matInput class="input-color" placeholder="Email" formControlName="email" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
-        <input type="text" matInput class="input-color" placeholder="phonenumber" formControlName="phoneNumber" />
+        <input type="number" matInput class="input-color" placeholder="Phone Number" formControlName="phoneNumber" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
-        <input type="password" matInput class="input-color" placeholder="password" formControlName="password" />
+        <input type="password" matInput class="input-color" placeholder="Password" formControlName="password" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
         <mat-label>Sign up as</mat-label>
@@ -32,7 +32,7 @@
       <div class="input-group checker">
         <p>By clicking on verify you agree to the LnkuP terms and conditions</p>
       </div>
-      <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text">Next -> Verify</button>
+      <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text">Verify</button>
       <p class="a-login">Already have an account? <a href="" [routerLink]="['/login']">Log In</a></p>
     </form>
   </main>

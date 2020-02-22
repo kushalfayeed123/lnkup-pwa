@@ -32,6 +32,10 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   public durationInSeconds = 4;
   message: string;
   userPaymentData: UserPaymentToken;
+  senderName: string;
+  senderEmail: string;
+  messageTitle: string;
+  messageBody: string;
 
 
   constructor(private router: Router,
@@ -133,6 +137,55 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['login']);
     }
+  }
+
+  recoverPassword() {
+    this.loading = true;
+    const userId = localStorage.getItem('currentUserId');
+    this.authenticate.getById(userId)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      this.loading = false;
+      if (!res) {
+        this.toastService.showErrorMessage('An error occured please try again');
+      } else {
+        console.log(res);
+        this.sendPasswordEmail(res);
+      }
+    });
+  }
+
+  sendPasswordEmail(user) {
+    this.senderName = 'LnkuP';
+    this.senderEmail = 'linkupsolutionsintl@gmail.com';
+    this.messageTitle = 'LnkuP password recovery';
+    this.messageBody = `Dear ${user.userName}, your password request was received, you can log in with your username ${user.userName}
+     and your password ${user.password}. regards, the lnkup team.`;
+    const registerMail = {
+      toAddresses: [
+        {
+          name: user.userName,
+          address: user.email
+        }
+      ],
+      fromAddresses: [
+        {
+          name: this.senderName,
+          address: this.senderEmail
+        }
+      ],
+      subject: this.messageTitle,
+      content: this.messageBody
+    };
+
+    this.authenticate.sendEmail(registerMail)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(res => {
+      this.loading = false;
+      this.toastService.showInfoMessage(`Your login detail has been sent to ${user.email}. Check your inbox to continue.`);
+    }, err => {
+      this.toastService.showErrorMessage(err);
+    });
   }
 
   ngOnDestroy() {

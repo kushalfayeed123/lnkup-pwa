@@ -52,7 +52,6 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getActiveTrips();
-    this.notifyService.intiateConnection();
 
   }
 
