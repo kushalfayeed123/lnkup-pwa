@@ -77,7 +77,6 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
         data => {
           this.updateUserStatus();
           this.redirectUser();
-          localStorage.removeItem('registeredUser');
           this.loading = false;
         },
         error => {
@@ -142,17 +141,22 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   recoverPassword() {
     this.loading = true;
     const userId = localStorage.getItem('currentUserId');
-    this.authenticate.getById(userId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.loading = false;
-      if (!res) {
-        this.toastService.showErrorMessage('An error occured please try again');
-      } else {
-        console.log(res);
-        this.sendPasswordEmail(res);
-      }
-    });
+    const registeredUser =  JSON.parse(localStorage.getItem('registeredUser'));
+    if (!userId) {
+      this.sendPasswordEmail(registeredUser);
+    } else {
+      this.authenticate.getById(userId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.loading = false;
+        if (!res) {
+          this.toastService.showErrorMessage('An error occured please try again');
+        } else {
+          console.log(res);
+          this.sendPasswordEmail(res);
+        }
+      });
+    }
   }
 
   sendPasswordEmail(user) {
