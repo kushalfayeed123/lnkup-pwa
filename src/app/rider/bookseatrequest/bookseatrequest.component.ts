@@ -50,6 +50,8 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
               private broadcastService: BroadcastService,
               private toastrService: ToastrService,
               private notifyService: NotificationsService) {
+    this.notifyService.intiateConnection();
+
     this.getRiderSuccessAlert();
     this.getRiderDeclineAlert();
   }
@@ -179,12 +181,12 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   cancelRequest() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.activeRiderService.delete(user.id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.gettingDrivers = false;
-      localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
-      this.router.navigate([`rider/home/${user.id}`]);
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.gettingDrivers = false;
+        localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
+        this.router.navigate([`rider/home/${user.id}`]);
+      });
   }
 
   sendNotification() {

@@ -265,6 +265,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     private broadCastService: BroadcastService,
     private locationService: LocationDataService
   ) {
+    this.notificationService.intiateConnection();
     this.notificationService.angularFireMessenger();
     // this.notificationService.deleteSubscription();
     this.notificationService.requestPermision();

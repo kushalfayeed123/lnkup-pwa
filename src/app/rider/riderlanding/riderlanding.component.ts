@@ -319,6 +319,7 @@ showDirection: boolean;
     private notificationService: NotificationsService,
     private locationService: LocationDataService
   ) {
+    this.notificationService.intiateConnection();
     // this.getAllTrips();
     this.notificationService.angularFireMessenger();
     // this.notificationService.deleteSubscription();

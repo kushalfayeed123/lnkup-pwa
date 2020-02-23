@@ -61,10 +61,10 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   onGoingTrip: boolean;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
-    private activeTripService: ActiveTripDataService,
-    private router: Router,
-    private notifyService: NotificationsService,
-    private broadcastService: BroadcastService) {
+              private activeTripService: ActiveTripDataService,
+              private router: Router,
+              private notifyService: NotificationsService,
+              private broadcastService: BroadcastService) {
 
   }
 

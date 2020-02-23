@@ -34,7 +34,6 @@ export class SideNavComponent implements OnDestroy {
               media: MediaMatcher,
               public _router: Router,
               private route: ActivatedRoute) {
-    this.notifyService.intiateConnection();
 
     this.broadCastService.showSideNav
       .pipe(takeUntil(this.unsubscribe$))
