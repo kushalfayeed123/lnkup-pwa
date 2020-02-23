@@ -33,7 +33,8 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     private authService: AuthenticateDataService,
     private route: Router,
     private _snackBar: MatSnackBar,
-    private notifyService: NotificationsService
+    private notifyService: NotificationsService,
+    private broadcastService: BroadcastService
   ) { }
 
   ngOnInit() {
@@ -91,9 +92,12 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
             localStorage.setItem('registeredUser', JSON.stringify(registerValues));
-            this.route.navigate(['verify']);
-            this.loading = false;
-            this.registerForm.reset();
+            this.broadcastService.publishRecoveryStatus(false);
+            setTimeout(() => {
+              this.route.navigate(['verify']);
+              this.loading = false;
+              this.registerForm.reset();
+            }, 3000);
         },
           error => {
             this.loading = false;

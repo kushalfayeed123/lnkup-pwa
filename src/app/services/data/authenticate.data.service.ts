@@ -13,6 +13,7 @@ export abstract class AuthenticateDataService {
     abstract delete(user);
     abstract logout();
     abstract getById(id): Observable<Users>;
+    abstract getByEmail(email): Observable<Users>;
     abstract get currentUserValue();
     abstract updateUserStatus(user);
     abstract decode();

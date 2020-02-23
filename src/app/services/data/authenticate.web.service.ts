@@ -64,6 +64,10 @@ export class AuthenticateWebService implements AuthenticateDataService {
     return this.http.get<Users>(`${this.webUrl}/user/${id}`);
   }
 
+  getByEmail(email: any) {
+    return this.http.get<Users>(`${this.webUrl}/user/email/${email}`);
+  }
+
   register(user: any) {
     return this.http.post(`${this.webUrl}/user/register`, user);
   }

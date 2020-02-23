@@ -123,6 +123,8 @@ export class AppComponent implements OnInit, OnDestroy {
     const route = this.route.url;
     const profileRoute = route.slice(0, 8);
     const riderRoute = route.slice(0, 6);
+    const verifyRoute = route.slice(0, 6);
+
     const driverRoute = route.slice(0, 7);
     const tripsRoute = route.slice(0, 6);
     const riderRequest = route.slice(0, 21);
@@ -156,6 +158,11 @@ export class AppComponent implements OnInit, OnDestroy {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
 
+    } else if (verifyRoute === '/verify') {
+      showSideNav = false;
+      this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+
     } else if (profileRoute === '/profile') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
@@ -173,7 +180,7 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       showSideNav = false;
       this.broadCastService.publishSideNavValue(showSideNav);
-      localStorage.removeItem('currentRoute');
+      // localStorage.removeItem('currentRoute');
     }
   }
 

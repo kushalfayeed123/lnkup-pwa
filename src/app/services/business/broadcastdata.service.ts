@@ -34,6 +34,9 @@ export class BroadcastService {
   private _emptyTrips = new BehaviorSubject(null);
   public emptyTrips = this._emptyTrips.asObservable();
 
+  private _recovery = new BehaviorSubject(null);
+  public recovery = this._recovery.asObservable();
+
 
   constructor(private activeTrip: ActiveTripDataService) {}
 
@@ -67,7 +70,9 @@ export class BroadcastService {
   publishMessage(message) {
     this._notifMessage.next(message);
   }
-
+  publishRecoveryStatus(status) {
+    this._recovery.next(status);
+  }
   publishAllTrips(allTrips) {
     this._allTrips.next(allTrips);
   }

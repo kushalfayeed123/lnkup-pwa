@@ -41,6 +41,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
+              private broadcastService: BroadcastService,
               // tslint:disable-next-line: variable-name
               private _snackBar: MatSnackBar,
               private authenticate: AuthenticateDataService,
@@ -137,60 +138,10 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       this.router.navigate(['login']);
     }
   }
-
   recoverPassword() {
-    this.loading = true;
-    const userId = localStorage.getItem('currentUserId');
-    const registeredUser =  JSON.parse(localStorage.getItem('registeredUser'));
-    if (!userId) {
-      this.sendPasswordEmail(registeredUser);
-    } else {
-      this.authenticate.getById(userId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        this.loading = false;
-        if (!res) {
-          this.toastService.showErrorMessage('An error occured please try again');
-        } else {
-          console.log(res);
-          this.sendPasswordEmail(res);
-        }
-      });
-    }
+    this.broadcastService.publishRecoveryStatus(true);
   }
 
-  sendPasswordEmail(user) {
-    this.senderName = 'LnkuP';
-    this.senderEmail = 'linkupsolutionsintl@gmail.com';
-    this.messageTitle = 'LnkuP password recovery';
-    this.messageBody = `Dear ${user.userName}, your password request was received, you can log in with your username ${user.userName}
-     and your password ${user.password}. regards, the lnkup team.`;
-    const registerMail = {
-      toAddresses: [
-        {
-          name: user.userName,
-          address: user.email
-        }
-      ],
-      fromAddresses: [
-        {
-          name: this.senderName,
-          address: this.senderEmail
-        }
-      ],
-      subject: this.messageTitle,
-      content: this.messageBody
-    };
-
-    this.authenticate.sendEmail(registerMail)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.loading = false;
-      this.toastService.showInfoMessage(`Your login detail has been sent to ${user.email}. Check your inbox to continue.`);
-    }, err => {
-      this.toastService.showErrorMessage(err);
-    });
-  }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
