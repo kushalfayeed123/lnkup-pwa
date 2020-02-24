@@ -320,12 +320,17 @@ showDirection: boolean;
     private locationService: LocationDataService
   ) {
     this.notificationService.intiateConnection();
-    // this.getAllTrips();
     this.notificationService.angularFireMessenger();
-    // this.notificationService.deleteSubscription();
     this.notificationService.requestPermision();
     this.notificationService.receiveMessage();
-    this.notificationService.currentMessage.subscribe(res => {});
+    this.notificationService.currentMessage.subscribe(res => {
+      console.log('current message', res);
+    });
+
+
+
+    // this.getAllTrips();
+    // this.notificationService.deleteSubscription();
     // this.notificationService.tokenRefresh();
     this.setIntervalCall();
   }
@@ -354,7 +359,7 @@ showDirection: boolean;
     });
     this.searchControl = new FormControl();
     this.zoom = 15;
-    this.getAllDriversLocations();
+    // this.getAllDriversLocations();
     this.getEmptyTrips();
   }
 
@@ -413,7 +418,7 @@ showDirection: boolean;
     interval(30000)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(x => {
-        this.broadCastCurrentLocation();
+        // this.broadCastCurrentLocation();
         this.getAllDriversLocations();
       });
   }
@@ -496,6 +501,7 @@ showDirection: boolean;
         .getLocationsByUserId(user.id)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
+          console.log(res)
           if (!res) {
             this.createUserLocation();
             return;

@@ -62,6 +62,7 @@ export class NotificationsService {
                 messagingContext.onMessage = messagingContext.onMessage.bind(messagingContext);
                 messagingContext.onTokenRefresh = messagingContext.onTokenRefresh.bind(messagingContext);
             });
+            // this.deleteSubscription();
         const user = JSON.parse(localStorage.getItem('currentUser'));
         this.userId = user.id;
     }
@@ -69,9 +70,8 @@ export class NotificationsService {
     getuserToken(sub) {
         this.authService.getById(this.userId)
             .subscribe(token => {
-                this.token = token.pushNotificationTokens;
                 console.log(token);
-                if (this.token.length > 0) {
+                if (token.pushNotificationTokens.length > 0) {
                     this.updateToken(this.userId, sub);
                 } else {
                     this.saveToken(this.userId, sub);
@@ -131,6 +131,7 @@ export class NotificationsService {
     receiveMessage() {
         this.angularFireMessaging.messages
             .subscribe(message => {
+                console.log(message)
                 this.currentMessage.next(message);
             });
     }
@@ -144,12 +145,12 @@ export class NotificationsService {
                 .subscribe(res => {
                     console.log('fcm response', res);
                 });
-            });
+        });
     }
 
 
     deleteSubscription() {
-        this.angularFireMessaging.deleteToken(this.token[0].token)
+        this.angularFireMessaging.deleteToken('faon2MkQ9SyVyDc_O1fMN4:APA91bFjk0pgL1eQPZzByPQJOg47D8U8Exnr_N64YeQh8596LdgnG6-C_PbTVcXr0opo6GSBOxBPGTTyjTmThmKCODo_SbesRE001knvhPXl7CEizW7hEXtG-ysDeXeMfNWK3EBZC3Qp')
             .subscribe(res => {
                 console.log(res);
             });
@@ -197,6 +198,16 @@ export class NotificationsService {
             .configureLogging(signalR.LogLevel.Information)
             .build();
 
+        hubConnection.start()
+            .catch(err => console.error(err.toString()))
+            .then(() => {
+                hubConnection.invoke('GetConnectionId')
+                    .then((connectionId) => {
+                        // sessionStorage.setItem('clientConnectionId', connectionId);
+                        //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
+                    });
+            });
+
         hubConnection.on('ReceiveMessage', message => {
             const user = JSON.parse(localStorage.getItem('currentUser'));
             const userRole = user.role;
@@ -217,15 +228,8 @@ export class NotificationsService {
             }
         });
 
-        hubConnection.start().catch(err => console.error(err.toString()))
-            .then(() => {
-                hubConnection.invoke('GetConnectionId')
-                    .then((connectionId) => {
-                        sessionStorage.setItem('clientConnectionId', connectionId);
-                        //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
-                    });
-            });
-        hubConnection.onclose(function () {
+
+        hubConnection.onclose(() => {
             setTimeout(() => {
                 hubConnection.start();
             }, 5000);
@@ -246,14 +250,14 @@ export class NotificationsService {
         if (trip) {
             const tripId = trip.tripId;
             this.tripService.getTripsById(tripId)
-            .subscribe(res => {
-                if (res.driverTripStatus === 0) {
-                    const endTrip = true;
-                    this._endTrip.next(endTrip);
-                } else {
-                    return;
-                }
-            });
+                .subscribe(res => {
+                    if (res.driverTripStatus === 0) {
+                        const endTrip = true;
+                        this._endTrip.next(endTrip);
+                    } else {
+                        return;
+                    }
+                });
         }
     }
 
