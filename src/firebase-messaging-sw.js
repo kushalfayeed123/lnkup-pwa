@@ -15,7 +15,8 @@ firebase.initializeApp({
   storageBucket: 'lnkup-5ddec.appspot.com',
   messagingSenderId: '986206457990',
   appId: '1:986206457990:web:404eba7da3a744396f4107',
-  measurementId: 'G-35QM2LZ7S4'});
+  measurementId: 'G-35QM2LZ7S4'
+});
 
 
 
