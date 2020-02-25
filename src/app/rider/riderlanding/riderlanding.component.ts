@@ -305,6 +305,7 @@ showDirection: boolean;
   emptyTrip: boolean;
   allAvailableTrips: ActiveTrips[];
   showCurrenLocationInput: boolean;
+  request: { currentLocationLongitude: any; currentLocationLatitude: any; riderDestinationLatitude: any; riderDestinationLongitude: any; userId: any; tripStatus: string; };
 
   constructor(
     private route: ActivatedRoute,
@@ -622,19 +623,24 @@ showDirection: boolean;
     this.destinationlongitude = location.longitude;
   }
   createTripRequest() {
-    const UserId = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = JSON.parse(localStorage.getItem('currentUser'));
     const status = 1;
+
+    setTimeout(() => {
+      const destination = JSON.parse(localStorage.getItem('destination'));
+      const request = {
+        currentLocationLongitude: this.longitude.toString(),
+        currentLocationLatitude: this.latitude.toString(),
+        riderDestinationLatitude: destination.lat.toString(),
+        riderDestinationLongitude: destination.lng.toString(),
+        userId: userId.id,
+        tripStatus: '1'
+      };
+      localStorage.setItem('activeRiderRequest', JSON.stringify(request));
+    }, 5000);
+   
     this.getAllActiveTrips(status);
-    const destination = JSON.parse(localStorage.getItem('destination'));
-    const request = {
-      currentLocationLongitude: this.longitude.toString(),
-      currentLocationLatitude: this.latitude.toString(),
-      riderDestinationLatitude: destination.lat.toString(),
-      riderDestinationLongitude: destination.lng.toString(),
-      userId: UserId.id,
-      tripStatus: '1'
-    };
-    localStorage.setItem('activeRiderRequest', JSON.stringify(request));
+   
   }
   markerDragEnd(m: any, $event: any) {}
   milesToRadius(value) {

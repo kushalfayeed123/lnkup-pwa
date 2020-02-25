@@ -131,16 +131,16 @@ export class NotificationsService {
     receiveMessage() {
         this.angularFireMessaging.messages
             .subscribe(message => {
-                console.log(message)
+                console.log(message);
                 this.currentMessage.next(message);
             });
     }
 
     sendMessage(user, message) {
-        const token = user.pushNotificationTokens;
-        token.forEach(element => {
-            const newToken = element.token;
-            const pushMessage = { ...message, newToken };
+        const pushToken = user.pushNotificationTokens;
+        pushToken.forEach(element => {
+            const token = element.token;
+            const pushMessage = { ...message, token };
             this.pushService.sendFCMMessage(pushMessage)
                 .subscribe(res => {
                     console.log('fcm response', res);
