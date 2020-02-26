@@ -9,17 +9,12 @@ section.auth-pages a {
   transition: all ease-in 300ms;
   color: #ffffff;
 }
-
-nav {
-  position: relative;
-  bottom: 81px;
-}
-.pl-2 {
+.pl-2{
   position: relative;
   bottom: 40px;
   left: 55%;
 }
-.loader {
+.loader{
   position: relative;
   left: 25%;
   height: 50px;
@@ -29,10 +24,12 @@ nav {
   min-width: 150px;
   max-width: 500px;
   width: 100%;
+
 }
-.login-text {
+.login-text{
   color: #eeeeee !important;
 }
+
 
 .auth-full-width {
   width: 100%;
@@ -43,18 +40,16 @@ td {
   padding-right: 8px;
 }
 
-section.auth-pages a:hover,
-section.auth-pages a:active,
-section.auth-pages a:focus {
+section.auth-pages a:hover, section.auth-pages a:active, section.auth-pages a:focus {
   text-decoration: none;
   -webkit-transition: all ease-out 300ms;
   transition: all ease-out 300ms;
   color: #e040fb;
 }
-::ng-deep .dark-snackbar {
+::ng-deep .dark-snackbar{
   background: #e040fb !important;
 }
-::ng-deep .dark-snackbar-error {
+::ng-deep .dark-snackbar-error{
   background: #ff1744 !important;
 }
 
@@ -78,11 +73,7 @@ section.auth-pages .page-heading p {
   color: #ccc;
   font-weight: normal;
   font-size: 16px;
-  font-family: "Poppins";
-}
-
-.contain-box {
-  padding: 70px 32px !important;
+  font-family: 'Poppins';
 }
 
 section.auth-pages .alt-sisgn-up {
@@ -90,17 +81,17 @@ section.auth-pages .alt-sisgn-up {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
   -ms-flex-wrap: no-wrap;
-  flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
   margin-bottom: 37px;
 }
 
@@ -123,9 +114,7 @@ section.auth-pages .alt-sisgn-up button {
   min-width: 123px;
 }
 
-section.auth-pages .alt-sisgn-up button:focus,
-section.auth-pages .alt-sisgn-up button:active,
-section.auth-pages .alt-sisgn-up button:hover {
+section.auth-pages .alt-sisgn-up button:focus, section.auth-pages .alt-sisgn-up button:active, section.auth-pages .alt-sisgn-up button:hover {
   outline: none;
 }
 
@@ -151,7 +140,7 @@ section.auth-pages .input-group input {
   border: 0;
   border-bottom: 1px solid #ffffff;
   font-size: 16px;
-  font-family: "Circular-book";
+  font-family: 'Circular-book';
   width: 100%;
   display: inline-block;
   background-color: transparent;
@@ -160,16 +149,14 @@ section.auth-pages .input-group input {
   transition: all ease-in 300ms;
 }
 
-section.auth-pages .input-group input:focus,
-section.auth-pages .input-group input:active,
-section.auth-pages .input-group input:hover {
+section.auth-pages .input-group input:focus, section.auth-pages .input-group input:active, section.auth-pages .input-group input:hover {
   outline: none;
   border-bottom: 1px solid #d8d8d8;
   -webkit-transition: all ease-out 300ms;
   transition: all ease-out 300ms;
 }
 
-section.auth-pages .input-group input[type="checkbox"] {
+section.auth-pages .input-group input[type='checkbox'] {
   padding: 6px;
   width: unset;
   margin-right: 7px;
@@ -182,7 +169,7 @@ section.auth-pages .input-group input[type="checkbox"] {
   background-color: transparent;
 }
 
-section.auth-pages .input-group input[type="submit"] {
+section.auth-pages .input-group input[type='submit'] {
   display: inline-block;
   white-space: nowrap;
   font-size: 16px;
@@ -201,9 +188,7 @@ section.auth-pages .input-group input[type="submit"] {
   width: 100%;
 }
 
-section.auth-pages .input-group input[type="submit"]:focus,
-section.auth-pages .input-group input[type="submit"]:active,
-section.auth-pages .input-group input[type="submit"]:hover {
+section.auth-pages .input-group input[type='submit']:focus, section.auth-pages .input-group input[type='submit']:active, section.auth-pages .input-group input[type='submit']:hover {
   outline: none;
 }
 
@@ -212,17 +197,17 @@ section.auth-pages .checker {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: left;
-  -ms-flex-pack: left;
-  justify-content: left;
+      -ms-flex-pack: left;
+          justify-content: left;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
   -ms-flex-wrap: no-wrap;
-  flex-wrap: no-wrap;
+      flex-wrap: no-wrap;
   margin-top: 30px;
 }
 
@@ -230,7 +215,7 @@ section.auth-pages .checker p {
   color: #ccc;
   font-weight: normal;
   font-size: 10px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   margin: 0;
 }
 

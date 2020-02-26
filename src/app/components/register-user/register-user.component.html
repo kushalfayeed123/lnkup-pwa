@@ -17,7 +17,7 @@
         <input type="text" matInput class="input-color" placeholder="Email" formControlName="email" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
-        <input type="number" matInput class="input-color" placeholder="Phone Number" formControlName="phoneNumber" />
+        <input type="text" matInput class="input-color" placeholder="Phone Number" formControlName="phoneNumber" />
       </mat-form-field>
       <mat-form-field class="auth-full-width">
         <input type="password" matInput class="input-color" placeholder="Password" formControlName="password" />
@@ -32,10 +32,11 @@
       <div class="input-group checker">
         <p>By clicking on verify you agree to the LnkuP terms and conditions</p>
       </div>
-      <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text">Verify</button>
+      <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"> Verify</button>
       <p class="a-login">Already have an account? <a href="" [routerLink]="['/login']">Log In</a></p>
+      <!-- <a class="a-login">Forgot password? <a href="" [routerLink]="['/login']">Log In</a></p> -->
+
     </form>
   </main>
 </section>
 
-<app-notification></app-notification>
