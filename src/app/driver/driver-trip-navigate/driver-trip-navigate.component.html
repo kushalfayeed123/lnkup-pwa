@@ -28,7 +28,7 @@
       <swiper [config]="config" class="swiper">
         <div class="swiper-wrapper">
           <main class="contain-box  swiper-slide" *ngFor="let rider of tripRiders; let i = index;">
-           
+
                 <div class="avi-info" (deferLoad)="rider.user.userImage !== null">
                   <img src="assets/Images/default-user.png" alt="" class="avi" *ngIf="rider.user.userImage === null" />
                   <img src="data:image/png;base64,{{rider.user.userImage}}" alt="" class="avi avi-blinker"
@@ -41,7 +41,7 @@
                   <div class="title-heading">Swipe left to view more riders</div>
                 </div>
 
-               
+
           </main>
         </div>
       </swiper>
@@ -85,4 +85,3 @@
 
 </mat-card>
 
-<app-notification></app-notification>

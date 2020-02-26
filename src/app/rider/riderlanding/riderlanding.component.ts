@@ -336,6 +336,7 @@ showDirection: boolean;
   }
 
   ngOnInit() {
+
     this.activeTripCheck();
     this.emptyTrip = false;
     localStorage.removeItem('currentLocation');
