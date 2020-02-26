@@ -2,13 +2,13 @@
 
 
 <div class="avd-container" >
-    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style" [usePanning]="true"  
-        [zoomControl]="false">
+    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style" [usePanning]="true"
+        [zoomControl]="false"  [disableDefaultUI]= "true" >
         <!-- <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
         </agm-marker> -->
 
         <ng-container *ngIf="!gettingDrivers">
-          <agm-overlay *ngIf="longitude && latitude" 
+          <agm-overlay *ngIf="longitude && latitude"
           [latitude]  = "latitude"
           [longitude] = "longitude"
         >
@@ -20,7 +20,7 @@
 
 
       <ng-container *ngIf="loadMarker">
-        <agm-overlay *ngIf="longitude && latitude" 
+        <agm-overlay *ngIf="longitude && latitude"
         [latitude]  = "latitude"
         [longitude] = "longitude"
       >
@@ -29,7 +29,7 @@
         <!-- <img src="./assets/Images/direction.svg" alt="" class="animated bounceInDown img"> -->
       </agm-overlay>
       </ng-container>
-    
+
         <!-- <agm-marker *ngFor="let trips of allActiveTrips; let i = index;" [(latitude)]="allTripsDestinationLat[i]"
          [(longitude)]="allTripsDestinationLong[i]" [markerDraggable]="false" >
         </agm-marker> -->
@@ -41,9 +41,9 @@
 
         <!-- <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
             [circleDraggable]="false" [editable]="false" *ngIf="gettingDrivers"></agm-circle> -->
-         
 
-        
+
+
         <agm-direction *ngIf="showDirection" [origin]="origin" [destination]="destination" [renderOptions]="renderOptions" [markerOptions]="markerOptions"></agm-direction>
 
     </agm-map>

@@ -47,12 +47,12 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
               private notifyService: NotificationsService,
               private riderService: ActiveRiderDataService,
               private router: Router) {
-                this.notifyService.intiateConnection();
-                this.getDriverSuccessAlert();
+    this.getDriverSuccessAlert();
   }
 
   ngOnInit() {
     this.getActiveTrips();
+    // this.notifyService.intiateConnection();
 
   }
 

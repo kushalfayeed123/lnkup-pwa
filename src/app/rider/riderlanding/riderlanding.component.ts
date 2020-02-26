@@ -239,7 +239,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           width: 20,
           height: 20
         }
-     
+
     },
     destination: {
         icon: './assets/Images/direction.svg',
@@ -247,7 +247,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           width: 20,
           height: 20
         }
-    
+
     },
 }
 
@@ -319,7 +319,6 @@ showDirection: boolean;
     private notificationService: NotificationsService,
     private locationService: LocationDataService
   ) {
-    this.notificationService.intiateConnection();
     // this.getAllTrips();
     this.notificationService.angularFireMessenger();
     // this.notificationService.deleteSubscription();
@@ -354,6 +353,7 @@ showDirection: boolean;
     });
     this.searchControl = new FormControl();
     this.zoom = 15;
+    // this.notificationService.intiateConnection();
     this.getAllDriversLocations();
     this.getEmptyTrips();
   }
@@ -496,11 +496,10 @@ showDirection: boolean;
         .getLocationsByUserId(user.id)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
-          if (!res) {
-            this.createUserLocation();
-            return;
-          } else {
+          if (res) {
             this.updateUserLocation(user.id);
+          } else {
+            this.createUserLocation();
           }
         });
     }
@@ -574,7 +573,7 @@ showDirection: boolean;
       this.longitude = origin.lng;
     }, 2000);
 
-    
+
     //   this.heatmap = new google.maps.visualization.HeatmapLayer({
     //     data: [this.origin, this.destination]
     // });
