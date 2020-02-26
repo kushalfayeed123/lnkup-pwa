@@ -1,7 +1,7 @@
 <div class="avd-container" *ngIf="showLanding">
 
   <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false" [styles]="style" [usePanning]="true">
-      <agm-overlay
+      <agm-overlay  
       [latitude]  = "latitude"
       [longitude] = "longitude"
     >
@@ -75,3 +75,4 @@
 </div>
 <app-driver-trip-create [destination]="destinationName" [pickup]="pickupName" *ngIf="!showLanding">
 </app-driver-trip-create>
+<app-notification></app-notification>
