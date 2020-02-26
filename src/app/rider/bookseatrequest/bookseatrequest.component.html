@@ -1,5 +1,5 @@
 <section class="auth-pages book-seat  filled-page auth-pages security animated zoomIn" id="ride-confirmation">
-   
+
     <main class="contain-box " *ngIf="!gettingDrivers">
       <!-- <nav class="riderHeader">
         <a href="">
@@ -45,12 +45,12 @@
           <button type="submit"  id="book-ride" mat-raised-button color="accent"
           (click)="createRiderRequest()" class="auth-full-width" [disabled]="inValidSeat">Send Request</button>
         </div>
-      
+
         <!-- <div (click)=cancelRequest() class="cancel">
           Cancel Request
         </div> -->
       </form>
-    
+
     </main>
 
     <div *ngIf="gettingDrivers" class="animated zoomIn wait-message">
@@ -64,7 +64,6 @@
       (click)="cancelRequest()" class="auth-full-width">Cancel Request</button>
     </div>
 </div>
-   
+
   </section>
 
-  <app-notification></app-notification>
