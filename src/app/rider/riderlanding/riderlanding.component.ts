@@ -305,6 +305,7 @@ showDirection: boolean;
   emptyTrip: boolean;
   allAvailableTrips: ActiveTrips[];
   showCurrenLocationInput: boolean;
+  request: { currentLocationLongitude: any; currentLocationLatitude: any; riderDestinationLatitude: any; riderDestinationLongitude: any; userId: any; tripStatus: string; };
 
   constructor(
     private route: ActivatedRoute,
@@ -319,12 +320,17 @@ showDirection: boolean;
     private notificationService: NotificationsService,
     private locationService: LocationDataService
   ) {
-    // this.getAllTrips();
     this.notificationService.angularFireMessenger();
-    // this.notificationService.deleteSubscription();
     this.notificationService.requestPermision();
     this.notificationService.receiveMessage();
-    this.notificationService.currentMessage.subscribe(res => {});
+    this.notificationService.currentMessage.subscribe(res => {
+      console.log('current message', res);
+    });
+
+
+
+    // this.getAllTrips();
+    // this.notificationService.deleteSubscription();
     // this.notificationService.tokenRefresh();
     this.setIntervalCall();
   }
@@ -353,8 +359,8 @@ showDirection: boolean;
     });
     this.searchControl = new FormControl();
     this.zoom = 15;
-    // this.notificationService.intiateConnection();
-    this.getAllDriversLocations();
+    // this.getAllDriversLocations();
+
     this.getEmptyTrips();
   }
 
@@ -413,7 +419,7 @@ showDirection: boolean;
     interval(30000)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(x => {
-        this.broadCastCurrentLocation();
+        // this.broadCastCurrentLocation();
         this.getAllDriversLocations();
       });
   }
@@ -496,9 +502,9 @@ showDirection: boolean;
         .getLocationsByUserId(user.id)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
-          if (res) {
-            this.updateUserLocation(user.id);
-          } else {
+          console.log(res)
+          if (!res) {
+
             this.createUserLocation();
           }
         });
@@ -615,19 +621,24 @@ showDirection: boolean;
     this.destinationlongitude = location.longitude;
   }
   createTripRequest() {
-    const UserId = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = JSON.parse(localStorage.getItem('currentUser'));
     const status = 1;
+
+    setTimeout(() => {
+      const destination = JSON.parse(localStorage.getItem('destination'));
+      const request = {
+        currentLocationLongitude: this.longitude.toString(),
+        currentLocationLatitude: this.latitude.toString(),
+        riderDestinationLatitude: destination.lat.toString(),
+        riderDestinationLongitude: destination.lng.toString(),
+        userId: userId.id,
+        tripStatus: '1'
+      };
+      localStorage.setItem('activeRiderRequest', JSON.stringify(request));
+    }, 5000);
+
     this.getAllActiveTrips(status);
-    const destination = JSON.parse(localStorage.getItem('destination'));
-    const request = {
-      currentLocationLongitude: this.longitude.toString(),
-      currentLocationLatitude: this.latitude.toString(),
-      riderDestinationLatitude: destination.lat.toString(),
-      riderDestinationLongitude: destination.lng.toString(),
-      userId: UserId.id,
-      tripStatus: '1'
-    };
-    localStorage.setItem('activeRiderRequest', JSON.stringify(request));
+
   }
   markerDragEnd(m: any, $event: any) {}
   milesToRadius(value) {
