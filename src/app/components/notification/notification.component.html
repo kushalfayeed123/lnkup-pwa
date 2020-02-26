@@ -1,5 +1,7 @@
-<div *ngIf="showMessage" class="notif-container slide-in" id="slide" [ngClass]="{'slide-out': closeMessage}">
+<div *ngIf="showMessage" class="notif-container animated fadeInDown" [ngClass]="{'fadeOutUp': closeMessage}">
     <div class="message">
     {{message}}
     </div>
 </div>
+
+<!-- <div></div> -->

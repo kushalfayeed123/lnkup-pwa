@@ -239,7 +239,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           width: 20,
           height: 20
         }
-     
+
     },
     destination: {
         icon: './assets/Images/direction.svg',
@@ -247,7 +247,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           width: 20,
           height: 20
         }
-    
+
     },
 }
 
@@ -320,7 +320,6 @@ showDirection: boolean;
     private notificationService: NotificationsService,
     private locationService: LocationDataService
   ) {
-    this.notificationService.intiateConnection();
     this.notificationService.angularFireMessenger();
     this.notificationService.requestPermision();
     this.notificationService.receiveMessage();
@@ -337,6 +336,7 @@ showDirection: boolean;
   }
 
   ngOnInit() {
+
     this.activeTripCheck();
     this.emptyTrip = false;
     localStorage.removeItem('currentLocation');
@@ -361,6 +361,7 @@ showDirection: boolean;
     this.searchControl = new FormControl();
     this.zoom = 15;
     // this.getAllDriversLocations();
+
     this.getEmptyTrips();
   }
 
@@ -504,10 +505,8 @@ showDirection: boolean;
         .subscribe(res => {
           console.log(res)
           if (!res) {
+
             this.createUserLocation();
-            return;
-          } else {
-            this.updateUserLocation(user.id);
           }
         });
     }
@@ -581,7 +580,7 @@ showDirection: boolean;
       this.longitude = origin.lng;
     }, 2000);
 
-    
+
     //   this.heatmap = new google.maps.visualization.HeatmapLayer({
     //     data: [this.origin, this.destination]
     // });
@@ -638,9 +637,9 @@ showDirection: boolean;
       };
       localStorage.setItem('activeRiderRequest', JSON.stringify(request));
     }, 5000);
-   
+
     this.getAllActiveTrips(status);
-   
+
   }
   markerDragEnd(m: any, $event: any) {}
   milesToRadius(value) {
