@@ -264,15 +264,32 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   sendTripMessage(status: string) {
     this.tripRiders.forEach(element => {
       const recieverId = element.userId;
+      const receiver  = element.user.userName;
       if (status === 'end') {
         console.log('status', status, this.tripRiders);
         const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
-        this.notifyService.sendNotification(recieverId, message);
-        this.notifyService.sendAcceptMessage(recieverId, message);
+        const pushMessage = {
+          title: 'LnkuP',
+          body: message,
+          click_action: `https://lnkupmob.azureedge.net/rider/home/${recieverId}`,
+          receiverName: receiver
+        };
+        this.notifyService.sendNotification(recieverId, pushMessage);
+        setTimeout(() => {
+          this.notifyService.sendAcceptMessage(recieverId, message);
+        }, 5000);
       } else {
         const message = 'Your trip has started.';
-        this.notifyService.sendNotification(recieverId, message);
-        this.notifyService.sendAcceptMessage(recieverId, message);
+        const pushMessage = {
+          title: 'LnkuP',
+          body: message,
+          click_action: `https://lnkupmob.azureedge.net/rider/home/${recieverId}`,
+          receiverName: receiver
+        };
+        this.notifyService.sendNotification(recieverId, pushMessage);
+        setTimeout(() => {
+          this.notifyService.sendAcceptMessage(recieverId, message);
+        }, 5000);
       }
     });
   }
