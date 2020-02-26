@@ -107,10 +107,15 @@ export class AppComponent implements OnInit, OnDestroy {
   reload() {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe(next => {
-        if (confirm('A new version is available. Do you want to load it?')) {
-          window.location.reload();
-          this.authenticateService.logout();
-        }
+        // if (confirm('A new version is available. Do you want to load it?')) {
+        //   window.location.reload();
+        //   this.authenticateService.logout();
+        // }
+
+        // tslint:disable-next-line: max-line-length
+        this.notifyService.showInfoMessage(' New updates are available for your app. Please sit back and relax while we install the updates.');
+        this.authenticateService.logout();
+        window.location.reload();
       });
     }
   }

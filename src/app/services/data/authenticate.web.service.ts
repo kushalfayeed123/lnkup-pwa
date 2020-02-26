@@ -86,10 +86,7 @@ export class AuthenticateWebService implements AuthenticateDataService {
 
   logout() {
     // remove user from local storage to log user out
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
     localStorage.clear();
-    localStorage.setItem('currentUserId', userId);
     this.currentUserSubject.next(null);
   }
   decode() {
