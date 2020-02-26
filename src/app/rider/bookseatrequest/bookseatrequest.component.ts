@@ -50,6 +50,8 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
               private broadcastService: BroadcastService,
               private toastrService: ToastrService,
               private notifyService: NotificationsService) {
+    this.notifyService.intiateConnection();
+
     this.getRiderSuccessAlert();
     this.getRiderDeclineAlert();
   }
@@ -58,7 +60,6 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.dropoff = localStorage.getItem('storedAddress');
     this.getTripDetails();
     this.getRiderRequest();
-    this.notifyService.intiateConnection();
     // this.notifyService.sendAcceptMessage();
     this.gettingDriversCheck();
   }
@@ -180,12 +181,12 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   cancelRequest() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     this.activeRiderService.delete(user.id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      this.gettingDrivers = false;
-      localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
-      this.router.navigate([`rider/home/${user.id}`]);
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        this.gettingDrivers = false;
+        localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
+        this.router.navigate([`rider/home/${user.id}`]);
+      });
   }
 
   sendNotification() {
@@ -197,8 +198,10 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       click_action: `https://lnkupmob.azureedge.net/driver/rider-request`,
       receiverName: this.driverEmail
     };
-    this.notifyService.sendAcceptMessage(userId, message);
     this.notifyService.sendNotification(userId, pushMessage);
+    setTimeout(() => {
+      this.notifyService.sendAcceptMessage(userId, message);
+    }, 5000);
   }
 
 

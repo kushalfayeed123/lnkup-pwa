@@ -64,6 +64,10 @@ export class AuthenticateWebService implements AuthenticateDataService {
     return this.http.get<Users>(`${this.webUrl}/user/${id}`);
   }
 
+  getByEmail(email: any) {
+    return this.http.get<Users>(`${this.webUrl}/user/email/${email}`);
+  }
+
   register(user: any) {
     return this.http.post(`${this.webUrl}/user/register`, user);
   }
@@ -82,7 +86,10 @@ export class AuthenticateWebService implements AuthenticateDataService {
 
   logout() {
     // remove user from local storage to log user out
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
     localStorage.clear();
+    localStorage.setItem('currentUserId', userId);
     this.currentUserSubject.next(null);
   }
   decode() {
@@ -103,5 +110,9 @@ export class AuthenticateWebService implements AuthenticateDataService {
   }
   updateUserImage(id: any, image: any) {
     return this.http.put(`${this.webUrl}/user/image/${id}`, image);
+  }
+
+  sendEmail(payload) {
+    return this.http.post<Users>(`${this.webUrl}/sendmail`, payload);
   }
 }

@@ -320,6 +320,7 @@ showDirection: boolean;
     private notificationService: NotificationsService,
     private locationService: LocationDataService
   ) {
+    this.notificationService.intiateConnection();
     this.notificationService.angularFireMessenger();
     this.notificationService.requestPermision();
     this.notificationService.receiveMessage();
@@ -336,7 +337,6 @@ showDirection: boolean;
   }
 
   ngOnInit() {
-
     this.activeTripCheck();
     this.emptyTrip = false;
     localStorage.removeItem('currentLocation');
@@ -361,7 +361,6 @@ showDirection: boolean;
     this.searchControl = new FormControl();
     this.zoom = 15;
     // this.getAllDriversLocations();
-
     this.getEmptyTrips();
   }
 
@@ -505,8 +504,10 @@ showDirection: boolean;
         .subscribe(res => {
           console.log(res)
           if (!res) {
-
             this.createUserLocation();
+            return;
+          } else {
+            this.updateUserLocation(user.id);
           }
         });
     }

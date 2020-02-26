@@ -1,24 +1,26 @@
 <section class="auth-pages login-page animated zoomIn">
-    <main class="contain-box">
-      <div class="page-heading ">
-        <h1>LnkuP</h1>
-        <p>"Evolving your commuting experience."</p>
-      </div>
-      <mat-spinner *ngIf="loading"  [diameter]="20"
-      class="loader"
-    ></mat-spinner>
-      <form class="auth-form" id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <mat-form-field class="auth-full-width">
-          <input type="text" matInput class="input-color" placeholder="Username" formControlName="username"/>
-          </mat-form-field>
+  <main class="contain-box">
+    <div class="page-heading ">
+      <h1>LnkuP</h1>
+      <p>"Evolving your commuting experience."</p>
+    </div>
+    <mat-spinner *ngIf="loading"  [diameter]="20"
+    class="loader"
+  ></mat-spinner>
+    <form class="auth-form" id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="auth-full-width">
+        <input type="text" matInput class="input-color" placeholder="User Name" formControlName="username"/>
+        </mat-form-field>
 
-            <mat-form-field class="auth-full-width">
-                <input type="password" matInput class="input-color" formControlName="password" placeholder="Password"/>
-                </mat-form-field>
-        <!-- <p><a href="">Forgot password?</a></p> -->
-            <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text">Login</button>
-            <!-- <img *ngIf="loading" class="pl-2" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" /> -->
-        <p class="a-login">Don’t have an account? <a href="" [routerLink]="['/register']">Sign Up</a></p>
-      </form>
-    </main>
-  </section>
+          <mat-form-field class="auth-full-width">
+              <input type="password" matInput class="input-color" formControlName="password" placeholder="Password"/>
+              </mat-form-field>
+      <!-- <p><a href="">Forgot password?</a></p> -->
+          <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text">Login</button>
+          <!-- <img *ngIf="loading" class="pl-2" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" /> -->
+      <p class="a-login">Don’t have an account? <a href="" [routerLink]="['/register']">Sign Up</a></p>
+      <p class="a-login" > <a href="" [routerLink]="['/verify']" (click)="recoverPassword()">Forgot password?</a> </p>
+
+    </form>
+  </main>
+</section>

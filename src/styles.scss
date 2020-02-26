@@ -101,21 +101,23 @@ cursor: pointer;
   height: 20px;
   border-radius: 50%;
   background: #e040fb;
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  transition: all 0.2s;
+  -webkit-transition: all 2s;
+  -moz-transition: all 2s;
+  transition: all 2s;
   -webkit-animation: r5 1s 0s ease-out infinite;
   -moz-animation: r5 1s 0s ease-out infinite;
   animation: r5 1s 0s ease-out infinite;
+  -ms-transition: all 2s;
+  -o-transition: all 2s;
 }
 
 @-webkit-keyframes r5 {
   0% {
-    box-shadow: 0 0 8px 6px rgba(93,204,231, .5), 0 0 0px 0px transparent, 0 0 0px 0px rgba(93,204,231, .7);
+    box-shadow: 0 0 8px 6px rgba(224,64,251, .5), 0 0 0px 0px transparent, 0 0 0px 0px rgba(224,64,251, .7);
   }
   10% {
     transform:scale(1,1);
-    box-shadow: 0 0 8px 6px rgba(93,204,231, .5), 0 0 12px 10px transparent, 0 0 12px 14px rgba(93,204,231, .7);
+    box-shadow: 0 0 8px 6px rgba(224,64,251, .5), 0 0 12px 10px transparent, 0 0 12px 14px rgba(224,64,251, .7);
   }
   100% {
     box-shadow: 0 0 8px 6px rgba(26, 140, 255, 0), 0 0 0px 40px transparent, 0 0 0px 40px rgba(26, 140, 255, 0);
@@ -123,10 +125,10 @@ cursor: pointer;
 }
 @-moz-keyframes r5 {
   0% {
-    box-shadow: 0 0 8px 6px rgb(93,204,231), 0 0 0px 0px transparent, 0 0 0px 0px rgb(93,204,231);
+    box-shadow: 0 0 8px 6px rgb(224,64,251), 0 0 0px 0px transparent, 0 0 0px 0px rgb(224,64,251);
   }
   10% {
-    box-shadow: 0 0 8px 6px rgb(93,204,231), 0 0 12px 10px transparent, 0 0 12px 14px rgb(93,204,231);
+    box-shadow: 0 0 8px 6px rgb(224,64,251), 0 0 12px 10px transparent, 0 0 12px 14px rgb(224,64,251);
   }
   100% {
     box-shadow: 0 0 8px 6px rgba(26, 140, 255, 0), 0 0 0px 40px transparent, 0 0 0px 40px rgba(26, 140, 255, 0);
@@ -134,10 +136,10 @@ cursor: pointer;
 }
 @keyframes r5 {
   0% {
-    box-shadow: 0 0 8px 6px rgb(93,204,231), 0 0 0px 0px transparent, 0 0 0px 0px rgb(93,204,231);
+    box-shadow: 0 0 8px 6px rgb(224,64,251), 0 0 0px 0px transparent, 0 0 0px 0px rgb(224,64,251);
   }
   10% {
-    box-shadow: 0 0 8px 6px rgb(93,204,231), 0 0 12px 10px transparent, 0 0 12px 14px rgb(93,204,231);
+    box-shadow: 0 0 8px 6px rgb(224,64,251), 0 0 12px 10px transparent, 0 0 12px 14px rgb(224,64,251);
   }
   100% {
     box-shadow: 0 0 8px 6px rgba(26, 140, 255, 0), 0 0 0px 40px transparent, 0 0 0px 40px rgba(26, 140, 255, 0);

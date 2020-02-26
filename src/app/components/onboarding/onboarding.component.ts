@@ -33,6 +33,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     private activeTrip: ActiveTripDataService,
     private broadcastService: BroadcastService
   ) {
+    localStorage.removeItem('registeredUser');
+
   }
 
   ngOnInit() {

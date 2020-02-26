@@ -32,11 +32,16 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   public durationInSeconds = 4;
   message: string;
   userPaymentData: UserPaymentToken;
+  senderName: string;
+  senderEmail: string;
+  messageTitle: string;
+  messageBody: string;
 
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
+              private broadcastService: BroadcastService,
               // tslint:disable-next-line: variable-name
               private _snackBar: MatSnackBar,
               private authenticate: AuthenticateDataService,
@@ -73,7 +78,6 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
         data => {
           this.updateUserStatus();
           this.redirectUser();
-          localStorage.removeItem('registeredUser');
           this.loading = false;
         },
         error => {
@@ -134,6 +138,10 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       this.router.navigate(['login']);
     }
   }
+  recoverPassword() {
+    this.broadcastService.publishRecoveryStatus(true);
+  }
+
 
   ngOnDestroy() {
     this.unsubscribe$.next();

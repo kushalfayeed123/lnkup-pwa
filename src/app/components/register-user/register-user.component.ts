@@ -20,6 +20,7 @@ import { NotificationsService } from 'src/app/services/business/notificatons.ser
   host: { '[@slideInAnimation]': '' }
 })
 export class RegisterUserComponent implements OnInit, OnDestroy {
+
   public registerForm: FormGroup;
   private unsubscribe$ = new Subject<void>();
   public loading: boolean;
@@ -27,13 +28,14 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
   currentDate: string;
   currentTime: string;
 
-  constructor(
-    private formBuilder: FormBuilder,
+
+  constructor(private formBuilder: FormBuilder,
     private authService: AuthenticateDataService,
     private route: Router,
     private _snackBar: MatSnackBar,
-    private notifyService: NotificationsService
-  ) {}
+    private notifyService: NotificationsService,
+    private broadcastService: BroadcastService
+  ) { }
 
   ngOnInit() {
     this.getTime();
@@ -54,14 +56,14 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
 
   getTime() {
     const currentDate = new Date();
-    this.currentTime = formatDate(currentDate, ' hh:mm a', 'en-US');
-    this.currentDate = formatDate(currentDate, ' MMMM d, y', 'en-US');
+    this.currentTime = formatDate(currentDate, 'hh:mm a', 'en-US');
+    this.currentDate = formatDate(currentDate, 'MMMM d, y', 'en-US');
   }
 
   registerUser() {
     this.loading = true;
     const countryCode = '+234';
-    let userPhone = '';
+    let userPhone = this.registerForm.value.phoneNumber;
     const username = this.registerForm.value.userName.toLowerCase();
     const lastname = this.registerForm.value.lastName.toLowerCase();
 
@@ -70,54 +72,42 @@ export class RegisterUserComponent implements OnInit, OnDestroy {
     const validateCode = randomCode.slice(0, 6);
     localStorage.setItem('userVerification', validateCode);
 
-    if (this.registerForm.value.phoneNumber.substring(0, 4) === countryCode) {
-      userPhone = this.registerForm.value.phoneNumber;
+    if (JSON.stringify(this.registerForm.value.phoneNumber).substring(0, 4) === countryCode) {
+      userPhone = this.registerForm.value.phoneNumber.toString();
     } else {
-      userPhone = countryCode + this.registerForm.value.phoneNumber;
+      userPhone = countryCode + this.registerForm.value.phoneNumber.toString();
     }
     this.registerForm.patchValue({
-      verificationCode: validateCode,
-      phoneNumber: userPhone,
-      userName: username,
-      lastName: lastname,
-      signupDate: this.currentDate,
-      signupTime: this.currentTime
+      verificationCode: validateCode, phoneNumber: userPhone,
+      userName: username, lastName: lastname, signupDate: this.currentDate, signupTime: this.currentTime
     });
 
 
-    if (this.registerForm.value.userName && this.registerForm.value.lastName && this.registerForm.value.phoneNumber
-       && this.registerForm.value.email && this.registerForm.value.password && this.registerForm.value.role) {
-      const registerValues = this.registerForm.value;
 
-      this.authService
-        .register(registerValues)
+    if (this.registerForm.value.userName && this.registerForm.value.lastName
+      && this.registerForm.value.phoneNumber && this.registerForm.value.password && this.registerForm.value.email
+      && this.registerForm.value.role) {
+      const registerValues = this.registerForm.value;
+      this.authService.register(registerValues)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          res => {
-            if (res) {
-              localStorage.setItem(
-                'registeredUser',
-                JSON.stringify(registerValues)
-              );
+        .subscribe(res => {
+            localStorage.setItem('registeredUser', JSON.stringify(registerValues));
+            this.broadcastService.publishRecoveryStatus(false);
+            setTimeout(() => {
               this.route.navigate(['verify']);
               this.loading = false;
               this.registerForm.reset();
-            } else {
-              this.openErrorMessage('An error occured please try again');
-            }
-          },
+            }, 3000);
+        },
           error => {
             this.loading = false;
-            console.log(error);
             this.openErrorMessage(error);
-          }
-        );
+          });
     } else {
       this.openErrorMessage('All fields are required');
       this.loading = false;
-
-      return;
     }
+
   }
   openErrorMessage(errorMessage) {
     // this._snackBar.openFromComponent(ErrorMessageComponent, {

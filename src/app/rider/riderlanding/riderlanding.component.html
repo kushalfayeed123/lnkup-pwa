@@ -2,110 +2,107 @@
 
 
 <div class="avd-container" >
-    <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style" [usePanning]="true"
-<<<<<<< HEAD
-        [zoomControl]="false">
-=======
-        [zoomControl]="false"  [disableDefaultUI]= "true" >
->>>>>>> f4f1ade8be54d8e649ae8e7edde693564eab0c31
-        <!-- <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
-        </agm-marker> -->
+  <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style" [usePanning]="true"
+      [zoomControl]="false">
+      <!-- <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
+      </agm-marker> -->
 
-        <ng-container *ngIf="!gettingDrivers">
-          <agm-overlay *ngIf="longitude && latitude"
-          [latitude]  = "latitude"
-          [longitude] = "longitude"
-        >
-          <!-- blue html square -->
-          <!-- <div class="marker animated pulse infinite"></div> -->
-          <img src="./assets/Images/pin1.svg" alt="" class="img">
-        </agm-overlay>
-        </ng-container>
-
-
-      <ng-container *ngIf="loadMarker">
+      <ng-container *ngIf="!gettingDrivers">
         <agm-overlay *ngIf="longitude && latitude"
         [latitude]  = "latitude"
         [longitude] = "longitude"
       >
         <!-- blue html square -->
-        <div class="marker"></div>
-        <!-- <img src="./assets/Images/direction.svg" alt="" class="animated bounceInDown img"> -->
+        <!-- <div class="marker animated pulse infinite"></div> -->
+        <img src="./assets/Images/pin1.svg" alt="" class="img">
       </agm-overlay>
       </ng-container>
 
-        <!-- <agm-marker *ngFor="let trips of allActiveTrips; let i = index;" [(latitude)]="allTripsDestinationLat[i]"
-         [(longitude)]="allTripsDestinationLong[i]" [markerDraggable]="false" >
-        </agm-marker> -->
-        <!-- <agm-marker *ngFor="let loc of driverLocation; let i = index;" [(latitude)]="driverLocationsLat[i]"
-        [(longitude)]="driverLocationsLong[i]" [markerDraggable]="false" >
-       </agm-marker>
-        <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="false"
-            [animation]="userLocationMarkerAnimation" *ngIf="gettingDrivers"></agm-marker> -->
 
-        <!-- <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
-            [circleDraggable]="false" [editable]="false" *ngIf="gettingDrivers"></agm-circle> -->
+    <ng-container *ngIf="loadMarker">
+      <agm-overlay *ngIf="longitude && latitude"
+      [latitude]  = "latitude"
+      [longitude] = "longitude"
+    >
+      <!-- blue html square -->
+      <div class="marker"></div>
+      <!-- <img src="./assets/Images/direction.svg" alt="" class="animated bounceInDown img"> -->
+    </agm-overlay>
+    </ng-container>
+
+      <!-- <agm-marker *ngFor="let trips of allActiveTrips; let i = index;" [(latitude)]="allTripsDestinationLat[i]"
+       [(longitude)]="allTripsDestinationLong[i]" [markerDraggable]="false" >
+      </agm-marker> -->
+      <!-- <agm-marker *ngFor="let loc of driverLocation; let i = index;" [(latitude)]="driverLocationsLat[i]"
+      [(longitude)]="driverLocationsLong[i]" [markerDraggable]="false" >
+     </agm-marker>
+      <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="false"
+          [animation]="userLocationMarkerAnimation" *ngIf="gettingDrivers"></agm-marker> -->
+
+      <!-- <agm-circle [latitude]="latitude" [longitude]="longitude" [(radius)]="circleRadius" [fillColor]="'#ff1744'"
+          [circleDraggable]="false" [editable]="false" *ngIf="gettingDrivers"></agm-circle> -->
 
 
 
-        <agm-direction *ngIf="showDirection" [origin]="origin" [destination]="destination" [renderOptions]="renderOptions" [markerOptions]="markerOptions"></agm-direction>
+      <agm-direction *ngIf="showDirection" [origin]="origin" [destination]="destination" [renderOptions]="renderOptions" [markerOptions]="markerOptions"></agm-direction>
 
-    </agm-map>
-    <ng-container *ngIf="!availableTrips && !emptyTrip" >
-        <form id="search-form" *ngIf="showForm " class="animated zoomIn">
-            <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?"
-                matGoogleMapsAutocomplete   (onAutocompleteSelected)="onAutocompleteSelected($event)"
-                (onLocationSelected)="onLocationSelected($event)"/>
+  </agm-map>
+  <ng-container *ngIf="!availableTrips && !emptyTrip" >
+      <form id="search-form" *ngIf="showForm " class="animated zoomIn">
+          <input *ngIf="!riderLink" type="text" name="destinationAddress"  id="" class="destination" placeholder="Where are you going?"
+              matGoogleMapsAutocomplete   (onAutocompleteSelected)="onAutocompleteSelected($event)"
+              (onLocationSelected)="onLocationSelected($event)"/>
 
-        </form>
-        <form class="destination-container " *ngIf="!reachableDrivers " >
-            <mat-card *ngIf="!riderLink " class="animated zoomIn">
-                <div *ngIf="gettingDrivers " class="animated zoomIn" >
-                        <p class="search" >Please hold on while we search for drivers near you</p>
-                        <mat-spinner   [diameter]="20"
-                        class="loader"
-                      ></mat-spinner>
-                </div>
+      </form>
+      <form class="destination-container " *ngIf="!reachableDrivers " >
+          <mat-card *ngIf="!riderLink " class="animated zoomIn">
+              <div *ngIf="gettingDrivers " class="animated zoomIn" >
+                      <p class="search" >Please hold on while we search for drivers near you</p>
+                      <mat-spinner   [diameter]="20"
+                      class="loader"
+                    ></mat-spinner>
+              </div>
 
-                <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
-                    <mat-form-field class="auth-full-width" (click)="toggleInput()" *ngIf="!showInput">
-                        <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off"
-                            autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]="currentLocation" disabled
-                            matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
-
-                    </mat-form-field>
-
-                    <mat-form-field class="auth-full-width" *ngIf="showInput">
-                      <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off" autofocus
-                          autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]=""
+              <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
+                  <mat-form-field class="auth-full-width" (click)="toggleInput()" *ngIf="!showInput">
+                      <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off"
+                          autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]="currentLocation" disabled
                           matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
 
                   </mat-form-field>
 
-                    <!-- <p><a href="">Forgot password?</a></p> -->
-                    <button (click)='getDrivers()' mat-raised-button color="accent" *ngIf="destinationAddress && originAddress"
-                        class="auth-full-width login-text animated fadeInRight">Search
-                        <i class="material-icons right">send</i>
-                    </button>
-                    </mat-card-content>
-            </mat-card>
-            <mat-card class="example-card" *ngIf="riderLink ">
-                    <mat-card-content>
-                    <app-riderlink></app-riderlink>
-                    </mat-card-content>
-                    </mat-card>
-        </form>
-    </ng-container>
+                  <mat-form-field class="auth-full-width" *ngIf="showInput">
+                    <input type="text" matInput class="input-color search" placeholder="Your current location" autocorrect="off" autofocus
+                        autocapitalize="off" spellcheck="off" #search name="currentLocation"  [ngModel]=""
+                        matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserCurrentLocation($event)">
+
+                </mat-form-field>
+
+                  <!-- <p><a href="">Forgot password?</a></p> -->
+                  <button (click)='getDrivers()' mat-raised-button color="accent" *ngIf="destinationAddress && originAddress"
+                      class="auth-full-width login-text animated fadeInRight">Search
+                      <i class="material-icons right">send</i>
+                  </button>
+                  </mat-card-content>
+          </mat-card>
+          <mat-card class="example-card" *ngIf="riderLink ">
+                  <mat-card-content>
+                  <app-riderlink></app-riderlink>
+                  </mat-card-content>
+                  </mat-card>
+      </form>
+  </ng-container>
 
 </div>
 
 <div *ngIf="emptyTrip" class="driver-message-card animated zoomIn">
-    <mat-card class="message-card-body  ">
-        <mat-card-content>
-          <div class="search" >Sorry, there are no drivers headed in your direction at this time. Please try again shortly.</div>
-          <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn" (click)="navToTripSearch()">Back</button>
-        </mat-card-content>
-      </mat-card>
+  <mat-card class="message-card-body  ">
+      <mat-card-content>
+        <div class="search" >Sorry, there are no drivers headed in your direction at this time. Please try again shortly.</div>
+        <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn" (click)="navToTripSearch()">Back</button>
+      </mat-card-content>
+    </mat-card>
 </div>
 
 <app-availabledrivers *ngIf="availableTrips"></app-availabledrivers>
+

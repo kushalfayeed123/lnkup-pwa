@@ -41,6 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private router: ActivatedRoute,
               private activeTrip: ActiveTripDataService,
               private notifyService: NotificationsService) {
+
     route.events.subscribe(url => {
       this.getCurrentRoute();
     });
@@ -69,8 +70,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!user) {
       this.route.navigate(['/login']);
     } else {
-      this.notifyService.intiateConnection();
-      if (!onGoingTrip ) {
+      if (!onGoingTrip) {
         if (!currentRoute) {
           this.route.navigate(['/onboarding']);
         } else {
@@ -123,19 +123,21 @@ export class AppComponent implements OnInit, OnDestroy {
     const route = this.route.url;
     const profileRoute = route.slice(0, 8);
     const riderRoute = route.slice(0, 6);
+    const verifyRoute = route.slice(0, 6);
+
     const driverRoute = route.slice(0, 7);
     const tripsRoute = route.slice(0, 6);
     const riderRequest = route.slice(0, 21);
     this.router.queryParams
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(param => {
-      if (param.riderLink) {
-        this.riderLink = true;
-      }
-      if (param.driverNav) {
-        this.driverNav = true;
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(param => {
+        if (param.riderLink) {
+          this.riderLink = true;
+        }
+        if (param.driverNav) {
+          this.driverNav = true;
+        }
+      });
 
     if (this.riderLink) {
       showSideNav = false;
@@ -156,6 +158,11 @@ export class AppComponent implements OnInit, OnDestroy {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
 
+    } else if (verifyRoute === '/verify') {
+      showSideNav = false;
+      this.broadCastService.publishSideNavValue(showSideNav);
+      this.saveCurrentRoute(route);
+
     } else if (profileRoute === '/profile') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
@@ -173,6 +180,7 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       showSideNav = false;
       this.broadCastService.publishSideNavValue(showSideNav);
+      // localStorage.removeItem('currentRoute');
     }
   }
 
