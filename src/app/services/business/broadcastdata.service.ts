@@ -37,12 +37,14 @@ export class BroadcastService {
   private _recovery = new BehaviorSubject(null);
   public recovery = this._recovery.asObservable();
 
+  private _messageType = new BehaviorSubject(null);
+  public messageType = this._messageType.asObservable();
+
 
   constructor(private activeTrip: ActiveTripDataService) {}
 
   shareCurrentUser(user) {
     this._userData.next(user);
-    console.log("data gets to service", user);
   }
 
   publishRiderRequest(request) {
@@ -67,8 +69,9 @@ export class BroadcastService {
     this._paymentStatus.next(paymentStatus);
   }
 
-  publishMessage(message) {
+  publishMessage(message, type) {
     this._notifMessage.next(message);
+    this._messageType.next(type);
   }
   publishRecoveryStatus(status) {
     this._recovery.next(status);

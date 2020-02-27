@@ -1,7 +1,28 @@
-<div *ngIf="showMessage" class="notif-container animated fadeInDown" [ngClass]="{'fadeOutUp': closeMessage}">
+<div  *ngIf="showMessage && isError" class="notif-container animated fadeInDown error" [ngClass]="{'fadeOutUp': closeMessage}">
     <div class="message">
     {{message}}
     </div>
+    <div class="icon-img">
+      <img src="./assets/icons/error.svg" alt="">
+    </div>
+</div>
+
+<div *ngIf="showMessage && isInfo" class="notif-container animated fadeInDown info" [ngClass]="{'fadeOutUp': closeMessage}">
+  <div class="message">
+  {{message}}
+  </div>
+  <div class="icon-img">
+    <img src="./assets/icons/info.svg" alt="">
+  </div>
+</div>
+
+<div *ngIf="showMessage && isSuccess" class="notif-container animated fadeInDown success" [ngClass]="{'fadeOutUp': closeMessage}">
+  <div class="message">
+  {{message}}
+  </div>
+  <div class="icon-img">
+    <img src="./assets/icons/tick.svg" alt="">
+  </div>
 </div>
 
 <!-- <div></div> -->

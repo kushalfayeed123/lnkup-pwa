@@ -10,8 +10,7 @@ import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
-
-
+import { NetworkStatusAngularService } from 'network-status-angular';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +18,6 @@ import { ActiveTripDataService } from './services/data/active-trip/active-trip.d
   styleUrls: ['./app.component.scss'],
   providers: [MessageService],
   encapsulation: ViewEncapsulation.None
-
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'lnkup';
@@ -34,16 +32,26 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line: variable-name
 
-  constructor(private metaService: MetaService, private swUpdate: SwUpdate,
-              private broadCastService: BroadcastService,
-              private authenticateService: AuthenticateDataService,
-              private route: Router,
-              private router: ActivatedRoute,
-              private activeTrip: ActiveTripDataService,
-              private notifyService: NotificationsService) {
-
+  constructor(
+    private metaService: MetaService,
+    private swUpdate: SwUpdate,
+    private broadCastService: BroadcastService,
+    private authenticateService: AuthenticateDataService,
+    private route: Router,
+    private router: ActivatedRoute,
+    private activeTrip: ActiveTripDataService,
+    private notifyService: NotificationsService,
+    private networkStatus: NetworkStatusAngularService
+  ) {
     route.events.subscribe(url => {
       this.getCurrentRoute();
+    });
+    this.networkStatus.status.subscribe(res => {
+      if (res === false) {
+        this.notifyService.showSuccessMessage(
+          'We are currently unable to connect to the LnkuP servers.'
+        );
+      }
     });
     this.reload();
     this.getLoggedInUser();
@@ -55,8 +63,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
   }
-
-
 
   getLoggedInUser() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -113,7 +119,9 @@ export class AppComponent implements OnInit, OnDestroy {
         // }
 
         // tslint:disable-next-line: max-line-length
-        this.notifyService.showInfoMessage(' New updates are available for your app. Please sit back and relax while we install the updates.');
+        this.notifyService.showInfoMessage(
+          ' New updates are available for your app. Please sit back and relax while we install the updates.'
+        );
         this.authenticateService.logout();
         window.location.reload();
       });
@@ -121,7 +129,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   saveCurrentRoute(route) {
     JSON.stringify(localStorage.setItem('currentRoute', route));
-
   }
   getCurrentRoute() {
     let showSideNav = true;
@@ -162,20 +169,16 @@ export class AppComponent implements OnInit, OnDestroy {
     } else if (driverRoute === '/driver') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
-
     } else if (verifyRoute === '/verify') {
       showSideNav = false;
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
-
     } else if (profileRoute === '/profile') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
-
     } else if (profileRoute === '/payment') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
-
     } else if (profileRoute === '/support') {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
@@ -188,7 +191,6 @@ export class AppComponent implements OnInit, OnDestroy {
       // localStorage.removeItem('currentRoute');
     }
   }
-
 
   ngOnDestroy() {
     this.unsubscribe$.next();

@@ -56,7 +56,8 @@ import { LocationWebService } from './services/data/location/location.web.servic
 import { LocationDataService } from './services/data/location/location.data.service';
 import { TripsHistoryComponent } from './components/trips-history/trips-history.component';
 import { GoogleMapsAPIWrapper, AgmCoreModule } from '@agm/core';
-import { AgmOverlays } from 'agm-overlays';
+import { NetworkStatusAngularModule } from 'network-status-angular';
+
 
 
 
@@ -115,6 +116,7 @@ import { AgmOverlays } from 'agm-overlays';
       measurementId: 'G-35QM2LZ7S4'
     }),
     AngularFireMessagingModule,
+    NetworkStatusAngularModule.forRoot()
   ],
 
   providers: [
