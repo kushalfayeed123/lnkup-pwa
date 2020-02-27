@@ -74,7 +74,7 @@ export class AuthenticateWebService implements AuthenticateDataService {
 
   update(user: any) {
     console.log('from the service', user);
-    return this.http.put(`${this.webUrl}/user/${user.id}`, user);
+    return this.http.put(`${this.webUrl}/user/${user.userId}`, user);
   }
   updateUserStatus(user: any) {
     console.log('from the service', user);

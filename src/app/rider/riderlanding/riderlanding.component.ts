@@ -462,6 +462,7 @@ showDirection: boolean;
         });
       });
     }
+
   }
   getActiveTripsCordinates() {
     this.activeTrip

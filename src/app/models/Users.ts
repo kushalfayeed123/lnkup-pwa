@@ -7,10 +7,14 @@ export class Users{
     firstName: string;
     lastName: string;
     verificationCode: string;
+    email: string;
     Role: string;
     userStatus: string;
     token: string;
-    phoneNumber: string
+    phoneNumber: string;
+    password: string;
+    signupDate: string;
+    signupTime: string;
     userImage: UserImage;
     userPaymentData: UserPaymentToken[];
     pushNotificationTokens: PushNotificationTokens[];
