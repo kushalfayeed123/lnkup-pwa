@@ -271,8 +271,8 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
         const pushMessage = {
           title: 'LnkuP',
           body: message,
-          click_action: `https://lnkupmob.azureedge.net/rider/home/${recieverId}`,
-          receiverName: receiver
+          receiverName: receiver,
+          click_action: `https://lnkupmob.azureedge.net/rider/home/${recieverId}`
         };
         this.notifyService.sendNotification(recieverId, pushMessage);
         setTimeout(() => {

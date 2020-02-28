@@ -143,8 +143,15 @@ export class NotificationsService {
     const pushToken = user.pushNotificationTokens;
     pushToken.forEach(element => {
       const token = element.token;
-      const pushMessage = { ...message, token };
-      this.pushService.sendFCMMessage(pushMessage).subscribe(res => {
+      // const pushMessage = { ...message, token };
+      const messagePayload = {
+        notification: {
+          message
+        },
+        data: {},
+        to: token
+      };
+      this.pushService.sendFCMMessage(messagePayload).subscribe(res => {
         console.log('fcm response', res);
       });
     });

@@ -195,8 +195,9 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     const pushMessage = {
       title: 'LnkuP Request',
       body: message,
-      click_action: `https://lnkupmob.azureedge.net/driver/rider-request`,
-      receiverName: this.driverEmail
+      receiverName: this.driverEmail,
+      click_action: `https://lnkupmob.azureedge.net/driver/rider-request`
+
     };
     this.notifyService.sendNotification(userId, pushMessage);
     setTimeout(() => {
