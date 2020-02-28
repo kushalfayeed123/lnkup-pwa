@@ -49,6 +49,7 @@
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
+    "network-status-angular": "^1.0.4",
     "ng-animate": "^0.3.4",
     "ng-connection-service": "^1.0.4",
     "ng-sidebar": "^9.2.0",
