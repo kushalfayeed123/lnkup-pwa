@@ -31,10 +31,10 @@
                   </li>
                 </ul>
               </div>
-              <!-- <div class="cancel-trip" color="accent">Cancel Trip</div>
-              <button type="submit" mat-raised-button color="accent" *ngIf="showPaymentButton"
+              <!-- <div class="cancel-trip" color="accent">Cancel Trip</div> -->
+              <button type="submit" mat-raised-button color="accent" *ngIf="!hideCancelButton"
                class="auth-full-width"
-              (click)="makePayment()">Pay Now</button> -->
+              (click)="cancelRequest()">Cancel</button>
             </div>
           </div>
         </div>
@@ -42,6 +42,6 @@
     </div>
   </div>
 
-  <mat-spinner *ngIf="!driverData"  [diameter]="20"
+  <mat-spinner *ngIf="loading"  [diameter]="20"
   class="loader"
 ></mat-spinner>

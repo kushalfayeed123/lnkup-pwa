@@ -119,7 +119,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
   }
 
   tripProcess(status, newRequest) {
-    if (status) {
+    if (status === true) {
       newRequest.forEach(rider => {
         const tripConnectionId = localStorage.getItem('clientConnectionId');
         const driverName = this.activeTrip.tripDriver.driver.userName;
@@ -188,12 +188,10 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
       newRequest.forEach(rider => {
         const tripConnectionId = localStorage.getItem('clientConnectionId');
         const driverName = this.activeTrip.tripDriver.driver.userName;
-        const pickup = this.activeTrip.tripPickup;
         const riderId = rider.activeRiderId;
         const receiver = rider.user.userName;
         const receiverId = rider.user.userId;
-        const pickupTime = this.activeTrip.tripStartDateTime;
-        const bookedSeat = rider.bookedSeat;
+     
         const riderConnectionId = rider.riderConnectId;
         const message = `${driverName}
         has cancelled this trip. Please search for another trip. Thank you.`;
@@ -203,11 +201,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
         click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
         receiverName: receiver
       };
-        if (this.allowedRiderCount < 1) {
-        this.newAllowedRiderCount = this.maxSeat - bookedSeat;
-      } else {
-        this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
-      }
+      
         const activeRider = {
         tripStatus: '3',
         paymentStatus: '0',
@@ -259,8 +253,15 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
   }
   cancelActiveTrip() {
     this.cancelLoading = true;
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
     const tripConnectionId = localStorage.getItem('clientConnectionId');
-    this.tripProcess(false, this.riderRequest);
+    if (this.riderRequestLength < 1) {
+      this.cancelLoading = false;
+      this.router.navigate(['driver/home', userId]);
+    } else {
+      this.tripProcess(false, this.riderRequest);
+    }
   }
 
 

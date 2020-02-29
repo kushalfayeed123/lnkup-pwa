@@ -84,11 +84,11 @@
   </section>
 
   <div class="trip-control">
-    <button id="accept" mat-raised-button color="accent" class="auth-full-width btn-round start animated zoomIn"
+    <button id="accept" mat-raised-button color="accent" class="auth-full-width animated zoomIn accept-btn"
       *ngIf="!loading" (click)="startTrip()">Start
       trip</button>
-    <button  *ngIf="!loading" id="accept" mat-raised-button color="accent"
-      class="auth-full-width btn-round animated zoomIn" (click)="cancelActiveTrip()">Cancel trip</button>
+    <button  *ngIf="!loading" id="accept" mat-raised-button color="accent" class="auth-full-width animated zoomIn"
+     (click)="cancelActiveTrip()">Cancel trip</button>
   </div>
 </div>
 

@@ -267,8 +267,8 @@ export class NotificationsService {
           const endTrip = true;
           this._endTrip.next(endTrip);
         } else {
-          return;
-        }
+          const endTrip = false;
+          this._endTrip.next(endTrip);        }
       });
     }
   }
