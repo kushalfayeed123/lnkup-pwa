@@ -41,6 +41,7 @@ export class NotificationsService {
   subscription: string;
   pushSubscriptionToUpdate: { token: string };
   userId: any;
+  hubConnection: any;
 
   constructor(
     private router: Router,
@@ -86,7 +87,7 @@ export class NotificationsService {
     this.pushService
       .updateFCMToken(userId, this.pushSubscriptionToUpdate)
       .subscribe(
-        res => {},
+        res => { },
         error => {
           console.error(error);
         }
@@ -98,7 +99,7 @@ export class NotificationsService {
       userId
     };
     this.pushService.saveSubscription(this.pushSubscription).subscribe(
-      res => {},
+      res => { },
       error => {
         console.error(error);
       }
@@ -166,62 +167,63 @@ export class NotificationsService {
   }
 
   sendAcceptMessage(user?, messages?) {
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
-    const loginToken = this.user.token;
-    const hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
-    hubConnection
-      .start()
-      .catch(err => console.error(err.toString()))
-      .then(() => {
-        hubConnection.invoke('ReceiveMessage', user, messages).then(res => {
-          console.log(user);
-        });
+    // this.user = JSON.parse(localStorage.getItem('currentUser'));
+    // const loginToken = this.user.token;
+    // const hubConnection = new signalR.HubConnectionBuilder()
+    //   .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
+    //   .configureLogging(signalR.LogLevel.Information)
+    //   .build();
+    // this.hubConnection
+    //   .start()
+    //   .catch(err => console.error(err.toString()))
+    //   .then(() => {
+
+    //   });
+
+    this.hubConnection.send('ReceiveMessage', user, messages).then(res => {
+      console.log(user);
+    });
+  }
+
+  sendRejectMessage(userId, message) {
+    // this.user = JSON.parse(localStorage.getItem('currentUser'));
+    // const loginToken = this.user.token;
+    // const hubConnection = new signalR.HubConnectionBuilder()
+    //   .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
+    //   .configureLogging(signalR.LogLevel.Information)
+    //   .build();
+
+    // this.hubConnection
+    //   .start()
+    //   .catch(err => console.error(err.toString()))
+    //   .then(() => {
+
+    //   });
+    this.hubConnection.send('ReceiveDeclineMessage', userId, message)
+      .then(res => {
+        console.log(res);
       });
   }
 
-  rejectMessage(userId, message) {
+  async intiateConnection() {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
     const loginToken = this.user.token;
-    const hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
-    // const userId = this.user.id.toString;
-
-    hubConnection
-      .start()
-      .catch(err => console.error(err.toString()))
-      .then(() => {
-        hubConnection
-          .invoke('ReceiveDeclineMessage', userId, message)
-          .then(res => {
-            console.log(res);
-          });
-      });
-  }
-
-  intiateConnection() {
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
-    const loginToken = this.user.token;
-    const hubConnection = new signalR.HubConnectionBuilder()
+    this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    hubConnection
+    this.hubConnection
       .start()
       .catch(err => console.error(err.toString()))
       .then(() => {
-        hubConnection.invoke('GetConnectionId').then(connectionId => {
-          // sessionStorage.setItem('clientConnectionId', connectionId);
-          //   hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
+        this.hubConnection.invoke('GetConnectionId').then(connectionId => {
+          localStorage.setItem('clientConnectionId', connectionId);
+          // hubConnection.invoke('ReceiveMessage', `Welcome back ${this.user.userName}`);
         });
       });
 
-    hubConnection.on('ReceiveMessage', message => {
+    await this.hubConnection.on('ReceiveMessage', message => {
       const user = JSON.parse(localStorage.getItem('currentUser'));
       const userRole = user.role;
       if (userRole === 'Driver') {
@@ -231,9 +233,8 @@ export class NotificationsService {
       }
     });
 
-    hubConnection.on('ReceiveDeclineMessage', message => {
-      const user = JSON.parse(localStorage.getItem('currentUser'));
-      const userRole = user.role;
+    await this.hubConnection.on('ReceiveDeclineMessage', message => {
+      const userRole = this.user.role;
       if (userRole === 'Driver') {
         this.alertDriverCancel(message);
       } else {
@@ -241,9 +242,9 @@ export class NotificationsService {
       }
     });
 
-    hubConnection.onclose(() => {
+    this.hubConnection.onclose(() => {
       setTimeout(() => {
-        hubConnection.start();
+        this.hubConnection.start();
       }, 5000);
     });
   }

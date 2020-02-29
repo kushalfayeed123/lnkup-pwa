@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { ActiveTripWebService } from 'src/app/services/data/active-trip/active-trip.web.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   animations: [slideInAnimation],
   host: { '[@slideInAnimation]': '' }
 })
-export class RiderRequestComponent implements OnInit, OnDestroy {
+export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
 
   private unsubscribe$ = new Subject<void>();
   public config: any = {
@@ -48,12 +48,14 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
               private riderService: ActiveRiderDataService,
               private router: Router) {
                 this.notifyService.intiateConnection();
-                this.getDriverSuccessAlert();
   }
 
   ngOnInit() {
     this.getActiveTrips();
-
+  }
+  ngAfterViewInit() {
+    this.getDriverSuccessAlert();
+    this.getDriverCancelAlert();
   }
 
   getTripData() {
@@ -113,136 +115,179 @@ export class RiderRequestComponent implements OnInit, OnDestroy {
   }
   acceptTripRequest(request) {
     const newRequest = request.filter(x => x.tripStatus === '1');
-    newRequest.forEach(rider => {
-      const tripConnectionId = sessionStorage.getItem('clientConnectionId');
-      const driverName = this.activeTrip.tripDriver.driver.userName;
-      const pickup = this.activeTrip.tripPickup;
-      const riderId = rider.activeRiderId;
-      const receiver = rider.user.userName;
-      const receiverId = rider.user.userId;
-      const pickupTime = this.activeTrip.tripStartDateTime;
-      const bookedSeat = rider.bookedSeat;
-      const riderConnectionId = rider.riderConnectId;
-      const message = `Linkup with ${driverName}
-    at ${pickup} on or before ${pickupTime}`;
-      const pushMessage = {
-      title: 'LnkuP',
-      body: message,
-      click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
-      receiverName: receiver
-    };
-      if (this.allowedRiderCount <= 0) {
-      this.newAllowedRiderCount = this.maxSeat - bookedSeat;
-    } else {
-      this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
-    }
-      const startTime = localStorage.getItem('startTime');
-      const activeRider = {
-      tripStatus: '2',
-      paymentStatus: '0',
-      riderConnectId: riderConnectionId,
-    };
+    this.tripProcess(true, newRequest);
+  }
 
-
-      this.riderService.update(riderId, activeRider)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-      }, error => {
-        console.log(error);
+  tripProcess(status, newRequest) {
+    if (status) {
+      newRequest.forEach(rider => {
+        const tripConnectionId = localStorage.getItem('clientConnectionId');
+        const driverName = this.activeTrip.tripDriver.driver.userName;
+        const pickup = this.activeTrip.tripPickup;
+        const riderId = rider.activeRiderId;
+        const receiver = rider.user.userName;
+        const receiverId = rider.user.userId;
+        const pickupTime = this.activeTrip.tripStartDateTime;
+        const bookedSeat = rider.bookedSeat;
+        const riderConnectionId = rider.riderConnectId;
+        const message = `Linkup with ${driverName}
+      at ${pickup} on or before ${pickupTime}`;
+        const pushMessage = {
+        title: 'LnkuP',
+        body: message,
+        click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
+        receiverName: receiver
+      };
+        if (this.allowedRiderCount < 1) {
+        this.newAllowedRiderCount = this.maxSeat - bookedSeat;
+      } else {
+        this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
+      }
+        const startTime = localStorage.getItem('startTime');
+        const activeRider = {
+        tripStatus: '2',
+        paymentStatus: '0',
+        riderConnectId: riderConnectionId,
+      };
+        this.riderService.update(riderId, activeRider)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(data => {
+        }, error => {
+          console.log(error);
+        });
+  
+        if (this.newAllowedRiderCount < 1) {
+        this.activeTripStatus = 2;
+      } else {
+        this.activeTripStatus = 1;
+      }
+        const activeTrip = {
+        driverTripStatus: this.activeTripStatus,
+        allowedRiderCount: this.newAllowedRiderCount,
+        tripConnectionId,
+        actualTripEndDateTime: '',
+        tripEndDateTime: '',
+        actualTripStartDateTime: startTime.toString(),
+        tripStartDateTime: pickupTime,
+      };
+  
+  
+        this.tripService.updateTrip(this.activeTripId, activeTrip)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(response => {
+          this.notifyService.sendNotification(receiverId, pushMessage);
+          setTimeout(() => {
+            this.notifyService.sendAcceptMessage(receiverId, message);
+          }, 5000);
+  
+        }, error => {
+          console.log(error);
+        });
       });
-
-      if (this.newAllowedRiderCount <= 0) {
-      this.activeTripStatus = 2;
     } else {
-      this.activeTripStatus = 1;
-    }
-      const activeTrip = {
-      driverTripStatus: this.activeTripStatus,
-      allowedRiderCount: this.newAllowedRiderCount,
-      tripConnectionId,
-      actualTripEndDateTime: '',
-      tripEndDateTime: '',
-      actualTripStartDateTime: startTime.toString(),
-      tripStartDateTime: pickupTime,
-    };
-
-
-      this.tripService.updateTrip(this.activeTripId, activeTrip)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(response => {
-        this.getActiveTrips();
-        this.notifyService.sendNotification(receiverId, pushMessage);
-        setTimeout(() => {
-          this.notifyService.sendAcceptMessage(receiverId, message);
-        }, 5000);
-        if (this.activeTripStatus === 2) {
+      newRequest.forEach(rider => {
+        const tripConnectionId = localStorage.getItem('clientConnectionId');
+        const driverName = this.activeTrip.tripDriver.driver.userName;
+        const pickup = this.activeTrip.tripPickup;
+        const riderId = rider.activeRiderId;
+        const receiver = rider.user.userName;
+        const receiverId = rider.user.userId;
+        const pickupTime = this.activeTrip.tripStartDateTime;
+        const bookedSeat = rider.bookedSeat;
+        const riderConnectionId = rider.riderConnectId;
+        const message = `${driverName}
+        has cancelled this trip. Please search for another trip. Thank you.`;
+        const pushMessage = {
+        title: 'LnkuP',
+        body: message,
+        click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
+        receiverName: receiver
+      };
+        if (this.allowedRiderCount < 1) {
+        this.newAllowedRiderCount = this.maxSeat - bookedSeat;
+      } else {
+        this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
+      }
+        const activeRider = {
+        tripStatus: '3',
+        paymentStatus: '0',
+        riderConnectId: riderConnectionId,
+      };
+        this.riderService.update(riderId, activeRider)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(data => {
+        }, error => {
+          console.log(error);
+        });
+  
+        const activeTrip = {
+        driverTripStatus: 4,
+        allowedRiderCount: this.newAllowedRiderCount,
+        tripConnectionId
+      };
+        this.tripService.updateTrip(this.activeTripId, activeTrip)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(response => {
+          this.getActiveTrips();
+          this.notifyService.sendNotification(receiverId, pushMessage);
+          setTimeout(() => {
+            this.notifyService.sendRejectMessage(receiverId, message);
+          }, 5000);
           const user = JSON.parse(localStorage.getItem('currentUser'));
           const userId = user.id;
-          this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
-        }
-      }, error => {
-        console.log(error);
+          this.cancelLoading = false;
+          this.router.navigate(['driver/home', userId]);
+        }, error => {
+          console.log(error);
+        });
       });
-    });
-
+    }
   }
 
   startTrip() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
-    this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
+    if (this.newAllowedRiderCount < this.maxSeat) {
+        if (confirm(`You have ${this.newAllowedRiderCount} riders in this trip, continue?`)) {
+          this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
+        } else {
+          return;
+        }
+      } else {
+        this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
+      }
   }
   cancelActiveTrip() {
     this.cancelLoading = true;
-    const tripConnectionId = sessionStorage.getItem('clientConnectionId');
-
-    const activeTrip = {
-      driverTripStatus: 2,
-      allowedRiderCount: this.newAllowedRiderCount,
-      tripConnectionId
-    };
-
-
-    this.tripService.updateTrip(this.activeTripId, activeTrip)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(response => {
-        this.getActiveTrips();
-        // this.notifyService.sendAcceptMessage(receiverId, message);
-        // this.notifyService.sendNotification(receiverId, pushMessage);
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        const userId = user.id;
-        this.cancelLoading = false;
-        this.router.navigate(['driver/home', userId]);
-      }, error => {
-        console.log(error);
-      });
+    const tripConnectionId = localStorage.getItem('clientConnectionId');
+    this.tripProcess(false, this.riderRequest);
   }
 
 
-  declineTripRequest(rider) {
-    console.log(rider);
-    const riderConnectionId = rider.riderConnectId;
-    const riderId = rider.activeRiderId;
-    const receiverId = rider.user.userId;
-    const driverName = this.activeTrip.tripDriver.driver.userName;
-    const receiver = rider.user.userName;
-    const message = `Sorry, ${driverName} declined your request. Please search for another driver.`;
-    const pushMessage = {
-      title: 'LnkuP Trip',
-      body: message,
-      click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}`,
-      receiverName: receiver
-    };
-    this.riderService.delete(riderId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        this.notifyService.rejectMessage(receiverId, message);
-        this.notifyService.sendNotification(receiverId, pushMessage);
-        this.getActiveTrips();
-      }, error => {
-        console.log('An error occured');
-      });
-  }
+  // declineTripRequest(rider) {
+  //   console.log(rider);
+  //   const riderConnectionId = rider.riderConnectId;
+  //   const riderId = rider.activeRiderId;
+  //   const receiverId = rider.user.userId;
+  //   const driverName = this.activeTrip.tripDriver.driver.userName;
+  //   const receiver = rider.user.userName;
+  //   const message = `Sorry, ${driverName} declined your request. Please search for another driver.`;
+  //   const pushMessage = {
+  //     title: 'LnkuP Trip',
+  //     body: message,
+  //     click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}`,
+  //     receiverName: receiver
+  //   };
+  //   this.riderService.delete(riderId)
+  //     .pipe(takeUntil(this.unsubscribe$))
+  //     .subscribe(data => {
+  //       this.notifyService.rejectMessage(receiverId, message);
+  //       this.notifyService.sendNotification(receiverId, pushMessage);
+  //       this.getActiveTrips();
+  //     }, error => {
+  //       console.log('An error occured');
+  //     });
+  // }
 
   ngOnDestroy() {
     this.unsubscribe$.next();

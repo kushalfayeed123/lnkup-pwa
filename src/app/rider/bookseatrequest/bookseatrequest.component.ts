@@ -53,7 +53,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.notifyService.intiateConnection();
 
     this.getRiderSuccessAlert();
-    this.getRiderDeclineAlert();
+    // this.getRiderDeclineAlert();
   }
 
   ngOnInit() {
@@ -220,20 +220,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       });
   }
 
-  async getRiderDeclineAlert() {
-    await this.notifyService.declineAlert
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(alert => {
-        if (alert) {
-          console.log('alert', alert);
-          const user = JSON.parse(localStorage.getItem('currentUser'));
-          const userId = user.id;
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-          this.router.onSameUrlNavigation = 'reload';
-          this.router.navigate([`rider/home/${userId}`]);
-        }
-      });
-  }
+
 
   ngOnDestroy() {
     this.unsubscribe$.next();

@@ -110,6 +110,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
 
     this.totalTripFee = this.tripFeeArray.reduce((a, b) => a + b, 0);
     this.feeToCharge = (20 / 100) * this.totalTripFee;
+    this.startActiveTrip();
   }
 
   makePayment() {
@@ -276,7 +277,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
         };
         this.notifyService.sendNotification(recieverId, pushMessage);
         setTimeout(() => {
-          this.notifyService.sendAcceptMessage(recieverId, message);
+          this.notifyService.sendRejectMessage(recieverId, message);
         }, 5000);
       } else {
         const message = 'Your trip has started.';

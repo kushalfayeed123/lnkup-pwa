@@ -57,6 +57,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
               private notifyService: NotificationsService,
               private paymentService: PaymentDataService,
               private router: Router) {
+
     this.notifyService.endTrip
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
@@ -69,6 +70,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getUserdata();
     this.getRiderRequest();
+    this.getRiderDeclineAlert();
   }
 
 
@@ -81,6 +83,27 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     this.pickupAddress = trip.tripPickup;
     const driverId = trip.driverId;
     this.getDriverData();
+    // this.listenToTripCancel();
+  }
+
+  // listenToTripCancel() {
+  //   this.notifyService.declineAlert
+  //     .pipe(takeUntil(this.unsubscribe$))
+  //     .subscribe(decline => {
+  //       if (decline) {
+  //         this.router.navigate(['rider/home',this.userId]);
+  //       }
+  //     });
+  // }
+
+  async getRiderDeclineAlert() {
+    await this.notifyService.declineAlert
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(alert => {
+        if (alert) {
+          this.router.navigate([`/onboarding`]);
+        }
+      });
   }
   getUserdata() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -149,17 +172,17 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     const trip = JSON.parse(localStorage.getItem('riderRequest'));
     const tripId = trip.tripId;
     this.tripService.getTripsById(tripId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      const activeRiders = res.activeRiders;
-      activeRiders.filter(a => a.userId === this.userId);
-      if (activeRiders) {
-        const onGoingTrip = true;
-        localStorage.setItem('onGoingTrip', JSON.stringify(onGoingTrip));
-      }
-      this.activeRiderId = activeRiders[0].activeRiderId;
-      this.riderConnectId = activeRiders[0].riderConnectId;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        const activeRiders = res.activeRiders;
+        activeRiders.filter(a => a.userId === this.userId);
+        if (activeRiders) {
+          const onGoingTrip = true;
+          localStorage.setItem('onGoingTrip', JSON.stringify(onGoingTrip));
+        }
+        this.activeRiderId = activeRiders[0].activeRiderId;
+        this.riderConnectId = activeRiders[0].riderConnectId;
+      });
   }
 
   confirmPayment() {
@@ -190,7 +213,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
                 this.paymentService.updatePayment(this.paymentId, newToken)
                   .pipe(takeUntil(this.unsubscribe$))
                   .subscribe(token => {
-                   this.updateActiveRider();
+                    this.updateActiveRider();
                   }, error => {
                     console.error('could not update payment');
                   });
@@ -215,16 +238,15 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       riderConnectId: this.riderConnectId
     };
     this.riderService.update(this.activeRiderId, activeRider)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(data => {
-      localStorage.removeItem('currentLocation');
-      this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-      this.router.onSameUrlNavigation = 'reload';
-      this.router.navigate([`rider/home/${this.userId}`]);
-    }, error => {
-      console.log(error);
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        localStorage.removeItem('currentLocation');
+        this.notifyService.showSuccessMessage('Thank you. Your payment was successful.');
+   
+        this.router.navigate(['/onboarding']);
+      }, error => {
+        console.log(error);
+      });
   }
 
   generateReference() {
@@ -256,10 +278,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(data => {
             const alertMessage = 'Your trip request has been canceled.';
-            alert(alertMessage);
-            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-            this.router.onSameUrlNavigation = 'reload';
-            this.router.navigate([`rider/home/${this.userId}`]);
+            this.notifyService.showErrorMessage(alertMessage);
+            this.router.navigate(['/onboarding']);
           });
       });
   }
@@ -282,8 +302,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       }, 7000);
     } else {
       this.notifyService.showSuccessMessage(`Your trip has ended. Please pay ${this.driverName} a sum of ₦ ${this.tripFee} cash. Thank you for riding with lnkup.`);
+      this.router.navigate(['/onboarding']);
     }
-    this.router.navigate([`rider/home/${this.userId}`]);
   }
 
 
