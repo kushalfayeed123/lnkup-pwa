@@ -1,11 +1,11 @@
     <h1 mat-dialog-title>{{data.name}}</h1>
-<div mat-dialog-content>
+<div mat-dialog-content *ngIf="showPrice">
   <p>&#8358; {{data.price}}</p>
 
 </div>
 <div mat-dialog-actions class="close-btn">
-  <button mat-raised-button color="accent" (click)="onNoClick()">
-  Ok
-</button>
-  <!-- <button mat-raised-button color="accent" (click)="onNoClick()" cdkFocusInitial>Pay Now</button> -->
+  <button mat-raised-button color="accent" (click)="onNoClick(true)" cdkFocusInitial>Ok</button>
+  <button mat-raised-button color="accent" (click)="onNoClick(false)" *ngIf="showCancel">
+    Cancel
+  </button>
 </div>

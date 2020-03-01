@@ -185,7 +185,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.gettingDrivers = false;
         localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
-        this.router.navigate([`rider/home/${user.id}`]);
+        this.router.navigate(['/onboarding']);
       });
   }
 
@@ -212,7 +212,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     await this.notifyService.successAlert
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(alert => {
-        if (alert) {
+        if (alert === true) {
           this.gettingDrivers = false;
           localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
           this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });

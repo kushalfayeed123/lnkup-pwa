@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     this.networkStatus.status.subscribe(res => {
       if (res === false) {
-        this.notifyService.showSuccessMessage(
+        this.notifyService.showErrorMessage(
           'We are currently unable to connect to the LnkuP servers. Please try again shortly'
         );
       }

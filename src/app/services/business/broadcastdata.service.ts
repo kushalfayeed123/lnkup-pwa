@@ -40,6 +40,9 @@ export class BroadcastService {
   private _messageType = new BehaviorSubject(null);
   public messageType = this._messageType.asObservable();
 
+  private _modalStat = new BehaviorSubject(null);
+  public modalStat = this._modalStat.asObservable();
+
 
   constructor(private activeTrip: ActiveTripDataService) {}
 
@@ -84,6 +87,10 @@ export class BroadcastService {
     this._emptyTrips.next(trips);
   }
 
+  publishModalStatus(status) {
+    this._modalStat.next(status);
+  }
+  
   getAllTrips() {
     this.activeTrip
       .getAllTrips()

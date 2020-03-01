@@ -147,7 +147,7 @@ export class NotificationsService {
       // const pushMessage = { ...message, token };
       const messagePayload = {
         notification: {
-          message
+          ...message
         },
         data: {},
         to: token

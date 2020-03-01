@@ -678,6 +678,7 @@ showDirection: boolean;
           this.showNoTripMessage = true;
           this.showForm = false;
           setTimeout(() => {
+            this.loadMarker = false;
             this.showNoTripMessage = false;
             this.showForm = true;
             this.gettingDrivers = false;

@@ -217,7 +217,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: { name: this.name, price: driverFee }
+      data: { name: this.name, price: driverFee, showCancel: false  }
     });
     if (this.cashRiders.length > 0) {
       this.isCashPayment = true;
@@ -250,7 +250,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: { name: this.name }
+      data: { name: this.name, price: null, showCancel: false }
     });
     dialogRef.afterClosed().subscribe(result => {
         this.makePayment();

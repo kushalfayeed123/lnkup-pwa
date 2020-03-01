@@ -9,6 +9,9 @@ import { NotificationsService } from 'src/app/services/business/notificatons.ser
 import { ActiveRiderDataService } from 'src/app/services/data/active-rider/active-rider.data.service';
 import { Router } from '@angular/router';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { MatDialog } from '@angular/material';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 
 @Component({
   selector: 'app-rider-request',
@@ -46,6 +49,8 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
   constructor(private tripService: ActiveTripDataService,
               private notifyService: NotificationsService,
               private riderService: ActiveRiderDataService,
+              private broadcastService: BroadcastService,
+              public dialog: MatDialog,
               private router: Router) {
                 this.notifyService.intiateConnection();
   }
@@ -130,7 +135,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
         const pickupTime = this.activeTrip.tripStartDateTime;
         const bookedSeat = rider.bookedSeat;
         const riderConnectionId = rider.riderConnectId;
-        const message = `Linkup with ${driverName}
+        const message = `Meet ${driverName}
       at ${pickup} on or before ${pickupTime}`;
         const pushMessage = {
         title: 'LnkuP',
@@ -201,7 +206,6 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
         click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
         receiverName: receiver
       };
-      
         const activeRider = {
         tripStatus: '3',
         paymentStatus: '0',
@@ -213,7 +217,6 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
         }, error => {
           console.log(error);
         });
-  
         const activeTrip = {
         driverTripStatus: 4,
         allowedRiderCount: this.newAllowedRiderCount,
@@ -241,12 +244,25 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
   startTrip() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     const userId = user.id;
-    if (this.newAllowedRiderCount < this.maxSeat) {
-        if (confirm(`You have ${this.newAllowedRiderCount} riders in this trip, continue?`)) {
-          this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
-        } else {
-          return;
-        }
+    const name = `You have ${this.riderRequestLength} riders in this trip, continue?`;
+    if (this.riderRequestLength < this.maxSeat) {
+      const dialogRef = this.dialog.open(ModalComponent, {
+        width: '90%',
+        panelClass: 'dialog',
+        data: { name,  price: null, showCancel: true }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.broadcastService.modalStat
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(res => {
+          if (res === true) {
+            this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
+          } else {
+            return;
+          }
+        });
+      });
+
       } else {
         this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
       }
