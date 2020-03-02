@@ -53,7 +53,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.notifyService.intiateConnection();
 
     this.getRiderSuccessAlert();
-    this.getRiderDeclineAlert();
+    // this.getRiderDeclineAlert();
   }
 
   ngOnInit() {
@@ -185,7 +185,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.gettingDrivers = false;
         localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
-        this.router.navigate([`rider/home/${user.id}`]);
+        this.router.navigate(['/onboarding']);
       });
   }
 
@@ -195,8 +195,9 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     const pushMessage = {
       title: 'LnkuP Request',
       body: message,
-      click_action: `https://lnkupmob.azureedge.net/driver/rider-request`,
-      receiverName: this.driverEmail
+      receiverName: this.driverEmail,
+      click_action: `https://lnkupmob.azureedge.net/driver/rider-request`
+
     };
     this.notifyService.sendNotification(userId, pushMessage);
     setTimeout(() => {
@@ -211,7 +212,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     await this.notifyService.successAlert
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(alert => {
-        if (alert) {
+        if (alert === true) {
           this.gettingDrivers = false;
           localStorage.setItem('gettingDrivers', JSON.stringify(this.gettingDrivers));
           this.router.navigate([`rider/home/${userId}`], { queryParams: { riderLink: true } });
@@ -219,20 +220,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       });
   }
 
-  async getRiderDeclineAlert() {
-    await this.notifyService.declineAlert
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(alert => {
-        if (alert) {
-          console.log('alert', alert);
-          const user = JSON.parse(localStorage.getItem('currentUser'));
-          const userId = user.id;
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-          this.router.onSameUrlNavigation = 'reload';
-          this.router.navigate([`rider/home/${userId}`]);
-        }
-      });
-  }
+
 
   ngOnDestroy() {
     this.unsubscribe$.next();

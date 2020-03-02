@@ -56,6 +56,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   message: string;
   dateNow: any;
   activeTripObject: any;
+  endMessage: string;
 
 
 
@@ -110,6 +111,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
 
     this.totalTripFee = this.tripFeeArray.reduce((a, b) => a + b, 0);
     this.feeToCharge = (20 / 100) * this.totalTripFee;
+    this.startActiveTrip();
   }
 
   makePayment() {
@@ -216,7 +218,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: { name: this.name, price: driverFee }
+      data: { name: this.name, price: driverFee, showCancel: false  }
     });
     if (this.cashRiders.length > 0) {
       this.isCashPayment = true;
@@ -249,7 +251,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: { name: this.name }
+      data: { name: this.name, price: null, showCancel: false }
     });
     dialogRef.afterClosed().subscribe(result => {
         this.makePayment();
@@ -266,17 +268,23 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       const recieverId = element.userId;
       const receiver  = element.user.userName;
       if (status === 'end') {
-        console.log('status', status, this.tripRiders);
-        const message = `Your trip has ended, your fee is ₦${element.tripFee}.`;
+        if (element.paymentType === 'Card') {
+          // tslint:disable-next-line: max-line-length
+          this.endMessage =  `Your trip has ended. A sum of ₦ ${element.tripFee} will be charged on your card. Thank you for riding with lnkup.`;
+        } else {
+          // tslint:disable-next-line: max-line-length
+          this.endMessage = ` Your trip has ended. Please pay ${this.activeTrip.tripDriver.userName} a sum of ₦ ${element.tripFee} cash. Thank you for riding with lnkup.`;
+        }
+        // tslint:disable-next-line: max-line-length
         const pushMessage = {
           title: 'LnkuP',
-          body: message,
-          click_action: `https://lnkupmob.azureedge.net/rider/home/${recieverId}`,
-          receiverName: receiver
+          body: this.endMessage,
+          receiverName: receiver,
+          click_action: `https://lnkupmob.azureedge.net/rider/home/${recieverId}`
         };
         this.notifyService.sendNotification(recieverId, pushMessage);
         setTimeout(() => {
-          this.notifyService.sendAcceptMessage(recieverId, message);
+          this.notifyService.sendRejectMessage(recieverId, this.endMessage);
         }, 5000);
       } else {
         const message = 'Your trip has started.';

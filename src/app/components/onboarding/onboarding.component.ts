@@ -73,18 +73,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateUserRole() {
+  updateUserRole(role) {
     this.loading = true;
     this.authService
       .getByEmail(this.user.email)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         this.userObject = res;
-        if (this.user.role === 'Driver') {
-          this.userObject.Role = 'Rider';
-        } else {
-          this.userObject.Role = 'Driver';
-        }
+        this.userObject.Role = role;
         const updatePayload = {
           userId: this.userObject.userId,
           email: this.userObject.email,

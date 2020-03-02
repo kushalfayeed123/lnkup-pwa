@@ -35,6 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private metaService: MetaService,
     private swUpdate: SwUpdate,
+    private push: SwPush,
     private broadCastService: BroadcastService,
     private authenticateService: AuthenticateDataService,
     private route: Router,
@@ -48,8 +49,8 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     this.networkStatus.status.subscribe(res => {
       if (res === false) {
-        this.notifyService.showSuccessMessage(
-          'We are currently unable to connect to the LnkuP servers.'
+        this.notifyService.showErrorMessage(
+          'We are currently unable to connect to the LnkuP servers. Please try again shortly'
         );
       }
     });
@@ -126,6 +127,9 @@ export class AppComponent implements OnInit, OnDestroy {
         window.location.reload();
       });
     }
+
+    this.push.messages.subscribe(msg => console.log('push message', msg));
+    this.push.notificationClicks.subscribe(click => console.log('notification click', click));
   }
   saveCurrentRoute(route) {
     JSON.stringify(localStorage.setItem('currentRoute', route));

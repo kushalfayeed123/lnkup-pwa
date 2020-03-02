@@ -12,11 +12,11 @@
         </nav> -->
 
     <div *ngIf="loading" class="emptyRiders">
-      <span>Broadcasting your trip</span>
+      <span>Fetching Requests...</span>
       <mat-spinner [diameter]="20" class="loader"></mat-spinner>
     </div>
     <div *ngIf="cancelLoading" class="emptyRiders">
-      <span>Canceling your trip</span>
+      <span>Cancelling your trip</span>
       <mat-spinner [diameter]="20" class="loader"></mat-spinner>
     </div>
     <div *ngIf="riderRequestLength === 0 && !loading && allRiderRequest === 0 && !cancelLoading" class="emptyRiders animated zoomIn">
@@ -83,14 +83,11 @@
     </swiper>
   </section>
 
-  <div class="trip-control">
-    <button id="accept" mat-raised-button color="accent" class="auth-full-width btn-round start"
-    [ngClass]="{'end-button-center': riderRequestLength > 0 && !loading}"
-      *ngIf="riderRequestLength > 0 && !loading" (click)="startTrip()">Start
-      trip</button>
-    <button  *ngIf="riderRequestLength < 1 && !loading" id="accept" mat-raised-button color="accent"
-     [ngClass]="{'end-button-center': riderRequestLength < 1 || !loading}"
-      class="auth-full-width btn-round animated zoomIn" (click)="cancelActiveTrip()">Cancel trip</button>
+  <div class="trip-control" >
+    <button id="accept" mat-raised-button color="accent" class="auth-full-width animated zoomIn accept-btn"
+      *ngIf="!loading && riderRequestLength > 0" (click)="startTrip()">Start</button>
+    <button  *ngIf="!loading" id="accept" mat-raised-button color="accent" class="auth-full-width animated zoomIn"
+     (click)="cancelActiveTrip()">Cancel</button>
   </div>
 </div>
 

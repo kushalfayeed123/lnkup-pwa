@@ -13,6 +13,13 @@ ride-details variant
   text-align: right;
 }
 
+#accept {
+  width: 40%;
+}
+.accept-btn {
+  margin-right: 17%;
+}
+
 .ride section.auth-pages.security#ride-confirmation .item-details.dest, .ride.request section.auth-pages.security#ride-confirmation .item-details.dd,
 .ride section.auth-pages.security#ride-confirmation .item-details.srt {
   display: grid;
@@ -250,8 +257,11 @@ section.auth-pages.security#ride-confirmation .card-details img {
   bottom: 0;
   padding: 20px;
   width: 100%;
+  z-index: 100;
 
 }
+
+
 
 .btn-round {
   height: 100px !important;
