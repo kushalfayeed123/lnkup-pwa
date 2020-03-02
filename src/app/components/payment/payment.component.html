@@ -34,6 +34,12 @@
 
       </div>
       <div class="cardDetails-container" *ngIf="isCard && !isCash">
+
+        <div class="allowed-cards">
+          <img src="./assets/Images/master-card.svg" alt="" class="card-img">
+          <img src="./assets/Images/verve.png" alt="" class="card-img">
+        </div>
+
         <div *ngIf="!isAvs && !isPin && !isOtp">
           <div>
             <mat-form-field class="auth-full-width card-number">
@@ -89,6 +95,8 @@
             </mat-form-field>
           </div>
         </div>
+
+     
       </div>
 
       <div *ngIf="isCash && !isCard">
@@ -102,17 +110,20 @@
         <i class="flaticon-square-add-button" id="add-method"></i>
       </div>
       <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save
-        payment</button>
+        Card</button>
       <button id="use-payment" *ngIf="isCard && !isAvs && isPin " (click)="initiatePinAuth()">Submit Pin</button>
       <button id="use-payment" *ngIf="isCard && isAvs && !isPin && !isOtp" (click)="initiateAvsAuth()">Submit Billing
         Details</button>
       <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit
         OTP</button>
 
-
+        <div class="flutter">
+          <div class="flutter-text">Your transactions are powered by</div>
+          <img src="./assets/Images/Flutterwave-1.png" alt="" class="flutter-img">
+        </div>
     </form>
     <div *ngIf="addCard" class="card-message">
-      <span>
+      <span >
         You have a card saved already. Do you want to add another card?
       </span>
       <div class="btn-container">
@@ -135,5 +146,6 @@
             </div>
         </div> -->
     <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
+
   </main>
 </section>
