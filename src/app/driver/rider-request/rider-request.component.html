@@ -83,12 +83,11 @@
     </swiper>
   </section>
 
-  <div class="trip-control">
+  <div class="trip-control" >
     <button id="accept" mat-raised-button color="accent" class="auth-full-width animated zoomIn accept-btn"
-      *ngIf="!loading" (click)="startTrip()">Start
-      trip</button>
+      *ngIf="!loading && riderRequestLength > 0" (click)="startTrip()">Start</button>
     <button  *ngIf="!loading" id="accept" mat-raised-button color="accent" class="auth-full-width animated zoomIn"
-     (click)="cancelActiveTrip()">Cancel trip</button>
+     (click)="cancelActiveTrip()">Cancel</button>
   </div>
 </div>
 

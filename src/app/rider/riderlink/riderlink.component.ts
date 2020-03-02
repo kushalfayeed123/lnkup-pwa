@@ -63,8 +63,9 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     this.notifyService.endTrip
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
-        if (res) {
+        if (res === true) {
           this.showPaymentMessage();
+          this.hideCancelButton = false;
         } else if (res === false) {
           this.hideCancelButton = true;
         }
@@ -168,8 +169,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
           this.showPaymentButton = true;
         });
     } else {
-      this.notifyService.showInfoMessage(`Please pay ₦${this.tripFee} to your driver.`);
-      this.updateActiveRider();
+      return;
     }
 
   }
@@ -275,23 +275,23 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     const trip = JSON.parse(localStorage.getItem('riderRequest'));
     const tripId = trip.tripId;
     this.tripService.getTripsById(tripId)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(res => {
-      const activeRiders = res.activeRiders;
-      const currentRider = activeRiders.find(x => x.userId === this.userId);
-      console.log('current user', res);
-      const riderName = currentRider.user.userName;
-      const activeRiderId = currentRider.activeRiderId;
-      this.riderService.delete(activeRiderId)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        this.sendNotification(res.tripDriver.driverId, res.tripDriver.driver.userName, riderName);
-        this.loading = false;
-        const alertMessage = 'Your trip request has been cancelled.';
-        this.notifyService.showErrorMessage(alertMessage);
-        this.router.navigate(['/onboarding']);
+      .subscribe(res => {
+        const activeRiders = res.activeRiders;
+        const currentRider = activeRiders.find(x => x.userId === this.userId);
+        console.log('current user', res);
+        const riderName = currentRider.user.userName;
+        const activeRiderId = currentRider.activeRiderId;
+        this.riderService.delete(activeRiderId)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(data => {
+            this.sendNotification(res.tripDriver.driverId, res.tripDriver.driver.userName, riderName);
+            this.loading = false;
+            const alertMessage = 'Your trip request has been cancelled.';
+            this.notifyService.showErrorMessage(alertMessage);
+            this.router.navigate(['/onboarding']);
+          });
       });
-    });
 
   }
 
@@ -327,8 +327,9 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
         this.makePayment();
       }, 7000);
     } else {
-      this.notifyService.showSuccessMessage(`Your trip has ended. Please pay ${this.driverName} a sum of ₦ ${this.tripFee} cash. Thank you for riding with lnkup.`);
-      this.router.navigate(['/onboarding']);
+      this.updateActiveRider();
+      // this.notifyService.showSuccessMessage(`Your trip has ended. Please pay ${this.driverName} a sum of ₦ ${this.tripFee} cash. Thank you for riding with lnkup.`);
+      // this.router.navigate(['/onboarding']);
     }
   }
 
