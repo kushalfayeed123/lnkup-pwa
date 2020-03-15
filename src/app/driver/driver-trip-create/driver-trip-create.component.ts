@@ -250,6 +250,10 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         this.activeTripService.createTrip(this.tripForm.getRawValue())
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(trip => {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            // this.notifyService.addUserToGroup(user.userName);
+            localStorage.setItem('groupName', user.userName);
+
             this.loader = false;
             this.activeTrip = trip;
             localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));

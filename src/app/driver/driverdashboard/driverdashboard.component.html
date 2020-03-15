@@ -1,31 +1,30 @@
 <div class="avd-container" *ngIf="showLanding">
 
-  <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false" [styles]="style" [usePanning]="true">
-      <agm-overlay
-      [latitude]  = "latitude"
-      [longitude] = "longitude"
-    >
+  <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false" [styles]="style"
+    [usePanning]="true">
+    <agm-overlay [latitude]="latitude" [longitude]="longitude">
       <!-- blue html square -->
       <!-- <div class="marker"></div> -->
       <img src="./assets/Images/direction.svg" alt="" class="img">
     </agm-overlay>
     <!-- <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true"></agm-marker> -->
     <agm-marker *ngFor="let loc of riderLocation; let i = index;" [(latitude)]="riderLocationsLat[i]"
-    [(longitude)]="riderLocationsLong[i]" [markerDraggable]="true" >
-   </agm-marker>
+      [(longitude)]="riderLocationsLong[i]" [markerDraggable]="true">
+    </agm-marker>
     <agm-direction *ngIf="startTrip" [origin]="origin" [destination]="destination" [renderOptions]="renderOptions">
     </agm-direction>
 
   </agm-map>
-  <form action="" id="search-form" *ngIf="showLanding && !driverNavigate" >
+  <form action="" id="search-form" *ngIf="showLanding && !driverNavigate">
+    <input *ngIf="showDestination && currentUser" type="search" name="" id="" class="destination animated zoomIn"
+      placeholder="Where are you going?" matGoogleMapsAutocomplete
+      (onAutocompleteSelected)="storeUserDestinationLocation($event)" />
 
-    <input *ngIf="showDestination && currentUser" type="search" name="" id="" class="destination animated zoomIn" placeholder="Where are you going?"
-      matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserDestinationLocation($event)" />
-
-    <input *ngIf="showPickup" type="search" name="" id="" class="destination animated zoomIn" placeholder=" Set your pickup spot"
-      matGoogleMapsAutocomplete (onAutocompleteSelected)="storeUserPickupLocation($event)" />
+    <input *ngIf="showPickup" type="search" name="" id="" class="destination animated zoomIn"
+      placeholder=" Set your pickup spot" matGoogleMapsAutocomplete
+      (onAutocompleteSelected)="storeUserPickupLocation($event)" />
   </form>
-  <form class="destination-container" *ngIf="!driverNavigate" >
+  <form class="destination-container" *ngIf="!driverNavigate">
     <mat-card class="example-card animated zoomIn">
       <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
       <mat-card-content *ngIf="currentUser">
@@ -45,7 +44,8 @@
             <div class="platenumber">{{plateNumber}}</div>
 
             <div *ngIf="showDestination" class="destination-location">
-              <div *ngIf="destinationName" class="location animated zoomIn" style="font-size: 16px;">Your Destination</div>
+              <div *ngIf="destinationName" class="location animated zoomIn" style="font-size: 16px;">Your Destination
+              </div>
               <div class="location animated zoomIn">{{destinationName}}</div>
             </div>
 

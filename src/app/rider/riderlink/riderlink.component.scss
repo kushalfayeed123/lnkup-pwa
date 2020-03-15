@@ -11,11 +11,14 @@
   }
   #contact {
     position: relative;
-    bottom: 87px;
-    left: 85px;
+    bottom: 114px;
+    left: 67px;
+  }
+  .img-link {
+    padding-right: 18px;
   }
   .phone-img {
-    height: 31px;
+    height: 25px;
 
   }
   .available-driver-card {
@@ -38,8 +41,10 @@
     grid-column-gap: unset;
   }
   .auth-full-width {
-    width: 59%;
-    margin-left: 36%;
+    width: 100%;
+    position: relative;
+    bottom: 9px;
+    right: 70px;
   }
   .mat-form-field{
     width: 100% !important ;

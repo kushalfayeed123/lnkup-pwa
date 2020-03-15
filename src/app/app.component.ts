@@ -44,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private notifyService: NotificationsService,
     private networkStatus: NetworkStatusAngularService
   ) {
+
     route.events.subscribe(url => {
       this.getCurrentRoute();
     });
@@ -184,6 +185,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
     } else if (profileRoute === '/support') {
+      showSideNav = true;
       this.broadCastService.publishSideNavValue(showSideNav);
       this.saveCurrentRoute(route);
     } else if (tripsRoute === '/trips') {

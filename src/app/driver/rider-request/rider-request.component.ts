@@ -63,6 +63,12 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
     this.getDriverCancelAlert();
   }
 
+  navToSupport() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
+    this.router.navigate(['support', userId]);
+  }
+
   getTripData() {
     this.getActiveTrips();
     console.log('get trip');
