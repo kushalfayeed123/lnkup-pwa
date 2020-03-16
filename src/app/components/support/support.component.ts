@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { AppReviewDataService } from 'src/app/services/data/app-review/app-review.data.service';
@@ -39,11 +39,17 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   sent: any;
   constructor(private _router: Router, private fb: FormBuilder,
               private reviewService: AppReviewDataService,
+              private route: ActivatedRoute,
               private notifyService: NotificationsService) {
   }
 
   ngOnInit() {
     this.notifyService.intiateConnection();
+    this.route.queryParams
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(param => {
+      this.reviewType = param.reviewType;
+    });
     this.messageForm = this.fb.group({
       userReview: ['', [Validators.required]],
       userId: ['', [Validators.required]],
@@ -133,40 +139,36 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
     const format = 'MMMM d, y, hh:mm a';
     const locale = 'en-US';
     this.currentDateTime = formatDate(date, format, locale);
-    console.log('current time and date', this.currentDateTime);
   }
 
   toggleReview() {
     this.showReview = !this.showReview;
   }
   sendMessage() {
-    this.sendGroupMessage(this.messageForm.value.userReview);
-    // if (this.showReview === true) {
-    //   this.reviewType = 'comment';
-    // } else {
-    //   this.reviewType = 'Chat';
-    // }
-    // this.getCurrentTime();
-    // this.message = this.messageForm.value.userReview;
+    if (this.reviewType === 'comment') {
+      this.getCurrentTime();
+    this.message = this.messageForm.value.userReview;
     // this.allMessages = [...this.allMessages, this.message];
-    // this.messageForm.patchValue({userId: this.userId, reviewTime: this.currentDateTime, reviewType: this.reviewType});
-    // console.log(this.messageForm.value);
-    // if (this.messageForm.valid) {
-    //   this.reviewService.createReview(this.messageForm.value)
-    //   .pipe(takeUntil(this.unsubscribe$))
-    //   .subscribe(res => {
-    //     if (res) {
-    //       this.showResponse = true;
-    //       this.messageForm.reset();
-    //       // this.notifyService.showSuccessMessage('Thank you! Your comment has been sent. We will publish this on our wesite.')
-    //     } else {
-    //       return;
-    //     }
-    //   }, err => {
-    //     console.log(err);
-    //     // this.notifyService.showErrorMessage('We could not submit your comment, this might be due to a network error please try again')
-    //   });
-    // }
+    this.messageForm.patchValue({userId: this.userId, reviewTime: this.currentDateTime, reviewType: this.reviewType, userRating: 0});
+    if (this.messageForm.valid) {
+      console.log(this.reviewType)
+      this.reviewService.createReview(this.messageForm.value)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(res => {
+        if (res) {
+          this.messageForm.reset();
+          this.notifyService.showSuccessMessage('Thank you for using LnkuP. Your review has been submitted, we will get back to you as soon as possible.')
+        } else {
+          return;
+        }
+      }, err => {
+        this.notifyService.showErrorMessage('We could not submit your comment, this might be due to a network error please try again')
+      });
+    }
+    } else {
+      this.sendGroupMessage(this.messageForm.value.userReview);
+    }
+    
   }
 
   ngOnDestroy() {

@@ -58,6 +58,8 @@
           <li class="link-item"><a (click) = "navToTrips()" class="link">My Trips</a></li>
           <li class="link-item"><a (click) = "navToPayment()" class="link">Payment</a></li>
           <li class="link-item"><a (click) = "navToSupport()" class="link">Support </a></li>
+          <li class="link-item" *ngIf="showSpecialChat"><a (click) = "navToSpecialChat()" class="link">Chat </a></li>
+
           <li class="link-item"><a (click) = "logout()" class="link">Logout</a></li>
          <!-- <li class="link-item"><a (click) = "navToHome()" class="link">Security</a></li>
           <li class="link-item"><a (click) = "navToHome()" class="link">Ride History</a></li> -->
