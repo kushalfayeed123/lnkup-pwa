@@ -14,7 +14,7 @@
     <div class="toggle-comment">
       <!-- <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
             (click)="toggleReview()">
-            {{showReview ?'Report an issue' : 'Add a comment'}}          
+            {{showReview ?'Report an issue' : 'Add a comment'}}
         </button> -->
     </div>
   </nav>
@@ -33,15 +33,15 @@
         <div id="anchor"></div>
       </div> -->
     <div class="chat-box" *ngIf="!showReview">
-      <div class=" message" *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender !== userName,
-            'send': newMessage.sender === userName}">
+      <div class=" message" *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender === userName,
+            'send': newMessage.sender !== userName}">
         <div *ngIf="groupMessage && newMessage.sender !== userName" class="sender">
           {{newMessage.sender}}
         </div>
         <div #messages *ngIf="groupMessage" class="message-text">
           {{newMessage.message}}
+          <img src="./assets/icons/sent.svg" alt="" class="sent-icon" *ngIf="sent && newMessage.sender === userName">
         </div>
-        <img src="./assets/icons/sent.svg" alt="" class="sent-icon" *ngIf="sent && newMessage.sender === userName">
       </div>
 
       <div id="anchor"></div>

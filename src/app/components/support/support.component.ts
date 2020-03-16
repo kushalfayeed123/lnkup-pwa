@@ -43,6 +43,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.notifyService.intiateConnection();
     this.messageForm = this.fb.group({
       userReview: ['', [Validators.required]],
       userId: ['', [Validators.required]],
@@ -54,8 +55,8 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.addToGroup();
     setTimeout(() => {
+      this.addToGroup();
       this.receiveGroupMessage();
     }, 5000);
     // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
@@ -100,6 +101,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
     this.notifyService.sendGroupMessage(this.groupName, messageObject);
     setTimeout(() => {
       this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
+      this.messageForm.reset();
     }, 1000);
   }
   receiveGroupMessage() {
