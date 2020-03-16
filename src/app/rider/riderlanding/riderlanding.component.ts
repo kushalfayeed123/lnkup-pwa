@@ -327,9 +327,6 @@ showDirection: boolean;
     this.notificationService.currentMessage.subscribe(res => {
       console.log('current message', res);
     });
-
-
-
     // this.getAllTrips();
     // this.notificationService.deleteSubscription();
     // this.notificationService.tokenRefresh();

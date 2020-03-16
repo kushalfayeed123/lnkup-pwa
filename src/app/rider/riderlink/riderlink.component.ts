@@ -91,6 +91,13 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     // this.listenToTripCancel();
   }
 
+  navToSupport() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const userId = user.id;
+    this.broadCastService.publishSideNavValue(true);
+    this.router.navigate(['support', userId]);
+  }
+
   // listenToTripCancel() {
   //   this.notifyService.declineAlert
   //     .pipe(takeUntil(this.unsubscribe$))
@@ -132,6 +139,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
         const driverNumber = res.phoneNumber;
         this.driverName = res.userName;
         this.driverNumber = driverNumber.slice(0, 4) + driverNumber.slice(5);
+        // this.notifyService.addUserToGroup(this.driverName);
+        localStorage.setItem('groupName', this.driverName);
       });
   }
 

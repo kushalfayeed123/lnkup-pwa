@@ -29,6 +29,12 @@ export class NotificationsService {
   private _endTrip = new BehaviorSubject(null);
   public endTrip = this._endTrip.asObservable();
 
+  private _groupMessage = new BehaviorSubject(null);
+  public groupMessage = this._groupMessage.asObservable();
+
+  private _sentFlag = new BehaviorSubject(null);
+  public sentFlag = this._sentFlag.asObservable();
+
 
   reconnect: boolean;
 
@@ -185,6 +191,29 @@ export class NotificationsService {
     });
   }
 
+  addUserToGroup(groupName) {
+    this.hubConnection.invoke('AddToGroup', groupName)
+    .then(res => {
+      console.log('added user to group', groupName);
+    });
+  }
+
+  removeUserFromGroup(groupName) {
+    this.hubConnection.invoke('RemoveFromGroup', groupName)
+    .then(res => {
+      console.log('Removed user from group', groupName);
+    });
+  }
+
+  sendGroupMessage(groupName, message) {
+    this.hubConnection.send('SendGroupMessage', groupName, message)
+    .then(res => {
+      const sentFlag = true;
+      this._sentFlag.next(sentFlag);
+      console.log('message sent to group', groupName);
+    });
+  }
+
   sendRejectMessage(userId, message) {
     // this.user = JSON.parse(localStorage.getItem('currentUser'));
     // const loginToken = this.user.token;
@@ -240,6 +269,10 @@ export class NotificationsService {
       } else {
         this.alertRiderDecline(message);
       }
+    });
+
+    await this.hubConnection.on('ReceiveGroupMessage', message => {
+      this._groupMessage.next(message);
     });
 
     this.hubConnection.onclose(() => {

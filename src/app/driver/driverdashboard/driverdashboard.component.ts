@@ -297,6 +297,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.getUserById(userId);
       this.getUserProfileImage(userId);
     });
+
   }
 
   sideNavCheck() {
@@ -320,7 +321,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl(`${currentRoute}`, navigationExtras);
     }
   }
-
+ 
   startTrip() {
     this.broadCastService.startTrip
       .pipe(takeUntil(this.unsubscribe$))
