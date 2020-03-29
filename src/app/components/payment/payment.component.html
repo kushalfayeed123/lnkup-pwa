@@ -12,11 +12,11 @@
       Message</button> -->
 
     <form id="payment-form" [formGroup]="cardDetailsForm">
-      <div class="cards-container">
-        <div class="header-text" *ngIf="!isCash && !isCard"> Select your prefered payment method </div>
+      <div class="cards-container animated slideInRight">
+        <div class="header-text animated zoomIn" *ngIf="!isCash && !isCard && !addCard"> Select your prefered payment method </div>
         <img src="./assets/Images/003-left-arrow.svg" *ngIf="isCash || isCard" class="left-arrow" alt=""
-          (click)="togglePaymentMethods()">
-        <div class="payment-option" *ngIf="!isCard && !isCash && !addCard">
+          (click)="onNoClick()">
+        <div class="payment-option animated slideInRight" *ngIf="!isCard && !isCash && !addCard">
           <div class="setting-group" (click)="openCash()">
             <button class="payment-method">
               Cash
@@ -33,14 +33,14 @@
         </div>
 
       </div>
-      <div class="cardDetails-container" *ngIf="isCard && !isCash">
+      <div class="cardDetails-container animated slideInRight" *ngIf="isCard && !isCash">
 
         <div class="allowed-cards">
           <img src="./assets/Images/master-card.svg" alt="" class="card-img">
           <img src="./assets/Images/verve.png" alt="" class="card-img">
         </div>
 
-        <div *ngIf="!isAvs && !isPin && !isOtp">
+        <div *ngIf="!isAvs && !isPin && !isOtp" class="animated slideInRight">
           <div>
             <mat-form-field class="auth-full-width card-number">
               <input type="number" matInput placeholder="xxxx xxxx xxxx xxxx" formControlName="cardno" />
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <div *ngIf="isAvs">
+        <div *ngIf="isAvs" class="animated slideInRight">
           <div>
             <mat-form-field class="auth-full-width card-subdetails avs-details">
               <input type="text" matInput class="input-color" placeholder="Address" formControlName="billingaddress" />
@@ -99,7 +99,7 @@
      
       </div>
 
-      <div *ngIf="isCash && !isCard">
+      <div *ngIf="isCash && !isCard" class="animated slideInRight">
         <span>
           Once your trip is completed the fare will show up on your screen.
         </span>
@@ -109,20 +109,20 @@
         <!-- <span>Alternate Payment Method</span> -->
         <i class="flaticon-square-add-button" id="add-method"></i>
       </div>
-      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save
         Card</button>
-      <button id="use-payment" *ngIf="isCard && !isAvs && isPin " (click)="initiatePinAuth()">Submit Pin</button>
-      <button id="use-payment" *ngIf="isCard && isAvs && !isPin && !isOtp" (click)="initiateAvsAuth()">Submit Billing
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && isPin " (click)="initiatePinAuth()">Submit Pin</button>
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && isAvs && !isPin && !isOtp" (click)="initiateAvsAuth()">Submit Billing
         Details</button>
-      <button id="use-payment" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit
         OTP</button>
 
-        <div class="flutter">
-          <div class="flutter-text">Your transactions are powered by</div>
+        <div class="flutter animated slideInRight" *ngIf="!isCash && !isCard">
+          <div class="flutter-text">powered by</div>
           <img src="./assets/Images/Flutterwave-1.png" alt="" class="flutter-img">
         </div>
     </form>
-    <div *ngIf="addCard" class="card-message">
+    <div *ngIf="addCard" class="card-message animated slideInRight">
       <span >
         You have a card saved already. Do you want to add another card?
       </span>

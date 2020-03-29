@@ -197,8 +197,7 @@ section.auth-pages.security#payment-page .flaticon-square-add-button:before {
 .allowed-cards {
   display: flex;
   position: relative;
-  bottom: 49px;
-  z-index: -1;
+  top: 325px;
 }
 .cardDetails-container {
   height: 156px;
@@ -207,6 +206,12 @@ section.auth-pages.security#payment-page .flaticon-square-add-button:before {
   width: 43%;
   height: 52px;
   margin: auto;
+  border: 1px solid #424242;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
 }
 .card-subdetails {
   width: 36%;

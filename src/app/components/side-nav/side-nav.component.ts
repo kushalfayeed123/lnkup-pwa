@@ -25,6 +25,7 @@ export class SideNavComponent implements OnDestroy {
   routeId: any;
   events: string[] = [];
   opened: boolean;
+  showSpecialChat: boolean;
 
 
   constructor(changeDetectorRef: ChangeDetectorRef,
@@ -41,10 +42,13 @@ export class SideNavComponent implements OnDestroy {
         this.showSideNav = showNav;
         if (this.showSideNav === true) {
           this.getCurrentUser();
+
         } else {
           return;
         }
       });
+
+     
 
   }
 
@@ -60,13 +64,18 @@ export class SideNavComponent implements OnDestroy {
     this._router.navigate([`profile/${this.userId}`]);
   }
   navToSupport() {
-    this._router.navigate([`support/${this.userId}`]);
+    this._router.navigate([`support/${this.userId}`], { queryParams: { reviewType: 'comment' } });
   }
   navToPayment() {
     this._router.navigate([`payment/${this.userId}`]);
   }
   navToTrips() {
     this._router.navigate([`trips/${this.userId}`]);
+  }
+
+  navToSpecialChat() {
+    this._router.navigate([`support/${this.userId}`], { queryParams: { reviewType: 'chat' } })
+    localStorage.setItem('groupName', 'openSesami');
   }
   logout() {
     this.authService.logout();
@@ -81,6 +90,11 @@ export class SideNavComponent implements OnDestroy {
         this.userName = user.userName;
         this.userId = user.id;
         this.userRole = user.role.toLowerCase();
+        if (this.userName === 'segun' || this.userName === 'susan inalegwu') {
+          this.showSpecialChat = true;
+        } else {
+          this.showSpecialChat = false;
+        }
       }, 5000);
     } else {
       return;

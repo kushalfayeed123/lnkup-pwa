@@ -507,11 +507,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
   onNoClick() {
     this.addCard = false;
     this.togglePaymentMethods();
+    console.log(this.isCash, this.isCard)
   }
 
   togglePaymentMethods() {
     this.isCard = false;
     this.isCash = false;
+    this.addCard = false;
   }
 
   generateReference() {

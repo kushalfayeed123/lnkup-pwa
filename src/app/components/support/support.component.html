@@ -1,4 +1,4 @@
-<section class="chat-pages">
+<section class="chat-pages ">
   <nav>
     <!-- <a (click)="navToHome()">
           <img class="flaticon-back" src="./assets/Images/back-arrow.svg" alt="">
@@ -14,42 +14,33 @@
     <div class="toggle-comment">
       <!-- <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
             (click)="toggleReview()">
-            {{showReview ?'Report an issue' : 'Add a comment'}}          
+            {{showReview ?'Report an issue' : 'Add a comment'}}
         </button> -->
     </div>
   </nav>
   <main class="contain-box" #scroll>
-    <!-- <div class="chat-box" *ngIf="!showReview">
-        <div class="send message">
-          What is the problem Ma?
-        </div>
-        <div class="receive message">
-          My driver stole my bag at the dropoff point and i would like him to
-          be caught
-        </div>
-        <div class="send message">
-          Ok we would handle this as an urgent matter
-        </div>
-        <div id="anchor"></div>
-      </div> -->
+    <div *ngIf="reviewType==='comment'">
+      Hello {{userName}}, thank you for choosing to ride with LnkuP. If you have any complaints or suggestions, please do not hesitate to drop a comment below.
+      We will review your comment and get back to you as soon as we can. 😊
+    </div>
     <div class="chat-box" *ngIf="!showReview">
-      <div class=" message" *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender !== userName,
-            'send': newMessage.sender === userName}">
+      <div class=" message" *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive animated zoomIn': newMessage.sender === userName,
+            'send animated zoomIn': newMessage.sender !== userName}">
         <div *ngIf="groupMessage && newMessage.sender !== userName" class="sender">
           {{newMessage.sender}}
         </div>
-        <div #messages *ngIf="groupMessage" class="message-text">
+        <div #messages *ngIf="groupMessage" class="message-text  ">
           {{newMessage.message}}
+          <img src="./assets/icons/sent.svg" alt="" class="sent-icon" *ngIf="sent && newMessage.sender === userName">
         </div>
-        <img src="./assets/icons/sent.svg" alt="" class="sent-icon" *ngIf="sent && newMessage.sender === userName">
       </div>
 
       <div id="anchor"></div>
     </div>
-    <div class="compose">
-      <form [formGroup]="messageForm" class="compose-content" id="send-form">
+    <div class="compose ">
+      <form [formGroup]="messageForm" class="compose-content animated zoomIn" id="send-form">
         <textarea formControlName="userReview" name="" id="chat-box" cols="" rows="1" placeholder="Message"
-          autofocus></textarea>
+          ></textarea>
         <!-- <input type="text" name="" id="" placeholder="Message" /> -->
 
         <button id="send-message" (click)="sendMessage()">
