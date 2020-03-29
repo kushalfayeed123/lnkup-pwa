@@ -123,8 +123,8 @@ chat Theme
 .chat-pages .receive {
   background-color: #e040fb;
   -ms-grid-column-align: right;
-  justify-self: left;
-  width: 30%;
+  justify-self: center;
+  width: 50%;
   position: relative;
   left: 6%;
 }
@@ -140,7 +140,7 @@ chat Theme
   -ms-grid-column-align: left;
   justify-self: left;
   color: #4a4a4a;
-  width: 30%;
+  width: 50%;
 }
 
 .sent-container {
