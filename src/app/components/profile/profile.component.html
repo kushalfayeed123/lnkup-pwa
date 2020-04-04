@@ -14,8 +14,8 @@
         </button>
       </div>
       <div class="profile-info" (deferLoad)="!isImage">
-        <img src="{{image}}"  class="avi" *ngIf="isImage">
-        <img src="./assets/Images/default-user.png" class="avi"  *ngIf="!isImage">
+        <img src="{{image}}" class="avi" *ngIf="isImage">
+        <img src="./assets/Images/default-user.png" class="avi" *ngIf="!isImage">
         <div class="name-container">
           <h2 class="name">{{user.userName}}</h2>
           <!-- <span class="e-mail">{{user.email}}</span> -->
@@ -33,71 +33,69 @@
       </div>
     </div>
     <div *ngIf="openDialogue" class="animated zoomIn">
-      <div class="user-details" >
+      <div class="user-details">
         <div style="padding-bottom: 20px;"> {{image? 'Change Profile Image' : 'Upload Profile Image'}}</div>
         <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
         <div>
           <input type="file" style="padding-bottom: 20px;" (change)="uploadImage($event)" #PhotoInput hidden>
           <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
             (click)="PhotoInput.click()">
-           Upload
+            Upload
           </button>
         </div>
       </div>
 
-      <div class="user-details animated zoomIn" *ngIf="isDriver" >
+      <div class="user-details animated zoomIn" *ngIf="isDriver">
         <div>
-            <div style="padding-bottom: 20px;">Please enter your vehicle details</div>
-            <mat-spinner *ngIf="licenseLoad"  [diameter]="20"
-                class="loader"
-              ></mat-spinner>
-            <form action="" [formGroup]="registerCarDetails" (ngSubmit)="creatDriverAccount()">
-              <mat-form-field class="auth-full-width">
-                <input type="text" matInput class="input-color" placeholder="Your Car Model" formControlName="carType" />
-              </mat-form-field>
-              <mat-form-field class="auth-full-width">
-                  <input type="text" matInput class="input-color" placeholder="Your Vehicle Plate Number" formControlName="carDocument2" />
-                </mat-form-field>
-                <mat-form-field class="auth-full-width">
-                    <input type="text" matInput class="input-color" placeholder="Your Address" formControlName="workAddress" />
-                  </mat-form-field>
-                  <mat-form-field>
-                      <mat-label>Select Your Bank</mat-label>
-                      <mat-select  formControlName="driverBank" >
-                        <mat-option *ngFor="let bank of banks" [value]="bank.Code">
-                          {{bank.Name}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                    <mat-form-field class="auth-full-width">
-                        <input type="text" matInput class="input-color" placeholder="Your Account Number" formControlName="accountNumber" />
-                      </mat-form-field>
-              <button  type="submit" mat-raised-button color="accent"
+          <div style="padding-bottom: 20px;">Please enter your vehicle details</div>
+          <mat-spinner *ngIf="licenseLoad" [diameter]="20" class="loader"></mat-spinner>
+          <form action="" [formGroup]="registerCarDetails" (ngSubmit)="creatDriverAccount()">
+            <mat-form-field class="auth-full-width">
+              <input type="text" matInput class="input-color" placeholder="Your Car Model" formControlName="carType" />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width">
+              <input type="text" matInput class="input-color" placeholder="Your Vehicle Plate Number"
+                formControlName="carDocument2" />
+            </mat-form-field>
+            <mat-form-field class="auth-full-width">
+              <input type="text" matInput class="input-color" placeholder="Your Address"
+                formControlName="workAddress" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Select Your Bank</mat-label>
+              <mat-select formControlName="driverBank">
+                <mat-option *ngFor="let bank of banks" [value]="bank.Code">
+                  {{bank.Name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="auth-full-width">
+              <input type="text" matInput class="input-color" placeholder="Your Account Number"
+                formControlName="accountNumber" />
+            </mat-form-field>
+            <button type="submit" mat-raised-button color="accent"
               class="auth-full-width login-text submit-license">Submit</button>
-            </form>
-            <!-- <div>
+          </form>
+          <!-- <div>
                 <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
                 <button   mat-raised-button color="accent" class="auth-full-width login-text"
                   (click)="licenseInput.click()">
                   Upload Drver License
                 </button>
               </div> -->
-          </div>
         </div>
-        <div class="user-details animated slideInDown" *ngIf="isDriver">
-            <div style="padding-bottom: 20px;"> Upload License </div>
-            <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
-            <div>
-                <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
-                <button   mat-raised-button color="accent" class="auth-full-width login-text"
-                (click)="licenseInput.click()">
-                Upload Driver License
-              </button>
-            </div>
-          </div>
+      </div>
+      <div class="user-details animated slideInDown" *ngIf="isDriver">
+        <div style="padding-bottom: 20px;"> Upload License </div>
+        <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
+        <div>
+          <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
+          <button mat-raised-button color="accent" class="auth-full-width login-text" (click)="licenseInput.click()">
+            Upload Driver License
+          </button>
+        </div>
+      </div>
     </div>
-
-
 
 
     <div class="contact-info">

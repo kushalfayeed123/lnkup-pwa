@@ -18,9 +18,12 @@
         </button> -->
     </div>
   </nav>
-  <main class="contain-box" #scroll>
+  <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
+
+  <main class="contain-box" #scroll *ngIf="!loading">
     <div *ngIf="reviewType==='comment'">
-      Hello {{userName}}, thank you for choosing to ride with LnkuP. If you have any complaints or suggestions, please do not hesitate to drop a comment below.
+      Hello {{userName}}, thank you for choosing to ride with LnkuP. If you have any complaints or suggestions, please
+      do not hesitate to drop a comment below.
       We will review your comment and get back to you as soon as we can. 😊
     </div>
     <div class="chat-box" *ngIf="!showReview">
@@ -39,8 +42,7 @@
     </div>
     <div class="compose ">
       <form [formGroup]="messageForm" class="compose-content animated zoomIn" id="send-form">
-        <textarea formControlName="userReview" name="" id="chat-box" cols="" rows="1" placeholder="Message"
-          ></textarea>
+        <textarea formControlName="userReview" name="" id="chat-box" cols="" rows="1" placeholder="Message"></textarea>
         <!-- <input type="text" name="" id="" placeholder="Message" /> -->
 
         <button id="send-message" (click)="sendMessage()">
