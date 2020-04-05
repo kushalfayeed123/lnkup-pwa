@@ -130,14 +130,21 @@ export class NotificationsService {
   //         });
   // }
   sendNotification(userId, message) {
-    this.authService
-      .getById(userId)
-      .toPromise()
-      .then(res => {
-        this.receiver = res;
-        this.sendMessage(res, message);
-        console.log('receiver', res);
-      });
+    const userPushTokens = JSON.parse(localStorage.getItem('receiverPushTokens'));
+    if (!userPushTokens || userPushTokens.length < 1) {
+      this.authService
+        .getById(userId)
+        .toPromise()
+        .then(res => {
+          this.receiver = res;
+          localStorage.setItem('receiverPushTokens', JSON.stringify(res.pushNotificationTokens));
+          this.sendMessage(res.pushNotificationTokens, message);
+          console.log('receiver', res);
+        });
+    } else {
+      this.sendMessage(userPushTokens, message);
+    }
+
   }
   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(message => {
@@ -146,8 +153,7 @@ export class NotificationsService {
     });
   }
 
-  sendMessage(user, message) {
-    const pushToken = user.pushNotificationTokens;
+  sendMessage(pushToken, message) {
     pushToken.forEach(element => {
       const token = element.token;
       // const pushMessage = { ...message, token };
