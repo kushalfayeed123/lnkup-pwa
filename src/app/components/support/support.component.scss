@@ -249,6 +249,12 @@ chat Theme
 
 @media screen and (min-width: 374px) {
   .contain-box {
-    height: 687px;
+    height: 600px;
+  }
+}
+
+@media screen and (min-width: 374px) and (min-height: 800px) {
+  .contain-box {
+    height: 714px;
   }
 }
