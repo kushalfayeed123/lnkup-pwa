@@ -246,3 +246,9 @@ chat Theme
   top: 17px;
   left: 8px;
 }
+
+@media screen and (min-width: 374px) {
+  .contain-box {
+    height: 687px;
+  }
+}
