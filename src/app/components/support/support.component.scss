@@ -20,10 +20,11 @@ chat Theme
   flex-direction: row;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
-  margin-top: 62px;
   padding: 0 32px 15px 32px;
   border-bottom: 1px solid #979797;
   margin-bottom: 9px;
+  position: relative;
+  top: 41px;
 }
 
 .chat-pages nav a {
@@ -90,7 +91,9 @@ chat Theme
   // grid-template-rows: auto;
   // grid-column-gap: unset;
   // row-gap: 15px;
-  // overflow-anchor: none;
+  overflow-anchor: none;
+  height: auto;
+  margin-bottom: 29px;
 }
 .chat-flex {
   display: flex;
@@ -131,7 +134,6 @@ chat Theme
   position: relative;
   left: 31%;
   margin-bottom: 20px;
-
 }
 
 .sender {
@@ -231,9 +233,11 @@ chat Theme
 }
 
 .contain-box {
-  padding: 25px 32px !important;
-  overflow-y: auto;
+  margin-top: 43px;
+  padding: 20px 32px !important;
+  overflow-y: scroll !important;
   overflow-x: hidden;
+  height: 500px;
 }
 .sent-icon {
   height: 15px;

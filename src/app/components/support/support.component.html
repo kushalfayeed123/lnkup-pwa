@@ -27,8 +27,8 @@
       We will review your comment and get back to you as soon as we can. 😊
     </div>
     <div class="chat-box" *ngIf="!showReview">
-      <div class=" message" *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive animated zoomIn': newMessage.sender === userName,
-            'send animated zoomIn': newMessage.sender !== userName}">
+      <div class=" message " *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender === userName,
+            'send': newMessage.sender !== userName}">
         <div *ngIf="groupMessage && newMessage.sender !== userName" class="sender">
           {{newMessage.sender}}
         </div>

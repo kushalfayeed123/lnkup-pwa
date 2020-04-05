@@ -38,6 +38,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   groupName: string;
   sent: any;
   loading: boolean;
+  groupMembers = [];
   constructor(private _router: Router, private fb: FormBuilder,
     private reviewService: AppReviewDataService,
     private route: ActivatedRoute,
@@ -107,14 +108,26 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
     const messageObject = JSON.stringify({
       sender: this.userName,
       message,
+      senderId: this.userId
     });
     this.notifyService.sendGroupMessage(this.groupName, messageObject);
+    console.log('group members to send offline message to', this.groupMembers);
+    this.groupMembers.forEach(element => {
+      const receiverId = element;
+      if (receiverId === this.userId) {
+        return;
+      } else {
+        this.notifyService.sendNotification(receiverId, message);
+      }
+    });
     setTimeout(() => {
-      this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
+      // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
       this.messageForm.reset();
     }, 1000);
   }
+
   receiveGroupMessage() {
+
     this.notifyService.groupMessage
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
@@ -123,10 +136,18 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           const messageObject = JSON.parse(res);
           this.groupMessage = messageObject.message;
-          this.sender = messageObject.sender;
           this.allMessages = [...this.allMessages, messageObject];
+          this.sender = messageObject.sender;
+          const senderId = messageObject.senderId;
+          if (this.groupMembers.includes(senderId)) {
+            return;
+          } else {
+            this.groupMembers = [...this.groupMembers, senderId];
+          }
+
+          console.log('group members', this.groupMembers);
           setTimeout(() => {
-            this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
+            // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
           }, 1000);
 
         }
@@ -161,6 +182,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
           .subscribe(res => {
             if (res) {
               this.messageForm.reset();
+              // tslint:disable-next-line: max-line-length
               this.notifyService.showSuccessMessage('Thank you for using LnkuP. Your review has been submitted, we will get back to you as soon as possible.')
             } else {
               return;

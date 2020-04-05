@@ -192,26 +192,31 @@ export class NotificationsService {
   }
 
   addUserToGroup(groupName) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
     this.hubConnection.invoke('AddToGroup', groupName)
-    .then(res => {
-      console.log('added user to group', groupName);
-    });
+      .then(res => {
+        const message = {
+          senderId: user.id
+        };
+        this.sendGroupMessage(groupName, message);
+        console.log('added user to group', groupName);
+      });
   }
 
   removeUserFromGroup(groupName) {
     this.hubConnection.invoke('RemoveFromGroup', groupName)
-    .then(res => {
-      console.log('Removed user from group', groupName);
-    });
+      .then(res => {
+        console.log('Removed user from group', groupName);
+      });
   }
 
   sendGroupMessage(groupName, message) {
     this.hubConnection.send('SendGroupMessage', groupName, message)
-    .then(res => {
-      const sentFlag = true;
-      this._sentFlag.next(sentFlag);
-      console.log('message sent to group', groupName);
-    });
+      .then(res => {
+        const sentFlag = true;
+        this._sentFlag.next(sentFlag);
+        console.log('message sent to group', groupName);
+      });
   }
 
   sendRejectMessage(userId, message) {
@@ -301,7 +306,8 @@ export class NotificationsService {
           this._endTrip.next(endTrip);
         } else {
           const endTrip = false;
-          this._endTrip.next(endTrip);        }
+          this._endTrip.next(endTrip);
+        }
       });
     }
   }
