@@ -57,6 +57,9 @@ import { LocationDataService } from './services/data/location/location.data.serv
 import { TripsHistoryComponent } from './components/trips-history/trips-history.component';
 import { GoogleMapsAPIWrapper, AgmCoreModule } from '@agm/core';
 import { NetworkStatusAngularModule } from 'network-status-angular';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 
 
@@ -116,7 +119,10 @@ import { NetworkStatusAngularModule } from 'network-status-angular';
       measurementId: 'G-35QM2LZ7S4'
     }),
     AngularFireMessagingModule,
-    NetworkStatusAngularModule.forRoot()
+    NetworkStatusAngularModule.forRoot(),
+    NgxsModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot(),
   ],
 
   providers: [
