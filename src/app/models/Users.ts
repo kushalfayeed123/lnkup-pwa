@@ -1,7 +1,7 @@
 import { UserPaymentToken } from './payment';
 import { PushNotificationTokens } from './pushNotificationTokens';
 
-export class Users{
+export class Users {
     userId: string;
     userName: string;
     firstName: string;

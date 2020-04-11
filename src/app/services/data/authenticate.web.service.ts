@@ -7,6 +7,8 @@ import { AuthenticateDataService } from './authenticate.data.service';
 import { Users } from 'src/app/models/Users';
 import * as jwt_decode from 'jwt-decode';
 import { environment } from '../../../environments/environment';
+import { Store } from '@ngxs/store';
+import { GetLoggedInUser } from 'src/app/state/app.actions';
 
 
 
@@ -21,7 +23,7 @@ export class AuthenticateWebService implements AuthenticateDataService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   mockUrl: string;
 
-  constructor( private http: HttpClient) {
+  constructor(private http: HttpClient, private store: Store) {
     this.currentUserSubject = new BehaviorSubject<Users>(
       JSON.parse(localStorage.getItem('currentUser'))
     );
@@ -40,6 +42,7 @@ export class AuthenticateWebService implements AuthenticateDataService {
   login(username: string, password: string) {
     return this.http.post<any>(`${this.webUrl}/user/authenticate`, { username, password }).pipe(
       map(user => {
+        this.store.dispatch(new GetLoggedInUser(user));
         // login successful if there's a jwt token in the response
         if (user && user.token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -47,8 +50,8 @@ export class AuthenticateWebService implements AuthenticateDataService {
           this.loggedIn.next(true);
           this.currentUserSubject.next(user);
           this.getUserImage(user.id)
-          .subscribe(img => {
-          });
+            .subscribe(img => {
+            });
         }
 
         return user;
@@ -95,8 +98,8 @@ export class AuthenticateWebService implements AuthenticateDataService {
     try {
       return jwt_decode(token);
     } catch (Error) {
-     return null;
-   }
+      return null;
+    }
   }
 
   getUserImage(id: string) {

@@ -60,6 +60,8 @@ import { NetworkStatusAngularModule } from 'network-status-angular';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { TripsState } from './state/trips.state';
+import { AppState } from './state/app.state';
 
 
 
@@ -120,7 +122,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
     }),
     AngularFireMessagingModule,
     NetworkStatusAngularModule.forRoot(),
-    NgxsModule.forRoot(),
+    NgxsModule.forRoot([TripsState, AppState], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],

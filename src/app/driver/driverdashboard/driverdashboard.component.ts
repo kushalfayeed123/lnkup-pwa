@@ -321,7 +321,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl(`${currentRoute}`, navigationExtras);
     }
   }
- 
+
   startTrip() {
     this.broadCastService.startTrip
       .pipe(takeUntil(this.unsubscribe$))
@@ -437,7 +437,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.locationService
       .create(locationPayload)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {});
+      .subscribe(res => { });
   }
   updateUserLocation(id) {
     const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -450,7 +450,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.locationService
       .update(id, locationPayload)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {});
+      .subscribe(res => { });
   }
 
   getActiveTripById() {

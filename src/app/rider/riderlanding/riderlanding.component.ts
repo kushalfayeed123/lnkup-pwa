@@ -10,7 +10,7 @@ import {
 import { formatDate } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
-import { Subject, interval } from 'rxjs';
+import { Subject, interval, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
@@ -32,6 +32,13 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
 import { GoogleMapsScriptProtocol } from '@agm/core';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { bounce } from 'ng-animate';
+import { Select, Store } from '@ngxs/store';
+import { TripsState } from 'src/app/state/trips.state';
+import { SubSink } from 'subsink/dist/subsink';
+import { AppState } from 'src/app/state/app.state';
+import { Users } from 'src/app/models/Users';
+import { GetLoggedInUser } from 'src/app/state/app.actions';
+import { GetTrips } from 'src/app/state/trips.action';
 
 @Component({
   selector: 'app-riderlanding',
@@ -46,6 +53,11 @@ import { bounce } from 'ng-animate';
   host: { '[@slideInAnimation]': '' }
 })
 export class RiderlandingComponent implements OnInit, OnDestroy {
+
+  @Select(TripsState.getTrips) trips$: Observable<ActiveTrips[]>;
+  @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
+
+
   private unsubscribe$ = new Subject<void>();
   public userId: string;
   public circleRadius = 70;
@@ -234,24 +246,24 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   public markerOptions = {
     origin: {
-        icon: './assets/Images/direction.svg',
-        scaledSize: {
-          width: 20,
-          height: 20
-        }
+      icon: './assets/Images/direction.svg',
+      scaledSize: {
+        width: 20,
+        height: 20
+      }
 
     },
     destination: {
-        icon: './assets/Images/direction.svg',
-        scaledSize: {
-          width: 20,
-          height: 20
-        }
+      icon: './assets/Images/direction.svg',
+      scaledSize: {
+        width: 20,
+        height: 20
+      }
 
     },
-}
+  }
 
-showDirection: boolean;
+  showDirection: boolean;
   searchControl: FormControl;
   durationInSeconds = 10;
   longitude: any;
@@ -303,12 +315,20 @@ showDirection: boolean;
   currentDate: Date;
   dateNow: string;
   emptyTrip: boolean;
+  private subs = new SubSink();
   allAvailableTrips: ActiveTrips[];
   showCurrenLocationInput: boolean;
-  request: { currentLocationLongitude: any; currentLocationLatitude: any; riderDestinationLatitude: any; riderDestinationLongitude: any; userId: any; tripStatus: string; };
+  request: {
+    currentLocationLongitude: any; currentLocationLatitude: any;
+    riderDestinationLatitude: any; riderDestinationLongitude: any;
+    userId: any; tripStatus: string;
+  };
+  allTrips: ActiveTrips[];
+  currentUser: any;
 
   constructor(
     private route: ActivatedRoute,
+    private store: Store,
     private authService: AuthenticateDataService,
     private router: Router,
     private mapService: MapBroadcastService,
@@ -334,6 +354,17 @@ showDirection: boolean;
   }
 
   ngOnInit() {
+    this.store.dispatch(new GetTrips());
+    this.subs.add(
+      this.trips$.subscribe(trips => {
+        this.allTrips = trips;
+      }),
+      this.currentUser$.subscribe(user => {
+        this.currentUser = user;
+
+      })
+    );
+
     this.activeTripCheck();
     this.emptyTrip = false;
     localStorage.removeItem('currentLocation');
@@ -353,7 +384,6 @@ showDirection: boolean;
     this.sideNavCheck();
     this.route.params.subscribe(p => {
       const userId = p.id;
-      this.getUserById(userId);
     });
     this.searchControl = new FormControl();
     this.zoom = 15;
@@ -394,20 +424,20 @@ showDirection: boolean;
         }
       });
   }
-  getUserById(userId) {
-    this.authService
-      .getById(userId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(user => {
-        const userPaymentData = user.userPaymentData;
-        if (userPaymentData.length < 1) {
-          this.userPayment = false;
-        } else {
-          this.userPayment = true;
-        }
-        this.broadCastService.publishUserPaymentStatus(this.userPayment);
-      });
-  }
+  // getUserById(userId) {
+  //   this.authService
+  //     .getById(userId)
+  //     .pipe(takeUntil(this.unsubscribe$))
+  //     .subscribe(user => {
+  //       const userPaymentData = user.userPaymentData;
+  //       if (userPaymentData.length < 1) {
+  //         this.userPayment = false;
+  //       } else {
+  //         this.userPayment = true;
+  //       }
+  //       this.broadCastService.publishUserPaymentStatus(this.userPayment);
+  //     });
+  // }
   mapReading() {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
@@ -522,7 +552,7 @@ showDirection: boolean;
     this.locationService
       .create(locationPayload)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {});
+      .subscribe(res => { });
   }
   updateUserLocation(id) {
     const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -535,7 +565,7 @@ showDirection: boolean;
     this.locationService
       .update(id, locationPayload)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {});
+      .subscribe(res => { });
   }
 
   storeLocation() {
@@ -621,7 +651,6 @@ showDirection: boolean;
     this.destinationlongitude = location.longitude;
   }
   createTripRequest() {
-    const userId = JSON.parse(localStorage.getItem('currentUser'));
     const status = 1;
 
     setTimeout(() => {
@@ -631,7 +660,7 @@ showDirection: boolean;
         currentLocationLatitude: this.latitude.toString(),
         riderDestinationLatitude: destination.lat.toString(),
         riderDestinationLongitude: destination.lng.toString(),
-        userId: userId.id,
+        userId: this.currentUser.id,
         tripStatus: '1'
       };
       localStorage.setItem('activeRiderRequest', JSON.stringify(request));
@@ -640,7 +669,7 @@ showDirection: boolean;
     this.getAllActiveTrips(status);
 
   }
-  markerDragEnd(m: any, $event: any) {}
+  markerDragEnd(m: any, $event: any) { }
   milesToRadius(value) {
     this.circleRadius = value / 0.00062137;
   }
@@ -662,11 +691,12 @@ showDirection: boolean;
       .substring(1);
   }
   getAllActiveTrips(status?) {
-    const userId = JSON.parse(localStorage.getItem('currentUser'));
-    this.activeTrip
-      .getAllActiveTrips()
+    this.trips$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
+
+
+        console.log('All trips', this.allTrips);
         const allActiveTrips = data;
         if (data.length < 1) {
           this.notificationService.showInfoMessage(
@@ -707,7 +737,7 @@ showDirection: boolean;
                 {
                   origins: [tripEndLocation],
                   destinations: [riderEndLocation],
-                  travelMode: google.maps.TravelMode.DRIVING
+                  // travelMode: google.maps.TravelMode.DRIVING
                 },
                 (results: any) => {
                   this.destinationDistanceInKm =
@@ -763,6 +793,7 @@ showDirection: boolean;
           }, 5000);
         }
       });
+
   }
 
   navToTripSearch() {
@@ -818,5 +849,7 @@ showDirection: boolean;
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subs.unsubscribe();
+
   }
 }

@@ -9,6 +9,15 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
 import { formatDate } from '@angular/common';
 import { Subject } from 'rxjs/internal/Subject';
 import { Users } from 'src/app/models/Users';
+import { Select, Store } from '@ngxs/store';
+import { TripsState } from 'src/app/state/trips.state';
+import { ActiveTrips } from 'src/app/models/ActiveTrips';
+import { Observable } from 'rxjs/internal/Observable';
+import { SubSink } from 'subsink/dist/subsink';
+import { GetTrips } from 'src/app/state/trips.action';
+import { AppState } from 'src/app/state/app.state';
+import { GetCurrentUser } from 'src/app/state/app.actions';
+
 
 @Component({
   selector: 'app-onboarding',
@@ -19,6 +28,10 @@ import { Users } from 'src/app/models/Users';
   host: { '[@slideInAnimation]': '' }
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
+
+  @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
+
+
   todaysDataTime: any;
   today = new Date();
   greeting: string;
@@ -30,8 +43,13 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   message: string;
   userObject: Users;
   userRole: any;
+  private subs = new SubSink();
+  trips: ActiveTrips[];
+  currentUser: any;
+
 
   constructor(
+    private store: Store,
     private route: Router,
     private notify: NotificationsService,
     private activeTrip: ActiveTripDataService,
@@ -42,6 +60,12 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.subs.add(
+      this.loggedInUser$.subscribe(user => {
+        this.currentUser = user;
+      })
+
+    );
     this.getCurrentime();
   }
   clearLocalStorage() {
@@ -54,10 +78,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     localStorage.removeItem('driverData');
   }
   getCurrentime() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    this.user = user;
-    if (user !== null) {
-      this.userName = user.userName;
+
+    if (this.currentUser !== null) {
+      this.userName = this.currentUser.userName;
     }
     this.todaysDataTime = formatDate(
       this.today,
@@ -76,7 +99,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   updateUserRole(role) {
     this.loading = true;
     this.authService
-      .getByEmail(this.user.email)
+      .getByEmail(this.currentUser.email)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         this.userObject = res;
@@ -99,22 +122,23 @@ export class OnboardingComponent implements OnInit, OnDestroy {
           .update(updatePayload)
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(response => {
-              this.authService
-                .login(this.userObject.userName, this.userObject.password)
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe(data => {
-                  this.loading = false;
-                  this.userRole = this.authService.decode();
-                  if (this.userRole.role === 'Rider') {
-                    this.route.navigate(['rider/home', this.user.id]);
-                  } else if (this.userRole.role === 'Driver') {
-                    this.route.navigate(['driver/home', this.user.id]);
-                  } else if (this.userRole.role === 'Admin') {
-                    this.route.navigate(['admin/dashboard', this.user.id]);
-                  } else {
-                    this.route.navigate(['login']);
-                  }
-                });
+            this.store.dispatch(new GetCurrentUser(this.currentUser.id));
+            this.authService
+              .login(this.userObject.userName, this.userObject.password)
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe(data => {
+                this.loading = false;
+                this.userRole = this.authService.decode();
+                if (this.userRole.role === 'Rider') {
+                  this.route.navigate(['rider/home', this.currentUser.id]);
+                } else if (this.userRole.role === 'Driver') {
+                  this.route.navigate(['driver/home', this.currentUser.id]);
+                } else if (this.userRole.role === 'Admin') {
+                  this.route.navigate(['admin/dashboard', this.currentUser.id]);
+                } else {
+                  this.route.navigate(['login']);
+                }
+              });
           });
       });
   }
@@ -156,5 +180,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subs.unsubscribe();
+
   }
 }
