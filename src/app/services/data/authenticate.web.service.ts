@@ -22,36 +22,23 @@ export class AuthenticateWebService implements AuthenticateDataService {
   public registerUrl: string;
   private loggedIn = new BehaviorSubject<boolean>(false);
   mockUrl: string;
+  userToken: any;
 
   constructor(private http: HttpClient, private store: Store) {
-    this.currentUserSubject = new BehaviorSubject<Users>(
-      JSON.parse(localStorage.getItem('currentUser'))
-    );
-    this.currentUser = this.currentUserSubject.asObservable();
     this.webUrl = environment.webUrl;
-
-  }
-
-  public get currentUserValue(): Users {
-    return this.currentUserSubject.value;
-  }
-  get isLoggedIn() {
-    return this.loggedIn.asObservable();
   }
 
   login(username: string, password: string) {
     return this.http.post<any>(`${this.webUrl}/user/authenticate`, { username, password }).pipe(
       map(user => {
-        this.store.dispatch(new GetLoggedInUser(user));
         // login successful if there's a jwt token in the response
         if (user && user.token) {
+          this.userToken = user.token;
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.loggedIn.next(true);
-          this.currentUserSubject.next(user);
-          this.getUserImage(user.id)
-            .subscribe(img => {
-            });
+          this.store.dispatch(new GetLoggedInUser(user));
+          // this.getUserImage(user.id)
+          //   .subscribe(img => {
+          //   });
         }
 
         return user;
@@ -75,12 +62,10 @@ export class AuthenticateWebService implements AuthenticateDataService {
     return this.http.post(`${this.webUrl}/user/register`, user);
   }
 
-  update(user: any) {
-    console.log('from the service', user);
+  update(user) {
     return this.http.put(`${this.webUrl}/user/${user.userId}`, user);
   }
   updateUserStatus(user: any) {
-    console.log('from the service', user);
     return this.http.patch(`${this.webUrl}/user/status/${user.id}`, user);
   }
   delete(id: any) {
@@ -90,13 +75,10 @@ export class AuthenticateWebService implements AuthenticateDataService {
   logout() {
     // remove user from local storage to log user out
     localStorage.clear();
-    this.currentUserSubject.next(null);
   }
   decode() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const token = currentUser.token;
     try {
-      return jwt_decode(token);
+      return jwt_decode(this.userToken);
     } catch (Error) {
       return null;
     }

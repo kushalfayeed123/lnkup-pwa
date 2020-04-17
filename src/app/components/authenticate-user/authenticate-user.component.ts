@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { MatSnackBar } from '@angular/material';
@@ -11,6 +11,10 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
 import { ToastrService } from 'ngx-toastr';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { UserPaymentToken } from 'src/app/models/payment';
+import { Select } from '@ngxs/store';
+import { AppState } from 'src/app/state/app.state';
+import { Users } from 'src/app/models/Users';
+import { SubSink } from 'subsink/dist/subsink';
 
 @Component({
   selector: 'app-authenticate-user',
@@ -22,6 +26,9 @@ import { UserPaymentToken } from 'src/app/models/payment';
 })
 export class AuthenticateUserComponent implements OnInit, OnDestroy {
 
+  @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
+
+  private subs = new SubSink();
   public loginForm: FormGroup;
   public returnUrl: any;
   private unsubscribe$ = new Subject<void>();
@@ -39,13 +46,13 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
 
 
   constructor(private router: Router,
-              private route: ActivatedRoute,
-              private formBuilder: FormBuilder,
-              private broadcastService: BroadcastService,
-              // tslint:disable-next-line: variable-name
-              private _snackBar: MatSnackBar,
-              private authenticate: AuthenticateDataService,
-              private toastService: NotificationsService) { }
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private broadcastService: BroadcastService,
+    // tslint:disable-next-line: variable-name
+    private _snackBar: MatSnackBar,
+    private authenticate: AuthenticateDataService,
+    private toastService: NotificationsService) { }
 
   ngOnInit() {
 
@@ -53,6 +60,11 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+    this.subs.add(
+      this.loggedInUser$.subscribe(user => {
+        this.loggedInUser = user;
+      })
+    );
     // get return url from route or default to '/'
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
@@ -97,19 +109,18 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   }
   updateUserStatus() {
     this.loading = true;
-    const registeredUser = JSON.parse(localStorage.getItem('currentUser'));
     const userPass = this.f.password.value;
-    if (registeredUser == null) {
+    if (this.loggedInUser == null) {
       setTimeout(() => {
         this.loading = false;
         this.openErrorMessage();
       }, 3000);
       return;
     } else {
-      const userData = registeredUser;
+      const userData = this.loggedInUser;
       const userRole = this.authenticate.decode();
-
-      const userStatusData = {id: userData.id,
+      const userStatusData = {
+        id: userData.id,
         email: userData.email,
         username: userData.userName,
         phoneNumber: userData.phoneNumber,
@@ -117,7 +128,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
         token: userData.token,
         userStatus: 1,
         role: userRole.role
-        };
+      };
       this.authenticate.update(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
@@ -125,12 +136,11 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
     }
   }
   redirectUser() {
-    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
     this.userRole = this.authenticate.decode();
-    const userId = loggedInUser.id;
+    const userId = this.loggedInUser.id;
     if (this.userRole.role === 'Rider') {
       this.router.navigate(['/onboarding']);
-    } else if (this.userRole.role ===  'Driver') {
+    } else if (this.userRole.role === 'Driver') {
       this.router.navigate(['/onboarding']);
     } else if (this.userRole.role === 'Admin') {
       this.router.navigate(['admin/dashboard', userId]);

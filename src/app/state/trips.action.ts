@@ -9,6 +9,8 @@ export class CreateTrip {
 }
 export class GetTrips {
   static readonly type = '[Trips] GetTrips';
+
+  constructor(public allTrips: ActiveTrips[]) { }
 }
 
 export class GetTripById {

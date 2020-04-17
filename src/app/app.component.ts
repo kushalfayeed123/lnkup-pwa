@@ -7,10 +7,14 @@ import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
 import { BroadcastService } from './services/business/broadcastdata.service';
 import { environment } from 'src/environments/environment';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
 import { NetworkStatusAngularService } from 'network-status-angular';
+import { Select } from '@ngxs/store';
+import { AppState } from './state/app.state';
+import { Users } from './models/Users';
+import { SubSink } from 'subsink/dist/subsink';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +24,9 @@ import { NetworkStatusAngularService } from 'network-status-angular';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  @Select(AppState.getCurrentUser) loggedInUser$: Observable<Users>;
+
   title = 'lnkup';
   newVersion: boolean;
   showSideNav: boolean;
@@ -29,6 +36,10 @@ export class AppComponent implements OnInit, OnDestroy {
   showMessage: boolean;
   riderLink: boolean;
   driverNav: boolean;
+  private subs = new SubSink();
+  currentUser: Users;
+  loggedInUser: Users;
+
 
   // tslint:disable-next-line: variable-name
 
@@ -45,7 +56,19 @@ export class AppComponent implements OnInit, OnDestroy {
     private networkStatus: NetworkStatusAngularService
   ) {
 
-    route.events.subscribe(url => {
+
+  }
+
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngOnInit() {
+    this.subs.add(
+      this.loggedInUser$.subscribe(user => {
+        this.loggedInUser = user;
+      })
+    );
+    this.getLoggedInUser();
+
+    this.route.events.subscribe(url => {
       this.getCurrentRoute();
     });
     this.networkStatus.status.subscribe(res => {
@@ -56,18 +79,15 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
     this.reload();
-    this.getLoggedInUser();
-  }
 
-  // tslint:disable-next-line: use-lifecycle-interface
-  ngOnInit() {
     window.scrollTo(0, 0);
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
+
   }
 
   getLoggedInUser() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('logged in user', this.loggedInUser);
     const currentRoute = decodeURI(localStorage.getItem('currentRoute'));
     const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
     const navigationExtras: NavigationExtras = {
@@ -75,7 +95,7 @@ export class AppComponent implements OnInit, OnDestroy {
       preserveFragment: true
     };
 
-    if (!user) {
+    if (!this.loggedInUser) {
       this.route.navigate(['/login']);
     } else {
       if (!onGoingTrip) {
@@ -201,5 +221,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subs.unsubscribe();
+
   }
 }

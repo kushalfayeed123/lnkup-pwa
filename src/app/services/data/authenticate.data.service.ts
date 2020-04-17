@@ -14,7 +14,6 @@ export abstract class AuthenticateDataService {
     abstract logout();
     abstract getById(id): Observable<Users>;
     abstract getByEmail(email): Observable<Users>;
-    abstract get currentUserValue();
     abstract updateUserStatus(user);
     abstract decode();
     abstract getUserImage(id);

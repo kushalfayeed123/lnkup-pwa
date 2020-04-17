@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import * as firebase from 'firebase';
@@ -13,9 +13,14 @@ import { BroadcastService } from './broadcastdata.service';
 import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
 import { PushNotificationTokens } from 'src/app/models/pushNotificationTokens';
 import { ActiveTripDataService } from '../data/active-trip/active-trip.data.service';
+import { Select } from '@ngxs/store';
+import { AppState } from 'src/app/state/app.state';
 
 @Injectable()
 export class NotificationsService {
+
+  @Select(AppState.getCurrentUser) loggedInUser$: Observable<Users>;
+
   user: any;
   webUrl: string;
   activeTripId: any;
@@ -48,6 +53,7 @@ export class NotificationsService {
   pushSubscriptionToUpdate: { token: string };
   userId: any;
   hubConnection: any;
+  loggedInUser: any;
 
   constructor(
     private router: Router,
@@ -71,18 +77,20 @@ export class NotificationsService {
       );
     });
     // this.deleteSubscription();
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    this.userId = user.id;
+
   }
 
   getuserToken(sub) {
-    this.authService.getById(this.userId).subscribe(token => {
-      console.log(token);
-      if (token.pushNotificationTokens.length > 0) {
-        this.updateToken(this.userId, sub);
-      } else {
-        this.saveToken(this.userId, sub);
-      }
+    this.loggedInUser$.subscribe(res => {
+      this.userId = res.userId;
+      this.loggedInUser = res;
+      this.authService.getById(this.userId).subscribe(token => {
+        if (token.pushNotificationTokens.length > 0) {
+          this.updateToken(this.userId, sub);
+        } else {
+          this.saveToken(this.userId, sub);
+        }
+      });
     });
   }
 
@@ -246,8 +254,11 @@ export class NotificationsService {
   }
 
   async intiateConnection() {
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
-    const loginToken = this.user.token;
+    this.loggedInUser$.subscribe(res => {
+      this.userId = res.userId;
+      this.loggedInUser = res;
+    });
+    const loginToken = this.loggedInUser.token;
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })
       .configureLogging(signalR.LogLevel.Information)
@@ -264,8 +275,7 @@ export class NotificationsService {
       });
 
     await this.hubConnection.on('ReceiveMessage', message => {
-      const user = JSON.parse(localStorage.getItem('currentUser'));
-      const userRole = user.role;
+      const userRole = this.loggedInUser.role;
       if (userRole === 'Driver') {
         this.alertDriverSuccess(message);
       } else {
@@ -274,7 +284,7 @@ export class NotificationsService {
     });
 
     await this.hubConnection.on('ReceiveDeclineMessage', message => {
-      const userRole = this.user.role;
+      const userRole = this.loggedInUser.role;
       if (userRole === 'Driver') {
         this.alertDriverCancel(message);
       } else {

@@ -13,6 +13,9 @@
 .img {
   width: 17%;
 }
+.green-progress .mat-progress-bar-fill::after {
+  background-color: green !important;
+}
 .driver-message-card {
   position: relative;
   bottom: 28%;
@@ -387,16 +390,13 @@ body.map-body .avd li:first-of-type::before {
   -o-border-radius: 50%;
 }
 
-
 .example-card {
   height: 191px !important;
 }
 
-
 .driver-message-card {
   bottom: 35%;
 }
-
 
 // @media only screen and (min-height: 532px) and (max-height: 550px) {
 //   #search-form {

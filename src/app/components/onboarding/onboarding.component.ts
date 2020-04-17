@@ -41,7 +41,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   loading: boolean;
   allTrips: boolean;
   message: string;
-  userObject: Users;
+  userObject: any;
   userRole: any;
   private subs = new SubSink();
   trips: ActiveTrips[];
@@ -64,7 +64,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
       this.loggedInUser$.subscribe(user => {
         this.currentUser = user;
       })
-
     );
     this.getCurrentime();
   }
@@ -103,7 +102,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         this.userObject = res;
-        this.userObject.Role = role;
+        this.userObject.role = role;
         const updatePayload = {
           userId: this.userObject.userId,
           email: this.userObject.email,
@@ -113,21 +112,22 @@ export class OnboardingComponent implements OnInit, OnDestroy {
           password: this.userObject.password,
           token: this.userObject.token,
           userStatus: this.userObject.userStatus,
-          role: this.userObject.Role,
+          role: this.userObject.role,
           signupDate: this.userObject.signupDate,
           signupTime: this.userObject.signupTime,
           verificationCode: this.userObject.verificationCode
         };
+
         this.authService
           .update(updatePayload)
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(response => {
-            this.store.dispatch(new GetCurrentUser(this.currentUser.id));
             this.authService
               .login(this.userObject.userName, this.userObject.password)
               .pipe(takeUntil(this.unsubscribe$))
               .subscribe(data => {
                 this.loading = false;
+                this.store.dispatch(new GetCurrentUser(updatePayload.userId));
                 this.userRole = this.authService.decode();
                 if (this.userRole.role === 'Rider') {
                   this.route.navigate(['rider/home', this.currentUser.id]);

@@ -20,12 +20,13 @@ import {
    MatPaginatorModule,
    MatCardModule,
    MatDialogModule,
+   MatProgressBarModule,
 } from '@angular/material';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { NotificationComponent } from './components/notification/notification.component';
 
@@ -47,6 +48,7 @@ import { NotificationComponent } from './components/notification/notification.co
       MatDatepickerModule,
       MatNativeDateModule,
       MatChipsModule,
+      MatProgressBarModule,
       MatTooltipModule,
       MatTableModule,
       MatPaginatorModule,
@@ -78,6 +80,7 @@ import { NotificationComponent } from './components/notification/notification.co
       MatPaginatorModule,
       MatCardModule,
       MatProgressSpinnerModule,
+      MatProgressBarModule,
       MatBottomSheetModule,
       MatSidenavModule,
       MatSnackBarModule,
@@ -85,7 +88,7 @@ import { NotificationComponent } from './components/notification/notification.co
       MatCarouselModule,
       MatDialogModule,
       NotificationComponent
-      ],
+   ],
    providers: [
       MatDatepickerModule,
    ]

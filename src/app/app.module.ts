@@ -62,6 +62,8 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { TripsState } from './state/trips.state';
 import { AppState } from './state/app.state';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+
 
 
 
@@ -123,6 +125,7 @@ import { AppState } from './state/app.state';
     AngularFireMessagingModule,
     NetworkStatusAngularModule.forRoot(),
     NgxsModule.forRoot([TripsState, AppState], { developmentMode: !environment.production }),
+    NgxsStoragePluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],

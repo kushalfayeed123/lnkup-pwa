@@ -7,6 +7,11 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
+import { Select } from '@ngxs/store';
+import { AppState } from 'src/app/state/app.state';
+import { Observable } from 'rxjs';
+import { Users } from 'src/app/models/Users';
+import { SubSink } from 'subsink/dist/subsink';
 
 @Component({
   selector: 'app-side-nav',
@@ -15,7 +20,10 @@ import { NotificationsService } from 'src/app/services/business/notificatons.ser
   animations: [slideInAnimation]
 
 })
-export class SideNavComponent implements OnDestroy {
+export class SideNavComponent implements OnInit, OnDestroy {
+
+  @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
+
   private unsubscribe$ = new Subject<void>();
   _opened: boolean = false;
   showSideNav: boolean;
@@ -26,15 +34,18 @@ export class SideNavComponent implements OnDestroy {
   events: string[] = [];
   opened: boolean;
   showSpecialChat: boolean;
+  private subs = new SubSink();
+  loggedInUser: any;
+
 
 
   constructor(changeDetectorRef: ChangeDetectorRef,
-              private authService: AuthenticateDataService,
-              private broadCastService: BroadcastService,
-              private notifyService: NotificationsService,
-              media: MediaMatcher,
-              public _router: Router,
-              private route: ActivatedRoute) {
+    private authService: AuthenticateDataService,
+    private broadCastService: BroadcastService,
+    private notifyService: NotificationsService,
+    media: MediaMatcher,
+    public _router: Router,
+    private route: ActivatedRoute) {
 
     this.broadCastService.showSideNav
       .pipe(takeUntil(this.unsubscribe$))
@@ -48,8 +59,16 @@ export class SideNavComponent implements OnDestroy {
         }
       });
 
-     
 
+
+  }
+
+  ngOnInit() {
+    this.subs.add(
+      this.loggedInUser$.subscribe(user => {
+        this.loggedInUser = user;
+      })
+    );
   }
 
   _toggleSidebar() {
@@ -84,18 +103,15 @@ export class SideNavComponent implements OnDestroy {
   }
 
   getCurrentUser() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user) {
-      setTimeout(() => {
-        this.userName = user.userName;
-        this.userId = user.id;
-        this.userRole = user.role.toLowerCase();
-        if (this.userName === 'segun' || this.userName === 'susan inalegwu') {
-          this.showSpecialChat = true;
-        } else {
-          this.showSpecialChat = false;
-        }
-      }, 5000);
+    if (this.loggedInUser) {
+      this.userName = this.loggedInUser.userName;
+      this.userId = this.loggedInUser.id;
+      this.userRole = this.loggedInUser.role.toLowerCase();
+      if (this.userName === 'segun' || this.userName === 'susan inalegwu') {
+        this.showSpecialChat = true;
+      } else {
+        this.showSpecialChat = false;
+      }
     } else {
       return;
     }
@@ -106,6 +122,7 @@ export class SideNavComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 
 }

@@ -6,7 +6,6 @@ import { tap } from 'rxjs/internal/operators/tap';
 
 export class TripsStateModel {
   trips: ActiveTrips[];
-  totalTrips: number;
 }
 
 
@@ -15,7 +14,6 @@ export class TripsStateModel {
 
   defaults: {
     trips: [],
-    totalTrips: 0
   }
 })
 
@@ -34,19 +32,12 @@ export class TripsState {
   }
 
   @Action(GetTrips)
-  getTrips(ctx: StateContext<TripsStateModel>) {
-    return this.TripsService.getAllActiveTrips().pipe(
-      tap(trips => {
-        const state = ctx.getState();
-        ctx.setState({
-          ...state,
-          trips,
-          totalTrips: trips.length
-        });
-
-      },
-        err => console.log(err.error))
-    );
+  getTrips(ctx: StateContext<TripsStateModel>, { allTrips }: GetTrips) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      trips: allTrips,
+    });
   }
 
 }

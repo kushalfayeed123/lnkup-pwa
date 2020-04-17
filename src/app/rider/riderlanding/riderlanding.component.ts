@@ -54,7 +54,6 @@ import { GetTrips } from 'src/app/state/trips.action';
 })
 export class RiderlandingComponent implements OnInit, OnDestroy {
 
-  @Select(TripsState.getTrips) trips$: Observable<ActiveTrips[]>;
   @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
 
 
@@ -323,7 +322,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     riderDestinationLatitude: any; riderDestinationLongitude: any;
     userId: any; tripStatus: string;
   };
-  allTrips: ActiveTrips[];
+  allTrips: any;
   currentUser: any;
 
   constructor(
@@ -345,7 +344,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.notificationService.requestPermision();
     this.notificationService.receiveMessage();
     this.notificationService.currentMessage.subscribe(res => {
-      console.log('current message', res);
     });
     // this.getAllTrips();
     // this.notificationService.deleteSubscription();
@@ -354,14 +352,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(new GetTrips());
     this.subs.add(
-      this.trips$.subscribe(trips => {
-        this.allTrips = trips;
-      }),
       this.currentUser$.subscribe(user => {
         this.currentUser = user;
-
       })
     );
 
@@ -527,7 +520,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         return;
       }
       this.locationService
-        .getLocationsByUserId(user.id)
+        .getLocationsByUserId(this.currentUser.userId)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
           console.log(res)
@@ -535,19 +528,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.createUserLocation();
             return;
           } else {
-            this.updateUserLocation(user.id);
+            this.updateUserLocation(this.currentUser.userId);
           }
         });
     }
   }
 
   createUserLocation() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
     const locationPayload = {
-      userId: user.id,
+      userId: this.currentUser.userId,
       pickupLongitude: this.currentLongitude,
       pickupLatitude: this.currentLatitude,
-      userRole: user.role
+      userRole: this.currentUser.role
     };
     this.locationService
       .create(locationPayload)
@@ -555,12 +547,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .subscribe(res => { });
   }
   updateUserLocation(id) {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
     const locationPayload = {
-      userId: user.id,
+      userId: id,
       pickupLongitude: this.currentLongitude,
       pickupLatitude: this.currentLatitude,
-      userRole: user.role
+      userRole: this.currentUser.role
     };
     this.locationService
       .update(id, locationPayload)
@@ -691,14 +682,11 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .substring(1);
   }
   getAllActiveTrips(status?) {
-    this.trips$
+    this.activeTrip.getAllActiveTrips()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-
-
-        console.log('All trips', this.allTrips);
-        const allActiveTrips = data;
-        if (data.length < 1) {
+      .subscribe(res => {
+        const allActiveTrips = res;
+        if (res.length < 1) {
           this.notificationService.showInfoMessage(
             'Sorry there are no trips at the moment. Please try again later.'
           );
@@ -711,8 +699,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             this.gettingDrivers = false;
           }, 10000);
         } else {
-          this.passDirection();
           setTimeout(() => {
+            this.passDirection();
             allActiveTrips.forEach(element => {
               const tripDestinationLat = Number(element.driverEndLatitude);
               const tripDestinationLong = Number(element.driverEndLongitude);
@@ -735,9 +723,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
               );
               new google.maps.DistanceMatrixService().getDistanceMatrix(
                 {
+                  travelMode: google.maps.TravelMode.DRIVING,
                   origins: [tripEndLocation],
                   destinations: [riderEndLocation],
-                  // travelMode: google.maps.TravelMode.DRIVING
                 },
                 (results: any) => {
                   this.destinationDistanceInKm =
@@ -768,18 +756,15 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
               this.getRoutePoints(request);
               new google.maps.DistanceMatrixService().getDistanceMatrix(
                 {
+                  travelMode: google.maps.TravelMode.DRIVING,
                   origins: [currentLocation],
                   destinations: [pickupLocation],
-                  travelMode: google.maps.TravelMode.DRIVING
                 },
                 (results: any) => {
-                  this.pickupDistance =
+                  element.pickupDistance =
                     results.rows[0].elements[0].distance.value / 1000;
-                  const timeToPickup =
+                  element.timeToPickup =
                     results.rows[0].elements[0].duration.text;
-                  this.timeToPickup = timeToPickup;
-                  element.timeToPickup = this.timeToPickup;
-                  element.pickupDistance = this.pickupDistance;
                   if (!allActiveTrips) {
                     return;
                   } else {
@@ -790,10 +775,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
                 }
               );
             });
+            this.store.dispatch(new GetTrips(allActiveTrips));
           }, 5000);
         }
       });
-
   }
 
   navToTripSearch() {
@@ -830,9 +815,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   computeDistance(origin, destination) {
     new google.maps.DistanceMatrixService().getDistanceMatrix(
       {
+        travelMode: google.maps.TravelMode.DRIVING,
         origins: [origin],
         destinations: [destination],
-        travelMode: google.maps.TravelMode.DRIVING
       },
       (results: any) => {
         this.tripDistance =
