@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
@@ -20,9 +20,11 @@ import { SubSink } from 'subsink/dist/subsink';
   animations: [slideInAnimation]
 
 })
-export class SideNavComponent implements OnInit, OnDestroy {
+export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
+  @Select(AppState.showLeftNav) showLeftNav$: Observable<boolean>;
+
 
   private unsubscribe$ = new Subject<void>();
   _opened: boolean = false;
@@ -39,34 +41,34 @@ export class SideNavComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(changeDetectorRef: ChangeDetectorRef,
+  constructor(private changeDetectorRef: ChangeDetectorRef,
     private authService: AuthenticateDataService,
     private broadCastService: BroadcastService,
     private notifyService: NotificationsService,
     media: MediaMatcher,
     public _router: Router,
-    private route: ActivatedRoute) {
-
-    this.broadCastService.showSideNav
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(showNav => {
-        this.showSideNav = showNav;
-        if (this.showSideNav === true) {
-          this.getCurrentUser();
-
-        } else {
-          return;
-        }
-      });
+    private route: ActivatedRoute) { }
 
 
-
+  ngAfterViewChecked() {
+    this.subs.add(
+      this.showLeftNav$.subscribe(res => {
+        this.showSideNav = res;
+      })
+    );
+    this.changeDetectorRef.detectChanges();
   }
 
   ngOnInit() {
+
     this.subs.add(
       this.loggedInUser$.subscribe(user => {
         this.loggedInUser = user;
+        this.getCurrentUser();
+
+      }),
+      this.showLeftNav$.subscribe(res => {
+        this.showSideNav = res;
       })
     );
   }
@@ -107,7 +109,7 @@ export class SideNavComponent implements OnInit, OnDestroy {
       this.userName = this.loggedInUser.userName;
       this.userId = this.loggedInUser.id;
       this.userRole = this.loggedInUser.role.toLowerCase();
-      if (this.userName === 'segun' || this.userName === 'susan inalegwu') {
+      if (this.userName === 'segun' || this.userName === 'susan') {
         this.showSpecialChat = true;
       } else {
         this.showSpecialChat = false;

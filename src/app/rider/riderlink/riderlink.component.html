@@ -1,10 +1,10 @@
 <div class="avd animated zoomIn" *ngIf="driverData">
-    <!-- <h2 class="heading">Available Drivers</h2> -->
-    <div class="driver-container">
-      <div class="driver-track">
-        <div class="driver-item">
-          <div class="container-grid">
-            <div class="avi-info" (deferLoad)="driverData.userImage.image != null">
+  <!-- <h2 class="heading">Available Drivers</h2> -->
+  <div class="driver-container">
+    <div class="driver-track">
+      <div class="driver-item">
+        <div class="container-grid">
+          <!-- <div class="avi-info" (deferLoad)="driverData.userImage.image != null">
               <img *ngIf="driverData.userImage.image" src="data:image/png;base64,{{driverData.userImage.image}}" alt=""
               class="profile-info" >
              <img *ngIf="!driverData.userImage.image" src="./assets/Images/default-user.png"
@@ -17,33 +17,28 @@
                 <a href="tel:{{driverNumber}}" class="img-link"> <img src="./assets/Images/phone.svg" alt="" class="phone-img"></a>
                  <img src="../../../assets/Images/chat.svg" alt="" class="phone-img" (click)="navToSupport()">
                </div>
+            </div> -->
+          <div class="destination-details">
+            <div class="time-line-container">
+              <ul class="tl">
+                <li class="destination">
+                  <div class="location">Meet your driver here</div>
+                  <div class="seats sub">{{pickupAddress}}</div>
+                </li>
+                <li class="current-location">
+                  <div class="location">Your fare for this trip</div>
+                  <div class="est sub">&#8358;{{riderRequestData.tripFee}}</div>
+                </li>
+              </ul>
             </div>
-            <div class="destination-details">
-              <div class="time-line-container">
-                <ul class="tl">
-                  <li class="destination">
-                    <div class="location">Meet your driver here</div>
-                    <div class="seats sub">{{pickupAddress}}</div>
-                  </li>
-                  <li class="current-location">
-                    <div class="location">Your fare for this trip</div>
-                    <div class="est sub">&#8358;{{riderRequestData.tripFee}}</div>
-                  </li>
-                </ul>
-              </div>
-              <!-- <div class="cancel-trip" color="accent">Cancel Trip</div> -->
-              <button type="submit" mat-raised-button color="accent" *ngIf="!hideCancelButton"
-               class="auth-full-width"
+            <!-- <div class="cancel-trip" color="accent">Cancel Trip</div> -->
+            <button type="submit" mat-raised-button color="accent" *ngIf="!hideCancelButton" class="auth-full-width"
               (click)="cancelRequest()">Cancel</button>
-            </div>
-
-            <mat-spinner *ngIf="loading"  [diameter]="20"
-            class="loader"
-          ></mat-spinner>
           </div>
+
+          <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
         </div>
       </div>
     </div>
   </div>
-
-
+</div>

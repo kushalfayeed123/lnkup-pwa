@@ -11,10 +11,11 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
 import { ToastrService } from 'ngx-toastr';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { UserPaymentToken } from 'src/app/models/payment';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { AppState } from 'src/app/state/app.state';
 import { Users } from 'src/app/models/Users';
 import { SubSink } from 'subsink/dist/subsink';
+import { ShowLeftNav } from 'src/app/state/app.actions';
 
 @Component({
   selector: 'app-authenticate-user',
@@ -49,12 +50,14 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private broadcastService: BroadcastService,
+    private store: Store,
     // tslint:disable-next-line: variable-name
     private _snackBar: MatSnackBar,
     private authenticate: AuthenticateDataService,
     private toastService: NotificationsService) { }
 
   ngOnInit() {
+    this.store.dispatch(new ShowLeftNav(false));
 
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -137,13 +140,11 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   }
   redirectUser() {
     this.userRole = this.authenticate.decode();
-    const userId = this.loggedInUser.id;
-    if (this.userRole.role === 'Rider') {
+    const userId = this.loggedInUser.userId;
+    if (this.loggedInUser.role === 'Rider') {
       this.router.navigate(['/onboarding']);
-    } else if (this.userRole.role === 'Driver') {
+    } else if (this.loggedInUser.role === 'Driver') {
       this.router.navigate(['/onboarding']);
-    } else if (this.userRole.role === 'Admin') {
-      this.router.navigate(['admin/dashboard', userId]);
     } else {
       this.router.navigate(['login']);
     }

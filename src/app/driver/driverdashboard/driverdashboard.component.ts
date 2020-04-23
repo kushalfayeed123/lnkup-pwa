@@ -14,8 +14,15 @@ import { DriverDataDataService } from 'src/app/services/data/driver-data/driver-
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { LocationDataService } from 'src/app/services/data/location/location.data.service';
-import { interval } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { Select, Store } from '@ngxs/store';
+import { AppState } from 'src/app/state/app.state';
+import { SubSink } from 'subsink/dist/subsink';
+import { GetDriverData } from 'src/app/state/driver-data/driverdata.action';
+import { DriverState } from 'src/app/state/driver-data/driverdata.state';
+import { DriverData } from 'src/app/models/DriverData';
+import { ShowLeftNav } from 'src/app/state/app.actions';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,6 +32,11 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   host: { '[@slideInAnimation]': '' }
 })
 export class DriverdashboardComponent implements OnInit, OnDestroy {
+
+  @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
+  @Select(DriverState.getDriverData) driverData$: Observable<DriverData>;
+
+
   private unsubscribe$ = new Subject<void>();
   durationInSeconds = 4;
   activeTripForm: FormGroup;
@@ -213,6 +225,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       ]
     }
   ];
+  private subs = new SubSink();
   destinationName: any;
   location: any;
   currentUser: Users;
@@ -251,6 +264,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   riderLocation: any;
   riderLocationsLat: any[] = [];
   riderLocationsLong: any[] = [];
+  driverData: import("c:/sandbox/smichael/lnkup-mobile/src/app/models/DriverData").DriverData;
 
   constructor(
     private router: Router,
@@ -263,7 +277,8 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     private driverDataService: DriverDataDataService,
     private notificationService: NotificationsService,
     private broadCastService: BroadcastService,
-    private locationService: LocationDataService
+    private locationService: LocationDataService,
+    private store: Store
   ) {
     this.notificationService.intiateConnection();
     this.notificationService.angularFireMessenger();
@@ -280,29 +295,34 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.activeTripCheck();
+    this.store.dispatch(new ShowLeftNav(false));
+    this.subs.add(
+      this.currentUser$.subscribe(res => {
+        this.currentUser = res;
+        this.getUserById(res);
+        this.getDriverData();
+
+      }),
+      this.driverData$.subscribe(res => {
+        this.driverData = res;
+      })
+    );
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
         window.scrollTo(0, 0);
         this.driverNavigate = param.driverNav;
-        this.getDriverData();
       });
     this.sideNavCheck();
     this.showLanding = true;
     this.showDestination = true;
     this.zoom = 15;
-    this.route.params.subscribe(p => {
-      const userId = p.id;
-      this.getUserById(userId);
-      this.getUserProfileImage(userId);
-    });
 
   }
 
   sideNavCheck() {
     if (!this.driverNavigate) {
-      this.broadCastService.publishSideNavValue(true);
+      this.store.dispatch(new ShowLeftNav(true));
     } else {
       return;
     }
@@ -330,54 +350,23 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
         this.getUserDirection();
       });
   }
-  getUserById(userId) {
+  getUserById(user) {
     this.loading = true;
-    this.authService
-      .getById(userId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(user => {
-        this.currentUser = user;
-        this.userId = user.userId.substring(27).toUpperCase();
-        this.loading = false;
-        const userPaymentData = user.userPaymentData;
-        if (userPaymentData.length < 1) {
-          this.userPayment = false;
-        } else {
-          this.userPayment = true;
-        }
-        this.broadCastService.publishUserPaymentStatus(this.userPayment);
-      });
+    this.userId = user.userId.substring(27).toUpperCase();
+    this.loading = false;
+    const userPaymentData = user.userPaymentData;
+    if (userPaymentData.length < 1) {
+      this.userPayment = false;
+    } else {
+      this.userPayment = true;
+    }
+    this.broadCastService.publishUserPaymentStatus(this.userPayment);
   }
   getDriverData() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
-    this.driverDataService
-      .getDriverByDriverId(userId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        this.driverDataId = data.driverDataId;
-        this.plateNumber = data.carDocument2.toUpperCase();
-        this.driverStatus = data.driverStatus;
-        const driverData = {
-          driverDataId: this.driverDataId,
-          driverStatus: this.driverStatus
-        };
-        localStorage.setItem('driverData', JSON.stringify(driverData));
-      });
+    this.store.dispatch(new GetDriverData(this.currentUser.userId));
     // this.updateDriverConnect();
   }
-  getUserProfileImage(userId) {
-    this.authService
-      .getUserImage(userId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(img => {
-        if (img == null) {
-          return;
-        } else {
-          this.driverImage = 'data:image/png;base64,' + img.image;
-        }
-      });
-  }
+
   setIntervalCall() {
     interval(30000)
       .pipe(takeUntil(this.unsubscribe$))
@@ -413,13 +402,12 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     });
   }
   broadCastCurrentLocation() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
     this.locationService
-      .getLocationsByUserId(user.id)
+      .getLocationsByUserId(this.currentUser.userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         if (res) {
-          this.updateUserLocation(user.id);
+          this.updateUserLocation(this.currentUser.userId);
         } else {
           this.createUserLocation();
         }
@@ -427,12 +415,11 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
 
   createUserLocation() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
     const locationPayload = {
-      userId: user.id,
+      userId: this.currentUser.userId,
       pickupLongitude: this.longitude,
       pickupLatitude: this.latitude,
-      userRole: user.role
+      userRole: this.currentUser.role
     };
     this.locationService
       .create(locationPayload)
@@ -554,7 +541,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   }
   setPickup() {
     this.showDestination = true;
-    if (!this.driverDataId) {
+    if (!this.driverData) {
       this.showDestination = false;
       this.notificationService.showErrorMessage(
         'Sorry you can not create a trip at the moment. Please complete your vehicle registration'

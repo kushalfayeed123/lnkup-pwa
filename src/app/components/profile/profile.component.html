@@ -13,11 +13,11 @@
           <img src="./assets/icons/create-24px.svg" alt="" (click)="openUploadDialogue()">
         </button>
       </div>
-      <div class="profile-info" (deferLoad)="!isImage">
-        <img src="{{image}}" class="avi" *ngIf="isImage">
-        <img src="./assets/Images/default-user.png" class="avi" *ngIf="!isImage">
+      <div class="profile-info">
+        <img src="{{currentUser.imageUrl}}" class="avi">
+        <!-- <img src="./assets/Images/default-user.png" class="avi" *ngIf="!currentUser.imageUrl"> -->
         <div class="name-container">
-          <h2 class="name">{{user.userName}}</h2>
+          <h2 class="name">{{currentUser.userName}}</h2>
           <!-- <span class="e-mail">{{user.email}}</span> -->
         </div>
       </div>
@@ -34,10 +34,11 @@
     </div>
     <div *ngIf="openDialogue" class="animated zoomIn">
       <div class="user-details">
-        <div style="padding-bottom: 20px;"> {{image? 'Change Profile Image' : 'Upload Profile Image'}}</div>
+        <div style="padding-bottom: 20px;"> {{currentUser.imageUrl? 'Change Profile Image' : 'Upload Profile Image'}}
+        </div>
         <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
         <div>
-          <input type="file" style="padding-bottom: 20px;" (change)="uploadImage($event)" #PhotoInput hidden>
+          <input type="file" style="padding-bottom: 20px;" (change)="upload($event, 'profile')" #PhotoInput hidden>
           <button type="submit" mat-raised-button color="accent" class="auth-full-width login-text"
             (click)="PhotoInput.click()">
             Upload
@@ -49,7 +50,7 @@
         <div>
           <div style="padding-bottom: 20px;">Please enter your vehicle details</div>
           <mat-spinner *ngIf="licenseLoad" [diameter]="20" class="loader"></mat-spinner>
-          <form action="" [formGroup]="registerCarDetails" (ngSubmit)="creatDriverAccount()">
+          <form action="" [formGroup]="registerCarDetails">
             <mat-form-field class="auth-full-width">
               <input type="text" matInput class="input-color" placeholder="Your Car Model" formControlName="carType" />
             </mat-form-field>
@@ -69,11 +70,21 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+
             <mat-form-field class="auth-full-width">
               <input type="text" matInput class="input-color" placeholder="Your Account Number"
                 formControlName="accountNumber" />
             </mat-form-field>
-            <button type="submit" mat-raised-button color="accent"
+            <div>
+              <input type="file" style="padding-bottom: 20px;" (change)="upload($event, 'license')" #licenseInput
+                hidden>
+              <button mat-raised-button color="accent" class="auth-full-width login-text"
+                (click)="licenseInput.click()">
+                Upload Driver License
+              </button>
+            </div>
+
+            <button type="submit" mat-raised-button color="accent" (click)="creatDriverAccount()"
               class="auth-full-width login-text submit-license">Submit</button>
           </form>
           <!-- <div>
@@ -85,27 +96,27 @@
               </div> -->
         </div>
       </div>
-      <div class="user-details animated slideInDown" *ngIf="isDriver">
+      <!-- <div class="user-details animated slideInDown" *ngIf="isDriver">
         <div style="padding-bottom: 20px;"> Upload License </div>
         <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
         <div>
-          <input type="file" style="padding-bottom: 20px;" (change)="uploadLicense($event)" #licenseInput hidden>
+          <input type="file" style="padding-bottom: 20px;" (change)="upload($event, 'license')" #licenseInput hidden>
           <button mat-raised-button color="accent" class="auth-full-width login-text" (click)="licenseInput.click()">
             Upload Driver License
           </button>
         </div>
-      </div>
+      </div> -->
     </div>
 
 
     <div class="contact-info">
       <div class="contact">
         <img src="./assets/icons/markunread-24px.svg" alt="" class="icon">
-        <span class="contact-details">{{user.email}}</span>
+        <span class="contact-details">{{currentUser.email}}</span>
       </div>
       <div class="contact">
         <img src="./assets/icons/call-24px.svg" alt="" class="icon">
-        <span class="contact-details">{{user.phoneNumber}}</span>
+        <span class="contact-details">{{currentUser.phoneNumber}}</span>
       </div>
     </div>
     <div class="share">

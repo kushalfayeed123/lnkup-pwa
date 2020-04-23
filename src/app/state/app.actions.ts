@@ -54,5 +54,5 @@ export class LogOut {
 export class GetCurrentUser {
   static readonly type = '[App] GetCurrentUser';
 
-  constructor(public user: Users) { }
+  constructor(public id: string) { }
 }

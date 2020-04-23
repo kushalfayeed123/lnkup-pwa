@@ -5,7 +5,7 @@ export class DriverData {
     driverId: string;
     driverStatus: number;
     carType: string;
-    plateNumber: number;
+    plateNumber: string;
     carDocument2: string;
     rating: number;
     rideDeclineCount: number;

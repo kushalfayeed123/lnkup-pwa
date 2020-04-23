@@ -1,8 +1,9 @@
 import { Users } from '../models/Users';
 import { Selector, State, StateContext, Action } from '@ngxs/store';
 import { AuthenticateDataService } from '../services/data/authenticate.data.service';
-import { SetPreviousRoute, ShowLoader, HideLoader, GetLoggedInUser, GetCurrentUser } from './app.actions';
+import { SetPreviousRoute, ShowLoader, HideLoader, GetLoggedInUser, GetCurrentUser, ShowLeftNav } from './app.actions';
 import { tap } from 'rxjs/internal/operators/tap';
+import { Injectable } from '@angular/core';
 
 export class AppStateModel {
   loggedInUser: any;
@@ -23,6 +24,7 @@ export class AppStateModel {
   }
 })
 
+@Injectable()
 
 export class AppState {
 
@@ -75,6 +77,15 @@ export class AppState {
     });
   }
 
+  @Action(ShowLeftNav)
+  showLeftNav(ctx: StateContext<AppStateModel>, { payload }: ShowLeftNav) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      showLeftNav: payload
+    });
+  }
+
   @Action(HideLoader)
   hideSpinner({ getState, setState }: StateContext<AppStateModel>) {
     const state = getState();
@@ -94,8 +105,8 @@ export class AppState {
   }
 
   @Action(GetCurrentUser)
-  getCurrentUser(ctx: StateContext<AppStateModel>, { user }: GetCurrentUser) {
-    return this.auth.getById(user).pipe(
+  getCurrentUser(ctx: StateContext<AppStateModel>, { id }: GetCurrentUser) {
+    return this.auth.getById(id).pipe(
       tap(currentUser => {
         const state = ctx.getState();
         ctx.setState({

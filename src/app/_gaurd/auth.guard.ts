@@ -9,7 +9,7 @@ import { Users } from '../models/Users';
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
 
-    @Select(AppState.getCurrentUser) loggedInUser$: Observable<any>;
+    @Select(AppState.getLoggedInUser) loggedInUser$: Observable<any>;
 
     constructor(private router: Router, private authenticateService: AuthenticateDataService) {
 
@@ -19,6 +19,7 @@ export class AuthGuard implements CanActivate {
         let userRole = '';
         this.loggedInUser$.subscribe(res => {
             userRole = res.role;
+            console.log(userRole);
         });
         if (userRole === route.data.role) {
             return true;

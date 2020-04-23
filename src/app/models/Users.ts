@@ -8,14 +8,14 @@ export class Users {
     lastName: string;
     verificationCode: string;
     email: string;
-    Role: string;
+    role: string;
     userStatus: string;
     token: string;
     phoneNumber: string;
     password: string;
     signupDate: string;
     signupTime: string;
-    userImage: UserImage;
+    imageUrl: string;
     userPaymentData: UserPaymentToken[];
     pushNotificationTokens: PushNotificationTokens[];
 }

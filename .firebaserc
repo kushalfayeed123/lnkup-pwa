@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "lnkup-5ddec": {
+      "hosting": {
+        "lnkup-mobile": [
+          "lnkup-5ddec"
+        ]
+      }
+    }
+  }
+}

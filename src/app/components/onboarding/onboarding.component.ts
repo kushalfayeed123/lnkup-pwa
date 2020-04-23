@@ -16,7 +16,8 @@ import { Observable } from 'rxjs/internal/Observable';
 import { SubSink } from 'subsink/dist/subsink';
 import { GetTrips } from 'src/app/state/trips.action';
 import { AppState } from 'src/app/state/app.state';
-import { GetCurrentUser } from 'src/app/state/app.actions';
+import { GetCurrentUser, ShowLeftNav } from 'src/app/state/app.actions';
+import { GetDriverData } from 'src/app/state/driver-data/driverdata.action';
 
 
 @Component({
@@ -60,6 +61,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.dispatch(new ShowLeftNav(false));
     this.subs.add(
       this.loggedInUser$.subscribe(user => {
         this.currentUser = user;
@@ -115,7 +117,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
           role: this.userObject.role,
           signupDate: this.userObject.signupDate,
           signupTime: this.userObject.signupTime,
-          verificationCode: this.userObject.verificationCode
+          verificationCode: this.userObject.verificationCode,
+          imageUrl: this.userObject.imageUrl
         };
 
         this.authService
@@ -126,15 +129,13 @@ export class OnboardingComponent implements OnInit, OnDestroy {
               .login(this.userObject.userName, this.userObject.password)
               .pipe(takeUntil(this.unsubscribe$))
               .subscribe(data => {
+                this.store.dispatch(new GetCurrentUser(this.currentUser.id));
                 this.loading = false;
-                this.store.dispatch(new GetCurrentUser(updatePayload.userId));
-                this.userRole = this.authService.decode();
-                if (this.userRole.role === 'Rider') {
+                console.log(this.currentUser)
+                if (this.currentUser.role === 'Rider') {
                   this.route.navigate(['rider/home', this.currentUser.id]);
-                } else if (this.userRole.role === 'Driver') {
+                } else if (this.currentUser.role === 'Driver') {
                   this.route.navigate(['driver/home', this.currentUser.id]);
-                } else if (this.userRole.role === 'Admin') {
-                  this.route.navigate(['admin/dashboard', this.currentUser.id]);
                 } else {
                   this.route.navigate(['login']);
                 }

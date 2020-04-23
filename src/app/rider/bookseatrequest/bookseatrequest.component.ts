@@ -9,6 +9,8 @@ import { NotificationsService } from 'src/app/services/business/notificatons.ser
 import { ToastrService } from 'ngx-toastr';
 import { PaymentMethod } from 'src/app/models/payment';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { Store } from '@ngxs/store';
+import { ShowLeftNav } from 'src/app/state/app.actions';
 
 @Component({
   selector: 'app-bookseatrequest',
@@ -45,11 +47,12 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   userPaymentStatus: any;
   canCreateTrip: boolean;
   constructor(private activeTrip: ActiveTripDataService,
-              private activeRiderService: ActiveRiderDataService,
-              private router: Router,
-              private broadcastService: BroadcastService,
-              private toastrService: ToastrService,
-              private notifyService: NotificationsService) {
+    private activeRiderService: ActiveRiderDataService,
+    private router: Router,
+    private broadcastService: BroadcastService,
+    private toastrService: ToastrService,
+    private notifyService: NotificationsService,
+    private store: Store) {
     this.notifyService.intiateConnection();
 
     this.getRiderSuccessAlert();
@@ -57,6 +60,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.dispatch(new ShowLeftNav(true));
     this.dropoff = localStorage.getItem('storedAddress');
     this.getTripDetails();
     this.getRiderRequest();

@@ -63,6 +63,9 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { TripsState } from './state/trips.state';
 import { AppState } from './state/app.state';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { DriverState } from './state/driver-data/driverdata.state';
+
 
 
 
@@ -123,8 +126,10 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
       measurementId: 'G-35QM2LZ7S4'
     }),
     AngularFireMessagingModule,
+    AngularFireStorageModule,
+
     NetworkStatusAngularModule.forRoot(),
-    NgxsModule.forRoot([TripsState, AppState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([TripsState, AppState, DriverState], { developmentMode: !environment.production }),
     NgxsStoragePluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

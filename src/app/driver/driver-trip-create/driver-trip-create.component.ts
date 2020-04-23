@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MapBroadcastService } from 'src/app/services/business/mapbroadcast.service';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { takeUntil } from 'rxjs/internal/operators/takeUntil';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { formatDate } from '@angular/common';
@@ -11,6 +11,10 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
 import * as moment from 'moment';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { Select } from '@ngxs/store';
+import { DriverState } from 'src/app/state/driver-data/driverdata.state';
+import { DriverData } from 'src/app/models/DriverData';
+import { SubSink } from 'subsink/dist/subsink';
 
 
 @Component({
@@ -21,6 +25,10 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   host: { '[@slideInAnimation]': '' }
 })
 export class DriverTripCreateComponent implements OnInit, OnDestroy {
+
+  @Select(DriverState.getDriverData) driverData$: Observable<DriverData>;
+
+  private subs = new SubSink();
 
   private unsubscribe$ = new Subject<void>();
   @Input() destination;
@@ -59,6 +67,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   driverCardStatus: any;
   currentDateTime: any;
   onGoingTrip: boolean;
+  driverData: DriverData;
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
     private activeTripService: ActiveTripDataService,
@@ -69,7 +78,12 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getDriverDetails();
+    this.subs.add(
+      this.driverData$.subscribe(res => {
+        this.driverData = res;
+        this.getDriverDetails(res);
+      })
+    );
     this.getLocationCoordinates();
     this.getTimeValues();
     this.fare = 0;
@@ -92,9 +106,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDriverDetails() {
-    const driverData = JSON.parse(localStorage.getItem('driverData'));
-
+  getDriverDetails(driverData) {
     this.driverDataId = driverData.driverDataId;
     this.driverStatus = driverData.driverStatus;
     const connectionId = sessionStorage.getItem('clientConnectionId');

@@ -11,10 +11,11 @@ import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
 import { NetworkStatusAngularService } from 'network-status-angular';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { AppState } from './state/app.state';
 import { Users } from './models/Users';
 import { SubSink } from 'subsink/dist/subsink';
+import { ShowLeftNav } from './state/app.actions';
 
 @Component({
   selector: 'app-root',
@@ -51,10 +52,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private authenticateService: AuthenticateDataService,
     private route: Router,
     private router: ActivatedRoute,
-    private activeTrip: ActiveTripDataService,
     private notifyService: NotificationsService,
-    private networkStatus: NetworkStatusAngularService
+    private networkStatus: NetworkStatusAngularService,
+    private store: Store
   ) {
+    this.store.dispatch(new ShowLeftNav(true));
 
 
   }
@@ -66,10 +68,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.loggedInUser = user;
       })
     );
-    this.getLoggedInUser();
+    // this.getLoggedInUser();
 
     this.route.events.subscribe(url => {
-      this.getCurrentRoute();
+      // this.getCurrentRoute();
     });
     this.networkStatus.status.subscribe(res => {
       if (res === false) {

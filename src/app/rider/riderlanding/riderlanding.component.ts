@@ -37,7 +37,7 @@ import { TripsState } from 'src/app/state/trips.state';
 import { SubSink } from 'subsink/dist/subsink';
 import { AppState } from 'src/app/state/app.state';
 import { Users } from 'src/app/models/Users';
-import { GetLoggedInUser } from 'src/app/state/app.actions';
+import { GetLoggedInUser, ShowLeftNav } from 'src/app/state/app.actions';
 import { GetTrips } from 'src/app/state/trips.action';
 
 @Component({
@@ -352,6 +352,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.dispatch(new ShowLeftNav(true));
     this.subs.add(
       this.currentUser$.subscribe(user => {
         this.currentUser = user;
