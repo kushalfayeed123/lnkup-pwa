@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && gzipper --verbose ./dist",
-    "build-prod": "ng build --prod && gzipper --verbose ./dist",
+    "build": "ng build ",
+    "build-prod": "ng build --prod ",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
