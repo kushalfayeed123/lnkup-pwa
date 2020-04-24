@@ -264,7 +264,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
   riderLocation: any;
   riderLocationsLat: any[] = [];
   riderLocationsLong: any[] = [];
-  driverData: import("c:/sandbox/smichael/lnkup-mobile/src/app/models/DriverData").DriverData;
+  driverData: DriverData;
 
   constructor(
     private router: Router,
