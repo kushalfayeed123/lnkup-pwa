@@ -60,11 +60,12 @@ import { NetworkStatusAngularModule } from 'network-status-angular';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
-import { TripsState } from './state/trips.state';
-import { AppState } from './state/app.state';
+
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { DriverState } from './state/driver-data/driverdata.state';
+import { TripsState } from './state/trip/trips.state';
+import { AppState } from './state/app/app.state';
 
 
 
@@ -87,7 +88,6 @@ import { DriverState } from './state/driver-data/driverdata.state';
     ProfileComponent,
     ModalComponent,
     PaymentComponent,
-    SpinnerComponent,
     SupportComponent,
     PaymentModalComponent,
     TripsHistoryComponent

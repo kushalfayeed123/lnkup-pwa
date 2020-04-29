@@ -1,4 +1,4 @@
-import { Users } from '../models/Users';
+import { Users } from 'src/app/models/Users';
 
 export class ShowLeftNav {
   static readonly type = '[App] ShowLeftNav';
@@ -16,11 +16,11 @@ export class SetPreviousRoute {
 
 export class ShowLoader {
   static readonly type = '[App] ShowLoader';
+
+  constructor(public showLoader: boolean) { }
 }
 
-export class HideLoader {
-  static readonly type = '[App] HideLoader';
-}
+
 
 export class ShowSuccessMessage {
   static readonly type = '[App] ShowSuccessMessage';
@@ -45,6 +45,12 @@ export class GetLoggedInUser {
   static readonly type = '[App] GetLoggedInUser';
 
   constructor(public user: Users) { }
+}
+
+export class GetUserByEmail {
+  static readonly type = '[App] GetUserByEmail';
+
+  constructor(public email: string) { }
 }
 
 export class LogOut {

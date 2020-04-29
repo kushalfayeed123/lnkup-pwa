@@ -8,7 +8,6 @@
         <div class="page-heading">
 
         </div>
-        <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
         <!-- <div class="increment-icon">
               <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
               <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
@@ -20,11 +19,11 @@
 
             <mat-form-field class="auth-full-width form-bottom">
                 <input type="text" matInput class="input-color" placeholder="Your destination is"
-                    formControlName="tripDestination"  />
+                    formControlName="tripDestination" />
             </mat-form-field>
             <mat-form-field class="auth-full-width form-bottom">
                 <input type="text" matInput class="input-color" placeholder="Link up with your passengers at"
-                formControlName="tripPickup"  />
+                    formControlName="tripPickup" />
             </mat-form-field>
 
             <!-- <mat-form-field class="auth-full-width form-bottom">
@@ -35,15 +34,16 @@
               </mat-form-field> -->
 
             <mat-form-field class="auth-full-width form-bottom">
-                <input [ngxTimepicker]="min" [min]="dateNow" type="text" matInput class="input-color" placeholder="What time will this trip begin?"
-                formControlName="tripStartDateTime" readonly>
-                <ngx-material-timepicker #min ></ngx-material-timepicker>
+                <input [ngxTimepicker]="min" [min]="dateNow" type="text" matInput class="input-color"
+                    placeholder="What time will this trip begin?" formControlName="tripStartDateTime" readonly>
+                <ngx-material-timepicker #min></ngx-material-timepicker>
             </mat-form-field>
 
 
             <mat-form-field class="auth-full-width form-bottom">
-                <input type="number" #ridersNumber matInput class="input-color" placeholder="How many riders will be joining this trip?"
-                formControlName="maxRiderNumber" (keyup)="computeTripFare(ridersNumber.value)" min="1"/>
+                <input type="number" #ridersNumber matInput class="input-color"
+                    placeholder="How many riders will be joining this trip?" formControlName="maxRiderNumber"
+                    (keyup)="computeTripFare(ridersNumber.value)" min="1" />
             </mat-form-field>
 
             <!-- <mat-form-field class="auth-full-width">

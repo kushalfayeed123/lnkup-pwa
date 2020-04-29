@@ -12,10 +12,10 @@ import { ToastrService } from 'ngx-toastr';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { UserPaymentToken } from 'src/app/models/payment';
 import { Select, Store } from '@ngxs/store';
-import { AppState } from 'src/app/state/app.state';
 import { Users } from 'src/app/models/Users';
 import { SubSink } from 'subsink/dist/subsink';
-import { ShowLeftNav } from 'src/app/state/app.actions';
+import { AppState } from 'src/app/state/app/app.state';
+import { ShowLeftNav, ShowLoader } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-authenticate-user',
@@ -76,7 +76,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-    this.loading = true;
+    this.store.dispatch(new ShowLoader(true));
     this.message = 'Please check your username or password and try again.';
     // // stop here if form is invalid
     if (this.loginForm.invalid) {
@@ -92,13 +92,11 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.updateUserStatus();
-          this.redirectUser();
-          this.loading = false;
         },
         error => {
           this.error = error;
           setTimeout(() => {
-            this.loading = false;
+            this.store.dispatch(new ShowLoader(false));
             this.toastService.showErrorMessage(this.message);
           }, 3000);
         }
@@ -123,7 +121,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       const userData = this.loggedInUser;
       const userRole = this.authenticate.decode();
       const userStatusData = {
-        id: userData.id,
+        userId: userData.id,
         email: userData.email,
         username: userData.userName,
         phoneNumber: userData.phoneNumber,
@@ -135,6 +133,8 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       this.authenticate.update(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(data => {
+          this.store.dispatch(new ShowLoader(false));
+          this.redirectUser();
         });
     }
   }

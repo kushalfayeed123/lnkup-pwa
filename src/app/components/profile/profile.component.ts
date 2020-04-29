@@ -11,10 +11,10 @@ import { PaymentDataService } from 'src/app/services/data/payment/payment.data.s
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { AngularFireStorageReference, AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
 import { Select, Store } from '@ngxs/store';
-import { AppState } from 'src/app/state/app.state';
 import { Users } from 'src/app/models/Users';
 import { SubSink } from 'subsink/dist/subsink';
-import { GetCurrentUser } from 'src/app/state/app.actions';
+import { AppState } from 'src/app/state/app/app.state';
+import { GetCurrentUser } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-profile',

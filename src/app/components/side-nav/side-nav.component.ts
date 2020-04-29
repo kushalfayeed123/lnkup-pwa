@@ -8,10 +8,10 @@ import { Subject } from 'rxjs/internal/Subject';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { Select } from '@ngxs/store';
-import { AppState } from 'src/app/state/app.state';
 import { Observable } from 'rxjs';
 import { Users } from 'src/app/models/Users';
 import { SubSink } from 'subsink/dist/subsink';
+import { AppState } from 'src/app/state/app/app.state';
 
 @Component({
   selector: 'app-side-nav',

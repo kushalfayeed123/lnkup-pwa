@@ -1,69 +1,61 @@
 <section class="auth-pages book-seat  filled-page auth-pages security animated zoomIn" id="ride-confirmation">
 
-    <main class="contain-box " *ngIf="!gettingDrivers">
-      <!-- <nav class="riderHeader">
+  <main class="contain-box " *ngIf="!gettingDrivers">
+    <!-- <nav class="riderHeader">
         <a href="">
           <i class="flaticon-left-arrow"></i>
         </a>
         <h1>Request Summary</h1>
       </nav> -->
-      <div class="page-heading">
-        <p>
-          Please confirm your seat and Drop off.
-        </p>
-      </div>
-      <mat-spinner *ngIf="loading" [diameter]="20"
-      class="loader"
-    ></mat-spinner>
+    <div class="page-heading">
+      <p>
+        Please confirm your seat and Drop off.
+      </p>
+    </div>
+    <form action="" id="book-seat-filled-form">
+      <mat-form-field class="auth-full-width form-bottom">
+        <input type="text" matInput class="input-color" placeholder="Your Dropoff" name="dropoff" [ngModel]=dropoff
+          disabled />
+      </mat-form-field>
 
-      <form action="" id="book-seat-filled-form">
-        <mat-form-field class="auth-full-width form-bottom">
-          <input type="text" matInput class="input-color" placeholder="Your Dropoff"name="dropoff" [ngModel]=dropoff disabled/>
-        </mat-form-field>
+      <mat-form-field class="auth-full-width form-bottom">
+        <input type="number" matInput class="input-color" placeholder="How many seats do you want to book?"
+          name="seatCount" #seatNumber [ngModel]=seatCount (keyup)="computeTripFare(seatNumber.value)" />
+      </mat-form-field>
 
-        <mat-form-field class="auth-full-width form-bottom">
-            <input type="number" matInput class="input-color"
-             placeholder="How many seats do you want to book?" name="seatCount" #seatNumber
-            [ngModel]=seatCount (keyup)="computeTripFare(seatNumber.value)"/>
-        </mat-form-field>
-
-        <div class="payment-options">
-            <div class="c-card">
-            </div>
-            <mat-form-field class="auth-full-width">
-              <mat-label>Your prefered mode of payment</mat-label>
-              <mat-select>
-                  <mat-option  *ngFor="let payment of paymentMethod" [value]="payment.name" (click)="setPaymentMethod(payment.name)">{{payment.name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        <div class="input-group fare-group">
-          <div class="f-total">
-            <label for="">Fare Total</label>
-            <span class="fare-price animated zoomIn">&#8358; {{newFare}}</span>
-          </div>
-          <button type="submit"  id="book-ride" mat-raised-button color="accent"
-          (click)="createRiderRequest()" class="auth-full-width" [disabled]="inValidSeat">Send Request</button>
+      <div class="payment-options">
+        <div class="c-card">
         </div>
+        <mat-form-field class="auth-full-width">
+          <mat-label>Your prefered mode of payment</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let payment of paymentMethod" [value]="payment.name"
+              (click)="setPaymentMethod(payment.name)">{{payment.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="input-group fare-group">
+        <div class="f-total">
+          <label for="">Fare Total</label>
+          <span class="fare-price animated zoomIn">&#8358; {{newFare}}</span>
+        </div>
+        <button type="submit" id="book-ride" mat-raised-button color="accent" (click)="createRiderRequest()"
+          class="auth-full-width" [disabled]="inValidSeat">Send Request</button>
+      </div>
 
-        <!-- <div (click)=cancelRequest() class="cancel">
+      <!-- <div (click)=cancelRequest() class="cancel">
           Cancel Request
         </div> -->
-      </form>
+    </form>
 
-    </main>
+  </main>
 
-    <div *ngIf="gettingDrivers" class="animated zoomIn wait-message">
-      <p class="search">Adding you to the trip, please hold on.</p>
-      <mat-spinner   [diameter]="20"
-      class="loader"
-    ></mat-spinner>
-
+  <div *ngIf="gettingDrivers" class="animated zoomIn wait-message">
+    <p class="search">Adding you to the trip, please hold on.</p>
     <div class="cancel-btn">
-      <button type="submit"  id="book-ride" mat-raised-button color="accent"
-      (click)="cancelRequest()" class="auth-full-width">Cancel Request</button>
+      <button type="submit" id="book-ride" mat-raised-button color="accent" (click)="cancelRequest()"
+        class="auth-full-width">Cancel Request</button>
     </div>
-</div>
+  </div>
 
-  </section>
-
+</section>

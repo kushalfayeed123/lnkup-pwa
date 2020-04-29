@@ -3,9 +3,6 @@
     <div class="page-heading">
       <h1>Signup</h1>
     </div>
-      <mat-spinner *ngIf="loading" [diameter]="20"
-      class="loader"
-    ></mat-spinner>
     <form [formGroup]="registerForm" (ngSubmit)="registerUser()" id="sign-up-form">
       <mat-form-field class="auth-full-width">
         <input type="text" matInput class="input-color" placeholder="First Name" formControlName="userName" />
@@ -25,8 +22,8 @@
       <mat-form-field class="auth-full-width">
         <mat-label>Sign up as</mat-label>
         <mat-select formControlName="role">
-            <mat-option value="Driver">Driver</mat-option>
-            <mat-option value="Rider">Rider</mat-option>
+          <mat-option value="Driver">Driver</mat-option>
+          <mat-option value="Rider">Rider</mat-option>
         </mat-select>
       </mat-form-field>
       <div class="input-group checker">
@@ -37,4 +34,3 @@
     </form>
   </main>
 </section>
-

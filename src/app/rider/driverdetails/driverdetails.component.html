@@ -1,54 +1,51 @@
-
 <div class="destination-container animated zoomIn">
   <swiper [config]="">
-          <div class="swiper-wrapper">
-          <mat-card class="available-drivers-card swiper-slide" >
-          <mat-card-content>
-            <div *ngIf="!isTrips">
-                <p class="search">Fetching your driver's details</p>
-                <mat-spinner   [diameter]="20"
-                class="loader"
-              ></mat-spinner>
-            </div>
+    <div class="swiper-wrapper">
+      <mat-card class="available-drivers-card swiper-slide">
+        <mat-card-content>
+          <div *ngIf="!isTrips">
+            <p class="search">Fetching your driver's details</p>
+          </div>
 
-                    <div class="avd" *ngIf="isTrips">
-                      <!-- <h2 class="heading">Available Drivers</h2> -->
-                      <div class="driver-container">
-                        <div class="driver-track">
-                          <div class="driver-item">
-                            <div class="container-grid">
-                              <div class="avi-info" (deferLoad)="image != null">
-                                <img src="data:image/jpeg;base64,{{image}}" alt="" class="profile-info" *ngIf="image"/>
-                                <img src="./assets/Images/default-user.png" class="profile-info" alt="" *ngIf="!image">
+          <div class="avd" *ngIf="isTrips">
+            <!-- <h2 class="heading">Available Drivers</h2> -->
+            <div class="driver-container">
+              <div class="driver-track">
+                <div class="driver-item">
+                  <div class="container-grid">
+                    <div class="avi-info" (deferLoad)="image != null">
+                      <img src="data:image/jpeg;base64,{{image}}" alt="" class="profile-info" *ngIf="image" />
+                      <img src="./assets/Images/default-user.png" class="profile-info" alt="" *ngIf="!image">
 
-                                <h3 class="driver-name">{{driverName}}</h3>
-                                <div class="location time-text">Trip Start Time</div>
-                                <div class="est sub time">{{tripStartTime}}</div>
-                                </div>
-                              <div class="destination-details">
-                                <div class="time-line-container">
-                                  <ul class="tl">
-                                    <li class="destination">
-                                      <div class="location">{{availableSeats}} available seats</div>
-                                      <div class="seats sub">At &#8358;{{tripPricePerRider}} per seat</div>
-                                    </li>
-                                    <li class="current-location">
-                                      <div class="location">Your Driver's DropOff</div>
-                                      <div class="est sub">{{destination}}</div>
-                                    </li>
-                                  </ul>
-                                </div>
-                                <button *ngIf="showNavBtn" type="submit" mat-raised-button color="accent" class="auth-full-width" (click)="navigateToBookSeat()">Book Seat</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <h3 class="driver-name">{{driverName}}</h3>
+                      <div class="location time-text">Trip Start Time</div>
+                      <div class="est sub time">{{tripStartTime}}</div>
                     </div>
-                  </mat-card-content>
-              </mat-card>
-              <!-- <div class="swiper-button-next"></div>
+                    <div class="destination-details">
+                      <div class="time-line-container">
+                        <ul class="tl">
+                          <li class="destination">
+                            <div class="location">{{availableSeats}} available seats</div>
+                            <div class="seats sub">At &#8358;{{tripPricePerRider}} per seat</div>
+                          </li>
+                          <li class="current-location">
+                            <div class="location">Your Driver's DropOff</div>
+                            <div class="est sub">{{destination}}</div>
+                          </li>
+                        </ul>
+                      </div>
+                      <button *ngIf="showNavBtn" type="submit" mat-raised-button color="accent" class="auth-full-width"
+                        (click)="navigateToBookSeat()">Book Seat</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <!-- <div class="swiper-button-next"></div>
               <div class="swiper-button-prev"></div> -->
-  </div>
+    </div>
   </swiper>
 </div>

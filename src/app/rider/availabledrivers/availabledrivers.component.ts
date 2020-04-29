@@ -1,6 +1,6 @@
 import { MapBroadcastService } from './../../services/business/mapbroadcast.service';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
 import { Router } from '@angular/router';
@@ -9,6 +9,10 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
 
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { bounce } from 'ng-animate';
+import { Select } from '@ngxs/store';
+import { TripsState } from 'src/app/state/trip/trips.state';
+import { ActiveTrips } from 'src/app/models/ActiveTrips';
+import { SubSink } from 'subsink/dist/subsink';
 
 @Component({
   selector: 'app-availabledrivers',
@@ -18,7 +22,12 @@ import { bounce } from 'ng-animate';
   host: { '[@slideInAnimation]': '' }
 })
 export class AvailabledriversComponent implements OnInit, OnDestroy {
+
+  @Select(TripsState.getAvailableTrips) trips$: Observable<ActiveTrips[]>;
+
   private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
+
   bounce: any;
 
   public config: any = {
@@ -44,78 +53,49 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
     private mapService: MapBroadcastService,
     private broadcastService: BroadcastService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.emptyTrip = false;
+    this.subs.add(
+      this.trips$.subscribe(res => {
+        this.availableTrips = res;
+      })
+    );
     this.broadcastService.showTripDetails
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
         this.showTripDetails = data;
-        this.getCurrentDateTime();
       });
     this.getAvailableTrips();
   }
 
 
-  getCurrentDateTime() {
-    this.currentDate = new Date();
-    const currentDate = new Date().getTime();
-    this.dateNow = formatDate(currentDate, ' h:mm a', 'en-US')
-      .toLowerCase()
-      .substring(1);
-  }
 
   getAvailableTrips() {
-    this.mapService.availableTrips
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(trips => {
-        this.availableTrips = trips.filter(
-          d =>
-            d.pickupDistance < 8 &&
-            d.userDriverDestinationDistance < 8 &&
-            d.allowedRiderCount >= 0 &&
-            new Date(d.actualTripStartDateTime) >= this.currentDate
-        );
-        if (this.availableTrips.length < 1) {
-            this.emptyTrip = true;
-            this.broadcastService.publishEmptyTrips(this.emptyTrip);
-        } else {
-          this.emptyTrip = false;
-          this.availableTrips.forEach(element => {
-            const userName = element.tripDriver;
-            if (userName) {
-              this.driverUserName.push(userName.driver.userName);
-            } else {
-              return;
-            }
-            const maxSeats = element.maxRiderNumber;
-            const allowedRiderCount = element.allowedRiderCount;
-            if (allowedRiderCount === 0) {
-              const availableSeat = maxSeats;
-              this.availableSeats.push(availableSeat);
-            } else {
-              const availableSeat = allowedRiderCount;
-              this.availableSeats.push(availableSeat);
-            }
-          });
-        }
-      });
+    this.availableTrips.forEach(element => {
+      const userName = element.tripDriver;
+      if (userName) {
+        this.driverUserName.push(userName.driver.userName);
+      } else {
+        return;
+      }
+      const maxSeats = element.maxRiderNumber;
+      const allowedRiderCount = element.allowedRiderCount;
+      if (allowedRiderCount === 0) {
+        const availableSeat = maxSeats;
+        this.availableSeats.push(availableSeat);
+      } else {
+        const availableSeat = allowedRiderCount;
+        this.availableSeats.push(availableSeat);
+      }
+    });
   }
 
   passTripDetails(userTripId) {
     this.mapService.publishTripDetails(userTripId);
     this.showTripDetails = true;
-   }
-  navToTripSearch() {
-    // const user = JSON.parse(localStorage.getItem('currentUser'));
-    // const userId = user.id;
-    // this.clearLocalStorage();
-    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    // this.router.onSameUrlNavigation = 'reload';
-    // this.router.navigate(['rider/home', userId]);
-    this.showTripDetails = true;
   }
+
 
   clearLocalStorage() {
     localStorage.removeItem('paymentType');

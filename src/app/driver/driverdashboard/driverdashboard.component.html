@@ -26,7 +26,6 @@
   </form>
   <form class="destination-container" *ngIf="!driverNavigate">
     <mat-card class="example-card animated zoomIn">
-      <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
       <mat-card-content *ngIf="currentUser">
         <div class="destination-details animated zoomIn">
           <!-- <p class="move">
@@ -40,7 +39,7 @@
             <div class="driver-name">{{currentUser?.userName}}</div>
             <!-- <span class="driver-stats">Departure: 10:00 am</span> -->
           </div>
-          <div class="driver-id">
+          <div class="driver-id" *ngIf="driverData">
             <div class="platenumber">{{driverData.plateNumber | uppercase }}
             </div>
 

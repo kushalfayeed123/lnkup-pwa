@@ -10,7 +10,6 @@ export class CreateTrip {
 export class GetTrips {
   static readonly type = '[Trips] GetTrips';
 
-  constructor(public allTrips: ActiveTrips[]) { }
 }
 
 export class GetTripById {
@@ -34,4 +33,11 @@ export class DeleteTrip {
 
   constructor(public id: string) {
   }
+
+}
+
+export class GetAvailableTrips {
+  static readonly type: '[Trips] GetAvailableTrips';
+
+  constructor(public availableTrips: ActiveTrips[]) { }
 }

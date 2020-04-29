@@ -10,14 +10,11 @@ import { formatDate } from '@angular/common';
 import { Subject } from 'rxjs/internal/Subject';
 import { Users } from 'src/app/models/Users';
 import { Select, Store } from '@ngxs/store';
-import { TripsState } from 'src/app/state/trips.state';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { Observable } from 'rxjs/internal/Observable';
 import { SubSink } from 'subsink/dist/subsink';
-import { GetTrips } from 'src/app/state/trips.action';
-import { AppState } from 'src/app/state/app.state';
-import { GetCurrentUser, ShowLeftNav } from 'src/app/state/app.actions';
-import { GetDriverData } from 'src/app/state/driver-data/driverdata.action';
+import { AppState } from 'src/app/state/app/app.state';
+import { ShowLeftNav, GetCurrentUser, GetUserByEmail, ShowLoader } from 'src/app/state/app/app.actions';
 
 
 @Component({
@@ -31,6 +28,9 @@ import { GetDriverData } from 'src/app/state/driver-data/driverdata.action';
 export class OnboardingComponent implements OnInit, OnDestroy {
 
   @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
+  @Select(AppState.getUserByEmail) currentUser$: Observable<Users>;
+
+
 
 
   todaysDataTime: any;
@@ -47,6 +47,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   trips: ActiveTrips[];
   currentUser: any;
+  loggedInUser: Users;
+  userByEmail: Users;
 
 
   constructor(
@@ -63,9 +65,13 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(new ShowLeftNav(false));
     this.subs.add(
-      this.loggedInUser$.subscribe(user => {
-        this.currentUser = user;
+      this.loggedInUser$.subscribe(res => {
+        this.loggedInUser = res;
+      }),
+      this.currentUser$.subscribe(res => {
+        this.currentUser = res;
       })
+
     );
     this.getCurrentime();
   }
@@ -79,9 +85,11 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     localStorage.removeItem('driverData');
   }
   getCurrentime() {
-
+    this.store.dispatch(new GetUserByEmail(this.loggedInUser.email));
     if (this.currentUser !== null) {
       this.userName = this.currentUser.userName;
+    } else {
+      this.userName = this.loggedInUser.userName;
     }
     this.todaysDataTime = formatDate(
       this.today,
@@ -98,85 +106,43 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   }
 
   updateUserRole(role) {
-    this.loading = true;
-    this.authService
-      .getByEmail(this.currentUser.email)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        this.userObject = res;
-        this.userObject.role = role;
-        const updatePayload = {
-          userId: this.userObject.userId,
-          email: this.userObject.email,
-          userName: this.userObject.userName,
-          lastName: this.userObject.lastName,
-          phoneNumber: this.userObject.phoneNumber,
-          password: this.userObject.password,
-          token: this.userObject.token,
-          userStatus: this.userObject.userStatus,
-          role: this.userObject.role,
-          signupDate: this.userObject.signupDate,
-          signupTime: this.userObject.signupTime,
-          verificationCode: this.userObject.verificationCode,
-          imageUrl: this.userObject.imageUrl
-        };
+    this.store.dispatch(new ShowLoader(true));
+    const updatePayload = {
+      userId: this.currentUser.userId,
+      email: this.currentUser.email,
+      userName: this.currentUser.userName,
+      lastName: this.currentUser.lastName,
+      phoneNumber: this.currentUser.phoneNumber,
+      token: this.currentUser.token,
+      userStatus: this.currentUser.userStatus,
+      role,
+      signupDate: this.currentUser.signupDate,
+      signupTime: this.currentUser.signupTime,
+      verificationCode: this.currentUser.verificationCode,
+      imageUrl: this.currentUser.imageUrl
+    };
 
+    this.authService
+      .update(updatePayload)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
         this.authService
-          .update(updatePayload)
+          .login(this.currentUser.userName, this.currentUser.password)
           .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(response => {
-            this.authService
-              .login(this.userObject.userName, this.userObject.password)
-              .pipe(takeUntil(this.unsubscribe$))
-              .subscribe(data => {
-                this.store.dispatch(new GetCurrentUser(this.currentUser.id));
-                this.loading = false;
-                console.log(this.currentUser)
-                if (this.currentUser.role === 'Rider') {
-                  this.route.navigate(['rider/home', this.currentUser.id]);
-                } else if (this.currentUser.role === 'Driver') {
-                  this.route.navigate(['driver/home', this.currentUser.id]);
-                } else {
-                  this.route.navigate(['login']);
-                }
-              });
+          .subscribe(data => {
+            this.store.dispatch(new ShowLoader(false))
+            if (data.role === 'Rider') {
+              this.route.navigate(['rider/home', data.id]);
+            } else if (data.role === 'Driver') {
+              this.route.navigate(['driver/home', data.id]);
+            } else {
+              this.route.navigate(['login']);
+            }
           });
       });
   }
 
-  // driverNavToHome() {
-  //   if (this.user !== null) {
-  //     if (this.user.role !== 'Driver') {
-  //       this.notify.showErrorMessage(
-  //         'You are logged in as a rider, please login with your driver account to continue.'
-  //       );
-  //       setTimeout(() => {
-  //         this.route.navigate(['/login']);
-  //       }, 3000);
-  //     } else {
-  //       this.route.navigate([`driver/home/${this.user.id}`]);
-  //     }
-  //   } else {
-  //     this.route.navigate(['/login']);
-  //   }
-  // }
 
-  // riderNavToHome() {
-  //   if (this.user !== null) {
-  //     if (this.user.role !== 'Rider') {
-  //       this.notify.showErrorMessage(
-  //         'You are logged in as a driver, please login with your rider account to continue.'
-  //       );
-  //       setTimeout(() => {
-  //         this.route.navigate(['/login']);
-  //       }, 3000);
-  //     } else {
-  //       this.route.navigate([`rider/home/${this.user.id}`]);
-  //     }
-  //   } else {
-  //     this.route.navigate(['/login']);
-  //   }
-  // }
 
   ngOnDestroy() {
     this.unsubscribe$.next();

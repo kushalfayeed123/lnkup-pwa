@@ -12,10 +12,10 @@ import { takeUntil } from 'rxjs/operators';
 import { ActiveTripDataService } from './services/data/active-trip/active-trip.data.service';
 import { NetworkStatusAngularService } from 'network-status-angular';
 import { Select, Store } from '@ngxs/store';
-import { AppState } from './state/app.state';
 import { Users } from './models/Users';
 import { SubSink } from 'subsink/dist/subsink';
-import { ShowLeftNav } from './state/app.actions';
+import { AppState } from './state/app/app.state';
+import { ShowLeftNav } from './state/app/app.actions';
 
 @Component({
   selector: 'app-root',

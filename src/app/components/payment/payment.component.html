@@ -13,7 +13,8 @@
 
     <form id="payment-form" [formGroup]="cardDetailsForm">
       <div class="cards-container animated slideInRight">
-        <div class="header-text animated zoomIn" *ngIf="!isCash && !isCard && !addCard"> Select your prefered payment method </div>
+        <div class="header-text animated zoomIn" *ngIf="!isCash && !isCard && !addCard"> Select your prefered payment
+          method </div>
         <img src="./assets/Images/003-left-arrow.svg" *ngIf="isCash || isCard" class="left-arrow" alt=""
           (click)="onNoClick()">
         <div class="payment-option animated slideInRight" *ngIf="!isCard && !isCash && !addCard">
@@ -96,7 +97,7 @@
           </div>
         </div>
 
-     
+
       </div>
 
       <div *ngIf="isCash && !isCard" class="animated slideInRight">
@@ -109,21 +110,25 @@
         <!-- <span>Alternate Payment Method</span> -->
         <i class="flaticon-square-add-button" id="add-method"></i>
       </div>
-      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && !isPin && !isOtp" (click)="initiatePayment()">Save
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && !isPin && !isOtp"
+        (click)="initiatePayment()">Save
         Card</button>
-      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && isPin " (click)="initiatePinAuth()">Submit Pin</button>
-      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && isAvs && !isPin && !isOtp" (click)="initiateAvsAuth()">Submit Billing
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && isPin "
+        (click)="initiatePinAuth()">Submit Pin</button>
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && isAvs && !isPin && !isOtp"
+        (click)="initiateAvsAuth()">Submit Billing
         Details</button>
-      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && !isPin && isOtp" (click)="validatePayment()">Submit
+      <button id="use-payment" class="animated zoomIn" *ngIf="isCard && !isAvs && !isPin && isOtp"
+        (click)="validatePayment()">Submit
         OTP</button>
 
-        <div class="flutter animated slideInRight" *ngIf="!isCash && !isCard">
-          <div class="flutter-text">powered by</div>
-          <img src="./assets/Images/Flutterwave-1.png" alt="" class="flutter-img">
-        </div>
+      <div class="flutter animated slideInRight" *ngIf="!isCash && !isCard">
+        <div class="flutter-text">powered by</div>
+        <img src="./assets/Images/Flutterwave-1.png" alt="" class="flutter-img">
+      </div>
     </form>
     <div *ngIf="addCard" class="card-message animated slideInRight">
-      <span >
+      <span>
         You have a card saved already. Do you want to add another card?
       </span>
       <div class="btn-container">
@@ -145,7 +150,5 @@
                 Cash
             </div>
         </div> -->
-    <mat-spinner *ngIf="loading" [diameter]="20" class="loader"></mat-spinner>
-
   </main>
 </section>

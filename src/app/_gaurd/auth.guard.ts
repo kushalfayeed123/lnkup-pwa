@@ -3,8 +3,8 @@ import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { AuthenticateDataService } from '../services/data/authenticate.data.service';
 import { Observable } from 'rxjs';
 import { Select } from '@ngxs/store';
-import { AppState } from '../state/app.state';
 import { Users } from '../models/Users';
+import { AppState } from '../state/app/app.state';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {

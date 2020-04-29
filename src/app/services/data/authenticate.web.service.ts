@@ -8,7 +8,7 @@ import { Users } from 'src/app/models/Users';
 import * as jwt_decode from 'jwt-decode';
 import { environment } from '../../../environments/environment';
 import { Store } from '@ngxs/store';
-import { GetLoggedInUser, GetCurrentUser } from 'src/app/state/app.actions';
+import { GetLoggedInUser } from 'src/app/state/app/app.actions';
 
 
 
@@ -63,7 +63,6 @@ export class AuthenticateWebService implements AuthenticateDataService {
   }
 
   update(user) {
-    console.log(user)
     return this.http.put(`${this.webUrl}/user/${user.userId}`, user);
   }
   updateUserStatus(user: any) {

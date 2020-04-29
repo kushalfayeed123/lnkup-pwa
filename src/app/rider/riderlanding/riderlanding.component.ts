@@ -33,12 +33,13 @@ import { GoogleMapsScriptProtocol } from '@agm/core';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { bounce } from 'ng-animate';
 import { Select, Store } from '@ngxs/store';
-import { TripsState } from 'src/app/state/trips.state';
 import { SubSink } from 'subsink/dist/subsink';
-import { AppState } from 'src/app/state/app.state';
 import { Users } from 'src/app/models/Users';
-import { GetLoggedInUser, ShowLeftNav } from 'src/app/state/app.actions';
-import { GetTrips } from 'src/app/state/trips.action';
+import { AppState } from 'src/app/state/app/app.state';
+import { ShowLeftNav, ShowLoader } from 'src/app/state/app/app.actions';
+import { GetTrips, GetAvailableTrips } from 'src/app/state/trip/trips.action';
+import { TripsState } from 'src/app/state/trip/trips.state';
+
 
 @Component({
   selector: 'app-riderlanding',
@@ -55,6 +56,8 @@ import { GetTrips } from 'src/app/state/trips.action';
 export class RiderlandingComponent implements OnInit, OnDestroy {
 
   @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
+  @Select(TripsState.getTrips) trips$: Observable<ActiveTrips[]>;
+
 
 
   private unsubscribe$ = new Subject<void>();
@@ -353,9 +356,13 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new ShowLeftNav(true));
+    this.store.dispatch(new GetTrips());
     this.subs.add(
       this.currentUser$.subscribe(user => {
         this.currentUser = user;
+      }),
+      this.trips$.subscribe(res => {
+        this.allActiveTrips = res;
       })
     );
 
@@ -375,7 +382,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           this.getPickupDirection();
         }
       });
-    this.sideNavCheck();
     this.route.params.subscribe(p => {
       const userId = p.id;
     });
@@ -621,6 +627,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     });
   }
   getDrivers() {
+    this.store.dispatch(new ShowLoader(true));
     this.loadMarker = true;
     if (!this.userPayment) {
       localStorage.setItem('paymentType', 'cash');
@@ -683,103 +690,113 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       .substring(1);
   }
   getAllActiveTrips(status?) {
-    this.activeTrip.getAllActiveTrips()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        const allActiveTrips = res;
-        if (res.length < 1) {
-          this.notificationService.showInfoMessage(
-            'Sorry there are no trips at the moment. Please try again later.'
+    if (this.allActiveTrips.length < 1) {
+      this.notificationService.showInfoMessage(
+        'Sorry there are no trips at the moment. Please try again later.'
+      );
+      this.showNoTripMessage = true;
+      this.showForm = false;
+      setTimeout(() => {
+        this.loadMarker = false;
+        this.showNoTripMessage = false;
+        this.showForm = true;
+        this.gettingDrivers = false;
+      }, 10000);
+    } else {
+      setTimeout(() => {
+        const activeTrips = JSON.parse(JSON.stringify(this.allActiveTrips));
+        activeTrips.forEach(element => {
+          const tripDestinationLat = Number(element.driverEndLatitude);
+          const tripDestinationLong = Number(element.driverEndLongitude);
+          const pickupLat = Number(element.driverStartLatitude);
+          const pickupLng = Number(element.driverStartLongitude);
+          const origin = JSON.parse(localStorage.getItem('origin'));
+          const userLocation = JSON.parse(
+            localStorage.getItem('currentLocation')
           );
-          this.showNoTripMessage = true;
-          this.showForm = false;
-          setTimeout(() => {
-            this.loadMarker = false;
-            this.showNoTripMessage = false;
-            this.showForm = true;
-            this.gettingDrivers = false;
-          }, 10000);
-        } else {
-          setTimeout(() => {
-            this.passDirection();
-            allActiveTrips.forEach(element => {
-              const tripDestinationLat = Number(element.driverEndLatitude);
-              const tripDestinationLong = Number(element.driverEndLongitude);
-              const pickupLat = Number(element.driverStartLatitude);
-              const pickupLng = Number(element.driverStartLongitude);
-              const origin = JSON.parse(localStorage.getItem('origin'));
-              const userLocation = JSON.parse(
-                localStorage.getItem('currentLocation')
-              );
-              const userDestination = JSON.parse(
-                localStorage.getItem('destination')
-              );
-              const tripEndLocation = new google.maps.LatLng(
-                tripDestinationLat,
-                tripDestinationLong
-              );
-              const riderEndLocation = new google.maps.LatLng(
-                userDestination.lat,
-                userDestination.lng
-              );
-              new google.maps.DistanceMatrixService().getDistanceMatrix(
-                {
-                  travelMode: google.maps.TravelMode.DRIVING,
-                  origins: [tripEndLocation],
-                  destinations: [riderEndLocation],
-                },
-                (results: any) => {
-                  this.destinationDistanceInKm =
-                    results.rows[0].elements[0].distance.value / 1000;
-                  element.userDriverDestinationDistance = this.destinationDistanceInKm;
-                  // this.destinationDistanceInKm.push(destinationDistanceInKm);
-                }
-              );
+          const userDestination = JSON.parse(
+            localStorage.getItem('destination')
+          );
+          const tripEndLocation = new google.maps.LatLng(
+            tripDestinationLat,
+            tripDestinationLong
+          );
+          const riderEndLocation = new google.maps.LatLng(
+            userDestination.lat,
+            userDestination.lng
+          );
+          new google.maps.DistanceMatrixService().getDistanceMatrix(
+            {
+              travelMode: google.maps.TravelMode.DRIVING,
+              origins: [tripEndLocation],
+              destinations: [riderEndLocation],
+            },
+            (results: any) => {
+              this.destinationDistanceInKm =
+                results.rows[0].elements[0].distance.value / 1000;
+              element.userDriverDestinationDistance = this.destinationDistanceInKm;
+              // this.destinationDistanceInKm.push(destinationDistanceInKm);
+            }
+          );
 
-              if (userLocation !== null) {
-                this.start = userLocation;
+          if (userLocation !== null) {
+            this.start = userLocation;
+          } else {
+            this.start = origin;
+          }
+          const currentLocation = new google.maps.LatLng(
+            this.start.lat,
+            this.start.lng
+          );
+          const pickupLocation = new google.maps.LatLng(
+            pickupLat,
+            pickupLng
+          );
+          const request = {
+            origin: pickupLocation,
+            destination: tripEndLocation
+          };
+          localStorage.setItem('pickup', JSON.stringify(pickupLocation));
+          this.getRoutePoints(request);
+          new google.maps.DistanceMatrixService().getDistanceMatrix(
+            {
+              travelMode: google.maps.TravelMode.DRIVING,
+              origins: [currentLocation],
+              destinations: [pickupLocation],
+            },
+            (results: any) => {
+              element.pickupDistance =
+                results.rows[0].elements[0].distance.value / 1000;
+              element.timeToPickup =
+                results.rows[0].elements[0].duration.text;
+              if (!activeTrips) {
+                return;
               } else {
-                this.start = origin;
-              }
-              const currentLocation = new google.maps.LatLng(
-                this.start.lat,
-                this.start.lng
-              );
-              const pickupLocation = new google.maps.LatLng(
-                pickupLat,
-                pickupLng
-              );
-              const request = {
-                origin: pickupLocation,
-                destination: tripEndLocation
-              };
-              localStorage.setItem('pickup', JSON.stringify(pickupLocation));
-              this.getRoutePoints(request);
-              new google.maps.DistanceMatrixService().getDistanceMatrix(
-                {
-                  travelMode: google.maps.TravelMode.DRIVING,
-                  origins: [currentLocation],
-                  destinations: [pickupLocation],
-                },
-                (results: any) => {
-                  element.pickupDistance =
-                    results.rows[0].elements[0].distance.value / 1000;
-                  element.timeToPickup =
-                    results.rows[0].elements[0].duration.text;
-                  if (!allActiveTrips) {
-                    return;
-                  } else {
-                    this.mapService.publishAvailableTrips(allActiveTrips);
-                    this.availableTrips = true;
-                    this.gettingDrivers = false;
-                  }
+                this.allAvailableTrips = activeTrips.filter(d => d.pickupDistance < 8 &&
+                  d.userDriverDestinationDistance < 8 &&
+                  d.allowedRiderCount >= 0 &&
+                  new Date(d.actualTripStartDateTime) >= this.currentDate);
+
+                console.log(this.allAvailableTrips);
+                if (this.allAvailableTrips.length < 1) {
+                  this.store.dispatch(new ShowLoader(false));
+                  this.emptyTrip = true;
+                  this.loadMarker = false;
+                } else {
+                  this.store.dispatch(new GetAvailableTrips(this.allActiveTrips));
+                  this.store.dispatch(new ShowLoader(false));
+                  this.availableTrips = true;
+                  this.gettingDrivers = false;
+                  this.passDirection();
                 }
-              );
-            });
-            this.store.dispatch(new GetTrips(allActiveTrips));
-          }, 5000);
-        }
-      });
+
+              }
+            }
+          );
+        });
+
+      }, 5000);
+    }
   }
 
   navToTripSearch() {

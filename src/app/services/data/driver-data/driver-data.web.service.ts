@@ -13,8 +13,8 @@ import { Bank } from 'src/app/models/Bank';
 @Injectable({ providedIn: 'root' })
 
 export class DriverDataWebService implements DriverDataDataService {
-  
-   
+
+
 
 
   public webUrl: string;
@@ -34,7 +34,7 @@ export class DriverDataWebService implements DriverDataDataService {
 
 
 
- 
+
   // getTripsById(id: any) {
   //   return this.http.get<ActiveTrips>(`${this.webUrl}/ActiveTrip/${id}`);
   // }
@@ -52,44 +52,45 @@ export class DriverDataWebService implements DriverDataDataService {
 
   getAllDriverData() {
     return this.http.get<DriverData[]>(`${this.webUrl}/driverdata`);
-    }
+  }
   getDriverByDriverId(id: any) {
+    console.log(id)
     return this.http.get<DriverData>(`${this.webUrl}/driverdata/${id}`);
-    }
+  }
   createDriverData(driver: DriverData) {
     return this.http.post<DriverData>(`${this.webUrl}/driverdata`, driver);
-    }
+  }
   updateDriverData(id: any, driver: DriverData) {
     return this.http.put<DriverData>(`${this.webUrl}/driverdata/${id}`, driver);
-    }
+  }
   deleteDriverData(id: any) {
     return this.http.delete(`${this.webUrl}/driverdata`, id);
 
-    }
+  }
 
-    getAllLicense() {
-      return this.http.get<DriverLicense[]>(`${this.webUrl}/license`);
-    }
-    getLicenseByDriverId(id: string) {
-      return this.http.get<DriverLicense>(`${this.webUrl}/license/${id}`);
-    }
-    uploadDriverLicense(license: any) {
-      return this.http.post<DriverLicense>(`${this.webUrl}/license`, license);
-    }
-    updateDriverLicense(id: string, license: DriverLicense) {
-      return this.http.put<DriverLicense>(`${this.webUrl}/license/${id}`, license);
-    }
-    deleteDriverLicense(id: any) {
-      return this.http.delete(`${this.webUrl}/license`, id);
-    }
+  getAllLicense() {
+    return this.http.get<DriverLicense[]>(`${this.webUrl}/license`);
+  }
+  getLicenseByDriverId(id: string) {
+    return this.http.get<DriverLicense>(`${this.webUrl}/license/${id}`);
+  }
+  uploadDriverLicense(license: any) {
+    return this.http.post<DriverLicense>(`${this.webUrl}/license`, license);
+  }
+  updateDriverLicense(id: string, license: DriverLicense) {
+    return this.http.put<DriverLicense>(`${this.webUrl}/license/${id}`, license);
+  }
+  deleteDriverLicense(id: any) {
+    return this.http.delete(`${this.webUrl}/license`, id);
+  }
 
-    createDriverAccount(payload) {
-      return this.http.post(`${this.subAccountUrl}/create`, payload);
-    }
+  createDriverAccount(payload) {
+    return this.http.post(`${this.subAccountUrl}/create`, payload);
+  }
 
-    getBanksLookup() {
-      const parameter = {public_key: environment.ravePubKey};
-      return this.http.get<any>(`${this.bankLookupUrl}/${this.country}`, {params: parameter});
-    }
+  getBanksLookup() {
+    const parameter = { public_key: environment.ravePubKey };
+    return this.http.get<any>(`${this.bankLookupUrl}/${this.country}`, { params: parameter });
+  }
 
 }

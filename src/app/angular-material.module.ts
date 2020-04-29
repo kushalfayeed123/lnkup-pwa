@@ -29,6 +29,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { NotificationComponent } from './components/notification/notification.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
    imports: [
@@ -60,7 +61,8 @@ import { NotificationComponent } from './components/notification/notification.co
       MatCarouselModule,
       MatDialogModule
    ],
-   declarations: [NotificationComponent],
+   declarations: [NotificationComponent, SpinnerComponent,
+   ],
    exports: [
       MatButtonModule,
       MatToolbarModule,
@@ -87,7 +89,9 @@ import { NotificationComponent } from './components/notification/notification.co
       MatTabsModule,
       MatCarouselModule,
       MatDialogModule,
-      NotificationComponent
+      NotificationComponent,
+      SpinnerComponent,
+
    ],
    providers: [
       MatDatepickerModule,

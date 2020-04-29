@@ -14,12 +14,12 @@ import { PushNotificationDataService } from '../data/push-notification/push-noti
 import { PushNotificationTokens } from 'src/app/models/pushNotificationTokens';
 import { ActiveTripDataService } from '../data/active-trip/active-trip.data.service';
 import { Select } from '@ngxs/store';
-import { AppState } from 'src/app/state/app.state';
+import { AppState } from 'src/app/state/app/app.state';
 
 @Injectable()
 export class NotificationsService {
 
-  @Select(AppState.getCurrentUser) loggedInUser$: Observable<Users>;
+  @Select(AppState.getUserByEmail) loggedInUser$: Observable<Users>;
 
   user: any;
   webUrl: string;

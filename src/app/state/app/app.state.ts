@@ -1,9 +1,9 @@
-import { Users } from '../models/Users';
-import { Selector, State, StateContext, Action } from '@ngxs/store';
-import { AuthenticateDataService } from '../services/data/authenticate.data.service';
-import { SetPreviousRoute, ShowLoader, HideLoader, GetLoggedInUser, GetCurrentUser, ShowLeftNav } from './app.actions';
+import { Selector, State, StateContext, Action, Store } from '@ngxs/store';
+import { SetPreviousRoute, ShowLoader, GetLoggedInUser, GetCurrentUser, ShowLeftNav, GetUserByEmail } from './app.actions';
 import { tap } from 'rxjs/internal/operators/tap';
 import { Injectable } from '@angular/core';
+import { Users } from 'src/app/models/Users';
+import { AuthenticateDataService } from 'src/app/services/data/authenticate.data.service';
 
 export class AppStateModel {
   loggedInUser: any;
@@ -11,6 +11,7 @@ export class AppStateModel {
   showLoader: boolean;
   showLeftNav: boolean;
   previousRoute: string;
+  userByEmail: any;
 }
 
 @State<AppStateModel>({
@@ -20,7 +21,8 @@ export class AppStateModel {
     loggedInUser: null,
     showLoader: false,
     previousRoute: '',
-    showLeftNav: false
+    showLeftNav: false,
+    userByEmail: null,
   }
 })
 
@@ -40,6 +42,11 @@ export class AppState {
   }
 
   @Selector()
+  static getUserByEmail(state: AppStateModel) {
+    return state.userByEmail;
+  }
+
+  @Selector()
   static getLoggedInUser(state: AppStateModel) {
     return state.loggedInUser;
   }
@@ -55,7 +62,7 @@ export class AppState {
   }
 
 
-  constructor(private auth: AuthenticateDataService) {
+  constructor(private auth: AuthenticateDataService, private store: Store) {
 
   }
 
@@ -69,11 +76,11 @@ export class AppState {
   }
 
   @Action(ShowLoader)
-  showLoader({ getState, setState }: StateContext<AppStateModel>) {
-    const state = getState();
-    setState({
+  showLoader(ctx: StateContext<AppStateModel>, { showLoader }: ShowLoader) {
+    const state = ctx.getState();
+    ctx.setState({
       ...state,
-      showLoader: true
+      showLoader
     });
   }
 
@@ -86,13 +93,17 @@ export class AppState {
     });
   }
 
-  @Action(HideLoader)
-  hideSpinner({ getState, setState }: StateContext<AppStateModel>) {
-    const state = getState();
-    setState({
-      ...state,
-      showLoader: false
-    });
+  @Action(GetUserByEmail)
+  getUserByEmail(ctx: StateContext<AppStateModel>, { email }: GetUserByEmail) {
+    return this.auth.getByEmail(email).pipe(
+      tap(user => {
+        const state = ctx.getState();
+        ctx.setState({
+          ...state,
+          userByEmail: user
+        });
+      })
+    );
   }
 
   @Action(GetLoggedInUser)

@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PaymentMethod } from 'src/app/models/payment';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { Store } from '@ngxs/store';
-import { ShowLeftNav } from 'src/app/state/app.actions';
+import { ShowLeftNav } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-bookseatrequest',

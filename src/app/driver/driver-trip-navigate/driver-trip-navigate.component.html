@@ -2,7 +2,6 @@
 
   <mat-card-content>
     <div class="blink_me" *ngIf="endTrip"></div>
-    <mat-spinner *ngIf="!activeTrip" [diameter]="20" class="loader"></mat-spinner>
     <div *ngIf="isCashPayment" class="animated zoomIn">
       <div>
         The following riders will pay cash
@@ -23,30 +22,31 @@
     </div>
 
     <div class="container-grid animated zoomIn" *ngIf="isActive || !isCashPayment">
-        <div class="riders">
-            <div class="radius" >
-      <swiper [config]="config" class="swiper">
-        <div class="swiper-wrapper">
-          <main class="contain-box  swiper-slide" *ngFor="let rider of tripRiders; let i = index;">
+      <div class="riders">
+        <div class="radius">
+          <swiper [config]="config" class="swiper">
+            <div class="swiper-wrapper">
+              <main class="contain-box  swiper-slide" *ngFor="let rider of tripRiders; let i = index;">
 
                 <div class="avi-info" (deferLoad)="rider.user.userImage !== null">
                   <img src="assets/Images/default-user.png" alt="" class="avi" *ngIf="rider.user.userImage === null" />
                   <img src="data:image/png;base64,{{rider.user.userImage}}" alt="" class="avi avi-blinker"
                     *ngIf="rider.user.userImage !== null" />
-                    <div id="contact "  class="passengers">
-                      <a href="tel:{{riderNumber[i]}}"> <img src="../../../assets/Images/phone.svg" alt="" class="phone-img"></a>
-                       <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
-                     </div>
+                  <div id="contact " class="passengers">
+                    <a href="tel:{{riderNumber[i]}}"> <img src="../../../assets/Images/phone.svg" alt=""
+                        class="phone-img"></a>
+                    <!-- <img src="../../../assets/Images/chat.svg" alt="" class="phone-img"> -->
+                  </div>
                   <div class="passengers">{{rider.user.userName}}</div>
                   <div class="title-heading">Swipe left to view more riders</div>
                 </div>
 
 
-          </main>
+              </main>
+            </div>
+          </swiper>
         </div>
-      </swiper>
-    </div>
-  </div>
+      </div>
       <!-- <div class="share">
                                     <div class="radius primary">
                                       <i class="flaticon-send-1"></i>
@@ -54,7 +54,7 @@
                                     <div>Share</div>
                                   </div> -->
 
-      <div class="destination-details"  *ngIf="activeTrip">
+      <div class="destination-details" *ngIf="activeTrip">
         <div class="time-line-container">
           <ul class="tl">
             <li class="destination">
@@ -84,4 +84,3 @@
   </mat-card-content>
 
 </mat-card>
-
