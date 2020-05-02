@@ -29,7 +29,7 @@ import { UserPaymentToken } from 'src/app/models/payment';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { LocationDataService } from 'src/app/services/data/location/location.data.service';
 import { slideInAnimation } from 'src/app/services/misc/animation';
-import { GoogleMapsScriptProtocol } from '@agm/core';
+import { GoogleMapsScriptProtocol, AgmMap } from '@agm/core';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { bounce } from 'ng-animate';
 import { Select, Store } from '@ngxs/store';
@@ -69,6 +69,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   private heatmap: google.maps.visualization.HeatmapLayer = null;
 
   @ViewChild('search', { static: true }) public searchElement: ElementRef;
+  @ViewChild(AgmMap, { static: false }) map: AgmMap;
+
   style = [
     {
       elementType: 'geometry',
@@ -396,6 +398,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.zoom = 15;
     // this.getAllDriversLocations();
     // this.getEmptyTrips();
+  }
+
+  smoothMapPan() {
+
   }
 
   sideNavCheck() {
@@ -835,13 +841,18 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   storeUserCurrentLocation(result: PlaceResult) {
+    this.map.usePanning = true;
     const userLocation = result.formatted_address;
     this.originAddress = userLocation;
     this.mapService.findOrigin(userLocation);
+    this.map.triggerResize();
     setTimeout(() => {
       // this.showCurrenLocationInput = true;
       this.getCurrentLocation();
     }, 3000);
+  }
+
+  mapSmoothAnimation(destination) {
   }
 
   computeDistance(origin, destination) {

@@ -7,6 +7,12 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { Select, Store } from '@ngxs/store';
+import { AppState } from 'src/app/state/app/app.state';
+import { Observable } from 'rxjs';
+import { Users } from 'src/app/models/Users';
+import { SubSink } from 'subsink/dist/subsink';
+import { GetLoggedInUser, GetCurrentUser } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-support',
@@ -17,7 +23,11 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
 })
 export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
+
+
   @ViewChild('scroll', { static: true }) scroll: any;
+  private subs = new SubSink();
 
   userName: any;
   private unsubscribe$ = new Subject<void>();
@@ -42,10 +52,16 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private _router: Router, private fb: FormBuilder,
     private reviewService: AppReviewDataService,
     private route: ActivatedRoute,
-    private notifyService: NotificationsService) {
+    private notifyService: NotificationsService,
+    private store: Store) {
   }
 
   ngOnInit() {
+    this.subs.add(
+      this.currentUser$.subscribe(res => {
+        this.getCurrentUser(res);
+      })
+    );
     this.notifyService.intiateConnection();
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
@@ -59,7 +75,6 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
       reviewType: ['', [Validators.required]],
       reviewTime: ['', [Validators.required]],
     });
-    this.getCurrentUser();
   }
 
   ngAfterViewInit() {
@@ -87,21 +102,10 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  getCurrentUser() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user) {
-      this.userName = user.userName;
-      this.userId = user.id;
-      this.userRole = user.role.toLowerCase();
-    } else {
-      setTimeout(() => {
-        const user = JSON.parse(localStorage.getItem('currentUser'));
-        this.userName = user.userName;
-        this.userId = user.id;
-        this.userRole = user.role.toLowerCase();
-      }, 5000);
-      return;
-    }
+  getCurrentUser(user) {
+    this.userName = user.userName;
+    this.userId = user.userId;
+    this.userRole = user.role.toLowerCase();
   }
 
   sendGroupMessage(message) {
@@ -110,16 +114,23 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
       message,
       senderId: this.userId
     });
+
+    const pushMessage = {
+      title: `LnkuP message from ${this.userName}`,
+      body: message,
+      receiverName: this.userName,
+      click_action: `https://lnkupmob.azureedge.net/support/${this.userId}?reviewType=chat`
+    };
     this.notifyService.sendGroupMessage(this.groupName, messageObject);
     console.log('group members to send offline message to', this.groupMembers);
-    this.groupMembers.forEach(element => {
-      const receiverId = element;
-      if (receiverId === this.userId) {
-        return;
-      } else {
-        this.notifyService.sendNotification(receiverId, message);
-      }
-    });
+    const membersToReceiveMessage = this.groupMembers.filter(x => x !== this.userId);
+    console.log('members to recieve message', membersToReceiveMessage);
+    this.notifyService.sendNotification(membersToReceiveMessage[0], pushMessage);
+
+    // membersToReceiveMessage.forEach(element => {
+    //   const receiverId = element;
+    //   this.notifyService.sendNotification(receiverId, message);
+    // });
     setTimeout(() => {
       // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
       this.messageForm.reset();
@@ -127,7 +138,6 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   receiveGroupMessage() {
-
     this.notifyService.groupMessage
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
@@ -200,6 +210,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 
 }

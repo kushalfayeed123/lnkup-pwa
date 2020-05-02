@@ -19,11 +19,11 @@
     </div>
   </nav>
   <main class="contain-box" #scroll *ngIf="!loading">
-    <div *ngIf="reviewType==='comment'">
+    <!-- <div *ngIf="reviewType==='comment'">
       Hello {{userName}}, thank you for choosing to ride with LnkuP. If you have any complaints or suggestions, please
       do not hesitate to drop a comment below.
       We will review your comment and get back to you as soon as we can. 😊
-    </div>
+    </div> -->
     <div class="chat-box" *ngIf="!showReview">
       <div class=" message " *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender === userName,
             'send': newMessage.sender !== userName}">

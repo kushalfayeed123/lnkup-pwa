@@ -13,13 +13,14 @@ import { BroadcastService } from './broadcastdata.service';
 import { PushNotificationDataService } from '../data/push-notification/push-notification.data.service';
 import { PushNotificationTokens } from 'src/app/models/pushNotificationTokens';
 import { ActiveTripDataService } from '../data/active-trip/active-trip.data.service';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { AppState } from 'src/app/state/app/app.state';
+import { GetLoggedInUser } from 'src/app/state/app/app.actions';
 
 @Injectable()
 export class NotificationsService {
 
-  @Select(AppState.getUserByEmail) loggedInUser$: Observable<Users>;
+  @Select(AppState.getCurrentUser) loggedInUser$: Observable<Users>;
 
   user: any;
   webUrl: string;
@@ -62,7 +63,8 @@ export class NotificationsService {
     private pushService: PushNotificationDataService,
     private authService: AuthenticateDataService,
     private broadCastService: BroadcastService,
-    private tripService: ActiveTripDataService
+    private tripService: ActiveTripDataService,
+    private store: Store
   ) {
     this.webUrl = environment.openConnect;
   }
@@ -206,15 +208,17 @@ export class NotificationsService {
   }
 
   addUserToGroup(groupName) {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    this.hubConnection.invoke('AddToGroup', groupName)
-      .then(res => {
-        const message = {
-          senderId: user.id
-        };
-        this.sendGroupMessage(groupName, message);
-        console.log('added user to group', groupName);
-      });
+    this.loggedInUser$.subscribe(user => {
+      this.hubConnection.invoke('AddToGroup', groupName)
+        .then(res => {
+          console.log(res);
+          const message = {
+            senderId: user.userId
+          };
+          this.sendGroupMessage(groupName, message);
+          console.log('added user to group', groupName);
+        });
+    });
   }
 
   removeUserFromGroup(groupName) {
@@ -225,7 +229,7 @@ export class NotificationsService {
   }
 
   sendGroupMessage(groupName, message) {
-    this.hubConnection.send('SendGroupMessage', groupName, message)
+    this.hubConnection.send('ReceiveGroupMessage', groupName, message)
       .then(res => {
         const sentFlag = true;
         this._sentFlag.next(sentFlag);

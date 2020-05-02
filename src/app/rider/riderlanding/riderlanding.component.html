@@ -3,7 +3,7 @@
 
 <div class="avd-container">
   <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style"
-    [usePanning]="true" [zoomControl]="false" [streetViewControl]="false">
+    [panControl]="true" [zoomControl]="false" [streetViewControl]="false" [mapTypeId]="'roadmap'">
     <!-- <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
       </agm-marker> -->
 
