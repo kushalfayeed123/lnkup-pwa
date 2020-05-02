@@ -66,6 +66,10 @@ export class NotificationsService {
     private tripService: ActiveTripDataService,
     private store: Store
   ) {
+    this.loggedInUser$.subscribe(res => {
+      this.userId = res.userId;
+      this.loggedInUser = res;
+    });
     this.webUrl = environment.openConnect;
   }
 
@@ -258,10 +262,7 @@ export class NotificationsService {
   }
 
   async intiateConnection() {
-    this.loggedInUser$.subscribe(res => {
-      this.userId = res.userId;
-      this.loggedInUser = res;
-    });
+
     const loginToken = this.loggedInUser.token;
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${this.webUrl}`, { accessTokenFactory: () => loginToken })

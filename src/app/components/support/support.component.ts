@@ -60,6 +60,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subs.add(
       this.currentUser$.subscribe(res => {
         this.getCurrentUser(res);
+
       })
     );
     this.notifyService.intiateConnection();
@@ -125,12 +126,12 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('group members to send offline message to', this.groupMembers);
     const membersToReceiveMessage = this.groupMembers.filter(x => x !== this.userId);
     console.log('members to recieve message', membersToReceiveMessage);
-    this.notifyService.sendNotification(membersToReceiveMessage[0], pushMessage);
+    // this.notifyService.sendNotification(membersToReceiveMessage[0], pushMessage);
 
-    // membersToReceiveMessage.forEach(element => {
-    //   const receiverId = element;
-    //   this.notifyService.sendNotification(receiverId, message);
-    // });
+    membersToReceiveMessage.forEach(element => {
+      const receiverId = element;
+      this.notifyService.sendNotification(receiverId, pushMessage);
+    });
     setTimeout(() => {
       // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
       this.messageForm.reset();
