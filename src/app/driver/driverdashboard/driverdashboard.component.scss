@@ -2,6 +2,10 @@
   height: 100%;
 }
 
+.avd-container {
+  height: 108.2%;
+}
+
 .contain-box {
   padding: 54px 32px !important;
   height: 95vh;
@@ -17,7 +21,7 @@
 }
 #search-form input {
   border: 0;
-  width: 97%;
+  width: 96%;
   margin-right: auto;
   margin-left: auto;
   display: block;
@@ -58,7 +62,7 @@
   margin-left: 7px;
   margin-right: 7px;
   position: absolute;
-  top: 79%;
+  top: 77.2%;
   width: -webkit-fill-available;
 }
 .driver-id {
@@ -389,20 +393,17 @@ body.map-body .avd li:first-of-type::before {
   -o-border-radius: 50%;
 }
 
-
-
 @media only screen and (max-width: 600px) and (min-width: 500px) {
   .destination-container {
     top: 84%;
   }
 }
 
-
 @media only screen and (max-width: 800px) and (min-width: 600px) {
   .destination-container {
-    top: 82.5%;  }
+    top: 82.5%;
+  }
 }
-
 
 @media only screen and (min-height: 532px) and (max-height: 550px) {
   #search-form {
@@ -417,7 +418,7 @@ body.map-body .avd li:first-of-type::before {
     bottom: 170px;
   }
   .destination-container {
-    top: 363px;
+    top: 338px;
   }
 }
 
@@ -427,7 +428,7 @@ body.map-body .avd li:first-of-type::before {
   // }
 
   .destination-container {
-    top: 436px;
+    top: 409px;
   }
 }
 
@@ -437,17 +438,17 @@ body.map-body .avd li:first-of-type::before {
   // }
 
   .destination-container {
-    top: 464px;
+    top: 435px;
   }
 }
 @media only screen and (min-height: 700px) and (max-height: 731px) {
   .destination-container {
-    top: 520px;
+    top: 499px;
   }
 }
 @media only screen and (min-height: 732px) and (max-height: 736px) {
   .destination-container {
-    top: 524px;
+    top: 504px;
   }
 }
 
@@ -475,6 +476,6 @@ body.map-body .avd li:first-of-type::before {
     bottom: 161px;
   }
   .destination-container {
-    top: 80.5%;
+    top: 77.6%;
   }
 }

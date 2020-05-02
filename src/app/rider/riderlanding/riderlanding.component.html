@@ -3,7 +3,7 @@
 
 <div class="avd-container">
   <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" (mapReady)="mapReading()" [styles]="style"
-    [usePanning]="true" [zoomControl]="false" [disableDefaultUI]="true">
+    [usePanning]="true" [zoomControl]="false" [streetViewControl]="false">
     <!-- <agm-marker [(latitude)]="latitude" [(longitude)]="longitude" [markerDraggable]="true" >
       </agm-marker> -->
 
@@ -42,6 +42,17 @@
       [markerOptions]="markerOptions"></agm-direction>
 
   </agm-map>
+  <div *ngIf="emptyTrip" class="driver-message-card animated zoomIn">
+    <mat-card class="message-card-body  ">
+      <mat-card-content>
+        <div class="search">Sorry, there are no drivers headed in your direction at this time. Please try again
+          shortly.
+        </div>
+        <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn"
+          (click)="navToTripSearch()">Back</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
   <ng-container *ngIf="!availableTrips && !emptyTrip">
     <form id="search-form" *ngIf="showForm " class="animated zoomIn">
       <input *ngIf="!riderLink" type="text" name="destinationAddress" id="" class="destination"
@@ -54,6 +65,8 @@
         <div *ngIf="gettingDrivers " class="animated zoomIn">
           <p class="search">Please hold on while we search for drivers near you</p>
         </div>
+
+
 
         <mat-card-content *ngIf="!gettingDrivers && !showNoTripMessage">
           <mat-form-field class="auth-full-width" (click)="toggleInput()" *ngIf="!showInput">
@@ -87,15 +100,6 @@
 
 </div>
 
-<div *ngIf="emptyTrip" class="driver-message-card animated zoomIn">
-  <mat-card class="message-card-body  ">
-    <mat-card-content>
-      <div class="search">Sorry, there are no drivers headed in your direction at this time. Please try again shortly.
-      </div>
-      <button type="submit" mat-raised-button color="accent" class="auth-full-width cancel-btn"
-        (click)="navToTripSearch()">Back</button>
-    </mat-card-content>
-  </mat-card>
-</div>
+
 
 <app-availabledrivers *ngIf="availableTrips"></app-availabledrivers>

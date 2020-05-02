@@ -14,6 +14,12 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
 import { formatDate } from '@angular/common';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { Select } from '@ngxs/store';
+import { AppState } from 'src/app/state/app/app.state';
+import { Observable } from 'rxjs';
+import { Users } from 'src/app/models/Users';
+import { TripsState } from 'src/app/state/trip/trips.state';
+import { SubSink } from 'subsink/dist/subsink';
 
 @Component({
   selector: 'app-driver-trip-navigate',
@@ -23,6 +29,10 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   host: { '[@slideInAnimation]': '' }
 })
 export class DriverTripNavigateComponent implements OnInit, OnDestroy {
+  @Select(AppState.getCurrentUser) user$: Observable<Users>;
+  @Select(TripsState.getSelectedTrip) trips$: Observable<ActiveTrips>;
+
+
   public config: any = {
     navigation: {
       nextEl: '.swiper-button-next',
@@ -33,6 +43,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   };
   activeTripId: string;
   private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
   activeTrip: ActiveTrips;
   tripRiders: ActiveRiders[];
   startTrip: boolean;
@@ -57,24 +68,30 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   dateNow: any;
   activeTripObject: any;
   endMessage: string;
+  currentUser: Users;
 
 
 
   constructor(private tripService: ActiveTripDataService,
-              private broadCastService: BroadcastService,
-              public dialog: MatDialog,
-              private router: Router,
-              private notifyService: NotificationsService,
-              private authService: AuthenticateDataService,
-              private paymentService: PaymentDataService) { }
+    private broadCastService: BroadcastService,
+    public dialog: MatDialog,
+    private router: Router,
+    private notifyService: NotificationsService,
+    private authService: AuthenticateDataService,
+    private paymentService: PaymentDataService) { }
 
   ngOnInit() {
-    this.getUser();
+    this.subs.add(
+      this.user$.subscribe(res => {
+        this.currentUser = res;
+        this.getUser(res);
+
+      })
+    );
     this.getActiveTrip();
   }
-  getUser() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    this.userId = user.id;
+  getUser(user) {
+    this.userId = user.userId;
     this.email = user.email;
   }
   getActiveTrip() {
@@ -90,6 +107,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
         if (activeTrip) {
           this.activeTrip = activeTrip;
           this.tripRiders = activeTrip.activeRiders.filter(x => x.tripStatus === '2');
+          console.log(this.tripRiders);
           this.tripRiders.forEach(tel => {
             let riderNumber = tel.user.phoneNumber;
             riderNumber = riderNumber.slice(0, 4) + riderNumber.slice(5);
@@ -197,7 +215,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
 
   startActiveTrip() {
     this.getCurrentDateTime();
-    const tripStartTime =  {actual: this.currentDate, time: this.dateNow};
+    const tripStartTime = { actual: this.currentDate, time: this.dateNow };
     localStorage.setItem('tripStartDateTime', JSON.stringify(tripStartTime));
     this.startTrip = true;
     this.endTrip = true;
@@ -218,7 +236,7 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '90%',
       panelClass: 'dialog',
-      data: { name: this.name, price: driverFee, showCancel: false  }
+      data: { name: this.name, price: driverFee, showCancel: false }
     });
     if (this.cashRiders.length > 0) {
       this.isCashPayment = true;
@@ -254,8 +272,8 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
       data: { name: this.name, price: null, showCancel: false }
     });
     dialogRef.afterClosed().subscribe(result => {
-        this.makePayment();
-  });
+      this.makePayment();
+    });
   }
 
   clearLocations() {
@@ -266,14 +284,14 @@ export class DriverTripNavigateComponent implements OnInit, OnDestroy {
   sendTripMessage(status: string) {
     this.tripRiders.forEach(element => {
       const recieverId = element.userId;
-      const receiver  = element.user.userName;
+      const receiver = element.user.userName;
       if (status === 'end') {
         if (element.paymentType === 'Card') {
           // tslint:disable-next-line: max-line-length
-          this.endMessage =  `Your trip has ended. A sum of ₦ ${element.tripFee} will be charged on your card. Thank you for riding with lnkup.`;
+          this.endMessage = `Your trip has ended. A sum of ₦ ${element.tripFee} will be charged on your card. Thank you for riding with lnkup.`;
         } else {
           // tslint:disable-next-line: max-line-length
-          this.endMessage = ` Your trip has ended. Please pay ${this.activeTrip.tripDriver.userName} a sum of ₦ ${element.tripFee} cash. Thank you for riding with lnkup.`;
+          this.endMessage = ` Your trip has ended. Please pay ${this.activeTrip.tripDriver.driver.userName} a sum of ₦ ${element.tripFee} cash. Thank you for riding with lnkup.`;
         }
         // tslint:disable-next-line: max-line-length
         const pushMessage = {

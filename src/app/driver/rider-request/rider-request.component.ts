@@ -12,6 +12,13 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
 import { MatDialog } from '@angular/material';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { BroadcastService } from 'src/app/services/business/broadcastdata.service';
+import { Select, Store } from '@ngxs/store';
+import { AppState } from 'src/app/state/app/app.state';
+import { Observable } from 'rxjs';
+import { Users } from 'src/app/models/Users';
+import { SubSink } from 'subsink/dist/subsink';
+import { ShowLoader } from 'src/app/state/app/app.actions';
+import { TripsState } from 'src/app/state/trip/trips.state';
 
 @Component({
   selector: 'app-rider-request',
@@ -20,9 +27,15 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
   animations: [slideInAnimation],
   host: { '[@slideInAnimation]': '' }
 })
-export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
+export class RiderRequestComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  @Select(AppState.getCurrentUser) user$: Observable<Users>;
+  @Select(TripsState.getSelectedTrip) trips$: Observable<ActiveTrips>;
+
+
 
   private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
   public config: any = {
     navigation: {
       nextEl: '.swiper-button-next',
@@ -45,18 +58,25 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
   loading: boolean;
   allRiderRequest: number;
   cancelLoading: boolean;
+  currentUser: Users;
 
   constructor(private tripService: ActiveTripDataService,
-              private notifyService: NotificationsService,
-              private riderService: ActiveRiderDataService,
-              private broadcastService: BroadcastService,
-              public dialog: MatDialog,
-              private router: Router) {
-                this.notifyService.intiateConnection();
+    private notifyService: NotificationsService,
+    private riderService: ActiveRiderDataService,
+    private broadcastService: BroadcastService,
+    public dialog: MatDialog,
+    private router: Router,
+    private store: Store) {
+    this.notifyService.intiateConnection();
   }
 
   ngOnInit() {
-    this.getActiveTrips();
+    this.subs.add(
+      this.user$.subscribe(res => {
+        this.currentUser = res;
+        this.getTripData();
+      })
+    )
   }
   ngAfterViewInit() {
     this.getDriverSuccessAlert();
@@ -64,9 +84,7 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
   }
 
   navToSupport() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
-    this.router.navigate(['support', userId]);
+    this.router.navigate(['support', this.currentUser.userId]);
   }
 
   getTripData() {
@@ -144,56 +162,56 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
         const message = `Meet ${driverName}
       at ${pickup} on or before ${pickupTime}`;
         const pushMessage = {
-        title: 'LnkuP',
-        body: message,
-        click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
-        receiverName: receiver
-      };
+          title: 'LnkuP',
+          body: message,
+          click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
+          receiverName: receiver
+        };
         if (this.allowedRiderCount < 1) {
-        this.newAllowedRiderCount = this.maxSeat - bookedSeat;
-      } else {
-        this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
-      }
+          this.newAllowedRiderCount = this.maxSeat - bookedSeat;
+        } else {
+          this.newAllowedRiderCount = this.allowedRiderCount - bookedSeat;
+        }
         const startTime = localStorage.getItem('startTime');
         const activeRider = {
-        tripStatus: '2',
-        paymentStatus: '0',
-        riderConnectId: riderConnectionId,
-      };
+          tripStatus: '2',
+          paymentStatus: '0',
+          riderConnectId: riderConnectionId,
+        };
         this.riderService.update(riderId, activeRider)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(data => {
-        }, error => {
-          console.log(error);
-        });
-  
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(data => {
+          }, error => {
+            console.log(error);
+          });
+
         if (this.newAllowedRiderCount < 1) {
-        this.activeTripStatus = 2;
-      } else {
-        this.activeTripStatus = 1;
-      }
+          this.activeTripStatus = 2;
+        } else {
+          this.activeTripStatus = 1;
+        }
         const activeTrip = {
-        driverTripStatus: this.activeTripStatus,
-        allowedRiderCount: this.newAllowedRiderCount,
-        tripConnectionId,
-        actualTripEndDateTime: '',
-        tripEndDateTime: '',
-        actualTripStartDateTime: startTime.toString(),
-        tripStartDateTime: pickupTime,
-      };
-  
-  
+          driverTripStatus: this.activeTripStatus,
+          allowedRiderCount: this.newAllowedRiderCount,
+          tripConnectionId,
+          actualTripEndDateTime: '',
+          tripEndDateTime: '',
+          actualTripStartDateTime: startTime.toString(),
+          tripStartDateTime: pickupTime,
+        };
+
+
         this.tripService.updateTrip(this.activeTripId, activeTrip)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(response => {
-          this.notifyService.sendNotification(receiverId, pushMessage);
-          setTimeout(() => {
-            this.notifyService.sendAcceptMessage(receiverId, message);
-          }, 5000);
-  
-        }, error => {
-          console.log(error);
-        });
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(response => {
+            this.notifyService.sendNotification(receiverId, pushMessage);
+            setTimeout(() => {
+              this.notifyService.sendAcceptMessage(receiverId, message);
+            }, 5000);
+
+          }, error => {
+            console.log(error);
+          });
       });
     } else {
       newRequest.forEach(rider => {
@@ -202,85 +220,80 @@ export class RiderRequestComponent implements OnInit, OnDestroy,AfterViewInit {
         const riderId = rider.activeRiderId;
         const receiver = rider.user.userName;
         const receiverId = rider.user.userId;
-     
+
         const riderConnectionId = rider.riderConnectId;
         const message = `${driverName}
         has cancelled this trip. Please search for another trip. Thank you.`;
         const pushMessage = {
-        title: 'LnkuP',
-        body: message,
-        click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
-        receiverName: receiver
-      };
+          title: 'LnkuP',
+          body: message,
+          click_action: `https://lnkupmob.azureedge.net/rider/home/${riderId}?riderLink=true`,
+          receiverName: receiver
+        };
         const activeRider = {
-        tripStatus: '3',
-        paymentStatus: '0',
-        riderConnectId: riderConnectionId,
-      };
+          tripStatus: '3',
+          paymentStatus: '0',
+          riderConnectId: riderConnectionId,
+        };
         this.riderService.update(riderId, activeRider)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(data => {
-        }, error => {
-          console.log(error);
-        });
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(data => {
+          }, error => {
+            console.log(error);
+          });
         const activeTrip = {
-        driverTripStatus: 4,
-        allowedRiderCount: this.newAllowedRiderCount,
-        tripConnectionId
-      };
+          driverTripStatus: 4,
+          allowedRiderCount: this.newAllowedRiderCount,
+          tripConnectionId
+        };
         this.tripService.updateTrip(this.activeTripId, activeTrip)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(response => {
-          this.getActiveTrips();
-          this.notifyService.sendNotification(receiverId, pushMessage);
-          setTimeout(() => {
-            this.notifyService.sendRejectMessage(receiverId, message);
-          }, 5000);
-          const user = JSON.parse(localStorage.getItem('currentUser'));
-          const userId = user.id;
-          this.cancelLoading = false;
-          this.router.navigate(['driver/home', userId]);
-        }, error => {
-          console.log(error);
-        });
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(response => {
+            this.getActiveTrips();
+            this.notifyService.sendNotification(receiverId, pushMessage);
+            setTimeout(() => {
+              this.notifyService.sendRejectMessage(receiverId, message);
+            }, 5000);
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            this.cancelLoading = false;
+            this.router.navigate(['driver/home', this.currentUser.userId]);
+          }, error => {
+            console.log(error);
+          });
       });
     }
   }
 
   startTrip() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
     const name = `You have ${this.riderRequestLength} riders in this trip, continue?`;
     if (this.riderRequestLength < this.maxSeat) {
       const dialogRef = this.dialog.open(ModalComponent, {
         width: '90%',
         panelClass: 'dialog',
-        data: { name,  price: null, showCancel: true }
+        data: { name, price: null, showCancel: true }
       });
       dialogRef.afterClosed().subscribe(result => {
         this.broadcastService.modalStat
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(res => {
-          if (res === true) {
-            this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
-          } else {
-            return;
-          }
-        });
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(res => {
+            if (res === true) {
+              this.router.navigate(['driver/home', this.currentUser.userId], { queryParams: { driverNav: true } });
+            } else {
+              return;
+            }
+          });
       });
 
-      } else {
-        this.router.navigate(['driver/home', userId], { queryParams: { driverNav: true } });
-      }
+    } else {
+      this.router.navigate(['driver/home', this.currentUser.userId], { queryParams: { driverNav: true } });
+    }
   }
   cancelActiveTrip() {
+    this.store.dispatch(new ShowLoader(false));
     this.cancelLoading = true;
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
-    const tripConnectionId = localStorage.getItem('clientConnectionId');
     if (this.riderRequestLength < 1) {
       this.cancelLoading = false;
-      this.router.navigate(['driver/home', userId]);
+      this.router.navigate(['driver/home', this.currentUser.userId]);
     } else {
       this.tripProcess(false, this.riderRequest);
     }

@@ -15,7 +15,7 @@ export class GetTrips {
 export class GetTripById {
   static readonly type = '[Trips] GetById';
 
-  constructor(public payload: ActiveTrips, public id: ActiveTrips) {
+  constructor(public id: any) {
 
   }
 }

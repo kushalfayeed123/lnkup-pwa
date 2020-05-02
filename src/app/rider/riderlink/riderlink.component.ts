@@ -16,6 +16,14 @@ import { PaymentDataService } from 'src/app/services/data/payment/payment.data.s
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
 import { UserPaymentToken } from 'src/app/models/payment';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { Select, Store } from '@ngxs/store';
+import { AppState } from 'src/app/state/app/app.state';
+import { Observable } from 'rxjs';
+import { SubSink } from 'subsink/dist/subsink';
+import { TripsState } from 'src/app/state/trip/trips.state';
+import { ActiveTrips } from 'src/app/models/ActiveTrips';
+import { GetTripById } from 'src/app/state/trip/trips.action';
+import { ShowLeftNav } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-riderlink',
@@ -25,7 +33,12 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   host: { '[@slideInAnimation]': '' }
 })
 export class RiderlinkComponent implements OnInit, OnDestroy {
+  @Select(AppState.getCurrentUser) user$: Observable<Users>;
+  @Select(TripsState.getSelectedTrip) trips$: Observable<ActiveTrips>;
+
+
   private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
   riderRequestData: any;
   pickupAddress: string;
   driverName: any;
@@ -49,16 +62,20 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   onGoingTrip: boolean;
   hideCancelButton: boolean;
   loading: boolean;
+  user: Users;
+  trip: ActiveTrips;
+  driver: any;
 
   constructor(private driverDataService: DriverDataDataService,
-              private riderService: ActiveRiderDataService,
-              private tripService: ActiveTripDataService,
-              private authService: AuthenticateDataService,
-              public dialog: MatDialog,
-              private broadCastService: BroadcastService,
-              private notifyService: NotificationsService,
-              private paymentService: PaymentDataService,
-              private router: Router) {
+    private riderService: ActiveRiderDataService,
+    private tripService: ActiveTripDataService,
+    private authService: AuthenticateDataService,
+    public dialog: MatDialog,
+    private broadCastService: BroadcastService,
+    private notifyService: NotificationsService,
+    private paymentService: PaymentDataService,
+    private router: Router,
+    private store: Store) {
 
     this.notifyService.endTrip
       .pipe(takeUntil(this.unsubscribe$))
@@ -73,8 +90,19 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getUserdata();
-    this.getRiderRequest();
+    this.store.dispatch(new ShowLeftNav(false));
+    this.subs.add(
+      this.user$.subscribe(res => {
+        this.user = res;
+        this.getUserdata(res);
+      }),
+      this.trips$.subscribe(res => {
+        this.trip = res;
+        this.getRiderRequest();
+        this.getActiveRiderData();
+      })
+    );
+    console.log(this.trip);
     this.getRiderDeclineAlert();
   }
 
@@ -83,8 +111,6 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   getRiderRequest() {
     this.riderRequestData = JSON.parse(localStorage.getItem('riderRequest'));
     const trip = JSON.parse(localStorage.getItem('tripDetails'));
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    this.userId = user.id;
     this.pickupAddress = trip.tripPickup;
     const driverId = trip.driverId;
     this.getDriverData();
@@ -92,10 +118,8 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   }
 
   navToSupport() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = user.id;
     this.broadCastService.publishSideNavValue(true);
-    this.router.navigate(['support', userId]);
+    this.router.navigate(['support', this.user.userId]);
   }
 
   // listenToTripCancel() {
@@ -117,37 +141,25 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
         }
       });
   }
-  getUserdata() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
+  getUserdata(user) {
     this.email = user.email;
     const request = JSON.parse(localStorage.getItem('riderRequest'));
     this.tripFee = request.tripFee;
-    this.getActiveRiderData();
   }
 
   getDriverData() {
-    this.loading = true;
     const driverData = JSON.parse(localStorage.getItem('tripDetails'));
-    const driverUserId = driverData.driverUserId;
     this.plateNumber = driverData.plateNumber;
     this.driverAccountId = driverData.driverAccountId;
-    this.authService.getById(driverUserId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        this.driverData = res;
-        this.loading = false;
-        const driverNumber = res.phoneNumber;
-        this.driverName = res.userName;
-        this.driverNumber = driverNumber.slice(0, 4) + driverNumber.slice(5);
-        // this.notifyService.addUserToGroup(this.driverName);
-        localStorage.setItem('groupName', this.driverName);
-      });
+    this.driver = this.trip.tripDriver.driver;
+    this.driverName = this.trip.tripDriver.driver.userName;
+    const driverNumber = this.trip.tripDriver.driver.phoneNumber;
+    this.driverNumber = driverNumber.slice(0, 4) + driverNumber.slice(5);
+    localStorage.setItem('groupName', this.driverName);
   }
 
   getLoggedInUserPaymentData() {
-    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
-    const userId = loggedInUser.id;
-    this.authService.getById(userId)
+    this.authService.getById(this.user.userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(token => {
         this.userPaymentData = token.userPaymentData;
@@ -160,9 +172,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       this.generateReference();
       const message = 'We are currently processing your payment please hold on.';
       this.notifyService.showInfoMessage(message);
-      const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
-      const userId = loggedInUser.id;
-      this.authService.getById(userId)
+      this.authService.getById(this.user.userId)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(token => {
           this.userPaymentData = token.userPaymentData;
@@ -184,20 +194,15 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   }
 
   getActiveRiderData() {
-    const trip = JSON.parse(localStorage.getItem('riderRequest'));
-    const tripId = trip.tripId;
-    this.tripService.getTripsById(tripId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        const activeRiders = res.activeRiders;
-        activeRiders.filter(a => a.userId === this.userId);
-        if (activeRiders) {
-          const onGoingTrip = true;
-          localStorage.setItem('onGoingTrip', JSON.stringify(onGoingTrip));
-        }
-        this.activeRiderId = activeRiders[0].activeRiderId;
-        this.riderConnectId = activeRiders[0].riderConnectId;
-      });
+    console.log(this.trip);
+    const activeRiders = this.trip.activeRiders;
+    activeRiders.filter(a => a.userId === this.user.userId);
+    if (activeRiders) {
+      const onGoingTrip = true;
+      localStorage.setItem('onGoingTrip', JSON.stringify(onGoingTrip));
+    }
+    this.activeRiderId = activeRiders[0].activeRiderId;
+    this.riderConnectId = activeRiders[0].riderConnectId;
   }
 
   confirmPayment() {

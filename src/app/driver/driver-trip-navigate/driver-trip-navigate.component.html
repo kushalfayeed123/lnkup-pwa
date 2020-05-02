@@ -28,10 +28,10 @@
             <div class="swiper-wrapper">
               <main class="contain-box  swiper-slide" *ngFor="let rider of tripRiders; let i = index;">
 
-                <div class="avi-info" (deferLoad)="rider.user.userImage !== null">
-                  <img src="assets/Images/default-user.png" alt="" class="avi" *ngIf="rider.user.userImage === null" />
-                  <img src="data:image/png;base64,{{rider.user.userImage}}" alt="" class="avi avi-blinker"
-                    *ngIf="rider.user.userImage !== null" />
+                <div class="avi-info" (deferLoad)="rider.user.imageUrl !== null">
+                  <img src="assets/Images/default-user.png" alt="" class="avi" *ngIf="rider.user.imageUrl === null" />
+                  <img src="{{rider.user.imageUrl}}" alt="" class="avi avi-blinker"
+                    *ngIf="rider.user.imageUrl !== null" />
                   <div id="contact " class="passengers">
                     <a href="tel:{{riderNumber[i]}}"> <img src="../../../assets/Images/phone.svg" alt=""
                         class="phone-img"></a>

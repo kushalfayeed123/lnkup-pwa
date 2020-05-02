@@ -9,10 +9,12 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
 
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { bounce } from 'ng-animate';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { TripsState } from 'src/app/state/trip/trips.state';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { SubSink } from 'subsink/dist/subsink';
+import { GetTripById } from 'src/app/state/trip/trips.action';
+import { ShowLoader } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-availabledrivers',
@@ -50,9 +52,8 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   dateNow: any;
 
   constructor(
-    private mapService: MapBroadcastService,
     private broadcastService: BroadcastService,
-    private router: Router
+    private store: Store
   ) { }
 
   ngOnInit() {
@@ -92,7 +93,7 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   }
 
   passTripDetails(userTripId) {
-    this.mapService.publishTripDetails(userTripId);
+    this.store.dispatch(new GetTripById(userTripId));
     this.showTripDetails = true;
   }
 

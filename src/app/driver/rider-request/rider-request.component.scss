@@ -4,7 +4,6 @@ ride-details variant
 =============================
 */
 
-
 .ride section.auth-pages.security#ride-confirmation .item-details.dd {
   display: block;
 }
@@ -20,18 +19,23 @@ ride-details variant
   margin-right: 17%;
 }
 
-.ride section.auth-pages.security#ride-confirmation .item-details.dest, .ride.request section.auth-pages.security#ride-confirmation .item-details.dd,
+.ride section.auth-pages.security#ride-confirmation .item-details.dest,
+.ride.request section.auth-pages.security#ride-confirmation .item-details.dd,
 .ride section.auth-pages.security#ride-confirmation .item-details.srt {
   display: grid;
   display: -ms-grid;
   -ms-grid-columns: 60% 40%;
-      grid-template-columns: 60% 40%;
+  grid-template-columns: 60% 40%;
   -ms-grid-rows: 1fr;
-      grid-template-rows: 1fr;
+  grid-template-rows: 1fr;
   grid-column-gap: unset;
 }
 
-.ride section.auth-pages.security#ride-confirmation .item-details.dest button, .ride.request section.auth-pages.security#ride-confirmation .item-details.dd button,
+.ride section.auth-pages.security#ride-confirmation .item-details.dest button,
+.ride.request
+  section.auth-pages.security#ride-confirmation
+  .item-details.dd
+  button,
 .ride section.auth-pages.security#ride-confirmation .item-details.srt button {
   border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -44,15 +48,25 @@ ride-details variant
   height: 30px;
   font-weight: 500;
   -ms-grid-column-align: end;
-      justify-self: end;
+  justify-self: end;
 }
 
-.ride section.auth-pages.security#ride-confirmation .item-details.dest .save-driver, .ride.request section.auth-pages.security#ride-confirmation .item-details.dd .save-driver,
-.ride section.auth-pages.security#ride-confirmation .item-details.srt .save-driver {
+.ride
+  section.auth-pages.security#ride-confirmation
+  .item-details.dest
+  .save-driver,
+.ride.request
+  section.auth-pages.security#ride-confirmation
+  .item-details.dd
+  .save-driver,
+.ride
+  section.auth-pages.security#ride-confirmation
+  .item-details.srt
+  .save-driver {
   -ms-flex-item-align: end;
-      align-self: flex-end;
+  align-self: flex-end;
   -ms-grid-column-align: center;
-      justify-self: center;
+  justify-self: center;
 }
 
 .ride section.auth-pages.security#ride-confirmation .item-details.rsd {
@@ -60,41 +74,44 @@ ride-details variant
   margin-bottom: 100px;
 }
 
-
 /*
 =============================
 ride-request variant
 =============================
 */
-.ride.request section.auth-pages.security#ride-confirmation .item-details.dd button {
+.ride.request
+  section.auth-pages.security#ride-confirmation
+  .item-details.dd
+  button {
   -ms-flex-item-align: end;
-      align-self: flex-end;
+  align-self: flex-end;
 }
 
 .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
   -ms-grid-columns: 1fr 2fr 0fr;
   grid-template-columns: 1fr 2fr 0fr;
   -webkit-column-gap: 40px;
-          column-gap: 40px;
-          margin-bottom: 18%;
-        }
+  column-gap: 40px;
+  margin-bottom: 18%;
+}
 
 .ride.request section.auth-pages.security#ride-confirmation .button-group {
   display: grid;
   display: -ms-grid;
   -ms-grid-columns: 45% 45%;
-      grid-template-columns: 45% 45%;
+  grid-template-columns: 45% 45%;
   -ms-grid-rows: 1fr;
-      grid-template-rows: 1fr;
+  grid-template-rows: 1fr;
   grid-column-gap: 10%;
 }
 
-.ride.request section.auth-pages.security#ride-confirmation .button-group #reject {
+.ride.request
+  section.auth-pages.security#ride-confirmation
+  .button-group
+  #reject {
   background-color: #ff5252;
   font-weight: 500;
 }
-
-
 
 /*
 =============================
@@ -109,9 +126,9 @@ section.auth-pages.security#ride-confirmation .item-details.dd {
   display: grid;
   display: -ms-grid;
   -ms-grid-columns: 75% 25%;
-      grid-template-columns: 75% 25%;
+  grid-template-columns: 75% 25%;
   -ms-grid-rows: auto;
-      grid-template-rows: auto;
+  grid-template-rows: auto;
   grid-column-gap: unset;
 }
 
@@ -119,9 +136,9 @@ section.auth-pages.security#ride-confirmation .item-details.srt {
   display: grid;
   display: -ms-grid;
   -ms-grid-columns: 1fr 1fr 1fr;
-      grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   -ms-grid-rows: auto;
-      grid-template-rows: auto;
+  grid-template-rows: auto;
   grid-column-gap: 40px;
 }
 
@@ -129,9 +146,9 @@ section.auth-pages.security#ride-confirmation .item-details.rsd {
   display: grid;
   display: -ms-grid;
   -ms-grid-columns: 60% 1fr;
-      grid-template-columns: 60% 1fr;
+  grid-template-columns: 60% 1fr;
   -ms-grid-rows: auto;
-      grid-template-rows: auto;
+  grid-template-rows: auto;
   grid-column-gap: 30px;
   margin-bottom: 40px;
 }
@@ -148,7 +165,8 @@ section.auth-pages.security#ride-confirmation .details {
   margin-bottom: 0;
 }
 
-section.auth-pages.security#ride-confirmation .flaticon-square-add-button:before {
+section.auth-pages.security#ride-confirmation
+  .flaticon-square-add-button:before {
   font-size: 14px;
   color: #ae0e8a;
   background-color: #f3f3f3;
@@ -192,7 +210,9 @@ section.auth-pages.security#ride-confirmation button {
   // font-family: "Lato";
 }
 
-section.auth-pages.security#ride-confirmation button:focus, section.auth-pages.security#ride-confirmation button:active, section.auth-pages.security#ride-confirmation button:hover {
+section.auth-pages.security#ride-confirmation button:focus,
+section.auth-pages.security#ride-confirmation button:active,
+section.auth-pages.security#ride-confirmation button:hover {
   outline: none;
 }
 #contact {
@@ -217,17 +237,17 @@ section.auth-pages.security#ride-confirmation .card-details {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left;
+  -ms-flex-pack: left;
+  justify-content: left;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 section.auth-pages.security#ride-confirmation .card-details img {
@@ -258,10 +278,7 @@ section.auth-pages.security#ride-confirmation .card-details img {
   padding: 20px;
   width: 100%;
   z-index: 100;
-
 }
-
-
 
 .btn-round {
   height: 100px !important;
@@ -277,7 +294,6 @@ section.auth-pages.security#ride-confirmation .card-details img {
 .start {
   background-color: #e040fb !important;
   color: #121212;
-
 }
 /*
 ================
@@ -289,13 +305,13 @@ section.auth-pages.security nav {
   display: grid;
   display: -ms-grid;
   -ms-grid-columns: [cone] 1fr [ctwo];
-      grid-template-columns: [cone] 1fr [ctwo];
+  grid-template-columns: [cone] 1fr [ctwo];
   -ms-grid-rows: [rone] 1fr [rtwo];
-      grid-template-rows: [rone] 1fr [rtwo];
+  grid-template-rows: [rone] 1fr [rtwo];
   grid-column-gap: unset;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   color: #ffffff;
   background-color: #e040fb;
   margin-top: 0;
@@ -303,14 +319,14 @@ section.auth-pages.security nav {
 
 section.auth-pages.security nav a {
   -ms-grid-column-align: left;
-      justify-self: left;
+  justify-self: left;
   grid-row: rone/rtwo;
   grid-column: cone/ctwo;
 }
 
 section.auth-pages.security nav h1 {
   -ms-grid-column-align: center;
-      justify-self: center;
+  justify-self: center;
   grid-row: rone/rtwo;
   grid-column: cone/ctwo;
   font-size: 20px;
@@ -318,12 +334,14 @@ section.auth-pages.security nav h1 {
   font-weight: normal;
 }
 
-section.auth-pages.security .setting-group, section.auth-pages.security#ride-history .history-group, section.auth-pages.security#saved-drivers .driver-details {
+section.auth-pages.security .setting-group,
+section.auth-pages.security#ride-history .history-group,
+section.auth-pages.security#saved-drivers .driver-details {
   border-bottom: 1px solid #ffffff;
   margin-bottom: 24px;
 }
 
-.emptyRiders{
+.emptyRiders {
   color: #eeeeee;
   position: relative;
   top: 241px;
@@ -333,14 +351,17 @@ section.auth-pages.security .setting-group, section.auth-pages.security#ride-his
 }
 
 @media only screen and (max-height: 568px) {
-  .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
+  .ride.request
+    section.auth-pages.security#ride-confirmation
+    .item-details.srt {
     margin-bottom: 18%;
   }
 }
 
-
 @media only screen and (min-height: 812px) {
-  .ride.request section.auth-pages.security#ride-confirmation .item-details.srt {
+  .ride.request
+    section.auth-pages.security#ride-confirmation
+    .item-details.srt {
     margin-bottom: 18%;
   }
 }
@@ -352,13 +373,13 @@ section.auth-pages.security .setting-group, section.auth-pages.security#ride-his
   }
 }
 
-  @media only screen and (max-width: 360px) {
+@media only screen and (max-width: 360px) {
   .btn-round {
     height: 78px !important;
     width: 28%;
     padding: 1px;
   }
-  .refresh-container{
+  .refresh-container {
     width: 40%;
     left: 60%;
   }

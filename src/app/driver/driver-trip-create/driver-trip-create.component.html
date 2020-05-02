@@ -12,6 +12,8 @@
               <img src="../../../assets/icons/minus-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
               <img src="../../../assets/icons/add-icon.svg" alt="" class="icon-dup" (click)="onValueChanged($event)">
           </div> -->
+
+        <div *ngIf="loading" class="trip-setup">Setting up trip</div>
         <form [formGroup]="tripForm" id="book-seat-filled-form" *ngIf="!loading" class="animated zoomIn">
 
 

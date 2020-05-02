@@ -1,12 +1,14 @@
-import { Selector, Action, StateContext, State } from '@ngxs/store';
-import { GetTrips, GetAvailableTrips } from './trips.action';
+import { Selector, Action, StateContext, State, Store } from '@ngxs/store';
+import { GetTrips, GetAvailableTrips, GetTripById } from './trips.action';
 import { tap } from 'rxjs/internal/operators/tap';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
+import { ShowLoader } from '../app/app.actions';
 
 export class TripsStateModel {
   trips: ActiveTrips[];
   availableTrips: ActiveTrips[];
+  selectedTrip: ActiveTrips;
 }
 
 
@@ -16,6 +18,7 @@ export class TripsStateModel {
   defaults: {
     trips: [],
     availableTrips: [],
+    selectedTrip: null,
   }
 })
 
@@ -32,8 +35,13 @@ export class TripsState {
     return state.availableTrips;
   }
 
+  @Selector()
+  static getSelectedTrip(state: TripsStateModel) {
+    return state.selectedTrip;
+  }
+
   constructor(
-    private TripsService: ActiveTripDataService
+    private TripsService: ActiveTripDataService, private store: Store
   ) {
 
   }
@@ -58,6 +66,21 @@ export class TripsState {
       ...state,
       availableTrips
     });
+  }
+
+  @Action(GetTripById)
+  getTripById(ctx: StateContext<TripsStateModel>, { id }: GetTripById) {
+    this.store.dispatch(new ShowLoader(true));
+    return this.TripsService.getTripsById(id).pipe(
+      tap(trip => {
+        const state = ctx.getState();
+        ctx.setState({
+          ...state,
+          selectedTrip: trip
+        });
+        this.store.dispatch(new ShowLoader(false));
+      })
+    );
   }
 
 }

@@ -1,23 +1,22 @@
-<div class="avd animated zoomIn" *ngIf="driverData">
+<div class="avd animated zoomIn" *ngIf="driver">
   <!-- <h2 class="heading">Available Drivers</h2> -->
   <div class="driver-container">
     <div class="driver-track">
       <div class="driver-item">
         <div class="container-grid">
-          <!-- <div class="avi-info" (deferLoad)="driverData.userImage.image != null">
-              <img *ngIf="driverData.userImage.image" src="data:image/png;base64,{{driverData.userImage.image}}" alt=""
-              class="profile-info" >
-             <img *ngIf="!driverData.userImage.image" src="./assets/Images/default-user.png"
-              class="profile-info" alt="" >
-              <h3 class="driver-name">{{driverData.userName}}</h3>
-              <div>
-                <div class="seats sub">{{plateNumber}}</div>
-              </div>
-              <div id="contact">
-                <a href="tel:{{driverNumber}}" class="img-link"> <img src="./assets/Images/phone.svg" alt="" class="phone-img"></a>
-                 <img src="../../../assets/Images/chat.svg" alt="" class="phone-img" (click)="navToSupport()">
-               </div>
-            </div> -->
+          <div class="avi-info" (deferLoad)="driver.imageUrl != null">
+            <img *ngIf="driver.imageUrl" src="{{driver.imageUrl}}" alt="" class="profile-info">
+            <img *ngIf="!driver.imageUrl" src="./assets/Images/default-user.png" class="profile-info" alt="">
+            <h3 class="driver-name">{{driverName}}</h3>
+            <div>
+              <div class="seats sub">{{plateNumber}}</div>
+            </div>
+            <div id="contact">
+              <a href="tel:{{driverNumber}}" class="img-link"> <img src="./assets/Images/phone.svg" alt=""
+                  class="phone-img"></a>
+              <img src="../../../assets/Images/chat.svg" alt="" class="phone-img" (click)="navToSupport()">
+            </div>
+          </div>
           <div class="destination-details">
             <div class="time-line-container">
               <ul class="tl">

@@ -47,7 +47,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   trips: ActiveTrips[];
   currentUser: any;
-  loggedInUser: Users;
+  loggedInUser: any;
   userByEmail: Users;
 
 
@@ -72,7 +72,10 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         this.currentUser = res;
       })
 
+
     );
+    this.store.dispatch(new GetCurrentUser(this.loggedInUser.id));
+
     this.getCurrentime();
   }
   clearLocalStorage() {

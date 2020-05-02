@@ -128,7 +128,8 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
         password: userPass.password,
         token: userData.token,
         userStatus: 1,
-        role: userRole.role
+        role: userRole.role,
+        imageUrl: userData.imageUrl
       };
       this.authenticate.update(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))

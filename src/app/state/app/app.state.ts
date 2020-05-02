@@ -11,7 +11,7 @@ export class AppStateModel {
   showLoader: boolean;
   showLeftNav: boolean;
   previousRoute: string;
-  userByEmail: any;
+  userByEmail: Users;
 }
 
 @State<AppStateModel>({

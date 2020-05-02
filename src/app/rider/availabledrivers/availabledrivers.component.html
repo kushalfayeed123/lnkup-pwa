@@ -1,61 +1,58 @@
-
 <div class="destination-container animated zoomIn" *ngIf="!showTripDetails" [@bounce]="bounce">
-        <swiper [config]="config">
-                <div class="swiper-wrapper">
-                  <ng-container *ngIf="!emptyTrip">
-                    <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">
-                      <mat-card-content>
-                        <div class="avd" [@bounce]="bounce">
-                          <!-- <h2 class="heading">Available Drivers</h2> -->
-                          <div class="driver-container">
-                            <div class="driver-track">
-                              <div class="driver-item">
-                                <div class="container-grid">
-                                  <div class="avi-info">
-                                    <!-- test -->
-                                      <!-- <img src="data:image/png;base64,{{trips.tripDriver.driver.userImage.image}}" alt=""
-                                       class="profile-info" *ngIf="trips.tripDriver.driver.userImage.image">
-                                      <img src="./assets/Images/default-user.png"
-                                       class="profile-info" alt="" *ngIf="!trips.tripDriver.driver.userImage.image"> -->
-                                    <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
-                                    <h3 class="driver-name">{{driverUserName[i]}}</h3>
-                                    <!-- <span class="driver-stats">Trip Time: {{trips.tripStartDateTime}}</span> -->
-                                    <div class="location time-text">Trip Start Time</div>
-                                    <div class="est sub time">{{trips.tripStartDateTime}}</div>
-                                  </div>
-                                  <div class="destination-details">
-                                    <div class="time-line-container">
-                                      <ul class="tl">
-                                        <li class="destination">
-                                          <div class="location">Pickup Spot</div>
-                                          <div class="seats sub">{{trips.tripPickup}}</div>
-                                        </li>
-                                        <li class="current-location">
-                                          <div class="location">Your pickup spot is {{trips.pickupDistance}} km away</div>
-                                          <!-- <div class="est sub ">{{availableSeats[i]}} seats available</div> -->
-                                        </li>
-                                      </ul>
-                                    </div>
-                                    <button type="submit" mat-raised-button color="accent" class="auth-full-width auth-full" (click)="passTripDetails(trips.tripId)">Choose Driver</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+  <swiper [config]="config">
+    <div class="swiper-wrapper">
+      <ng-container *ngIf="!emptyTrip">
+        <mat-card class="available-drivers-card swiper-slide" *ngFor="let trips of availableTrips; let i = index;">
+          <mat-card-content>
+            <div class="avd" [@bounce]="bounce">
+              <!-- <h2 class="heading">Available Drivers</h2> -->
+              <div class="driver-container">
+                <div class="driver-track">
+                  <div class="driver-item">
+                    <div class="container-grid">
+                      <div class="avi-info">
+                        <!-- test -->
+                        <img src="{{trips.tripDriver.driver.imageUrl}}" alt="" class="profile-info"
+                          *ngIf="trips.tripDriver.driver.imageUrl">
+                        <img src="./assets/Images/default-user.png" class="profile-info" alt=""
+                          *ngIf="!trips.tripDriver.driver.imageUrl">
+                        <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
+                        <h3 class="driver-name">{{driverUserName[i]}}</h3>
+                        <!-- <span class="driver-stats">Trip Time: {{trips.tripStartDateTime}}</span> -->
+                        <div class="location time-text">Trip Start Time</div>
+                        <div class="est sub time">{{trips.tripStartDateTime}}</div>
+                      </div>
+                      <div class="destination-details">
+                        <div class="time-line-container">
+                          <ul class="tl">
+                            <li class="destination">
+                              <div class="location">Pickup Spot</div>
+                              <div class="seats sub">{{trips.tripPickup}}</div>
+                            </li>
+                            <li class="current-location">
+                              <div class="location">Your pickup spot is {{trips.pickupDistance}} km away</div>
+                              <!-- <div class="est sub ">{{availableSeats[i]}} seats available</div> -->
+                            </li>
+                          </ul>
                         </div>
-                      </mat-card-content>
-                  </mat-card>
-                  </ng-container>
+                        <button type="submit" mat-raised-button color="accent" class="auth-full-width auth-full"
+                          (click)="passTripDetails(trips.tripId)">Choose Driver</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
 
-                    <!-- <div class="swiper-button-next"></div>
+      <!-- <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div> -->
 
 
-        </div>
-        </swiper>
-      </div>
+    </div>
+  </swiper>
+</div>
 
 <app-driverdetails *ngIf="showTripDetails"></app-driverdetails>
-
-
-

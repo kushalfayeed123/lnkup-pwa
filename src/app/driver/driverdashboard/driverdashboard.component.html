@@ -1,7 +1,7 @@
 <div class="avd-container" *ngIf="showLanding">
 
   <agm-map [(latitude)]="latitude" [(longitude)]="longitude" [(zoom)]="zoom" [zoomControl]="false" [styles]="style"
-    [usePanning]="true">
+    [usePanning]="true" [streetViewControl]="false">
     <agm-overlay [latitude]="latitude" [longitude]="longitude">
       <!-- blue html square -->
       <!-- <div class="marker"></div> -->

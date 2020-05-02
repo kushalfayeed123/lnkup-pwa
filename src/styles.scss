@@ -261,7 +261,7 @@ html {
 }
 router-outlet ~ * {
   position: absolute;
-  height: 93.4%;
+  height: 92.4%;
   width: 100%;
 }
 
@@ -624,9 +624,7 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-.avd-container {
-  height: 107%;
-}
+
 .profile-info {
   max-width: 64px;
   -o-object-fit: cover;

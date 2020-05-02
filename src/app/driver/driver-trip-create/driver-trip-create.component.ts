@@ -11,10 +11,11 @@ import { BroadcastService } from 'src/app/services/business/broadcastdata.servic
 import * as moment from 'moment';
 import { NgxMaterialTimepickerTheme } from 'ngx-material-timepicker';
 import { slideInAnimation } from 'src/app/services/misc/animation';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { DriverState } from 'src/app/state/driver-data/driverdata.state';
 import { DriverData } from 'src/app/models/DriverData';
 import { SubSink } from 'subsink/dist/subsink';
+import { ShowLoader } from 'src/app/state/app/app.actions';
 
 
 @Component({
@@ -73,7 +74,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
     private activeTripService: ActiveTripDataService,
     private router: Router,
     private notifyService: NotificationsService,
-    private broadcastService: BroadcastService) {
+    private broadcastService: BroadcastService,
+    private store: Store) {
 
   }
 
@@ -127,6 +129,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
       });
   }
   getLocationCoordinates() {
+    this.store.dispatch(new ShowLoader(true));
     this.loading = true;
     const tripStartLatLng = JSON.parse(localStorage.getItem('currentLocation'));
     const tripEndLatLng = JSON.parse(localStorage.getItem('destination'));
@@ -154,6 +157,8 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           driverStartLongitude: this.tripStartLng
         });
         this.loading = false;
+        this.store.dispatch(new ShowLoader(false));
+
       });
     } else {
       setTimeout(() => {
@@ -182,6 +187,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
             driverStartLongitude: this.tripStartLng
           });
           this.loading = false;
+          this.store.dispatch(new ShowLoader(false));
         });
       }, 5000);
     }
@@ -231,6 +237,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   broadCastTrip() {
     this.formatActualDateTime();
     this.loader = true;
+    this.store.dispatch(new ShowLoader(true));
     if (!this.driverDataId) {
       const message = 'Your profile is incomplete. Please complete your driver registration to start sharing your ride.';
       this.notifyService.showErrorMessage(message);
@@ -262,14 +269,12 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
         this.activeTripService.createTrip(this.tripForm.getRawValue())
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(trip => {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
             // this.notifyService.addUserToGroup(user.userName);
-            localStorage.setItem('groupName', user.userName);
-
+            localStorage.setItem('groupName', this.driverData.driver.userName);
             this.loader = false;
             this.activeTrip = trip;
             localStorage.setItem('activeTrip', JSON.stringify(this.activeTrip));
-            const message = 'You are now broadcasting your trip.';
+            const message = 'We are now broadcasting your trip.';
             this.notifyService.showSuccessMessage(message);
             this.onGoingTrip = true;
             localStorage.setItem('onGoingTrip', JSON.stringify(this.onGoingTrip));
@@ -277,10 +282,12 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
           }, error => {
             setTimeout(() => {
               this.loading = false;
+              this.store.dispatch(new ShowLoader(false));
             }, 3000);
           });
       } else {
         this.loader = false;
+        this.store.dispatch(new ShowLoader(false));
         const message = 'Number of riders exceeds car seating capacity';
         this.notifyService.showErrorMessage(message);
       }

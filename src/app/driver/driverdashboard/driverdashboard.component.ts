@@ -22,7 +22,7 @@ import { GetDriverData } from 'src/app/state/driver-data/driverdata.action';
 import { DriverState } from 'src/app/state/driver-data/driverdata.state';
 import { DriverData } from 'src/app/models/DriverData';
 import { AppState } from 'src/app/state/app/app.state';
-import { ShowLeftNav } from 'src/app/state/app/app.actions';
+import { ShowLeftNav, ShowLoader } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,7 +33,7 @@ import { ShowLeftNav } from 'src/app/state/app/app.actions';
 })
 export class DriverdashboardComponent implements OnInit, OnDestroy {
 
-  @Select(AppState.getUserByEmail) currentUser$: Observable<Users>;
+  @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
   @Select(DriverState.getDriverData) driverData$: Observable<DriverData>;
 
 
@@ -291,7 +291,7 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     // this.notificationService.tokenRefresh();
     this.startTrip();
     this.getCurrentLocation();
-    this.setIntervalCall();
+    // this.setIntervalCall();
   }
 
   ngOnInit() {
@@ -305,7 +305,6 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
       }),
       this.driverData$.subscribe(res => {
         this.driverData = res;
-        console.log(res)
       })
     );
     this.route.queryParams
@@ -356,16 +355,15 @@ export class DriverdashboardComponent implements OnInit, OnDestroy {
     this.userId = user.userId.substring(27).toUpperCase();
     this.loading = false;
     const userPaymentData = user.userPaymentData;
-    // if (userPaymentData.length < 1) {
-    //   this.userPayment = false;
-    // } else {
-    //   this.userPayment = true;
-    // }
-    // this.broadCastService.publishUserPaymentStatus(this.userPayment);
+    if (userPaymentData.length < 1) {
+      this.userPayment = false;
+    } else {
+      this.userPayment = true;
+    }
+    this.broadCastService.publishUserPaymentStatus(this.userPayment);
   }
   getDriverData() {
     this.store.dispatch(new GetDriverData(this.currentUser.userId));
-    // this.updateDriverConnect();
   }
 
   setIntervalCall() {
