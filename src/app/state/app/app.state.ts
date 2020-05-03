@@ -1,5 +1,5 @@
 import { Selector, State, StateContext, Action, Store } from '@ngxs/store';
-import { SetPreviousRoute, ShowLoader, GetLoggedInUser, GetCurrentUser, ShowLeftNav, GetUserByEmail } from './app.actions';
+import { SetPreviousRoute, ShowLoader, GetLoggedInUser, GetCurrentUser, ShowLeftNav, GetUserByEmail, SetCurrentRoute } from './app.actions';
 import { tap } from 'rxjs/internal/operators/tap';
 import { Injectable } from '@angular/core';
 import { Users } from 'src/app/models/Users';
@@ -12,6 +12,7 @@ export class AppStateModel {
   showLeftNav: boolean;
   previousRoute: string;
   userByEmail: Users;
+  currentRoute: any;
 }
 
 @State<AppStateModel>({
@@ -23,6 +24,7 @@ export class AppStateModel {
     previousRoute: '',
     showLeftNav: false,
     userByEmail: null,
+    currentRoute: null
   }
 })
 
@@ -35,7 +37,10 @@ export class AppState {
   static getPreviousRoute(state: AppStateModel) {
     return state.previousRoute;
   }
-
+  @Selector()
+  static getCurrenRoute(state: AppStateModel) {
+    return state.currentRoute;
+  }
   @Selector()
   static getCurrentUser(state: AppStateModel) {
     return state.currentUser;
@@ -72,6 +77,15 @@ export class AppState {
     ctx.setState({
       ...state,
       previousRoute: route
+    });
+  }
+
+  @Action(SetCurrentRoute)
+  SetCurrentRoute(ctx: StateContext<AppStateModel>, { route }: SetCurrentRoute) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      currentRoute: route
     });
   }
 

@@ -14,6 +14,12 @@ export class SetPreviousRoute {
   constructor(public route: string) { }
 }
 
+export class SetCurrentRoute {
+  static readonly type = '[App] SetCurrentRoute';
+
+  constructor(public route: string) { }
+}
+
 export class ShowLoader {
   static readonly type = '[App] ShowLoader';
 

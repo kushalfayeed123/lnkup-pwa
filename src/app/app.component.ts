@@ -15,7 +15,7 @@ import { Select, Store } from '@ngxs/store';
 import { Users } from './models/Users';
 import { SubSink } from 'subsink/dist/subsink';
 import { AppState } from './state/app/app.state';
-import { ShowLeftNav, SetPreviousRoute } from './state/app/app.actions';
+import { ShowLeftNav, SetPreviousRoute, SetCurrentRoute } from './state/app/app.actions';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +27,10 @@ import { ShowLeftNav, SetPreviousRoute } from './state/app/app.actions';
 export class AppComponent implements OnInit, OnDestroy {
 
   @Select(AppState.getCurrentUser) loggedInUser$: Observable<Users>;
+  @Select(AppState.getPreviousRoute) previousRoute$: Observable<any>;
+  @Select(AppState.getCurrenRoute) currentRoute$: Observable<any>;
+
+
 
   title = 'lnkup';
   newVersion: boolean;
@@ -40,6 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   currentUser: Users;
   loggedInUser: Users;
+  previousRoute: any;
+  currentRoute: any;
 
 
   // tslint:disable-next-line: variable-name
@@ -63,18 +69,26 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
-    this.subs.add(
-      this.loggedInUser$.subscribe(user => {
-        this.loggedInUser = user;
-      })
-    );
-    // this.getLoggedInUser();
-
+    this.reload();
     this.route.events.subscribe(url => {
+      this.store.dispatch(new SetCurrentRoute(this.route.url));
       if (url instanceof NavigationStart) {
         this.store.dispatch(new SetPreviousRoute(this.route.url));
       }
     });
+    this.subs.add(
+      this.loggedInUser$.subscribe(user => {
+        this.loggedInUser = user;
+      }),
+      this.previousRoute$.subscribe(res => {
+        this.previousRoute = res;
+      }),
+      this.currentRoute$.subscribe(res => {
+        this.currentRoute = res;
+      })
+    );
+
+
     this.networkStatus.status.subscribe(res => {
       if (res === false) {
         this.notifyService.showErrorMessage(
@@ -82,8 +96,7 @@ export class AppComponent implements OnInit, OnDestroy {
         );
       }
     });
-    this.reload();
-
+    this.getLoggedInUser();
     window.scrollTo(0, 0);
     this.metaService.createCanonicalURL();
     this.showSideNav = false;
@@ -91,26 +104,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   getLoggedInUser() {
-    console.log('logged in user', this.loggedInUser);
-    const currentRoute = decodeURI(localStorage.getItem('currentRoute'));
-    const onGoingTrip = JSON.parse(localStorage.getItem('onGoingTrip'));
-    const navigationExtras: NavigationExtras = {
-      queryParamsHandling: 'preserve',
-      preserveFragment: true
-    };
-
     if (!this.loggedInUser) {
       this.route.navigate(['/login']);
     } else {
-      if (!onGoingTrip) {
-        if (!currentRoute) {
-          this.route.navigate(['/onboarding']);
-        } else {
-          this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
-        }
-      } else {
-        this.route.navigateByUrl(`${currentRoute}`, navigationExtras);
-      }
+      this.route.navigateByUrl(this.currentRoute);
     }
     // if (!currentRoute) {
     //   this.route.navigate(['/onboarding']);
