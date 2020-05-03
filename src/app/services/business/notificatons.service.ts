@@ -219,7 +219,6 @@ export class NotificationsService {
           const message = {
             senderId: user.userId
           };
-          this.sendGroupMessage(groupName, message);
           console.log('added user to group', groupName);
         });
     });

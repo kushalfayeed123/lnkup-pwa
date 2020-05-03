@@ -19,6 +19,7 @@ import { Users } from 'src/app/models/Users';
 import { SubSink } from 'subsink/dist/subsink';
 import { ShowLoader } from 'src/app/state/app/app.actions';
 import { TripsState } from 'src/app/state/trip/trips.state';
+import { GetChatObject } from 'src/app/state/chat/chat.action';
 
 @Component({
   selector: 'app-rider-request',
@@ -83,7 +84,15 @@ export class RiderRequestComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getDriverCancelAlert();
   }
 
-  navToSupport() {
+  navToSupport(riderId, riderUserName) {
+    this.store.dispatch(new ShowLoader(false));
+    const chatObject = {
+      groupName: riderUserName,
+      receiverId: riderId,
+      senderId: this.currentUser.userId,
+      receiverName: riderUserName
+    };
+    this.store.dispatch(new GetChatObject(chatObject));
     this.router.navigate(['support', this.currentUser.userId]);
   }
 

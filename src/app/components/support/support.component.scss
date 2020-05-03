@@ -4,6 +4,13 @@ chat Theme
 =============================
 */
 
+.cancel-container {
+  position: absolute;
+  right: 9px;
+  bottom: 13px;
+  z-index: 100;
+}
+
 .chat-pages nav {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -58,8 +65,8 @@ chat Theme
 
 .chat-pages nav .driver-details img {
   margin-right: 5px;
-  height: 40px;
-  max-width: 40px;
+  height: 24px;
+  max-width: 24px;
   -o-object-fit: cover;
   object-fit: cover;
   -o-object-position: center;

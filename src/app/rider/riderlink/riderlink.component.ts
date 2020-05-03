@@ -22,8 +22,8 @@ import { Observable } from 'rxjs';
 import { SubSink } from 'subsink/dist/subsink';
 import { TripsState } from 'src/app/state/trip/trips.state';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
-import { GetTripById } from 'src/app/state/trip/trips.action';
 import { ShowLeftNav } from 'src/app/state/app/app.actions';
+import { GetChatObject } from 'src/app/state/chat/chat.action';
 
 @Component({
   selector: 'app-riderlink',
@@ -117,8 +117,14 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     // this.listenToTripCancel();
   }
 
-  navToSupport() {
-    this.broadCastService.publishSideNavValue(true);
+  navToSupport(driverId) {
+    const chatObject = {
+      groupName: this.user.userName,
+      receiverId: driverId,
+      senderId: this.user.userId,
+      receiverName: this.driverName
+    };
+    this.store.dispatch(new GetChatObject(chatObject));
     this.router.navigate(['support', this.user.userId]);
   }
 
@@ -292,7 +298,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         const activeRiders = res.activeRiders;
-        const currentRider = activeRiders.find(x => x.userId === this.userId);
+        const currentRider = activeRiders.find(x => x.user.userId === this.user.userId);
         console.log('current user', res);
         const riderName = currentRider.user.userName;
         const activeRiderId = currentRider.activeRiderId;

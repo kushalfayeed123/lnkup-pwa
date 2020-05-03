@@ -7,11 +7,13 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
 import { slideInAnimation } from 'src/app/services/misc/animation';
 import { NotificationsService } from 'src/app/services/business/notificatons.service';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Users } from 'src/app/models/Users';
 import { SubSink } from 'subsink/dist/subsink';
 import { AppState } from 'src/app/state/app/app.state';
+import { GetChatObject } from 'src/app/state/chat/chat.action';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-side-nav',
@@ -38,6 +40,8 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
   showSpecialChat: boolean;
   private subs = new SubSink();
   loggedInUser: any;
+  receiverId: string;
+  receiverName: string;
 
 
 
@@ -47,7 +51,8 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
     private notifyService: NotificationsService,
     media: MediaMatcher,
     public _router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private store: Store) { }
 
 
   ngAfterViewChecked() {
@@ -85,6 +90,13 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
     this._router.navigate([`profile/${this.userId}`]);
   }
   navToSupport() {
+    const chatObject = {
+      groupName: 'comment',
+      senderId: this.userId,
+      receiverId: 'f150612c-344a-4132-247b-08d763540042',
+      receiverName: 'Admin'
+    };
+    this.store.dispatch(new GetChatObject(chatObject));
     this._router.navigate([`support/${this.userId}`], { queryParams: { reviewType: 'comment' } });
   }
   navToPayment() {
@@ -95,8 +107,23 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   navToSpecialChat() {
-    this._router.navigate([`support/${this.userId}`], { queryParams: { reviewType: 'chat' } })
-    localStorage.setItem('groupName', 'openSesami');
+    const segunId = '7e2951e7-d324-4530-3958-08d7b7e0df40';
+    const susanId = '9e33f441-90f2-420f-247c-08d763540042';
+    if (this.userId === segunId) {
+      this.receiverId = susanId;
+      this.receiverName = 'Susan';
+    } else if (this.userId === susanId) {
+      this.receiverId = segunId;
+      this.receiverName = 'Segun';
+    }
+    const chatObject = {
+      groupName: 'chat',
+      senderId: this.userId,
+      receiverId: this.receiverId,
+      receiverName: this.receiverName
+    };
+    this.store.dispatch(new GetChatObject(chatObject));
+    this._router.navigate([`support/${this.userId}`], { queryParams: { reviewType: 'chat' } });
   }
   logout() {
     this.authService.logout();

@@ -66,6 +66,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { DriverState } from './state/driver-data/driverdata.state';
 import { TripsState } from './state/trip/trips.state';
 import { AppState } from './state/app/app.state';
+import { ChatState } from './state/chat/chat.state';
 
 
 
@@ -129,7 +130,7 @@ import { AppState } from './state/app/app.state';
     AngularFireStorageModule,
 
     NetworkStatusAngularModule.forRoot(),
-    NgxsModule.forRoot([TripsState, AppState, DriverState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([TripsState, AppState, DriverState, ChatState], { developmentMode: !environment.production }),
     NgxsStoragePluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

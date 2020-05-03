@@ -2,7 +2,7 @@ import { AuthenticateDataService } from 'src/app/services/data/authenticate.data
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 import { MetaService } from './services/business/metaService.service';
 import { SwUpdate, SwPush } from '@angular/service-worker';
-import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { Router, NavigationExtras, ActivatedRoute, NavigationStart } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationsService } from './services/business/notificatons.service';
 import { BroadcastService } from './services/business/broadcastdata.service';
@@ -15,7 +15,7 @@ import { Select, Store } from '@ngxs/store';
 import { Users } from './models/Users';
 import { SubSink } from 'subsink/dist/subsink';
 import { AppState } from './state/app/app.state';
-import { ShowLeftNav } from './state/app/app.actions';
+import { ShowLeftNav, SetPreviousRoute } from './state/app/app.actions';
 
 @Component({
   selector: 'app-root',
@@ -71,7 +71,9 @@ export class AppComponent implements OnInit, OnDestroy {
     // this.getLoggedInUser();
 
     this.route.events.subscribe(url => {
-      // this.getCurrentRoute();
+      if (url instanceof NavigationStart) {
+        this.store.dispatch(new SetPreviousRoute(this.route.url));
+      }
     });
     this.networkStatus.status.subscribe(res => {
       if (res === false) {

@@ -41,3 +41,5 @@ export class GetAvailableTrips {
 
   constructor(public availableTrips: ActiveTrips[]) { }
 }
+
+

@@ -4,6 +4,9 @@
           <img class="flaticon-back" src="./assets/Images/back-arrow.svg" alt="">
       </a> -->
     <div class="driver-details">
+      <div class="cancel-container" (click)="navTopreviousScreen()">
+        <img src="./assets/icons/icons8-cancel.svg" alt="">
+      </div>
       <!-- <img src="assets/Images/Avatar1.png" alt="" class="avi" /> -->
       <div class="name-container">
         <h2 class="name"></h2>
@@ -24,13 +27,32 @@
       do not hesitate to drop a comment below.
       We will review your comment and get back to you as soon as we can. 😊
     </div> -->
+
+
+
     <div class="chat-box" *ngIf="!showReview">
-      <div class=" message " *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender === userName,
-            'send': newMessage.sender !== userName}">
+      <!-- <div class=" message receive" *ngFor="let newMessage of currentUserMessage; let i=index">
+        <div #messages *ngIf="groupMessage" class="message-text  ">
+          {{newMessage}}
+          <img src="./assets/icons/sent.svg" alt="" class="sent-icon" *ngIf="sent[i]">
+        </div>
+      </div>
+      <div class=" message send" *ngFor="let newMessage of allMessages; let i=index">
         <div *ngIf="groupMessage && newMessage.sender !== userName" class="sender">
           {{newMessage.sender}}
         </div>
         <div #messages *ngIf="groupMessage" class="message-text  ">
+          {{newMessage.message}}
+        </div>
+      </div> -->
+
+
+      <div class=" message " *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender === userName,
+            'send': newMessage.sender !== userName}">
+        <div *ngIf="newMessage.sender !== userName" class="sender">
+          {{newMessage.sender}}
+        </div>
+        <div #messages class="message-text  ">
           {{newMessage.message}}
           <img src="./assets/icons/sent.svg" alt="" class="sent-icon" *ngIf="sent && newMessage.sender === userName">
         </div>

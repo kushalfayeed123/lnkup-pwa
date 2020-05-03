@@ -12,7 +12,9 @@ import { AppState } from 'src/app/state/app/app.state';
 import { Observable } from 'rxjs';
 import { Users } from 'src/app/models/Users';
 import { SubSink } from 'subsink/dist/subsink';
-import { GetLoggedInUser, GetCurrentUser } from 'src/app/state/app/app.actions';
+import { ShowLeftNav, ShowLoader } from 'src/app/state/app/app.actions';
+import { ChatState } from 'src/app/state/chat/chat.state';
+import { GetChatMessages } from 'src/app/state/chat/chat.action';
 
 @Component({
   selector: 'app-support',
@@ -24,6 +26,12 @@ import { GetLoggedInUser, GetCurrentUser } from 'src/app/state/app/app.actions';
 export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
+  @Select(ChatState.getChatObject) chatObject$: Observable<any>;
+  @Select(ChatState.getChat) messages$: Observable<any>;
+  @Select(AppState.getPreviousRoute) previousRoute$: Observable<any>;
+
+
+
 
 
   @ViewChild('scroll', { static: true }) scroll: any;
@@ -46,9 +54,13 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   sender: any;
   isMe: boolean;
   groupName: string;
-  sent: any;
+  sent = [];
   loading: boolean;
   groupMembers = [];
+  currentUserMessage = [];
+  chatObject: any;
+  messages = [];
+  previousRoute: any;
   constructor(private _router: Router, private fb: FormBuilder,
     private reviewService: AppReviewDataService,
     private route: ActivatedRoute,
@@ -57,18 +69,32 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.subs.add(
-      this.currentUser$.subscribe(res => {
-        this.getCurrentUser(res);
-
-      })
-    );
-    this.notifyService.intiateConnection();
+    this.store.dispatch(new ShowLeftNav(true));
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(param => {
         this.reviewType = param.reviewType;
+
       });
+    this.subs.add(
+      this.currentUser$.subscribe(res => {
+        this.getCurrentUser(res);
+      }),
+
+      this.chatObject$.subscribe(res => {
+        this.chatObject = res;
+      }),
+      this.messages$.subscribe(res => {
+        this.allMessages = res.filter(g => g.groupName === this.chatObject.groupName);
+        // this.groupMessage = res.message;
+        console.log(this.allMessages);
+      }),
+      this.previousRoute$.subscribe(res => {
+        this.previousRoute = res;
+      })
+    );
+    this.notifyService.intiateConnection();
+
     this.messageForm = this.fb.group({
       userReview: ['', [Validators.required]],
       userId: ['', [Validators.required]],
@@ -88,8 +114,8 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
 
   addToGroup() {
     this.loading = true;
-    this.groupName = localStorage.getItem('groupName');
-    this.notifyService.addUserToGroup(this.groupName);
+    // this.groupName = localStorage.getItem('groupName');
+    this.notifyService.addUserToGroup(this.chatObject.groupName);
     this.notifyService.sentFlag
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
@@ -98,7 +124,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
           return;
         } else {
           this.loading = false;
-          this.sent = res;
+          // this.sent.push(res);
         }
       });
   }
@@ -110,28 +136,30 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   sendGroupMessage(message) {
+    this.store.dispatch(new ShowLoader(true));
+    // this.currentUserMessage.push(message);
     const messageObject = JSON.stringify({
       sender: this.userName,
       message,
-      senderId: this.userId
+      senderId: this.chatObject.senderId,
+      groupName: this.chatObject.groupName
     });
 
     const pushMessage = {
-      title: `LnkuP message from ${this.userName}`,
+      title: `LnkuP message from ${this.chatObject.groupName}`,
       body: message,
-      receiverName: this.userName,
+      receiverName: this.chatObject.receiverName,
       click_action: `https://lnkupmob.azureedge.net/support/${this.userId}?reviewType=chat`
     };
-    this.notifyService.sendGroupMessage(this.groupName, messageObject);
-    console.log('group members to send offline message to', this.groupMembers);
-    const membersToReceiveMessage = this.groupMembers.filter(x => x !== this.userId);
-    console.log('members to recieve message', membersToReceiveMessage);
-    // this.notifyService.sendNotification(membersToReceiveMessage[0], pushMessage);
-
-    membersToReceiveMessage.forEach(element => {
-      const receiverId = element;
-      this.notifyService.sendNotification(receiverId, pushMessage);
-    });
+    this.notifyService.sendGroupMessage(this.chatObject.groupName, messageObject);
+    // console.log('group members to send offline message to', this.groupMembers);
+    // const membersToReceiveMessage = this.groupMembers.filter(x => x !== this.userId);
+    // console.log('members to recieve message', membersToReceiveMessage);
+    this.notifyService.sendNotification(this.chatObject.receiverId, pushMessage);
+    // membersToReceiveMessage.forEach(element => {
+    //   const receiverId = element;
+    //   this.notifyService.sendNotification(receiverId, pushMessage);
+    // });
     setTimeout(() => {
       // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
       this.messageForm.reset();
@@ -147,16 +175,12 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           const messageObject = JSON.parse(res);
           this.groupMessage = messageObject.message;
+          this.store.dispatch(new ShowLoader(false));
           this.allMessages = [...this.allMessages, messageObject];
+          // this.allMessages = this.allMessages.filter(x => x.sender !== this.userName);
           this.sender = messageObject.sender;
-          const senderId = messageObject.senderId;
-          if (this.groupMembers.includes(senderId)) {
-            return;
-          } else {
-            this.groupMembers = [...this.groupMembers, senderId];
-          }
-
-          console.log('group members', this.groupMembers);
+          console.log('group members', this.allMessages);
+          this.store.dispatch(new GetChatMessages(this.allMessages));
           setTimeout(() => {
             // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
           }, 1000);
@@ -206,6 +230,11 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
       this.sendGroupMessage(this.messageForm.value.userReview);
     }
 
+  }
+
+  navTopreviousScreen() {
+    console.log(this.previousRoute);
+    this._router.navigateByUrl(this.previousRoute);
   }
 
   ngOnDestroy() {

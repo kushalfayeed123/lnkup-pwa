@@ -40,6 +40,8 @@ export class TripsState {
     return state.selectedTrip;
   }
 
+
+
   constructor(
     private TripsService: ActiveTripDataService, private store: Store
   ) {
@@ -82,5 +84,7 @@ export class TripsState {
       })
     );
   }
+
+
 
 }
