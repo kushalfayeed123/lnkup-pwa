@@ -59,6 +59,7 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
   canCreateTrip: boolean;
   currentUser: Users;
   trip: ActiveTrips;
+  allowedSeats: any[];
   constructor(private activeTrip: ActiveTripDataService,
     private activeRiderService: ActiveRiderDataService,
     private router: Router,
@@ -98,7 +99,8 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     }
   }
   computeTripFare(value) {
-    const tripFare = value * this.fare;
+    // console.log(this.trip.aggregrateTripFee);
+    const tripFare = value * (this.trip.aggregrateTripFee / this.trip.maxRiderNumber);
     if (value > this.availableSeats) {
       this.inValidSeat = true;
     } else {
@@ -136,9 +138,15 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
     this.driverEmail = tripDetails.driverEmail;
     if (allowedRiderCount === 0) {
       this.availableSeats = maxSeats;
+      this.allowedSeats = Array(this.availableSeats).fill(1).map((x, i) => i + 1);
     } else {
       this.availableSeats = allowedRiderCount;
+      this.allowedSeats = Array(this.availableSeats).fill(1).map((x, i) => i + 1);
+
     }
+
+    console.log(this.availableSeats, this.allowedSeats);
+
   }
   getRiderRequest() {
     const activeRequest = JSON.parse(localStorage.getItem('activeRiderRequest'));
@@ -161,22 +169,23 @@ export class BookseatrequestComponent implements OnInit, OnDestroy {
       this.tripConnectionId = this.request.tripConnectionId;
       localStorage.setItem('riderRequest', JSON.stringify(this.request));
     } else {
-      setTimeout(() => {
-        this.fare = this.request.tripFee;
-        this.request.tripFee = this.newFare;
-        this.request.paymentType = this.selectedPaymentMethod;
-        this.request.paymentStatus = '0';
-        this.request.bookedSeat = this.seatCount;
-        this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
-        this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
-        this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
-        this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
-        this.request.userId = this.currentUser.userId;
-        this.request.tripStatus = activeRequest.tripStatus;
-        this.request.riderConnectId = connectionId;
-        this.tripConnectionId = this.request.tripConnectionId;
-        localStorage.setItem('riderRequest', JSON.stringify(this.request));
-      }, 5000);
+      // setTimeout(() => {
+      //   this.fare = this.request.tripFee;
+      //   this.request.tripFee = this.newFare;
+      //   this.request.paymentType = this.selectedPaymentMethod;
+      //   this.request.paymentStatus = '0';
+      //   this.request.bookedSeat = this.seatCount;
+      //   this.request.currentLocationLongitude = activeRequest.currentLocationLongitude;
+      //   this.request.currentLocationLatitude = activeRequest.currentLocationLatitude;
+      //   this.request.riderDestinationLatitude = activeRequest.riderDestinationLatitude;
+      //   this.request.riderDestinationLongitude = activeRequest.riderDestinationLongitude;
+      //   this.request.userId = this.currentUser.userId;
+      //   this.request.tripStatus = activeRequest.tripStatus;
+      //   this.request.riderConnectId = connectionId;
+      //   this.tripConnectionId = this.request.tripConnectionId;
+      //   localStorage.setItem('riderRequest', JSON.stringify(this.request));
+      // }, 5000);
+      return;
     }
 
   }

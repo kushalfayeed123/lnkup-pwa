@@ -37,11 +37,6 @@ const routes: Routes = [
   { path: 'trips/:id', component: TripsHistoryComponent },
   { path: 'profile/:id', component: ProfileComponent },
   { path: 'support/:id', component: SupportComponent },
-
-  {
-    path: 'admin',
-    loadChildren: './admin/admin.module#AdminModule'
-  },
   {
     path: 'rider',
     loadChildren: './rider/rider.module#RiderModule'
@@ -60,4 +55,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

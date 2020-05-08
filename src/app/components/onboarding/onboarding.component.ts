@@ -67,14 +67,13 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.loggedInUser$.subscribe(res => {
         this.loggedInUser = res;
+        this.store.dispatch(new GetUserByEmail(res.email));
+        this.store.dispatch(new GetCurrentUser(res.userId));
       }),
       this.currentUser$.subscribe(res => {
         this.currentUser = res;
       })
-
-
     );
-    this.store.dispatch(new GetCurrentUser(this.loggedInUser.id));
 
     this.getCurrentime();
   }
@@ -88,7 +87,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     localStorage.removeItem('driverData');
   }
   getCurrentime() {
-    this.store.dispatch(new GetUserByEmail(this.loggedInUser.email));
     if (this.currentUser !== null) {
       this.userName = this.currentUser.userName;
     } else {
@@ -135,9 +133,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
           .subscribe(data => {
             this.store.dispatch(new ShowLoader(false))
             if (data.role === 'Rider') {
-              this.route.navigate(['rider/home', data.id]);
+              this.route.navigate(['rider/home', data.userId]);
             } else if (data.role === 'Driver') {
-              this.route.navigate(['driver/home', data.id]);
+              this.route.navigate(['driver/home', data.userId]);
             } else {
               this.route.navigate(['login']);
             }

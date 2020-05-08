@@ -69,6 +69,7 @@ export class DriverTripCreateComponent implements OnInit, OnDestroy {
   currentDateTime: any;
   onGoingTrip: boolean;
   driverData: DriverData;
+  seatNumbers = [1, 2, 3, 4];
 
   constructor(private fb: FormBuilder, private mapService: MapBroadcastService,
     private activeTripService: ActiveTripDataService,

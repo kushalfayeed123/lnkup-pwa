@@ -20,7 +20,7 @@ import { GetLoggedInUser } from 'src/app/state/app/app.actions';
 @Injectable()
 export class NotificationsService {
 
-  @Select(AppState.getCurrentUser) loggedInUser$: Observable<Users>;
+  @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
 
   user: any;
   webUrl: string;
@@ -67,8 +67,12 @@ export class NotificationsService {
     private store: Store
   ) {
     this.loggedInUser$.subscribe(res => {
-      this.userId = res.userId;
-      this.loggedInUser = res;
+      if (!res) {
+        return;
+      } else {
+        this.userId = res.userId;
+        this.loggedInUser = res;
+      }
     });
     this.webUrl = environment.openConnect;
   }
@@ -214,13 +218,6 @@ export class NotificationsService {
   addUserToGroup(groupName) {
     this.loggedInUser$.subscribe(user => {
       this.hubConnection.invoke('AddToGroup', groupName)
-        .then(res => {
-          console.log(res);
-          const message = {
-            senderId: user.userId
-          };
-          console.log('added user to group', groupName);
-        });
     });
   }
 

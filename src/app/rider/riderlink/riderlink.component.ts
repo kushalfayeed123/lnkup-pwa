@@ -102,7 +102,6 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
         this.getActiveRiderData();
       })
     );
-    console.log(this.trip);
     this.getRiderDeclineAlert();
   }
 
@@ -200,7 +199,6 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
   }
 
   getActiveRiderData() {
-    console.log(this.trip);
     const activeRiders = this.trip.activeRiders;
     activeRiders.filter(a => a.userId === this.user.userId);
     if (activeRiders) {
@@ -294,7 +292,7 @@ export class RiderlinkComponent implements OnInit, OnDestroy {
     this.loading = true;
     const trip = JSON.parse(localStorage.getItem('riderRequest'));
     const tripId = trip.tripId;
-    this.tripService.getTripsById(tripId)
+    this.tripService.getTripsById(this.trip.tripId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
         const activeRiders = res.activeRiders;

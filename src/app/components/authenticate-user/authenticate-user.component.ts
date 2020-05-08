@@ -58,16 +58,11 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new ShowLeftNav(false));
-
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.subs.add(
-      this.loggedInUser$.subscribe(user => {
-        this.loggedInUser = user;
-      })
-    );
+
     // get return url from route or default to '/'
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
@@ -91,7 +86,12 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(
         data => {
-          this.updateUserStatus();
+          this.subs.add(
+            this.loggedInUser$.subscribe(user => {
+              this.loggedInUser = user;
+              this.updateUserStatus(user);
+            })
+          );
         },
         error => {
           this.error = error;
@@ -108,28 +108,27 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
       panelClass: ['dark-snackbar-error']
     });
   }
-  updateUserStatus() {
+  updateUserStatus(user) {
     this.loading = true;
     const userPass = this.f.password.value;
-    if (this.loggedInUser == null) {
+    if (user == null) {
       setTimeout(() => {
         this.loading = false;
         this.openErrorMessage();
       }, 3000);
       return;
     } else {
-      const userData = this.loggedInUser;
       const userRole = this.authenticate.decode();
       const userStatusData = {
-        userId: userData.id,
-        email: userData.email,
-        username: userData.userName,
-        phoneNumber: userData.phoneNumber,
-        password: userPass.password,
-        token: userData.token,
+        userId: user.userId,
+        email: user.email,
+        username: user.userName,
+        phoneNumber: user.phoneNumber,
+        password: user.password,
+        token: user.token,
         userStatus: 1,
         role: userRole.role,
-        imageUrl: userData.imageUrl
+        imageUrl: user.imageUrl
       };
       this.authenticate.update(userStatusData)
         .pipe(takeUntil(this.unsubscribe$))
@@ -141,7 +140,6 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   }
   redirectUser() {
     this.userRole = this.authenticate.decode();
-    const userId = this.loggedInUser.userId;
     if (this.loggedInUser.role === 'Rider') {
       this.router.navigate(['/onboarding']);
     } else if (this.loggedInUser.role === 'Driver') {
@@ -158,6 +156,7 @@ export class AuthenticateUserComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 
 }

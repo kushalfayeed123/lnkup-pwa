@@ -19,8 +19,13 @@
       </mat-form-field>
 
       <mat-form-field class="auth-full-width form-bottom">
-        <input type="number" matInput class="input-color" placeholder="How many seats do you want to book?"
-          name="seatCount" #seatNumber [ngModel]=seatCount (keyup)="computeTripFare(seatNumber.value)" />
+        <!-- <input type="number" matInput class="input-color" placeholder="How many seats do you want to book?"
+          name="seatCount" #seatNumber [ngModel]=seatCount (keyup)="computeTripFare(seatNumber.value)" /> -->
+
+        <mat-label>How many seats do you want to book?</mat-label>
+        <mat-select (selectionChange)="computeTripFare($event.value)" #seatNumber>
+          <mat-option *ngFor="let seat of allowedSeats" [value]="seat">{{seat}}</mat-option>
+        </mat-select>
       </mat-form-field>
 
       <div class="payment-options">

@@ -30,6 +30,8 @@
           </div>
         </div>
         <ul class="nav-links">
+          <li class="link-item"><a (click)="navToOnboarding()"
+              class="link">{{userRole === 'rider' ? 'Share your ride' : 'Join a ride' }}</a></li>
           <li class="link-item"><a (click)="navToHome()" class="link">Home</a></li>
           <li class="link-item"><a (click)="navToProfile()" class="link">Profile</a></li>
           <li class="link-item"><a (click)="navToTrips()" class="link">My Trips</a></li>

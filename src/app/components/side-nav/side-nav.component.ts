@@ -42,6 +42,7 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
   loggedInUser: any;
   receiverId: string;
   receiverName: string;
+  role: string;
 
 
 
@@ -70,7 +71,6 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.loggedInUser$.subscribe(user => {
         this.loggedInUser = user;
         this.getCurrentUser();
-
       }),
       this.showLeftNav$.subscribe(res => {
         this.showSideNav = res;
@@ -81,10 +81,18 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
   _toggleSidebar() {
     this._opened = !this._opened;
   }
-  navToHome() {
+  navToOnboarding() {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.onSameUrlNavigation = 'reload';
     this._router.navigate([`/onboarding`]);
+  }
+  navToHome() {
+    if (this.role === 'Rider') {
+      this._router.navigate([`rider/home/${this.userId}`]);
+    } else {
+      this._router.navigate([`driver/home/${this.userId}`]);
+
+    }
   }
   navToProfile() {
     this._router.navigate([`profile/${this.userId}`]);

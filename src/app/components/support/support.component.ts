@@ -113,20 +113,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addToGroup() {
-    this.loading = true;
-    // this.groupName = localStorage.getItem('groupName');
     this.notifyService.addUserToGroup(this.chatObject.groupName);
-    this.notifyService.sentFlag
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(res => {
-        if (!res) {
-          this.loading = false;
-          return;
-        } else {
-          this.loading = false;
-          // this.sent.push(res);
-        }
-      });
   }
 
   getCurrentUser(user) {

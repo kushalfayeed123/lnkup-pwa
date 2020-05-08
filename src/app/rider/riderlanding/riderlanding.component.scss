@@ -2,7 +2,7 @@
   height: 100%;
 }
 .avd-container {
-  height: 76%;
+  height: 108.2%;
 }
 #search-form {
   grid-column: cone/ctwo;
@@ -21,11 +21,12 @@
 }
 .driver-message-card {
   position: relative;
-  bottom: 9%;
+  bottom: 24%;
   padding: 9px;
 }
 .message-card-body {
   height: 114px !important;
+  top: -4px !important;
 }
 #search-form input {
   border: 0;
@@ -415,21 +416,21 @@ body.map-body .avd li:first-of-type::before {
 }
 
 @media only screen and (min-height: 640px) and (max-height: 667px) {
-  .avd-container {
-    height: 79%;
-  }
+  // .avd-container {
+  //   height: 79%;
+  // }
 }
 
 @media only screen and (min-height: 668px) and (max-height: 736px) {
-  .avd-container {
-    height: 81%;
-  }
+  // .avd-container {
+  //   height: 81%;
+  // }
 }
 
 @media only screen and (min-height: 736px) {
-  .avd-container {
-    height: 83%;
-  }
+  // .avd-container {
+  //   height: 83%;
+  // }
 }
 
 @media only screen and(max-width: 320px) {

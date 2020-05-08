@@ -43,9 +43,16 @@
 
 
             <mat-form-field class="auth-full-width form-bottom">
-                <input type="number" #ridersNumber matInput class="input-color"
+                <!-- <input type="number" #ridersNumber matInput class="input-color"
                     placeholder="How many riders will be joining this trip?" formControlName="maxRiderNumber"
-                    (keyup)="computeTripFare(ridersNumber.value)" min="1" />
+                    (keyup)="computeTripFare(ridersNumber.value)" min="1" /> -->
+                <mat-label>How many riders will be joining this trip?</mat-label>
+                <mat-select formControlName="maxRiderNumber" #ridersNumber
+                    (selectionChange)="computeTripFare($event.value)">
+                    <mat-option *ngFor="let seat of seatNumbers" [value]="seat">
+                        {{seat}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
 
             <!-- <mat-form-field class="auth-full-width">

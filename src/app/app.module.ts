@@ -60,6 +60,8 @@ import { NetworkStatusAngularModule } from 'network-status-angular';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsResetPluginModule } from 'ngxs-reset-plugin';
+
 
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { AngularFireStorageModule } from '@angular/fire/storage';
@@ -134,6 +136,7 @@ import { ChatState } from './state/chat/chat.state';
     NgxsStoragePluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
+    NgxsResetPluginModule.forRoot()
   ],
 
   providers: [

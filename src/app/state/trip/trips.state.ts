@@ -4,6 +4,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
 import { ShowLoader } from '../app/app.actions';
+import { StateReset } from 'ngxs-reset-plugin';
 
 export class TripsStateModel {
   trips: ActiveTrips[];
@@ -50,6 +51,8 @@ export class TripsState {
 
   @Action(GetTrips)
   getTrips(ctx: StateContext<TripsStateModel>) {
+    this.store.dispatch(new ShowLoader(true));
+    // this.store.dispatch(new StateReset(TripsState));
     return this.TripsService.getAllActiveTrips().pipe(
       tap(trips => {
         const state = ctx.getState();
@@ -57,17 +60,21 @@ export class TripsState {
           ...state,
           trips
         });
+        this.store.dispatch(new ShowLoader(false));
       })
     );
   }
 
   @Action(GetAvailableTrips)
   getAvailableTrips(ctx: StateContext<TripsStateModel>, { availableTrips }: GetAvailableTrips) {
+    this.store.dispatch(new ShowLoader(true));
     const state = ctx.getState();
     ctx.setState({
       ...state,
       availableTrips
     });
+    this.store.dispatch(new ShowLoader(false));
+
   }
 
   @Action(GetTripById)
@@ -75,12 +82,12 @@ export class TripsState {
     this.store.dispatch(new ShowLoader(true));
     return this.TripsService.getTripsById(id).pipe(
       tap(trip => {
+        this.store.dispatch(new ShowLoader(false));
         const state = ctx.getState();
         ctx.setState({
           ...state,
           selectedTrip: trip
         });
-        this.store.dispatch(new ShowLoader(false));
       })
     );
   }

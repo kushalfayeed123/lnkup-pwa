@@ -322,7 +322,7 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   dateNow: string;
   emptyTrip: boolean;
   private subs = new SubSink();
-  allAvailableTrips: ActiveTrips[];
+  allAvailableTrips = [];
   showCurrenLocationInput: boolean;
   request: {
     currentLocationLongitude: any; currentLocationLatitude: any;
@@ -333,6 +333,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   currentUser: any;
   selectedTrip: ActiveTrips;
   trips: ActiveTrips[];
+  currentLocationCoord: { lat: any; lng: any; };
+  tripEndLocation: google.maps.LatLng;
+  riderEndLocation: google.maps.LatLng;
 
   constructor(
     private route: ActivatedRoute,
@@ -377,7 +380,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     );
 
     this.activeTripCheck();
-    this.emptyTrip = false;
     localStorage.removeItem('currentLocation');
     setTimeout(() => {
       this.getCurrentLocation();
@@ -391,13 +393,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           this.getPickupDirection();
         }
       });
-    this.route.params.subscribe(p => {
-      const userId = p.id;
-    });
     this.searchControl = new FormControl();
     this.zoom = 15;
     // this.getAllDriversLocations();
-    // this.getEmptyTrips();
   }
 
   smoothMapPan() {
@@ -422,35 +420,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.router.navigate(['rider/bookSeat']);
     }
   }
-  // getEmptyTrips() {
-  //   this.broadCastService.emptyTrips
-  //     .pipe(takeUntil(this.unsubscribe$))
-  //     .subscribe(res => {
-  //       this.destinationAddress = '';
-  //       this.originAddress = '';
-  //       if (!res) {
-  //         setTimeout(() => {
-  //           this.emptyTrip = res;
-  //         }, 5000);
-  //       } else {
-  //         this.emptyTrip = res;
-  //       }
-  //     });
-  // }
-  // getUserById(userId) {
-  //   this.authService
-  //     .getById(userId)
-  //     .pipe(takeUntil(this.unsubscribe$))
-  //     .subscribe(user => {
-  //       const userPaymentData = user.userPaymentData;
-  //       if (userPaymentData.length < 1) {
-  //         this.userPayment = false;
-  //       } else {
-  //         this.userPayment = true;
-  //       }
-  //       this.broadCastService.publishUserPaymentStatus(this.userPayment);
-  //     });
-  // }
   mapReading() {
     this.userLocationMarkerAnimation = 'BOUNCE';
   }
@@ -489,7 +458,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.mapService.locationObject.subscribe(loc => {
         this.latitude = loc.lat;
         this.longitude = loc.lng;
-        const currentLocation = { lat: loc.lat, lng: loc.lng };
+        const currentLocation = { lat: this.latitude, lng: this.longitude };
+        this.currentLocationCoord = currentLocation;
         localStorage.setItem('origin', JSON.stringify(currentLocation));
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ location: currentLocation }, result => {
@@ -582,9 +552,9 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   storeLocation() {
     this.mapService.storeLocation(this.originAddress, this.destinationAddress);
   }
-  getDestinationCordinates() {
-    this.mapService.findDestination(this.destinationAddress);
-  }
+  // getDestinationCordinates() {
+  //   this.mapService.findDestination(this.destinationAddress);
+  // }
 
   passDirection() {
     const cl = JSON.parse(localStorage.getItem('origin'));
@@ -607,6 +577,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       this.origin = { lat: origin.lat, lng: origin.lng };
       this.destination = { lat: destination.lat, lng: destination.lng };
       this.renderOptions = {
+        suppressMarkers: true,
+
         polylineOptions: {
           strokeColor: '#e040fb',
           geodesic: true,
@@ -614,7 +586,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
           strokeWeight: 5,
           editable: false,
         },
-        suppressMarkers: true,
       };
       this.latitude = origin.lat;
       this.longitude = origin.lng;
@@ -631,17 +602,14 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   }
 
   getPickupDirection() {
-    const origin = JSON.parse(localStorage.getItem('currentLocation'));
-    const pickupArray = JSON.parse(localStorage.getItem('pickup'));
-    pickupArray.forEach(element => {
-      const destination = element;
-      console.log('get direction', origin, destination);
-      this.getDirection(origin, destination);
-    });
+    const activeRider = JSON.parse(localStorage.getItem('activeRiderRequest'));
+    const origin = { lat: Number(activeRider.currentLocationLatitude), lng: Number(activeRider.currentLocationLongitude) };
+    const destination = JSON.parse(localStorage.getItem('pickup'));
+    this.getDirection(origin, destination);
   }
   getDrivers() {
     this.store.dispatch(new GetTrips());
-    this.store.dispatch(new ShowLoader(true));
+    // this.store.dispatch(new ShowLoader(true));
     this.loadMarker = true;
     if (!this.userPayment) {
       localStorage.setItem('paymentType', 'cash');
@@ -649,14 +617,16 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       localStorage.setItem('paymentType', 'card');
     }
     this.getCurrentLocation();
-    this.getDestinationCordinates();
+    // this.getDestinationCordinates();
     this.gettingDrivers = true;
     this.showForm = false;
     this.loading = true;
     this.createTripRequest();
   }
   onAutocompleteSelected(result: PlaceResult) {
+    this.store.dispatch(new GetTrips());
     this.destinationAddress = result.formatted_address;
+    this.mapService.findDestination(this.destinationAddress);
   }
 
   onLocationSelected(location: Location) {
@@ -707,116 +677,119 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.trips$.subscribe(res => {
         this.allActiveTrips = res;
-        if (res.length < 1) {
-          this.notificationService.showInfoMessage(
-            'Sorry there are no trips at the moment. Please try again later.'
-          );
-          this.showNoTripMessage = true;
-          this.showForm = false;
-          setTimeout(() => {
-            this.loadMarker = false;
-            this.showNoTripMessage = false;
-            this.showForm = true;
-            this.gettingDrivers = false;
-          }, 10000);
-        } else {
-          setTimeout(() => {
-            const activeTrips = JSON.parse(JSON.stringify(res));
-            activeTrips.forEach(element => {
-              const tripDestinationLat = Number(element.driverEndLatitude);
-              const tripDestinationLong = Number(element.driverEndLongitude);
-              const pickupLat = Number(element.driverStartLatitude);
-              const pickupLng = Number(element.driverStartLongitude);
-              const origin = JSON.parse(localStorage.getItem('origin'));
-              const userLocation = JSON.parse(
-                localStorage.getItem('currentLocation')
-              );
-              const userDestination = JSON.parse(
-                localStorage.getItem('destination')
-              );
-              const tripEndLocation = new google.maps.LatLng(
-                tripDestinationLat,
-                tripDestinationLong
-              );
-              const riderEndLocation = new google.maps.LatLng(
-                userDestination.lat,
-                userDestination.lng
-              );
-              new google.maps.DistanceMatrixService().getDistanceMatrix(
-                {
-                  travelMode: google.maps.TravelMode.DRIVING,
-                  origins: [tripEndLocation],
-                  destinations: [riderEndLocation],
-                },
-                (results: any) => {
-                  this.destinationDistanceInKm =
-                    results.rows[0].elements[0].distance.value / 1000;
-                  element.userDriverDestinationDistance = this.destinationDistanceInKm;
-                  // this.destinationDistanceInKm.push(destinationDistanceInKm);
-                }
-              );
-
-              if (userLocation !== null) {
-                this.start = userLocation;
-              } else {
-                this.start = origin;
-              }
-              const currentLocation = new google.maps.LatLng(
-                this.start.lat,
-                this.start.lng
-              );
-              const pickupLocation = new google.maps.LatLng(
-                pickupLat,
-                pickupLng
-              );
-              const request = {
-                origin: pickupLocation,
-                destination: tripEndLocation
-              };
-              localStorage.setItem('pickup', JSON.stringify(pickupLocation));
-              this.getRoutePoints(request);
-              new google.maps.DistanceMatrixService().getDistanceMatrix(
-                {
-                  travelMode: google.maps.TravelMode.DRIVING,
-                  origins: [currentLocation],
-                  destinations: [pickupLocation],
-                },
-                (results: any) => {
-                  element.pickupDistance =
-                    results.rows[0].elements[0].distance.value / 1000;
-                  element.timeToPickup =
-                    results.rows[0].elements[0].duration.text;
-                  if (!activeTrips) {
-                    return;
-                  } else {
-                    const allAvailableTrips = activeTrips.filter(d => d.pickupDistance < 8 &&
-                      d.userDriverDestinationDistance < 8 &&
-                      d.allowedRiderCount >= 0 &&
-                      new Date(d.actualTripStartDateTime) >= this.currentDate);
-
-                    console.log(allAvailableTrips);
-                    if (allAvailableTrips.length < 1) {
-                      this.store.dispatch(new ShowLoader(false));
-                      this.emptyTrip = true;
-                      this.loadMarker = false;
-                    } else {
-                      this.emptyTrip = false;
-                      this.store.dispatch(new GetAvailableTrips(allAvailableTrips));
-                      this.store.dispatch(new ShowLoader(false));
-                      this.availableTrips = true;
-                      this.gettingDrivers = false;
-                      this.passDirection();
-                    }
-
-                  }
-                }
-              );
-            });
-
-          }, 5000);
-        }
       }),
     );
+    console.log(this.allActiveTrips);
+    if (this.allActiveTrips.length < 1) {
+      this.notificationService.showInfoMessage(
+        'Sorry there are no trips at the moment. Please try again later.'
+      );
+      this.showNoTripMessage = true;
+      this.showForm = false;
+      this.emptyTrip = false;
+      setTimeout(() => {
+        this.loadMarker = false;
+        this.showNoTripMessage = false;
+        this.showForm = true;
+        this.gettingDrivers = false;
+      }, 10000);
+    } else {
+      const activeTrips = JSON.parse(JSON.stringify(this.allActiveTrips));
+      activeTrips.forEach(element => {
+        const tripDestinationLat = Number(element.driverEndLatitude);
+        const tripDestinationLong = Number(element.driverEndLongitude);
+        const pickupLat = Number(element.driverStartLatitude);
+        const pickupLng = Number(element.driverStartLongitude);
+        const origin = JSON.parse(localStorage.getItem('origin'));
+        const userLocation = JSON.parse(
+          localStorage.getItem('currentLocation')
+        );
+        const userDestination = JSON.parse(
+          localStorage.getItem('destination')
+        );
+        this.tripEndLocation = new google.maps.LatLng(
+          tripDestinationLat,
+          tripDestinationLong
+        );
+        this.riderEndLocation = new google.maps.LatLng(
+          userDestination.lat,
+          userDestination.lng
+        );
+        new google.maps.DistanceMatrixService().getDistanceMatrix(
+          {
+            origins: [this.tripEndLocation],
+            destinations: [this.riderEndLocation],
+            travelMode: google.maps.TravelMode.DRIVING,
+          },
+          (results: any) => {
+            this.destinationDistanceInKm =
+              results.rows[0].elements[0].distance.value / 1000;
+            element.userDriverDestinationDistance = this.destinationDistanceInKm;
+            // this.destinationDistanceInKm.push(destinationDistanceInKm);
+          }
+        );
+
+        if (userLocation !== null) {
+          this.start = userLocation;
+        } else {
+          this.start = origin;
+        }
+        const currentLocation = new google.maps.LatLng(
+          this.start.lat,
+          this.start.lng
+        );
+        const pickupLocation = new google.maps.LatLng(
+          pickupLat,
+          pickupLng
+        );
+        const request = {
+          origin: pickupLocation,
+          destination: this.tripEndLocation
+        };
+        localStorage.setItem('pickup', JSON.stringify(pickupLocation));
+        this.getRoutePoints(request);
+        new google.maps.DistanceMatrixService().getDistanceMatrix(
+          {
+            origins: [currentLocation],
+            destinations: [pickupLocation],
+            travelMode: google.maps.TravelMode.DRIVING,
+          },
+          (results: any) => {
+            element.pickupDistance =
+              results.rows[0].elements[0].distance.value / 1000;
+            element.timeToPickup =
+              results.rows[0].elements[0].duration.text;
+
+            this.allAvailableTrips = activeTrips.filter(d => d.pickupDistance < 8 &&
+              d.userDriverDestinationDistance < 8 &&
+              d.allowedRiderCount >= 0 &&
+              new Date(d.actualTripStartDateTime) >= this.currentDate);
+
+            console.log(this.allAvailableTrips);
+
+            if (!this.allAvailableTrips) {
+              return;
+            } else {
+              if (this.allAvailableTrips.length > 0) {
+                this.store.dispatch(new GetAvailableTrips(this.allAvailableTrips));
+                // this.store.dispatch(new ShowLoader(false));
+                this.availableTrips = true;
+                this.gettingDrivers = false;
+                this.emptyTrip = false;
+                this.passDirection();
+              } else {
+                this.store.dispatch(new ShowLoader(false));
+                this.loadMarker = false;
+                this.emptyTrip = true;
+              }
+            }
+          }
+        );
+      });
+
+    }
+
+
   }
 
   navToTripSearch() {

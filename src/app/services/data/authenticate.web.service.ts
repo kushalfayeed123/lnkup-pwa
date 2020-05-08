@@ -9,6 +9,7 @@ import * as jwt_decode from 'jwt-decode';
 import { environment } from '../../../environments/environment';
 import { Store } from '@ngxs/store';
 import { GetLoggedInUser } from 'src/app/state/app/app.actions';
+import { StateClear } from 'ngxs-reset-plugin';
 
 
 
@@ -75,6 +76,9 @@ export class AuthenticateWebService implements AuthenticateDataService {
   logout() {
     // remove user from local storage to log user out
     localStorage.clear();
+    // this.store.dispatch(
+    //   new StateClear()
+    // );
   }
   decode() {
     try {
