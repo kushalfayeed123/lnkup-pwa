@@ -14,7 +14,7 @@ import { TripsState } from 'src/app/state/trip/trips.state';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { SubSink } from 'subsink/dist/subsink';
 import { GetTripById } from 'src/app/state/trip/trips.action';
-import { ShowLoader } from 'src/app/state/app/app.actions';
+import { ShowLoader, ShowBackButton } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-availabledrivers',
@@ -57,6 +57,11 @@ export class AvailabledriversComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    const buttonObject = {
+      showButton: true,
+      route: '/rider/home/7e2951e7-d324-4530-3958-08d7b7e0df40'
+    };
+    this.store.dispatch(new ShowBackButton(buttonObject));
     this.subs.add(
       this.trips$.subscribe(res => {
         this.availableTrips = res;

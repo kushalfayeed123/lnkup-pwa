@@ -1,5 +1,5 @@
 import { Selector, State, StateContext, Action, Store } from '@ngxs/store';
-import { SetPreviousRoute, ShowLoader, GetLoggedInUser, GetCurrentUser, ShowLeftNav, GetUserByEmail, SetCurrentRoute } from './app.actions';
+import { SetPreviousRoute, ShowLoader, GetLoggedInUser, GetCurrentUser, ShowLeftNav, GetUserByEmail, SetCurrentRoute, ShowBackButton, NavToTripSearch } from './app.actions';
 import { tap } from 'rxjs/internal/operators/tap';
 import { Injectable } from '@angular/core';
 import { Users } from 'src/app/models/Users';
@@ -13,6 +13,8 @@ export class AppStateModel {
   previousRoute: string;
   userByEmail: Users;
   currentRoute: any;
+  showBackButton: any;
+  navToSearch: boolean;
 }
 
 @State<AppStateModel>({
@@ -24,7 +26,9 @@ export class AppStateModel {
     previousRoute: '',
     showLeftNav: false,
     userByEmail: null,
-    currentRoute: null
+    currentRoute: null,
+    showBackButton: null,
+    navToSearch: false,
   }
 })
 
@@ -40,6 +44,10 @@ export class AppState {
   @Selector()
   static getCurrenRoute(state: AppStateModel) {
     return state.currentRoute;
+  }
+  @Selector()
+  static navToSearch(state: AppStateModel) {
+    return state.navToSearch;
   }
   @Selector()
   static getCurrentUser(state: AppStateModel) {
@@ -59,6 +67,11 @@ export class AppState {
   @Selector()
   static showLeftNav(state: AppStateModel) {
     return state.showLeftNav;
+  }
+
+  @Selector()
+  static showBackButton(state: AppStateModel) {
+    return state.showBackButton;
   }
 
   @Selector()
@@ -98,12 +111,30 @@ export class AppState {
     });
   }
 
+  @Action(ShowBackButton)
+  showBackButton(ctx: StateContext<AppStateModel>, { showButton }: ShowBackButton) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      showBackButton: showButton,
+    });
+  }
+
   @Action(ShowLeftNav)
   showLeftNav(ctx: StateContext<AppStateModel>, { payload }: ShowLeftNav) {
     const state = ctx.getState();
     ctx.setState({
       ...state,
       showLeftNav: payload
+    });
+  }
+
+  @Action(NavToTripSearch)
+  navToTripSearch(ctx: StateContext<AppStateModel>, { navToSearch }: NavToTripSearch) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      navToSearch
     });
   }
 

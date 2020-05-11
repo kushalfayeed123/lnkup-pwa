@@ -14,6 +14,7 @@ import { SubSink } from 'subsink/dist/subsink';
 import { AppState } from 'src/app/state/app/app.state';
 import { GetChatObject } from 'src/app/state/chat/chat.action';
 import { ThrowStmt } from '@angular/compiler';
+import { NavToTripSearch } from 'src/app/state/app/app.actions';
 
 @Component({
   selector: 'app-side-nav',
@@ -26,6 +27,8 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
   @Select(AppState.showLeftNav) showLeftNav$: Observable<boolean>;
+  @Select(AppState.showBackButton) showBackButton$: Observable<any>;
+
 
 
   private unsubscribe$ = new Subject<void>();
@@ -43,6 +46,8 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
   receiverId: string;
   receiverName: string;
   role: string;
+  showBack: boolean;
+  backRoute: any;
 
 
 
@@ -60,8 +65,10 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subs.add(
       this.showLeftNav$.subscribe(res => {
         this.showSideNav = res;
-      })
+      }),
+
     );
+
     this.changeDetectorRef.detectChanges();
   }
 
@@ -74,12 +81,24 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
       }),
       this.showLeftNav$.subscribe(res => {
         this.showSideNav = res;
-      })
+      }),
+      this.showBackButton$.subscribe(res => {
+        this.showBack = res.showButton;
+        this.backRoute = res.route;
+      }),
     );
+
+    console.log(this.showBack);
+
   }
 
   _toggleSidebar() {
     this._opened = !this._opened;
+  }
+  navBack() {
+    this._router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this._router.onSameUrlNavigation = 'reload';
+    this._router.navigate([this.backRoute]);
   }
   navToOnboarding() {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -87,7 +106,7 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
     this._router.navigate([`/onboarding`]);
   }
   navToHome() {
-    if (this.role === 'Rider') {
+    if (this.userRole === 'rider') {
       this._router.navigate([`rider/home/${this.userId}`]);
     } else {
       this._router.navigate([`driver/home/${this.userId}`]);
@@ -142,7 +161,7 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
   getCurrentUser() {
     if (this.loggedInUser) {
       this.userName = this.loggedInUser.userName;
-      this.userId = this.loggedInUser.id;
+      this.userId = this.loggedInUser.userId;
       this.userRole = this.loggedInUser.role.toLowerCase();
       if (this.userName === 'segun' || this.userName === 'susan') {
         this.showSpecialChat = true;

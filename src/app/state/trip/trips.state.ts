@@ -1,5 +1,5 @@
 import { Selector, Action, StateContext, State, Store } from '@ngxs/store';
-import { GetTrips, GetAvailableTrips, GetTripById } from './trips.action';
+import { GetTrips, GetAvailableTrips, GetTripById, GetAllTrips, ShowEmptyTripMessage } from './trips.action';
 import { tap } from 'rxjs/internal/operators/tap';
 import { ActiveTrips } from 'src/app/models/ActiveTrips';
 import { ActiveTripDataService } from 'src/app/services/data/active-trip/active-trip.data.service';
@@ -10,6 +10,8 @@ export class TripsStateModel {
   trips: ActiveTrips[];
   availableTrips: ActiveTrips[];
   selectedTrip: ActiveTrips;
+  allTrips: ActiveTrips[];
+  emptyTrip: Boolean;
 }
 
 
@@ -20,6 +22,8 @@ export class TripsStateModel {
     trips: [],
     availableTrips: [],
     selectedTrip: null,
+    allTrips: [],
+    emptyTrip: false,
   }
 })
 
@@ -30,7 +34,10 @@ export class TripsState {
   static getTrips(state: TripsStateModel) {
     return state.trips;
   }
-
+  @Selector()
+  static getAllTrips(state: TripsStateModel) {
+    return state.allTrips;
+  }
   @Selector()
   static getAvailableTrips(state: TripsStateModel) {
     return state.availableTrips;
@@ -39,6 +46,11 @@ export class TripsState {
   @Selector()
   static getSelectedTrip(state: TripsStateModel) {
     return state.selectedTrip;
+  }
+
+  @Selector()
+  static showEmptyTripMessage(state: TripsStateModel) {
+    return state.emptyTrip;
   }
 
 
@@ -59,6 +71,21 @@ export class TripsState {
         ctx.setState({
           ...state,
           trips
+        });
+        this.store.dispatch(new ShowLoader(false));
+      })
+    );
+  }
+
+  @Action(GetAllTrips)
+  getAllTrips(ctx: StateContext<TripsStateModel>) {
+    this.store.dispatch(new ShowLoader(true));
+    return this.TripsService.getAllTrips().pipe(
+      tap(trips => {
+        const state = ctx.getState();
+        ctx.setState({
+          ...state,
+          allTrips: trips
         });
         this.store.dispatch(new ShowLoader(false));
       })
@@ -92,6 +119,12 @@ export class TripsState {
     );
   }
 
-
-
+  @Action(ShowEmptyTripMessage)
+  showEmptyTripMessage(ctx: StateContext<TripsStateModel>, { emptyTrip }: ShowEmptyTripMessage) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      emptyTrip
+    });
+  }
 }

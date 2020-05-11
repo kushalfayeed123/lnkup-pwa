@@ -8,6 +8,22 @@ export class ShowLeftNav {
   }
 }
 
+export class ShowBackButton {
+  static readonly type = '[App] ShowBackButton';
+
+  constructor(public showButton: any) {
+
+  }
+}
+
+export class NavToTripSearch {
+  static readonly type = '[App] NavToTripSearch';
+
+  constructor(public navToSearch: boolean) {
+
+  }
+}
+
 export class SetPreviousRoute {
   static readonly type = '[App] SetPreviousRoute';
 

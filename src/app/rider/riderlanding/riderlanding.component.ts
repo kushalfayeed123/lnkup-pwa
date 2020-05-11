@@ -36,8 +36,8 @@ import { Select, Store } from '@ngxs/store';
 import { SubSink } from 'subsink/dist/subsink';
 import { Users } from 'src/app/models/Users';
 import { AppState } from 'src/app/state/app/app.state';
-import { ShowLeftNav, ShowLoader } from 'src/app/state/app/app.actions';
-import { GetTrips, GetAvailableTrips } from 'src/app/state/trip/trips.action';
+import { ShowLeftNav, ShowLoader, ShowBackButton } from 'src/app/state/app/app.actions';
+import { GetTrips, GetAvailableTrips, ShowEmptyTripMessage } from 'src/app/state/trip/trips.action';
 import { TripsState } from 'src/app/state/trip/trips.state';
 
 
@@ -58,6 +58,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
   @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
   @Select(TripsState.getTrips) trips$: Observable<ActiveTrips[]>;
   @Select(TripsState.getSelectedTrip) selectedTrips$: Observable<ActiveTrips>;
+  @Select(TripsState.showEmptyTripMessage) emptyTrip$: Observable<boolean>;
+
 
 
 
@@ -357,13 +359,15 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.notificationService.receiveMessage();
     this.notificationService.currentMessage.subscribe(res => {
     });
-    // this.getAllTrips();
-    // this.notificationService.deleteSubscription();
-    // this.notificationService.tokenRefresh();
     this.setIntervalCall();
   }
 
   ngOnInit() {
+    const buttonObject = {
+      showButton: false,
+      route: ''
+    };
+    this.store.dispatch(new ShowBackButton(buttonObject));
     this.store.dispatch(new ShowLeftNav(true));
     this.store.dispatch(new GetTrips());
     this.subs.add(
@@ -376,7 +380,10 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       }),
       this.selectedTrips$.subscribe(res => {
         this.selectedTrip = res;
-      })
+      }),
+      this.emptyTrip$.subscribe(res => {
+        this.emptyTrip = res;
+      }),
     );
 
     this.activeTripCheck();
@@ -513,7 +520,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         .getLocationsByUserId(this.currentUser.userId)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(res => {
-          console.log(res)
           if (!res) {
             this.createUserLocation();
             return;
@@ -608,8 +614,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.getDirection(origin, destination);
   }
   getDrivers() {
-    this.store.dispatch(new GetTrips());
-    // this.store.dispatch(new ShowLoader(true));
     this.loadMarker = true;
     if (!this.userPayment) {
       localStorage.setItem('paymentType', 'cash');
@@ -617,7 +621,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
       localStorage.setItem('paymentType', 'card');
     }
     this.getCurrentLocation();
-    // this.getDestinationCordinates();
     this.gettingDrivers = true;
     this.showForm = false;
     this.loading = true;
@@ -679,7 +682,6 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
         this.allActiveTrips = res;
       }),
     );
-    console.log(this.allActiveTrips);
     if (this.allActiveTrips.length < 1) {
       this.notificationService.showInfoMessage(
         'Sorry there are no trips at the moment. Please try again later.'
@@ -760,33 +762,28 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
             element.timeToPickup =
               results.rows[0].elements[0].duration.text;
 
+
             this.allAvailableTrips = activeTrips.filter(d => d.pickupDistance < 8 &&
               d.userDriverDestinationDistance < 8 &&
-              d.allowedRiderCount >= 0 &&
-              new Date(d.actualTripStartDateTime) >= this.currentDate);
-
+              d.allowedRiderCount >= 0 && new Date(d.actualTripStartDateTime) >= this.currentDate);
             console.log(this.allAvailableTrips);
-
-            if (!this.allAvailableTrips) {
+            if (this.allAvailableTrips.length < 1) {
+              this.store.dispatch(new ShowLoader(false));
+              this.loadMarker = false;
+              // this.store.dispatch(new ShowEmptyTripMessage(true));
+              this.emptyTrip = true;
               return;
             } else {
-              if (this.allAvailableTrips.length > 0) {
-                this.store.dispatch(new GetAvailableTrips(this.allAvailableTrips));
-                // this.store.dispatch(new ShowLoader(false));
-                this.availableTrips = true;
-                this.gettingDrivers = false;
-                this.emptyTrip = false;
-                this.passDirection();
-              } else {
-                this.store.dispatch(new ShowLoader(false));
-                this.loadMarker = false;
-                this.emptyTrip = true;
-              }
+              // this.store.dispatch(new ShowEmptyTripMessage(false));
+              this.store.dispatch(new GetAvailableTrips(this.allAvailableTrips));
+              this.availableTrips = true;
+              this.gettingDrivers = false;
+              this.emptyTrip = false;
+              this.passDirection();
             }
           }
         );
       });
-
     }
 
 
@@ -801,7 +798,8 @@ export class RiderlandingComponent implements OnInit, OnDestroy {
     this.showNoTripMessage = false;
     this.availableTrips = false;
     this.showDirection = false;
-    this.broadCastService.publishEmptyTrips(this.emptyTrip);
+    this.store.dispatch(new ShowEmptyTripMessage(this.emptyTrip));
+    // this.broadCastService.publishEmptyTrips(this.emptyTrip);
     // this.origin = {lat: null, lng: null};
     // this.destination = {lat: null, lng: null};
     this.getCurrentLocation();

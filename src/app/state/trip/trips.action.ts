@@ -12,6 +12,10 @@ export class GetTrips {
 
 }
 
+export class GetAllTrips {
+  static readonly type: '[Trips] GetAllTrips';
+}
+
 export class GetTripById {
   static readonly type = '[Trips] GetById';
 
@@ -41,5 +45,14 @@ export class GetAvailableTrips {
 
   constructor(public availableTrips: ActiveTrips[]) { }
 }
+
+
+
+export class ShowEmptyTripMessage {
+  static readonly type: '[Trips] ShowEmptyTripMessage';
+
+  constructor(public emptyTrip: boolean) { }
+}
+
 
 

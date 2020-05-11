@@ -49,9 +49,11 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary" *ngIf="showSideNav">
-      <button mat-icon-button (click)="sidenav.toggle()">
+      <button mat-icon-button (click)="sidenav.toggle()" *ngIf="!showBack">
         <mat-icon>menu</mat-icon>
       </button>
+
+      <img src="./assets/Images/back.svg" alt="" *ngIf="showBack" class="back" (click)="navBack()">
     </mat-toolbar>
     <app-spinner></app-spinner>
 

@@ -12,7 +12,7 @@ import { PaymentInstance, RaveOptions } from 'angular-rave';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { PaymentDataService } from 'src/app/services/data/payment/payment.data.service';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Payment } from 'src/app/models/payment';
 import { Router } from '@angular/router';
@@ -20,6 +20,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { PaymentModalComponent } from '../payment-modal/payment-modal.component';
 import { slideInAnimation } from 'src/app/services/misc/animation';
+import { Select } from '@ngxs/store';
+import { AppState } from 'src/app/state/app/app.state';
+import { Users } from 'src/app/models/Users';
+import { SubSink } from 'subsink/dist/subsink';
 
 @Component({
   selector: 'app-payment',
@@ -29,6 +33,9 @@ import { slideInAnimation } from 'src/app/services/misc/animation';
   host: { '[@slideInAnimation]': '' }
 })
 export class PaymentComponent implements OnInit, OnDestroy {
+  @Select(AppState.getCurrentUser) currentUser$: Observable<Users>;
+
+  private subs = new SubSink();
   paymentInstance: PaymentInstance;
   token: string;
   isCard: boolean;
@@ -71,6 +78,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   paymentStatus: any;
   addCard: boolean;
   loading: boolean;
+  user: Users;
 
   constructor(
     private fb: FormBuilder,
@@ -134,14 +142,19 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   getCurrentUser() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    this.userName = user.userName;
-    this.userId = user.id;
-    this.userPhone = user.phoneNumber.substring(4);
-    this.userEmail = user.email;
-    this.userRole = user.role.toLowerCase();
-    this.redirect =
-      'https://linkup20191021111853.azurewebsites.net/api/redirect';
+    this.subs.add(
+      this.currentUser$.subscribe(user => {
+        this.user = user;
+        this.userName = user.userName;
+        this.userId = user.userId;
+        this.userPhone = user.phoneNumber.substring(4);
+        this.userEmail = user.email;
+        this.userRole = user.role.toLowerCase();
+        this.redirect =
+          'https://linkup20191021111853.azurewebsites.net/api/redirect';
+      })
+    )
+
   }
 
   initiatePayment() {
@@ -456,8 +469,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.authService.getById(this.userId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
-        const paymentData: any = user.userPaymentData;
-        if (paymentData.length === 0) {
+        if (this.user.userPaymentData.length === 0) {
           const cardDetails = {
             userId: this.userId,
             paymentToken: token
@@ -534,5 +546,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 }
