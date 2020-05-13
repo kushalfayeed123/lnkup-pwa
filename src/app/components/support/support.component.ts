@@ -61,12 +61,14 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
   chatObject: any;
   messages = [];
   previousRoute: any;
+  container: HTMLElement;
   constructor(private _router: Router, private fb: FormBuilder,
     private reviewService: AppReviewDataService,
     private route: ActivatedRoute,
     private notifyService: NotificationsService,
     private store: Store) {
   }
+
 
   ngOnInit() {
     this.store.dispatch(new ShowLeftNav(true));
@@ -109,7 +111,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
       this.addToGroup();
       this.receiveGroupMessage();
     }, 5000);
-    // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
+    this.scrollChat();
   }
 
   addToGroup() {
@@ -121,7 +123,10 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userId = user.userId;
     this.userRole = user.role.toLowerCase();
   }
-
+  scrollChat() {
+    this.container = document.getElementById('anchor');
+    this.container.scrollIntoView({ behavior: 'smooth' });
+  }
   sendGroupMessage(message) {
     this.store.dispatch(new ShowLoader(true));
     // this.currentUserMessage.push(message);
@@ -139,16 +144,9 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
       click_action: `https://lnkupmob.azureedge.net/support/${this.userId}?reviewType=chat`
     };
     this.notifyService.sendGroupMessage(this.chatObject.groupName, messageObject);
-    // console.log('group members to send offline message to', this.groupMembers);
-    // const membersToReceiveMessage = this.groupMembers.filter(x => x !== this.userId);
-    // console.log('members to recieve message', membersToReceiveMessage);
     this.notifyService.sendNotification(this.chatObject.receiverId, pushMessage);
-    // membersToReceiveMessage.forEach(element => {
-    //   const receiverId = element;
-    //   this.notifyService.sendNotification(receiverId, pushMessage);
-    // });
     setTimeout(() => {
-      // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
+      this.scrollChat();
       this.messageForm.reset();
     }, 1000);
   }
@@ -157,6 +155,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
     this.notifyService.groupMessage
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(res => {
+
         if (!res) {
           return;
         } else {
@@ -168,10 +167,7 @@ export class SupportComponent implements OnInit, OnDestroy, AfterViewInit {
           this.sender = messageObject.sender;
           console.log('group members', this.allMessages);
           this.store.dispatch(new GetChatMessages(this.allMessages));
-          setTimeout(() => {
-            // this.scroll.nativeElement.scrollTo(0, this.scroll.nativeElement.scrollHeight);
-          }, 1000);
-
+          this.scrollChat();
         }
       });
   }

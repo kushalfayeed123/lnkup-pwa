@@ -47,12 +47,12 @@
       </div> -->
 
 
-      <div class=" message " *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender === userName,
+      <div class="message" *ngFor="let newMessage of allMessages; let i=index" [ngClass]="{'receive': newMessage.sender === userName,
             'send': newMessage.sender !== userName}">
         <div *ngIf="newMessage.sender !== userName" class="sender">
           {{newMessage.sender}}
         </div>
-        <div #messages class="message-text  ">
+        <div #messages class="message-text" id="msgContainer">
           {{newMessage.message}}
           <img src="./assets/icons/sent.svg" alt="" class="sent-icon" *ngIf="sent && newMessage.sender === userName">
         </div>

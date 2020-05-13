@@ -23,7 +23,7 @@ import { NavToTripSearch } from 'src/app/state/app/app.actions';
   animations: [slideInAnimation]
 
 })
-export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class SideNavComponent implements OnInit, OnDestroy {
 
   @Select(AppState.getLoggedInUser) loggedInUser$: Observable<Users>;
   @Select(AppState.showLeftNav) showLeftNav$: Observable<boolean>;
@@ -61,16 +61,16 @@ export class SideNavComponent implements OnInit, OnDestroy, AfterViewChecked {
     private store: Store) { }
 
 
-  ngAfterViewChecked() {
-    this.subs.add(
-      this.showLeftNav$.subscribe(res => {
-        this.showSideNav = res;
-      }),
+  // ngAfterViewChecked() {
+  //   this.subs.add(
+  //     this.showLeftNav$.subscribe(res => {
+  //       this.showSideNav = res;
+  //     }),
 
-    );
+  //   );
 
-    this.changeDetectorRef.detectChanges();
-  }
+  //   this.changeDetectorRef.detectChanges();
+  // }
 
   ngOnInit() {
 
