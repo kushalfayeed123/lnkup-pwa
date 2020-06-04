@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  webUrl: 'https://linkup20200307092355.azurewebsites.net/api',
-  openConnect: 'https://linkup20200307092355.azurewebsites.net/notifyHub',
+  webUrl: 'https://linkup20200603111008.azurewebsites.net/api',
+  openConnect: 'https://linkup20200603111008.azurewebsites.net/notifyHub',
   vapidPublicKey: 'BCleJ0xgtXBcFHep4RmZXWX3Fa6S6ofO-XCzK56AHW3CXPlXZBsOtQ1ydmoidDBXaPeZdvA70ybSXB6atJBq7Jc',
   ravePubKey: 'FLWPUBK-739886009b82a2388b326c76226bad2b-X',
   raveEndpoint: 'https://api.ravepay.co/flwv3-pug/getpaidx/api/charge',
